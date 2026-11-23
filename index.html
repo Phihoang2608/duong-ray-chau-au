@@ -610,13 +610,20 @@ body.landphone .chatList{height:110px}
 body.landphone .cmx{font-size:13px}
 body.landphone .chatForm input{font-size:14px;padding:5px 8px}
 body.landphone .quick button{font-size:12px;padding:1px 6px}
+.seatpick{display:grid;gap:8px;margin:8px 0}
+.seatpick button{display:flex;align-items:center;gap:10px;text-align:left;border:2px solid var(--pc);font-size:16px}
+.seatpick .chiploco{width:36px;height:36px;border-radius:50%;background:#f3e3bf;flex:none}
+.seatpick small{color:#6b5435}.seatpick .on{color:#15803d}.seatpick .off{color:#b91c1c}
+#leaveBtn{display:none}
+body.online #leaveBtn{display:inline-block}
+body.landphone #leaveBtn{font-size:0!important}body.landphone #leaveBtn::before{content:"🚪";font-size:13px}
 </style>
 </head>
 <body>
 <header>
   <h1>🚂 Đường Ray Châu Âu</h1>
   <div id="players"></div>
-  <div class="hbtns"><button id="chatBtn" title="Trò chuyện">💬<span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="musicBtn" title="Tắt nhạc nền">🎵</button><button id="soundBtn" title="Bật/tắt âm thanh">🔊</button><button id="rulesBtn">📖 Luật</button><button id="menuBtn">☰ Menu</button></div>
+  <div class="hbtns"><button id="chatBtn" title="Trò chuyện">💬<span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="musicBtn" title="Tắt nhạc nền">🎵</button><button id="soundBtn" title="Bật/tắt âm thanh">🔊</button><button id="rulesBtn">📖 Luật</button><button id="leaveBtn" title="Rời phòng online">🚪 Rời phòng</button><button id="menuBtn">☰ Menu</button></div>
   <div id="ticker"><div id="turnPill" style="display:none"><span class="tdot"></span><span id="turnName"></span></div><div id="tmsg"></div></div>
 </header>
 <main>
@@ -678,6 +685,7 @@ body.landphone .quick button{font-size:12px;padding:1px 6px}
       <div class="sep" style="grid-column:1/-1">Chơi cùng bạn bè online</div>
       <button id="createBtn">🌐 Tạo phòng</button>
       <button id="joinBtn">🔑 Vào phòng bằng mã</button>
+      <button id="resumeBtn" class="primary" style="display:none;grid-column:1/-1"></button>
       <button id="rulesBtn2">📖 Luật chơi</button>
       <button id="soundBtn2">🔊 Âm thanh: bật</button>
     </div>
@@ -845,7 +853,7 @@ function pushFx(o){ G.fxN=(G.fxN||0)+1; o.n=G.fxN; G.fx.push(o); if (G.fx.length
 /* seats: [{name, bot:true|false, peer:null|string}] */
 function newGame(seats){
   UNDO_USED={};
-  const players = seats.map((s,i)=>({ name:s.name, isBot:!!s.bot, peer:s.peer||null, colorIdx:i, color:PLAYER_COLORS[i].hex,
+  const players = seats.map((s,i)=>({ name:s.name, isBot:!!s.bot, peer:s.peer||null, pid:s.pid||null, colorIdx:i, color:PLAYER_COLORS[i].hex,
     hand:emptyHand(), trains:START_TRAINS, stations:3, tickets:[], score:0, routes:[] }));
   G = { players, deck:[], discard:[], market:[null,null,null,null,null], owner:ROUTES.map(()=>null), stations:{},
         hist:[], ticketDeck: shuffle(TICKETS.shorts.map(t=>t.id)), cur:0, drawn:0, finalTurns:null, passes:0,
@@ -1558,7 +1566,7 @@ const PeerRoom = {
       const S = { members:{}, ts:{}, handlers:[], last:[], me:{}, done:false, clients:[], hb:null };
       const emit = ()=>{
         const now = Date.now();
-        Object.keys(S.members).forEach(id=>{ if (id!==myId && now-(S.ts[id]||0) > 75000){ delete S.members[id]; delete S.ts[id]; } });
+        Object.keys(S.members).forEach(id=>{ if (id!==myId && now-(S.ts[id]||0) > 40000){ delete S.members[id]; delete S.ts[id]; } });
         S.members[myId] = S.me;
         S.last = Object.keys(S.members).map(id=>Object.freeze({ peer:id, presence:S.members[id]||{}, sameTab:id===myId, isMe:id===myId, kind:'viewer', by:null, guest:false, updatedAt:S.ts[id]||now }));
         S.handlers.forEach(h=>{ try{ h({peers:S.last, joined:[], left:[], updated:[]}); }catch(e){ console.error(e); } });
@@ -1583,7 +1591,7 @@ const PeerRoom = {
         const txt = buf ? buf.toString() : '';
         if (!txt){ delete S.members[id]; delete S.ts[id]; emit(); return; }
         try{ const p=JSON.parse(txt); if (!p || typeof p!=='object') return; const t=+p._ts||0;
-          if (Date.now()-t > 75000 || t < (S.ts[id]||0)) return; delete p._ts; S.members[id]=p; S.ts[id]=t; emit(); }catch(e){}
+          if (Date.now()-t > 40000 || t < (S.ts[id]||0)) return; delete p._ts; S.members[id]=p; S.ts[id]=t; emit(); }catch(e){}
       };
       BROKERS.forEach((url,i)=>{
         let c; try{ c = mqtt.connect(url, { clientId:myId+'_'+i, clean:true, keepalive:30, reconnectPeriod:3000, connectTimeout:7000,
@@ -1592,7 +1600,7 @@ const PeerRoom = {
         c.on('connect', ()=>{
           c.subscribe(base+'+', {qos:0}, err=>{
             if (err) return; pub();
-            if (!S.done){ S.done=true; S.hb=setInterval(()=>{ pub(); emit(); }, 20000); setTimeout(()=>{ resolve(api); emit(); }, 700); }
+            if (!S.done){ S.done=true; S.hb=setInterval(()=>{ pub(); emit(); }, 10000); setTimeout(()=>{ resolve(api); emit(); }, 700); }
           });
         });
         c.on('message', onMsg); c.on('error', ()=>{});
@@ -1945,6 +1953,7 @@ function playFx(f){
     case 'final': SFX.horn(); FX.banner('🔥 VÒNG CUỐI!', 'Mỗi người được đi thêm đúng 1 lượt', 'final', 2300); break;
     case 'end': SFX.fanfare(); FX.rain(5); Ticker.push('🏁 Kết thúc ván! Xem bảng điểm nhé.', 'win'); break;
     case 'undo': SFX.flip(); Ticker.push(`↩ ${esc(who(f.p))} đi lại nước vừa rồi`, 'info'); UIS.claimAt={}; break;
+    case 'back': Ticker.push(`🔌 ${esc(who(f.p))} đã vào lại phòng`, 'info'); break;
     case 'reshuf': SFX.flip(); toast('3 lá Đầu máy lộ ra — lật lại 5 lá mới!'); break;
   }
 }
@@ -2103,11 +2112,15 @@ function showRules(){
 }
 
 /* ===================== ONLINE ===================== */
-const NET = { mode:'local', room:null, code:null, name:'', myPeer:null, seq:0, lastAct:{}, peers:[], seen:{}, lastV:null, inGame:false, lobby:false, startAt:0,
+const NET = { first:{}, savedG:null, mode:'local', room:null, code:null, name:'', myPeer:null, seq:0, lastAct:{}, peers:[], seen:{}, lastV:null, inGame:false, lobby:false, startAt:0,
   isPresent(peer){ return !!peer && this.peers.some(p=>p.peer===peer); },
-  absentFor(peer){ if (this.isPresent(peer)) return 0; return Date.now() - Math.max(this.seen[peer]||0, this.startAt); } };
+  fresh(peer){ const p=peer && this.peers.find(q=>q.peer===peer); return !!p && (p.sameTab || Date.now()-p.updatedAt < 25000); },
+  absentFor(peer){ if (this.fresh(peer)) return 0; return Date.now() - Math.max(this.seen[peer]||0, this.startAt); } };
 let ROOM_API_P=null;
 const STANDALONE = !!window.STANDALONE;
+const MY_PID = (()=>{ try{ let v=localStorage.getItem('dr-pid'); if(!v){ v='p'+Math.random().toString(36).slice(2,12); localStorage.setItem('dr-pid',v); } return v; }catch(e){ return 'p'+Math.random().toString(36).slice(2,12); } })();
+function saveLastRoom(code, role){ try{ localStorage.setItem('dr-last', JSON.stringify({code, role:role||'guest', name:myName(), t:Date.now()})); }catch(e){} }
+function lastRoom(){ try{ const v=JSON.parse(localStorage.getItem('dr-last')||'null'); if (v && Date.now()-v.t < 6*3600e3) return v; }catch(e){} return null; }
 function inviteLink(){ return STANDALONE ? location.origin+location.pathname+'#p-'+NET.code : ''; }
 function getRoomApi(){
   if (!ROOM_API_P) ROOM_API_P=(async()=>{
@@ -2135,14 +2148,21 @@ function roomUnavailable(err, code){
    <p>Chế độ online chỉ chạy khi mở trang game trên <b>claude.ai</b> và đã đăng nhập. Bạn bè của bạn cũng cần tài khoản claude.ai và được bạn chia sẻ trang này (nút <b>Share/Chia sẻ</b> trên trang).</p>`,
    [{label:'Quay lại', onClick:goMenu}]);
 }
-async function createRoom(){
-  SFX.init(); const name=myName(); showLobbyView('<h2>🌐 Đang tạo phòng…</h2><div class="spinner"></div>',[]);
+async function createRoom(fixedCode){
+  SFX.init(); const name=myName(); showLobbyView(fixedCode?'<h2>🌐 Đang mở lại phòng '+esc(fixedCode)+'…</h2><div class="spinner"></div>':'<h2>🌐 Đang tạo phòng…</h2><div class="spinner"></div>',[]);
   const api=await getRoomApi(); if(!api) return roomUnavailable();
-  const code=genCode(); let r;
+  const code=(typeof fixedCode==='string'&&fixedCode)||genCode(); let r;
   try { r=await api.join('dr-'+code.toLowerCase(), {host:true}); } catch(e){ return roomUnavailable(e); }
-  Object.assign(NET,{mode:'host', room:r, code, name, lastAct:{}, peers:[], seen:{}, lobby:true, inGame:false}); chatReset();
-  r.onPeers(ch=>{ NET.peers=ch.peers; const me=ch.peers.find(p=>p.sameTab); if(me) NET.myPeer=me.peer; hostOnPeers(); }, onRoomError);
-  r.presence({role:'host', name, code, lobby:true}).catch(()=>{});
+  const resume=typeof fixedCode==='string' && !!NET.savedG;
+  Object.assign(NET,{mode:'host', room:r, code, name, lastAct:resume?NET.lastAct:{}, peers:[], seen:{}, lobby:true, inGame:false}); chatReset();
+  r.onPeers(ch=>{ if (NET.room!==r) return; NET.peers=ch.peers; const me=ch.peers.find(p=>p.sameTab); if(me) NET.myPeer=me.peer; hostOnPeers(); }, onRoomError);
+  saveLastRoom(code,'host'); refreshResume();
+  if (typeof fixedCode==='string' && NET.savedG){ // chủ phòng quay lại: khôi phục ván đang chơi
+    G=NET.savedG; NET.savedG=null; NET.lobby=false; NET.inGame=true; NET.startAt=Date.now(); ME=0;
+    G.players[0].peer=null; setTimeout(()=>{ G.players[0].peer=NET.myPeer; hideLobby(); UIS.lastFx=G.fxN||0; log(`${G.players[0].name} (chủ phòng) đã quay lại.`,'sys'); afterChange(); }, 400);
+    return;
+  }
+  r.presence({role:'host', name, code, pid:MY_PID, lobby:true}).catch(()=>{});
   showLobby();
 }
 async function joinRoom(code){
@@ -2152,12 +2172,12 @@ async function joinRoom(code){
   const api=await getRoomApi(); if(!api) return roomUnavailable();
   let r; try { r=await api.join('dr-'+code.toLowerCase(), {host:false}); } catch(e){ return roomUnavailable(e, code); }
   Object.assign(NET,{mode:'client', room:r, code, name, seq:0, peers:[], lastV:null, inGame:false, lobby:true}); chatReset();
-  r.onPeers(ch=>{ NET.peers=ch.peers; const me=ch.peers.find(p=>p.sameTab); if(me) NET.myPeer=me.peer; clientOnPeers(); }, onRoomError);
-  r.presence({role:'guest', name, act:null}).catch(()=>{});
+  r.onPeers(ch=>{ if (NET.room!==r) return; NET.peers=ch.peers; const me=ch.peers.find(p=>p.sameTab); if(me) NET.myPeer=me.peer; clientOnPeers(); }, onRoomError);
+  r.presence({role:'guest', name, pid:MY_PID, act:null}).catch(()=>{}); saveLastRoom(code,'guest'); refreshResume();
   showLobby();
   setTimeout(()=>{ if (NET.mode==='client' && !hostPeer() && !NET.inGame) showLobby(); }, 5000);
 }
-function leaveRoom(){ try{ NET.room && NET.room.leave(); }catch(e){} Object.assign(NET,{mode:'local', room:null, code:null, inGame:false, lobby:false, peers:[]}); document.body.classList.remove('online'); }
+function leaveRoom(){ if (NET.mode==='host' && NET.inGame && G && G.phase!=='end') NET.savedG=G; try{ NET.room && NET.room.leave(); }catch(e){} Object.assign(NET,{mode:'local', room:null, code:null, inGame:false, lobby:false, peers:[]}); document.body.classList.remove('online'); }
 function hostPeer(){ return NET.peers.find(p=>!p.sameTab && p.presence && p.presence.role==='host'); }
 function guestsHere(){ return NET.peers.filter(p=>!p.sameTab && p.presence && p.presence.role==='guest'); }
 function broadcast(){
@@ -2168,13 +2188,19 @@ function broadcast(){
 }
 function hostOnPeers(){
   chatIngest();
-  const now=Date.now(); NET.peers.forEach(p=>{ NET.seen[p.peer]=now; });
+  const now=Date.now(); NET.peers.forEach(p=>{ if (NET.fresh(p.peer)) NET.seen[p.peer]=now; });
   if (NET.lobby || !G){ if (NET.lobby) showLobby(); return; }
   let changed=false;
+  // Người chơi vào lại: nhận lại đúng ghế theo mã máy, theo tên, hoặc theo ghế họ tự chọn
+  guestsHere().forEach(pe=>{ if (!NET.first[pe.peer]) NET.first[pe.peer]=Date.now(); });
   guestsHere().forEach(pe=>{
-    if (G.players.some(p=>p.peer===pe.peer)) return;
-    const s2=G.players.findIndex(p=>!p.isBot && p.peer && p.peer!==NET.myPeer && !NET.isPresent(p.peer) && p.name===cleanName(pe.presence.name));
-    if (s2>=0){ G.players[s2].peer=pe.peer; NET.lastAct[pe.peer]=pe.presence.act&&pe.presence.act.n||0; log(`${G.players[s2].name} đã quay lại.`,'sys'); changed=true; }
+    if (G.players.some(p=>p.peer===pe.peer) || !NET.fresh(pe.peer)) return;
+    const pr=pe.presence||{}; const free=p=>!p.isBot && p.peer!==NET.myPeer && !NET.fresh(p.peer);
+    let s2=G.players.findIndex(p=>!p.isBot && p.pid && p.pid===pr.pid && p.peer!==NET.myPeer && (!NET.fresh(p.peer) || (NET.first[pe.peer]||0) > (NET.first[p.peer]||0)));
+    if (s2<0) s2=G.players.findIndex(p=>free(p) && p.name===cleanName(pr.name));
+    if (s2<0 && typeof pr.claim==='number' && G.players[pr.claim] && free(G.players[pr.claim])) s2=pr.claim;
+    if (s2>=0){ const pl=G.players[s2]; pl.peer=pe.peer; if (typeof pr.pid==='string') pl.pid=pr.pid.slice(0,20);
+      NET.lastAct[pe.peer]=pr.act&&pr.act.n||0; log(`${pl.name} đã vào lại phòng.`,'sys'); pushFx({k:'back', p:s2}); changed=true; }
   });
   guestsHere().forEach(pe=>{
     const a=pe.presence.act; if(!a || typeof a.n!=='number' || a.n<=(NET.lastAct[pe.peer]||0)) return;
@@ -2185,7 +2211,7 @@ function hostOnPeers(){
 }
 function hostStart(){
   const guests=guestsHere().slice(0,4);
-  const seats=[{name:NET.name, peer:NET.myPeer}, ...guests.map(g=>({name:cleanName(g.presence.name), peer:g.peer}))];
+  const seats=[{name:NET.name, peer:NET.myPeer, pid:MY_PID}, ...guests.map(g=>({name:cleanName(g.presence.name), peer:g.peer, pid:typeof g.presence.pid==='string'?g.presence.pid.slice(0,20):null}))];
   const nb=Math.max(0, Math.min(+$('#lobbyBots').value, 5-seats.length)); for(let i=0;i<nb;i++) seats.push({name:BOT_NAMES[i], bot:true});
   if (seats.length<2){ toast('Cần ít nhất 2 người chơi — chờ bạn bè vào hoặc thêm bot.'); return; }
   guests.forEach(g=>NET.lastAct[g.peer]=g.presence.act&&g.presence.act.n||0);
@@ -2202,9 +2228,18 @@ function clientOnPeers(){
       NET.lastV=st.v; const first=!NET.inGame; restore(st); NET.inGame=true;
       ME=G.players.findIndex(p=>p.peer===NET.myPeer);
       if (first || G.fxN<UIS.lastFx){ hideLobby(); resetUI(); UIS.lastFx=Math.max(0,G.fxN-1); }
-      UIS.waiting=false; clearTimeout(UIS.waitT); render();
+      UIS.waiting=false; clearTimeout(UIS.waitT); render(); maybeAskSeat();
     } else renderPlayersSafe();
   } else { NET.inGame=false; showLobby(); }
+}
+function maybeAskSeat(){
+  if (NET.mode!=='client' || ME>=0 || !G || G.phase==='end'){ if (ME>=0 && UIS.modalKey==='seat') hideModal(); return; }
+  if (UIS.modalKey==='seat') return;
+  const seats=G.players.map((p,i)=>({p,i})).filter(o=>!o.p.isBot && o.i!==0);
+  if (!seats.length) return;
+  showModal('🪑 Bạn là người chơi nào?', `<p>Ván đang chơi dở. Chọn đúng ghế của bạn để vào chơi tiếp:</p><div class="seatpick">${seats.map(o=>`<button data-s="${o.i}" style="--pc:${o.p.color}">${chipLoco(o.p.color)}<b>${esc(o.p.name)}</b> <small>${o.p.score} điểm · ${NET.isPresent(o.p.peer)?'<span class=on>đang online</span>':'<span class=off>đang vắng</span>'}</small></button>`).join('')}</div><p class="hint">Hoặc cứ để đó để xem mọi người chơi.</p>`,
+    [{label:'Chỉ xem thôi', onClick:()=>{ hideModal(); UIS.modalKey='seat-no'; }}], {center:true, key:'seat'});
+  $$('.seatpick button').forEach(b=>b.onclick=()=>{ SFX.init(); const s=+b.dataset.s; NET.room.presence({claim:s, act:null}).catch(()=>{}); toast('Đang xin vào ghế '+G.players[s].name+'…'); hideModal(true); });
 }
 function renderPlayersSafe(){ if (G && $('#players')) renderPlayers(); }
 
@@ -2270,11 +2305,11 @@ function showLobby(){
   if (NET.mode==='host'){
     showLobbyView(`<h2>🌐 Phòng chơi online</h2>${invite}<h3>Người trong phòng (${people.length}/5)</h3><div class="lpeople">${ppl}</div>
       <label>Thêm bot cho đủ người: <select id="lobbyBots">${[0,1,2,3,4].map(n=>`<option value="${n}" ${n===(people.length>1?0:1)?'selected':''}>${n} bot</option>`).join('')}</select></label>`,
-      [{label:'📋 Sao chép lời mời', onClick:copyInvite},{label:'🚀 Bắt đầu ván', cls:'primary', onClick:hostStart},{label:'Rời phòng', onClick:()=>{ leaveRoom(); goMenu(); }}]);
+      [{label:'📋 Sao chép lời mời', onClick:copyInvite},{label:'🚀 Bắt đầu ván', cls:'primary', onClick:hostStart},{label:'🚪 Rời phòng', onClick:()=>{ leaveRoom(); goMenu(); }}]);
   } else {
     const h=hostPeer();
     showLobbyView(`<h2>🌐 Phòng ${esc(NET.code)}</h2>${h?`<p>Đã vào phòng của <b>${esc(cleanName(h.presence.name))}</b>. Chờ chủ phòng bắt đầu ván…</p><div class="spinner"></div>`:'<p class="warn">Chưa thấy chủ phòng. Kiểm tra lại mã phòng, hoặc chờ chủ phòng mở lại.</p>'}
-      <h3>Người trong phòng</h3><div class="lpeople">${ppl}</div>`, [{label:'Rời phòng', onClick:()=>{ leaveRoom(); goMenu(); }}]);
+      <h3>Người trong phòng</h3><div class="lpeople">${ppl}</div>`, [{label:'🚪 Rời phòng', onClick:()=>{ leaveRoom(); goMenu(); }}]);
   }
 }
 function copyInvite(){
@@ -2284,14 +2319,28 @@ function copyInvite(){
 }
 
 /* ----- Menu ----- */
-function goMenu(){ MUSIC.stop(); clearTimeout(UIS.botT); hideModal(); $('#lobby').classList.add('hidden'); $('#menu').classList.remove('hidden'); }
+function refreshResume(){ const b=$('#resumeBtn'); if(!b) return;
+  if (NET.mode!=='local'){ b.style.display=''; b.innerHTML=`↩ Quay lại phòng <b>${esc(NET.code)}</b> <small>(vẫn đang kết nối)</small>`; return; }
+  const lr=lastRoom(); b.style.display = (lr && STANDALONE) ? '' : 'none'; if (lr) b.innerHTML=`↩ Vào lại phòng <b>${esc(lr.code)}</b>${lr.role==='host'&&NET.savedG?' <small>(tiếp tục ván đang chơi)</small>':''}`; }
+function resumeRoom(){
+  if (NET.mode!=='local'){ $('#menu').classList.add('hidden'); if (NET.inGame){ hideLobby(); render(); } else showLobby(); return; }
+  const lr=lastRoom(); if(!lr) return; if (lr.name) $('#pname').value=lr.name;
+  if (lr.role==='host') createRoom(lr.code); else joinRoom(lr.code);
+}
+function askLeave(){
+  const host=NET.mode==='host';
+  showModal('🚪 Rời phòng?', `<p>${host?'Bạn là <b>chủ phòng</b>. Khi bạn rời đi, ván chơi của mọi người sẽ <b>tạm dừng</b> cho tới khi bạn bấm <b>“Vào lại phòng”</b> ở menu.':'Ghế của bạn vẫn được giữ. Khi vắng quá 15 giây, máy sẽ đi thay lượt cho bạn.'}</p><p>Muốn quay lại: ở menu bấm <b>↩ Vào lại phòng ${esc(NET.code)}</b>.</p>`,
+    [{label:'🚪 Rời phòng', cls:'primary', onClick:()=>{ hideModal(); const c=NET.code; saveLastRoom(c, host?'host':'guest'); leaveRoom(); goMenu(); toast('Đã rời phòng '+c+'. Bấm “Vào lại phòng” để quay lại.'); }},
+     {label:'Ở lại chơi tiếp', onClick:()=>hideModal()}], {center:true});
+}
+function goMenu(){ refreshResume(); MUSIC.stop(); clearTimeout(UIS.botT); hideModal(); $('#lobby').classList.add('hidden'); $('#menu').classList.remove('hidden'); }
 function startLocal(){
   SFX.init(); leaveRoom(); const nb=+$('#nbots').value; const seats=[{name:myName()}]; for(let i=0;i<nb;i++) seats.push({name:BOT_NAMES[i], bot:true});
   resetUI(); newGame(seats); ME=0; hideLobby(); UIS.lastFx=0; afterChange();
 }
 function askJoin(prefill){
   showLobbyView(`<h2>🔑 Vào phòng${prefill?' '+esc(prefill):' bằng mã'}</h2>
-    <label for="joinName">Tên của bạn</label><input id="joinName" maxlength="16" value="${esc(prefill && $('#pname').value==='Phi' ? '' : $('#pname').value)}" placeholder="Nhập tên để mọi người biết bạn là ai" autocomplete="off">
+    <label for="joinName">Tên của bạn</label><input id="joinName" maxlength="16" value="${esc((lastRoom()&&lastRoom().name) || (prefill && $('#pname').value==='Phi' ? '' : $('#pname').value))}" placeholder="Nhập tên để mọi người biết bạn là ai" autocomplete="off">
     <label for="joinCode">Mã phòng</label><input id="joinCode" maxlength="6" value="${esc(prefill||'')}" placeholder="VD: K7QX" autocomplete="off">`,
     [{label:'🚂 Vào phòng', cls:'primary', onClick:doJoin},{label:'Quay lại', onClick:goMenu}]);
   function doJoin(){ const n=cleanName($('#joinName').value); if (!$('#joinName').value.trim()){ toast('Nhập tên của bạn trước nhé!'); $('#joinName').focus(); return; } $('#pname').value=n; joinRoom($('#joinCode').value); }
@@ -2337,7 +2386,8 @@ function bind(){
   $('#sbHead').onclick=()=>{ const sb=$('#scoreBoard'); sb.classList.toggle('closed'); try{ localStorage.setItem('dr-sb', sb.classList.contains('closed')?'0':'1'); }catch(e){} };
   try{ const v=localStorage.getItem('dr-sb'); if (v==='0') $('#scoreBoard').classList.add('closed'); }catch(e){}
   $('#rulesBtn').onclick=showRules; $('#rulesBtn2').onclick=showRules;
-  $('#menuBtn').onclick=()=>{ if (NET.mode!=='local' && !confirmLeave()) return; goMenu(); };
+  $('#menuBtn').onclick=()=>goMenu();
+  $('#leaveBtn').onclick=askLeave;
   $('#musicBtn').onclick=()=>{ SFX.init(); MUSIC.on=!MUSIC.on; $('#musicBtn').classList.toggle('off', !MUSIC.on); $('#musicBtn').title=MUSIC.on?'Tắt nhạc nền':'Bật nhạc nền'; render(); };
   $('#soundBtn').onclick=()=>{ SFX.init(); SFX.on=!SFX.on; if(!SFX.on) MUSIC.stop(); else if(G) render(); $('#soundBtn').textContent=SFX.on?'🔊':'🔇'; $('#soundBtn2').textContent=SFX.on?'🔊 Âm thanh: bật':'🔇 Âm thanh: tắt'; };
   $('#soundBtn2').onclick=()=>$('#soundBtn').onclick();
@@ -2366,6 +2416,8 @@ function bind(){
   document.addEventListener('click', e=>{ const q=e.target.closest('.quick button'); if(!q) return; SFX.init(); chatSend(q.dataset.q); });
   $$('.chatBox').forEach(el=>el.addEventListener('focusin', ()=>{ CHAT.unread=0; renderChat(); }));
   $('#chatBtn').onclick=()=>{ CHAT.unread=0; renderChat(); const p=$('#chatPanel'); if(p){ p.scrollIntoView({behavior:'smooth', block:'nearest'}); setTimeout(()=>{ const i=p.querySelector('input'); if(i) i.focus({preventScroll:true}); }, 350); } };
+  $('#resumeBtn').onclick=resumeRoom;
+  refreshResume();
   $('#startBtn').onclick=startLocal;
   $('#createBtn').onclick=createRoom;
   $('#joinBtn').onclick=()=>askJoin('');
