@@ -1941,9 +1941,12 @@ async function joinRoom(code){
 const GAME_ID='duong-ray-chau-au', GAME_TITLE='Đường Ray Châu Âu';
 function announceRoom(){
   if (!STANDALONE || NET.mode!=='host' || !NET.room || !NET.room.announce) return;
-  const n = 1 + guestsHere().filter(g=>NET.fresh(g.peer)).length;
-  const key = [NET.lobby, n, NET.name].join('|'); if (key===NET.annKey) return; NET.annKey=key;
-  NET.room.announce({g:GAME_ID, t:GAME_TITLE, code:NET.code, host:NET.name, n, max:5, open:!!NET.lobby});
+  let names;
+  if (!NET.lobby && G && G.players) names=G.players.filter(p=>!p.isBot && (p.peer===NET.myPeer || NET.fresh(p.peer))).map(p=>p.name);
+  else names=[NET.name, ...guestsHere().filter(g=>NET.fresh(g.peer)).map(g=>cleanName(g.presence.name))];
+  names=names.slice(0,6); const n=names.length;
+  const key = [NET.lobby, names.join(','), NET.name].join('|'); if (key===NET.annKey) return; NET.annKey=key;
+  NET.room.announce({g:GAME_ID, t:GAME_TITLE, code:NET.code, host:NET.name, n, max:5, open:!!NET.lobby, names});
 }
 function leaveRoom(){ NET.annKey=null; if (NET.mode==='host' && NET.inGame && G && G.phase!=='end') NET.savedG=G; try{ NET.room && NET.room.leave(); }catch(e){} Object.assign(NET,{mode:'local', room:null, code:null, inGame:false, lobby:false, peers:[]}); document.body.classList.remove('online'); }
 function hostPeer(){ return NET.peers.find(p=>!p.sameTab && p.presence && p.presence.role==='host'); }
@@ -1956,6 +1959,7 @@ function broadcast(){
 }
 function hostOnPeers(){
   chatIngest(); announceRoom();
+  clearTimeout(NET.annT); NET.annT=setTimeout(announceRoom, 3000);
   const now=Date.now(); NET.peers.forEach(p=>{ if (NET.fresh(p.peer)) NET.seen[p.peer]=now; });
   if (NET.lobby || !G){ if (NET.lobby) showLobby(); return; }
   let changed=false;

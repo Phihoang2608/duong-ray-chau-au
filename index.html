@@ -239,6 +239,47 @@ section.block#games{padding-top:22px}
 .st.open{color:#16a37a}
 .head h2{background:linear-gradient(90deg,#1d1b2e,#5136d0);-webkit-background-clip:text;background-clip:text;color:transparent}
 @media (max-width:640px){ .quick{padding:0 14px} .qbox input{width:calc(50% - 8px)} .qbox input.code{width:calc(50% - 8px)} .qtitle{width:100%} .qbtn{flex:1} .qstats{width:100%;margin-left:0;justify-content:space-between} }
+
+/* ===== Bố cục: game bên trái, phòng + người online bên phải ===== */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:start}
+.layout .games{grid-template-columns:repeat(auto-fill,minmax(175px,1fr))!important}
+.side{position:sticky;top:84px;display:flex;flex-direction:column;gap:16px}
+.pane{border-radius:20px;padding:14px 14px 12px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin:2px 4px 10px}
+.ph h3{margin:0;font-size:18px;font-weight:bold}
+.cnt{min-width:28px;text-align:center;font-size:13px;color:#fff;border-radius:14px;padding:1px 9px;background:linear-gradient(90deg,#ff5f8f,#8a5cf6)}
+.ptabs{display:flex;gap:4px;background:#f3f0fb;border-radius:12px;padding:3px;margin-bottom:10px}
+.ptabs button{flex:1;border:none;background:none;border-radius:9px;padding:6px 4px;font-size:13.5px;color:var(--ink2);cursor:pointer}
+.ptabs button.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(80,60,140,.12)}
+.rlist{display:flex;flex-direction:column;gap:9px;max-height:420px;overflow-y:auto;padding:2px}
+.rc{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;background:#fff;border:1px solid #eeeaf7;border-radius:14px;padding:8px;transition:transform .2s,box-shadow .2s}
+.rc:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(80,60,140,.12)}
+.rc.new{animation:rowIn 1s}
+@keyframes rowIn{from{background:#f0ebff}}
+.rt{width:54px;height:40px;border-radius:8px;overflow:hidden}.rt svg{width:100%;height:100%;display:block}
+.ri{min-width:0}
+.ri .l1{display:flex;align-items:baseline;gap:6px}
+.ri .code{font-weight:bold;letter-spacing:.14em;font-size:15px}
+.ri .gname{font-size:12.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri .who{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri .seats{display:flex;gap:3px;margin-top:4px}
+.ri .seats i{width:14px;height:5px;border-radius:3px;background:#e7e3f3}
+.ri .seats i.f{background:linear-gradient(90deg,#ff5f8f,#8a5cf6)}
+.rj{border:none;border-radius:10px;padding:7px 12px;font-size:13.5px;color:#fff;cursor:pointer;text-decoration:none;white-space:nowrap;background:linear-gradient(90deg,#ff5f8f,#8a5cf6);box-shadow:0 4px 10px rgba(138,92,246,.3)}
+.rj.watch{background:#fff;color:var(--ink2);border:1px solid #e3def2;box-shadow:none}
+.rj.full{background:#f3f0fb;color:var(--mute);box-shadow:none}
+.rempty{text-align:center;color:var(--ink2);font-size:14px;padding:16px 8px}
+.rempty a{display:inline-block;margin-top:10px}
+.olist{display:flex;flex-direction:column;gap:2px;max-height:300px;overflow-y:auto}
+.op{display:flex;align-items:center;gap:10px;padding:6px 6px;border-radius:10px}
+.op:hover{background:#f6f3ff}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:14px;flex:none;position:relative}
+.av::after{content:"";position:absolute;right:-1px;bottom:-1px;width:9px;height:9px;border-radius:50%;background:#22c55e;border:2px solid #fff}
+.op .nm{font-size:14.5px;font-weight:bold}.op .wh{font-size:12.5px;color:var(--mute)}
+.op .me{font-size:11.5px;color:#8a5cf6;margin-left:4px;font-weight:normal}
+.op a{margin-left:auto;font-size:12.5px;color:#8a5cf6;text-decoration:none}
+@media (max-width:1100px){ .layout{grid-template-columns:1fr} .side{position:static;display:grid;grid-template-columns:1fr 1fr} .layout.hasrooms .side{order:-1} }
+@media (max-width:640px){ .side{grid-template-columns:1fr} .rlist{max-height:260px} .olist{max-height:180px} }
 </style>
 </head>
 <body>
@@ -246,7 +287,7 @@ section.block#games{padding-top:22px}
 <div id="lamp"></div>
 <header class="top"><div class="bar glass">
   <a class="brand" href="#"><b>Phi</b> Board Games</a>
-  <nav class="nav"><a href="#games">Trò chơi</a><a href="#rooms">Phòng đang mở</a><a href="#how">Cách chơi</a></nav>
+  <nav class="nav"><a href="#games">Trò chơi</a><a href="#rooms">Phòng đang mở</a><a href="#rooms">Đang online</a><a href="#how">Cách chơi</a></nav>
   <button class="toggle" id="modeBtn" type="button" aria-label="Chuyển ngày đêm"><span class="tl" id="modeLab">Ban ngày</span><span class="sw"><span class="st" style="left:12px;top:8px"></span><span class="st" style="left:20px;top:18px"></span><span class="st" style="left:8px;top:20px"></span><span class="k"></span></span></button>
 </div></header>
 
@@ -258,15 +299,23 @@ section.block#games{padding-top:22px}
   <span class="qstats"><span><b id="sRooms">0</b> phòng mở</span><span><b id="sPlayers">0</b> người chơi</span><span class="live off" id="live"><i></i><span>Đang kết nối…</span></span><span style="display:none" id="sGames"></span></span>
 </form></div>
 
-<section class="block" id="games"><div class="wrap">
+<section class="block" id="games"><div class="wrap"><div class="layout"><div class="mainc">
   <div class="head"><h2>Trò chơi</h2><p>Bấm vào hình để vào chơi ngay</p></div>
-  <div class="gamesbox glass"><div class="games" id="gameList"></div></div>
+  <div class="gamesbox glass"><div class="games" id="gameList"></div></div></div>
+  <aside class="side" id="rooms">
+    <div class="pane glass">
+      <div class="ph"><h3>Phòng đang mở</h3><span class="cnt" id="cRooms">0</span></div>
+      <div class="ptabs"><button class="on" data-f="open">Đang chờ</button><button data-f="play">Đang chơi</button><button data-f="all">Tất cả</button></div>
+      <div id="roomList" class="rlist"></div>
+    </div>
+    <div class="pane glass">
+      <div class="ph"><h3>Đang online</h3><span class="cnt" id="cOnline">0</span></div>
+      <div id="onlineList" class="olist"></div>
+    </div>
+  </aside></div>
 </div></section>
 
-<section class="block" id="rooms"><div class="wrap">
-  <div class="head reveal"><h2>Phòng đang mở</h2><p>Cập nhật trực tiếp — bấm Vào phòng để tham gia</p></div>
-  <div class="rooms glass reveal" id="roomList"></div>
-</div></section>
+
 
 <section class="block" id="how"><div class="wrap">
   <div class="head reveal"><h2>Cách chơi cùng bạn bè</h2></div>
@@ -363,7 +412,7 @@ const GAMES = [
     desc:'Gieo xúc xắc đi quanh bàn cờ, mua đất và xây khách sạn. Người còn trụ lại cuối cùng là tỷ phú.', color:'#2e6a86', ready:false }
 ];
 const BROKERS=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081/mqtt'];
-const TOPIC='duongraychauau/v3hub/rooms/';
+const TOPIC='duongraychauau/v3hub/rooms/'; const OTOPIC='duongraychauau/v3hub/online/'; const CLIENTS=[];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=s=>String(s||'').replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁠-⁯]/g,'').trim().slice(0,16);
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),2600); }
@@ -391,30 +440,56 @@ document.addEventListener('click',e=>{ const a=e.target.closest('[data-go]'); if
 
 /* Phòng đang mở — nghe trực tiếp từ máy chủ */
 const ROOMS={}; const seenRooms=new Set();
+let FILTER='open'; const ONLINE={}; const MYID='h'+Math.random().toString(36).slice(2,10);
+const AVC=['#ff5f8f','#8a5cf6','#3fa9f5','#22b38a','#ff9f43','#e84393','#5f6fff'];
+function avColor(s){ let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))>>>0; return AVC[h%AVC.length]; }
 function render(){
   const now=Date.now();
-  const list=Object.values(ROOMS).filter(r=>now-r._ts<45000).sort((a,b)=>(b.open-a.open)||(b._ts-a._ts));
+  const list=Object.values(ROOMS).filter(r=>now-r._ts<45000).sort((a,b)=>(b.open-a.open)||((+b.n||0)-(+a.n||0))||(b._ts-a._ts));
   const open=list.filter(r=>r.open);
-  $('#sRooms').textContent=open.length;
-  $('#sPlayers').textContent=list.reduce((s,r)=>s+(+r.n||0),0);
-  if (!list.length){ $('#roomList').innerHTML='<div class="empty">Hiện chưa có phòng nào đang mở. Hãy chọn một trò chơi và tạo phòng đầu tiên.</div>'; return; }
-  $('#roomList').innerHTML=`<div class="room h"><span>Mã phòng</span><span>Trò chơi</span><span class="host">Chủ phòng</span><span class="pl">Người chơi</span><span class="stt">Trạng thái</span><span></span></div>`+
-    list.map(r=>{ const g=GAMES.find(x=>x.id===r.g); const n=+r.n||0, mx=+r.max||5; const isNew=!seenRooms.has(r.code); seenRooms.add(r.code);
-      return `<div class="room ${isNew?'new':''}"><span class="code">${esc(r.code)}</span><span>${esc(g?g.title:r.t)}</span><span class="host">${esc(clean(r.host))}</span>
-        <span class="pl">${n}/${mx}<span class="bar2"><i style="width:${Math.min(100,n/mx*100)}%"></i></span></span>
-        <span class="stt"><span class="st ${r.open?'open':'play'}">${r.open?'Đang chờ':'Đang chơi'}</span></span>
-        <span class="go">${r.open&&n<mx?`<a class="btn" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Vào phòng</a>`:`<a class="btn soft" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Xem</a>`}</span></div>`; }).join('');
+  $('#sRooms').textContent=open.length; $('#cRooms').textContent=list.length;
+  document.querySelector('.layout').classList.toggle('hasrooms', open.length>0);
+  const shown=list.filter(r=>FILTER==='all'||(FILTER==='open'?r.open:!r.open));
+  if (!shown.length){
+    $('#roomList').innerHTML=`<div class="rempty">${FILTER==='play'?'Chưa có ván nào đang diễn ra.':'Chưa có phòng nào đang chờ người.'}<br><a class="rj" href="${gameUrl(GAMES[0].id)}" data-go="${GAMES[0].id}">Tạo phòng mới</a></div>`;
+  } else $('#roomList').innerHTML=shown.map(r=>{ const g=GAMES.find(x=>x.id===r.g)||GAMES[0]; const n=+r.n||0, mx=+r.max||5; const isNew=!seenRooms.has(r.code); seenRooms.add(r.code);
+      const names=(Array.isArray(r.names)?r.names:[r.host]).map(clean).filter(Boolean);
+      const btn = r.open ? (n<mx?`<a class="rj" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Vào</a>`:`<span class="rj full">Đầy</span>`) : `<a class="rj watch" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Xem</a>`;
+      return `<div class="rc ${isNew?'new':''}"><div class="rt">${THUMBS[g.id]?THUMBS[g.id]():''}</div>
+        <div class="ri"><div class="l1"><span class="code">${esc(r.code)}</span><span class="gname">${esc(g.title)}</span></div>
+          <div class="who">${r.open?'Chờ':'Đang chơi'} · ${esc(names.join(', '))}</div>
+          <div class="seats">${Array.from({length:mx},(_,i)=>`<i class="${i<n?'f':''}"></i>`).join('')}</div></div>${btn}</div>`; }).join('');
+  // Người online: khách ở sảnh + người trong các phòng
+  const people=[];
+  const myName=clean(nameEl.value);
+  Object.entries(ONLINE).forEach(([id,p])=>{ if(now-p._ts<45000 && p.name) people.push({name:clean(p.name), where:'Ở sảnh', me:id===MYID}); });
+  if (myName && !people.some(p=>p.me)) people.unshift({name:myName, where:'Ở sảnh', me:true});
+  list.forEach(r=>{ const g=GAMES.find(x=>x.id===r.g); (Array.isArray(r.names)?r.names:[r.host]).forEach(nm=>{ nm=clean(nm); if(nm) people.push({name:nm, where:(r.open?'Chờ ở phòng ':'Đang chơi ở phòng ')+r.code, room:r}); }); });
+  people.sort((a,b)=>(b.me-a.me));
+  $('#cOnline').textContent=people.length; $('#sPlayers').textContent=people.length;
+  $('#onlineList').innerHTML = people.length ? people.map(p=>`<div class="op"><span class="av" style="background:${avColor(p.name)}">${esc(p.name.charAt(0).toUpperCase())}</span>
+      <div><div class="nm">${esc(p.name)}${p.me?'<span class="me">(bạn)</span>':''}</div><div class="wh">${esc(p.where)}</div></div>
+      ${p.room&&p.room.open?`<a href="${gameUrl(p.room.g,p.room.code)}" data-go="${esc(p.room.g)}">Vào cùng</a>`:''}</div>`).join('')
+    : '<div class="rempty">Nhập tên ở dải trên để mọi người thấy bạn đang online.</div>';
 }
+document.querySelectorAll('.ptabs button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.ptabs button').forEach(x=>x.classList.toggle('on',x===b)); FILTER=b.dataset.f; render(); });
 setInterval(render,5000); render();
 
+function pubMe(){ const nm=clean(nameEl.value); const msg = nm ? JSON.stringify({name:nm, _ts:Date.now()}) : ''; CLIENTS.forEach(c=>{ if(c.connected) c.publish(OTOPIC+MYID, msg, {retain:true,qos:0}); }); }
+setInterval(pubMe, 15000);
+nameEl.addEventListener('change', ()=>{ pubMe(); render(); });
+addEventListener('pagehide', ()=>{ CLIENTS.forEach(c=>{ try{ c.publish(OTOPIC+MYID,'',{retain:true}); }catch(e){} }); });
 function connect(){
   if (typeof mqtt==='undefined'){ $('#live').innerHTML='<i></i><span>Không tải được danh sách phòng</span>'; return; }
   let any=false;
   BROKERS.forEach((u,i)=>{
-    let c; try{ c=mqtt.connect(u,{clientId:'hub'+Math.random().toString(36).slice(2,10)+i,clean:true,keepalive:30,reconnectPeriod:4000,connectTimeout:7000}); }catch(e){ return; }
-    c.on('connect',()=>{ c.subscribe(TOPIC+'+'); if(!any){ any=true; const l=$('#live'); l.classList.remove('off'); l.innerHTML='<i></i><span>Trực tiếp</span>'; } });
+    let c; try{ c=mqtt.connect(u,{clientId:MYID+'_'+i,clean:true,keepalive:30,reconnectPeriod:4000,connectTimeout:7000,will:{topic:OTOPIC+MYID,payload:'',retain:true,qos:0}}); }catch(e){ return; }
+    CLIENTS.push(c);
+    c.on('connect',()=>{ c.subscribe(TOPIC+'+'); c.subscribe(OTOPIC+'+'); pubMe(); if(!any){ any=true; const l=$('#live'); l.classList.remove('off'); l.innerHTML='<i></i><span>Trực tiếp</span>'; } });
     c.on('message',(topic,buf)=>{
-      const key=topic.slice(TOPIC.length); const txt=buf?buf.toString():'';
+      const txt=buf?buf.toString():'';
+      if (topic.startsWith(OTOPIC)){ const id=topic.slice(OTOPIC.length); if(!txt){ delete ONLINE[id]; render(); return; } try{ const p=JSON.parse(txt); if(p&&typeof p.name==='string'){ p._ts=+p._ts||0; if(!ONLINE[id]||ONLINE[id]._ts<=p._ts){ ONLINE[id]=p; render(); } } }catch(e){} return; }
+      const key=topic.slice(TOPIC.length);
       if(!txt){ delete ROOMS[key]; render(); return; }
       try{ const r=JSON.parse(txt); if(!r||typeof r!=='object'||typeof r.code!=='string') return; r._ts=+r._ts||0;
         if(!/^[A-Z0-9]{4,6}$/.test(r.code)) return; if(ROOMS[key] && ROOMS[key]._ts>r._ts) return; ROOMS[key]=r; render(); }catch(e){}
