@@ -1548,14 +1548,14 @@ const Ticker = {
    Giả lập các hàm của "room" (join, presence, onPeers, peers, leave) để phần còn lại của game dùng chung.
    Mỗi người đăng trạng thái của mình lên 1 kênh riêng (giữ lại trên máy chủ), ai cũng nghe được mọi kênh trong phòng.
    Không nối thẳng máy với máy nên mạng 4G hay Wi-Fi đều vào được; tạm thoát ra Zalo rồi quay lại vẫn tự nối lại. */
-const BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt'];
+const BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt', 'wss://test.mosquitto.org:8081/mqtt'];
 const PeerRoom = {
   join(name, opts){
     return new Promise((resolve, reject)=>{
       if (typeof mqtt==='undefined') return reject(new Error('Chưa tải được thư viện kết nối'));
-      const base = 'duongraychauau/v2/' + name + '/p/';
+      const base = 'duongraychauau/v3/' + name + '/p/';
       const myId = 'u' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
-      const S = { members:{}, ts:{}, handlers:[], last:[], me:{}, done:false, client:null, bi:0, hb:null };
+      const S = { members:{}, ts:{}, handlers:[], last:[], me:{}, done:false, clients:[], hb:null };
       const emit = ()=>{
         const now = Date.now();
         Object.keys(S.members).forEach(id=>{ if (id!==myId && now-(S.ts[id]||0) > 75000){ delete S.members[id]; delete S.ts[id]; } });
@@ -1563,8 +1563,9 @@ const PeerRoom = {
         S.last = Object.keys(S.members).map(id=>Object.freeze({ peer:id, presence:S.members[id]||{}, sameTab:id===myId, isMe:id===myId, kind:'viewer', by:null, guest:false, updatedAt:S.ts[id]||now }));
         S.handlers.forEach(h=>{ try{ h({peers:S.last, joined:[], left:[], updated:[]}); }catch(e){ console.error(e); } });
       };
-      const pub = ()=>{ if (S.client && S.client.connected) S.client.publish(base+myId, JSON.stringify(Object.assign({}, S.me, {_ts:Date.now()})), {retain:true, qos:0}); };
-      let pubT=null; const pubSoon = ()=>{ if (pubT) return; pubT=setTimeout(()=>{ pubT=null; pub(); }, 60); };
+      // Gửi lên MỌI máy chủ đang nối được: chỉ cần 2 người chung 1 máy chủ là thấy nhau
+      const pub = ()=>{ const msg=JSON.stringify(Object.assign({}, S.me, {_ts:Date.now()})); S.clients.forEach(c=>{ if (c.connected) c.publish(base+myId, msg, {retain:true, qos:0}); }); };
+      let pubT=null; const pubSoon = ()=>{ if (pubT) return; pubT=setTimeout(()=>{ pubT=null; pub(); }, 50); };
       const api = {
         name,
         presence: async (patch)=>{
@@ -1574,33 +1575,30 @@ const PeerRoom = {
         },
         onPeers(h){ S.handlers.push(h); setTimeout(emit, 0); return ()=>{ S.handlers=S.handlers.filter(x=>x!==h); }; },
         peers(){ return S.last; },
-        connected(){ return !!(S.client && S.client.connected); },
-        leave: async ()=>{ clearInterval(S.hb); try{ S.client.publish(base+myId, '', {retain:true}); S.client.end(false); }catch(e){} }
+        connected(){ return S.clients.some(c=>c.connected); },
+        leave: async ()=>{ clearInterval(S.hb); S.clients.forEach(c=>{ try{ c.publish(base+myId, '', {retain:true}); c.end(false); }catch(e){} }); }
       };
-      const connect = ()=>{
-        const url = BROKERS[S.bi % BROKERS.length];
-        const c = mqtt.connect(url, { clientId:myId+'_'+S.bi, clean:true, keepalive:30, reconnectPeriod:2000, connectTimeout:8000,
-          will:{ topic:base+myId, payload:'', retain:true, qos:0 } });
-        S.client = c;
+      const onMsg = (topic, buf)=>{
+        const id = topic.slice(base.length); if (!id || id===myId) return;
+        const txt = buf ? buf.toString() : '';
+        if (!txt){ delete S.members[id]; delete S.ts[id]; emit(); return; }
+        try{ const p=JSON.parse(txt); if (!p || typeof p!=='object') return; const t=+p._ts||0;
+          if (Date.now()-t > 75000 || t < (S.ts[id]||0)) return; delete p._ts; S.members[id]=p; S.ts[id]=t; emit(); }catch(e){}
+      };
+      BROKERS.forEach((url,i)=>{
+        let c; try{ c = mqtt.connect(url, { clientId:myId+'_'+i, clean:true, keepalive:30, reconnectPeriod:3000, connectTimeout:7000,
+          will:{ topic:base+myId, payload:'', retain:true, qos:0 } }); }catch(e){ return; }
+        S.clients.push(c);
         c.on('connect', ()=>{
           c.subscribe(base+'+', {qos:0}, err=>{
-            if (err){ return; }
-            pub();
-            if (!S.done){ S.done=true; S.hb=setInterval(()=>{ pub(); emit(); }, 20000); setTimeout(()=>{ resolve(api); emit(); }, 900); }
+            if (err) return; pub();
+            if (!S.done){ S.done=true; S.hb=setInterval(()=>{ pub(); emit(); }, 20000); setTimeout(()=>{ resolve(api); emit(); }, 700); }
           });
         });
-        c.on('message', (topic, buf)=>{
-          const id = topic.slice(base.length); if (!id || id===myId) return;
-          const txt = buf ? buf.toString() : '';
-          if (!txt){ delete S.members[id]; delete S.ts[id]; emit(); return; }
-          try{ const p=JSON.parse(txt); if (!p || typeof p!=='object') return; const t=+p._ts||0; if (Date.now()-t > 75000) return; delete p._ts; S.members[id]=p; S.ts[id]=t; emit(); }catch(e){}
-        });
-        c.on('error', ()=>{});
-        // Máy chủ thứ nhất không vào được trong 9 giây thì thử máy chủ dự phòng
-        setTimeout(()=>{ if (!S.done && S.client===c && !c.connected){ try{ c.end(true); }catch(e){} S.bi++; if (S.bi < BROKERS.length*2) connect(); else reject(new Error('Không kết nối được máy chủ')); } }, 9000);
-      };
-      connect();
-      document.addEventListener('visibilitychange', ()=>{ if (!document.hidden && S.client && !S.client.connected){ try{ S.client.reconnect(); }catch(e){} } });
+        c.on('message', onMsg); c.on('error', ()=>{});
+      });
+      setTimeout(()=>{ if (!S.done){ S.done=true; S.clients.forEach(c=>{ try{ c.end(true); }catch(e){} }); reject(new Error('Không kết nối được máy chủ')); } }, 15000);
+      document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) S.clients.forEach(c=>{ if (!c.connected){ try{ c.reconnect(); }catch(e){} } }); });
     });
   }
 };
@@ -2113,7 +2111,11 @@ const STANDALONE = !!window.STANDALONE;
 function inviteLink(){ return STANDALONE ? location.origin+location.pathname+'#p-'+NET.code : ''; }
 function getRoomApi(){
   if (!ROOM_API_P) ROOM_API_P=(async()=>{
-    if (STANDALONE){ for (let i=0;i<40 && typeof mqtt==='undefined';i++) await new Promise(r=>setTimeout(r,250)); return typeof mqtt==='undefined' ? null : PeerRoom; }
+    if (STANDALONE){
+      for (let i=0;i<12 && typeof mqtt==='undefined';i++) await new Promise(r=>setTimeout(r,250));
+      if (typeof mqtt==='undefined'){ const sc=document.createElement('script'); sc.src='https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'; document.head.appendChild(sc);
+        for (let i=0;i<32 && typeof mqtt==='undefined';i++) await new Promise(r=>setTimeout(r,250)); }
+      return typeof mqtt==='undefined' ? null : PeerRoom; }
     for (let i=0;i<20 && !(window.claude && window.claude.use);i++) await new Promise(r=>setTimeout(r,250));
     if (!(window.claude && window.claude.use)) return null;
     try { return await window.claude.use('room'); } catch(e){ return null; }
