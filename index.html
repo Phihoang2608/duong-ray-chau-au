@@ -128,6 +128,24 @@ section.block{padding:30px 0 40px}
 .meta span{display:block;font-size:11.5px;color:var(--mute)}
 .gact{margin-top:auto}.gact .btn{width:100%}
 
+/* Thẻ game nhỏ gọn */
+.games{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(185px,1fr))!important;gap:26px 20px!important}
+.gc{display:block;text-decoration:none;color:inherit;cursor:pointer}
+.thumb{position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;box-shadow:0 6px 16px rgba(20,60,72,.18);transition:transform .25s cubic-bezier(.2,1.3,.4,1),box-shadow .25s;background:var(--glass2)}
+.thumb svg{display:block;width:100%;height:100%}
+.gc:hover .thumb{transform:translateY(-5px);box-shadow:0 16px 30px rgba(20,60,72,.28)}
+.gc.soon .thumb svg{filter:saturate(.55)}
+.thumb .soonlab{position:absolute;right:10px;top:10px;font-size:12px;background:rgba(18,49,58,.72);color:#fff;border-radius:20px;padding:2px 10px}
+.thumb .playlab{position:absolute;inset:auto 0 0 0;padding:28px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:14px;opacity:0;transform:translateY(8px);transition:all .25s}
+.gc:hover .thumb .playlab{opacity:1;transform:none}
+.gc h3{font-size:19px;font-weight:bold;margin:12px 2px 4px;transition:color .2s}
+.gc:hover h3{color:var(--accent)}
+.gc p{margin:0 2px;color:var(--ink2);font-size:14.5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gm{margin:6px 2px 0;font-size:13.5px;color:var(--mute);display:flex;gap:10px;align-items:center}
+.gm .on{color:#c0392b;display:inline-flex;align-items:center;gap:5px}.gm .on::before{content:"";width:7px;height:7px;border-radius:50%;background:#c0392b}
+body.night .gm .on{color:#ff6b5e}body.night .gm .on::before{background:#ff6b5e}
+.gamesbox{padding:22px 22px 26px;border-radius:26px}
+@media (max-width:640px){ .games{grid-template-columns:1fr 1fr!important;gap:18px 12px!important} .gamesbox{padding:12px} .gc h3{font-size:16px} .gc p{font-size:13px} .gm{font-size:12px} .head{flex-direction:column;align-items:flex-start;gap:4px} }
 /* Phòng */
 .rooms{padding:8px;border-radius:24px}
 .room{display:grid;grid-template-columns:110px 1.3fr 1fr 150px 120px 140px;align-items:center;gap:12px;padding:14px 16px;border-radius:16px}
@@ -213,7 +231,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 <section class="block" id="games"><div class="wrap">
   <div class="head reveal"><h2>Trò chơi</h2><p>Chọn một trò để chơi với máy hoặc tạo phòng mời bạn bè</p></div>
-  <div class="games" id="gameList"></div>
+  <div class="gamesbox glass reveal"><div class="games" id="gameList"></div></div>
 </div></section>
 
 <section class="block" id="rooms"><div class="wrap">
@@ -282,6 +300,30 @@ const hr=new Date().getHours(); setMode(saved ? saved==='night' : (hr>=18||hr<6)
 $('#modeBtn').addEventListener('click',()=>setMode(!document.body.classList.contains('night')));
 addEventListener('pointermove',e=>{ const l=$('#lamp'); l.style.setProperty('--lx',e.clientX+'px'); l.style.setProperty('--ly',e.clientY+'px'); });
 
+/* Ảnh nhỏ minh hoạ từng game */
+function card(x,y,r,rank,suit,red,w){ w=w||46; const hgt=w*1.4; return `<g transform="translate(${x},${y}) rotate(${r})"><rect x="${-w/2}" y="${-hgt/2}" width="${w}" height="${hgt}" rx="5" fill="#fff" stroke="#c9c2b4"/><text x="${-w/2+5}" y="${-hgt/2+15}" font-size="14" font-family="Times New Roman" font-weight="bold" fill="${red?'#c0392b':'#1b1b1b'}">${rank}</text><text x="0" y="8" text-anchor="middle" font-size="24" fill="${red?'#c0392b':'#1b1b1b'}">${suit}</text></g>`; }
+const THUMBS={
+  'duong-ray-chau-au':()=>{ const C=[[40,60],[110,40],[180,70],[250,45],[70,130],[150,120],[230,135],[110,190],[200,195],[270,170]];
+    const R=[[0,1,'#d8392b'],[1,2,'#2f6fc0'],[2,3,'#f2cc2a'],[0,4,'#3f9b46'],[4,5,'#b04fae'],[1,5,'#ee8a1c'],[5,6,'#2b2b2b'],[2,6,'#d8392b'],[3,9,'#3f9b46'],[6,9,'#2f6fc0'],[4,7,'#f2cc2a'],[5,7,'#3f9b46'],[7,8,'#d8392b'],[6,8,'#ee8a1c'],[8,9,'#b04fae']];
+    let s=`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#9fc9d6"/><path d="M0 30 Q60 10 120 25 T300 20 L300 225 L0 225Z" fill="#efe2bf"/><path d="M200 225 Q230 180 300 190 L300 225Z" fill="#9fc9d6"/>`;
+    R.forEach(([a,b,c],i)=>{ const A=C[a],B=C[b]; s+=`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#3b2a1a" stroke-width="9" stroke-linecap="round"/><line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${c}" stroke-width="6.5" stroke-dasharray="14 3" ${i%4===1?'opacity=".95"':''}/>`; });
+    C.forEach(p=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="7" fill="#fffaf0" stroke="#5b4326" stroke-width="2.5"/><circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="#8b2e16"/>`);
+    s+=`<g transform="translate(150,120) rotate(-8)"><rect x="-26" y="-11" width="34" height="18" rx="8" fill="#c1121f" stroke="#111" stroke-width="2"/><rect x="6" y="-15" width="16" height="22" rx="2" fill="#7d0c14" stroke="#111" stroke-width="2"/><rect x="-20" y="-20" width="7" height="10" fill="#222"/><circle cx="-16" cy="10" r="5" fill="#111"/><circle cx="2" cy="10" r="5" fill="#111"/><circle cx="16" cy="10" r="4" fill="#111"/></g></svg>`; return s; },
+  'tien-len':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1f6b4a"/><rect width="300" height="225" fill="url(#felt)" opacity=".0"/><ellipse cx="150" cy="240" rx="210" ry="120" fill="#24805a"/>${card(95,120,-24,'2','♥',1)}${card(125,108,-10,'A','♠',0)}${card(155,104,4,'K','♦',1)}${card(185,110,18,'Q','♣',0)}${card(212,124,30,'J','♥',1)}${card(60,60,-8,'3','♠',0,36)}${card(250,58,12,'3','♦',1,36)}</svg>`,
+  'ma-soi':()=>{ let st=''; for(let i=0;i<40;i++) st+=`<circle cx="${(i*71)%300}" cy="${(i*43)%120}" r="${i%3?0.8:1.4}" fill="#fff"/>`;
+    return `<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1b2537"/>${st}<circle cx="210" cy="62" r="34" fill="#f3f0dc"/><circle cx="198" cy="54" r="6" fill="#dcd7bd"/><circle cx="222" cy="72" r="4" fill="#dcd7bd"/>
+    <path d="M0 175 L40 150 L80 168 L130 140 L180 165 L230 145 L300 170 L300 225 L0 225Z" fill="#0f1622"/>
+    <path d="M30 175 L30 150 L48 136 L66 150 L66 175Z M200 180 L200 158 L222 140 L244 158 L244 180Z" fill="#26324a"/><rect x="42" y="157" width="8" height="9" fill="#f4c96b"/><rect x="216" y="162" width="9" height="10" fill="#f4c96b"/>
+    <path d="M120 175 L124 140 L118 126 L128 132 L136 118 L144 132 L154 126 L148 140 L152 175Z" fill="#0b0f17"/><circle cx="131" cy="136" r="2" fill="#ffcf3f"/><circle cx="141" cy="136" r="2" fill="#ffcf3f"/></svg>`; },
+  'da-quy':()=>{ const G=[['#d8392b',70,80],['#2f6fc0',130,70],['#3f9b46',190,82],['#f6f3ea',100,140],['#2b2b2b',160,145],['#f2cc2a',225,140]];
+    return `<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#3e3566"/><rect x="18" y="18" width="264" height="189" rx="12" fill="#4b4178"/>`+G.map(([c,x,y])=>`<g transform="translate(${x},${y})"><circle r="27" fill="#1d1830" opacity=".35" cx="3" cy="4"/><circle r="27" fill="${c}" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><path d="M-12 -4 L0 -15 L12 -4 L0 14Z" fill="#fff" opacity=".55"/><path d="M-12 -4 L12 -4 L0 14Z" fill="#fff" opacity=".25"/></g>`).join('')+`</svg>`; },
+  'phom':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#6d5a2f"/><ellipse cx="150" cy="120" rx="150" ry="110" fill="#7d683a"/>${card(60,75,0,'7','♠',0,40)}${card(90,75,0,'7','♥',1,40)}${card(120,75,0,'7','♦',1,40)}${card(185,75,0,'4','♣',0,40)}${card(215,75,0,'5','♣',0,40)}${card(245,75,0,'6','♣',0,40)}${card(95,160,-6,'9','♥',1,40)}${card(150,163,0,'K','♠',0,40)}${card(205,160,6,'2','♦',1,40)}</svg>`,
+  'co-ty-phu':()=>{ let s=`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#2e6a86"/><rect x="60" y="22" width="180" height="180" fill="#dfeee4" stroke="#1d3c4a" stroke-width="2"/>`; const cols=['#c0392b','#e67e22','#f1c40f','#27ae60','#2980b9','#8e44ad'];
+    for(let i=0;i<6;i++){ const x=60+i*30; s+=`<rect x="${x}" y="22" width="30" height="30" fill="#fff" stroke="#1d3c4a"/><rect x="${x}" y="22" width="30" height="8" fill="${cols[i]}"/><rect x="${x}" y="172" width="30" height="30" fill="#fff" stroke="#1d3c4a"/><rect x="${x}" y="194" width="30" height="8" fill="${cols[5-i]}"/>`; }
+    for(let i=1;i<5;i++){ const y=22+i*30; s+=`<rect x="60" y="${y}" width="30" height="30" fill="#fff" stroke="#1d3c4a"/><rect x="210" y="${y}" width="30" height="30" fill="#fff" stroke="#1d3c4a"/>`; }
+    s+=`<text x="150" y="108" text-anchor="middle" font-family="Times New Roman" font-size="20" font-weight="bold" fill="#1d3c4a" transform="rotate(-30 150 112)">TỶ PHÚ</text><g transform="translate(150,135)"><rect x="-13" y="-13" width="26" height="26" rx="5" fill="#fff" stroke="#1d3c4a" stroke-width="1.5"/><circle cx="-6" cy="-6" r="2.5"/><circle cx="6" cy="6" r="2.5"/><circle r="2.5"/></g><path d="M168 150 L178 138 L188 150 L188 162 L168 162Z" fill="#c0392b" stroke="#1d3c4a"/></svg>`; return s; }
+};
+
 /* Danh mục trò chơi — thêm game mới vào đây */
 const GAMES = [
   { id:'duong-ray-chau-au', title:'Đường Ray Châu Âu', sub:'Xây mạng đường sắt khắp lục địa', cat:'Chiến thuật · Xây dựng', players:'2–5', time:'45–60 phút', level:'Trung bình',
@@ -313,19 +355,13 @@ function needName(){ if (clean(nameEl.value)) return false; toast('Hãy nhập t
 /* Danh sách game */
 $('#sGames').textContent=GAMES.filter(g=>g.ready).length;
 $('#gameList').innerHTML=GAMES.map(g=>`
-  <article class="game glass reveal">
-    <div class="cover ${g.ready?'':'soon'}">${coverSVG(g.color, g.id)}
-      <div class="ctop"><span class="tag">${esc(g.cat)}</span>${g.ready?'':'<span class="tag">Sắp ra mắt</span>'}</div>
-      <div class="ttl">${esc(g.title)}<small>${esc(g.sub)}</small></div>
-    </div>
-    <div class="ginfo">
-      <p>${esc(g.desc)}</p>
-      <div class="meta"><div><span>Người chơi</span>${g.players}</div><div><span>Thời gian</span>${g.time}</div><div><span>Độ khó</span>${g.level}</div></div>
-      <div class="gact">${g.ready
-        ? `<a class="btn" href="${gameUrl(g.id)}" data-go="${g.id}">Chơi ngay <span class="ar">→</span></a>`
-        : `<button class="btn" disabled>Đang phát triển</button>`}</div>
-    </div>
-  </article>`).join('');
+  <a class="gc ${g.ready?'':'soon'} reveal" href="${g.ready?gameUrl(g.id):'#games'}" ${g.ready?`data-go="${g.id}"`:'data-soon="1"'} title="${esc(g.title)}">
+    <div class="thumb">${THUMBS[g.id]?THUMBS[g.id]():''}${g.ready?'<div class="playlab">Bấm để vào chơi</div>':'<span class="soonlab">Sắp ra mắt</span>'}</div>
+    <h3>${esc(g.title)}</h3>
+    <p>${esc(g.desc)}</p>
+    <div class="gm"><span>${g.players} người</span>${g.ready?'<span class="on">Online</span>':''}</div>
+  </a>`).join('');
+document.addEventListener('click',e=>{ const s=e.target.closest('[data-soon]'); if(s){ e.preventDefault(); toast('Trò chơi này đang được phát triển, sắp ra mắt!'); } });
 const io=new IntersectionObserver(es=>es.forEach(x=>{ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }),{threshold:.12});
 document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay=(i%3)*0.08+'s'; io.observe(el); });
 document.addEventListener('click',e=>{ const a=e.target.closest('[data-go]'); if(a && needName()) e.preventDefault(); });
