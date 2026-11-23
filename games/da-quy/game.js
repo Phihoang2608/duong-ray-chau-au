@@ -37,21 +37,21 @@ const DQ = (()=>{
       if (a.deck){ const d=S.decks[a.deck]; if(!d||!d.length) return false; id=d.pop(); }
       else { const lv=a.lv, i=a.i; if(!S.board[lv]||S.board[lv][i]==null) return false; id=S.board[lv][i]; refill(S,lv,i); }
       P.res.push(id); let g=0; if(S.bank[5]>0){ S.bank[5]--; P.tok[5]++; g=1; }
-      S.log.unshift(name+' giữ chỗ 1 thẻ cấp '+CARDS[id].lv+(g?' và nhận 1 Vàng':'')+'.'); ev(S,{k:'reserve',seat,id:a.deck?null:id}); return after(S,seat,t); }
+      S.log.unshift(name+' giữ chỗ 1 thẻ cấp '+CARDS[id].lv+(g?' và nhận 1 Vàng':'')+'.'); ev(S,{k:'reserve',seat,id:a.deck?null:id,lv:a.lv,i:a.i,deck:a.deck||0}); return after(S,seat,t); }
     if (a.t==='buy'){ let id, from;
       if (a.res!=null){ id=P.res[a.res]; if(id==null) return false; from='res'; } else { if(!S.board[a.lv]||S.board[a.lv][a.i]==null) return false; id=S.board[a.lv][a.i]; from='board'; }
       const card=CARDS[id], plan=payPlan(P,card); if(!plan) return false;
       for(let c=0;c<5;c++){ P.tok[c]-=plan.pay[c]; S.bank[c]+=plan.pay[c]; } P.tok[5]-=plan.gold; S.bank[5]+=plan.gold;
       if (from==='res') P.res.splice(a.res,1); else refill(S,a.lv,a.i);
       P.cards.push(id); P.bonus[card.col]++; P.pts+=card.pts;
-      S.log.unshift(name+' mua thẻ '+DQ_COL[card.col]+(card.pts?' (+'+card.pts+' điểm)':'')+'.'); ev(S,{k:'buy',seat,id}); return after(S,seat,t); }
+      S.log.unshift(name+' mua thẻ '+DQ_COL[card.col]+(card.pts?' (+'+card.pts+' điểm)':'')+'.'); ev(S,{k:'buy',seat,id,lv:a.lv,i:a.i,res:a.res}); return after(S,seat,t); }
     return false; }
   function after(S,seat,t){ const P=S.P[seat];
     if (tot(P.tok)>DQ_MAXTOK){ S.step='discard'; S.turnAt=t; return true; }
     endTurn(S,t); return true; }
   function endTurn(S,t){ const seat=S.turn, P=S.P[seat], n=S.seats.length;
     const ok=S.nobles.filter(id=>NOBLES[id].req.every((r,c)=>P.bonus[c]>=r));
-    if (ok.length){ const id=ok[0]; S.nobles=S.nobles.filter(x=>x!==id); P.nobles.push(id); P.pts+=3; S.log.unshift(NOBLE_NAMES[id]+' ghé thăm '+S.seats[seat].name+' (+3 điểm).'); ev(S,{k:'noble',seat,id}); }
+    if (ok.length){ const id=ok[0]; S.nobles=S.nobles.filter(x=>x!==id); P.nobles.push(id); P.pts+=3; S.log.unshift(NOBLE_NAMES[id]+' ghé thăm '+S.seats[seat].name+' (+3 điểm).'); ev(S,{k:'noble',seat,id,from:S.nobles.length}); }
     if (P.pts>=DQ_WIN && !S.last){ S.last=true; S.log.unshift(S.seats[seat].name+' đạt '+P.pts+' điểm — chơi nốt vòng này!'); }
     S.step='main';
     if ((S.last || S.round>=60) && seat===n-1){ finish(S,t); return; }
