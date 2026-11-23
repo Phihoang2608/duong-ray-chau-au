@@ -195,10 +195,54 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   .room{grid-template-columns:80px 1fr 100px}
   .room .stt{display:none}
 }
+
+/* ===== GIAO DIỆN NỀN TRẮNG NHIỀU MÀU ===== */
+:root{--ink:#1d1b2e;--ink2:#555268;--mute:#8b889c;--accent:#6c4cf0;--accent2:#5136d0;--glass:rgba(255,255,255,.72);--glass2:rgba(255,255,255,.9);--gline:rgba(120,110,170,.16);--shadow:0 10px 30px rgba(80,60,140,.10);--field:#fff}
+body{background:#fbfaff!important;color:var(--ink)}
+#scene,#lamp,.toggle{display:none!important}
+.bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#fdfcff}
+.bgfx i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:float 22s ease-in-out infinite alternate}
+.bgfx i:nth-child(1){width:520px;height:520px;left:-120px;top:-140px;background:#ffb5d0}
+.bgfx i:nth-child(2){width:480px;height:480px;right:-100px;top:-80px;background:#b9c8ff;animation-duration:26s}
+.bgfx i:nth-child(3){width:460px;height:460px;left:30%;top:35%;background:#c9f2e1;animation-duration:30s}
+.bgfx i:nth-child(4){width:420px;height:420px;right:5%;bottom:-160px;background:#ffe2b3;animation-duration:24s}
+.bgfx i:nth-child(5){width:380px;height:380px;left:-80px;bottom:-120px;background:#dcc8ff;animation-duration:28s}
+@keyframes float{to{transform:translate(60px,40px) scale(1.12)}}
+.glass{background:var(--glass)!important;border:1px solid var(--gline)!important;box-shadow:var(--shadow)!important}
+.top .bar{background:rgba(255,255,255,.78)!important}
+.brand b{background:linear-gradient(90deg,#ff5f8f,#8a5cf6,#3fa9f5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav a:hover{background:#f1edff}
+/* Ô vào phòng nhỏ gọn, có viền cầu vồng */
+.quick{margin:18px auto 0;max-width:1180px;padding:0 28px;position:relative;z-index:2}
+.qbox{position:relative;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px 10px 18px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(108,76,240,.10)}
+.qbox::before{content:"";position:absolute;inset:-2px;border-radius:20px;padding:2px;background:linear-gradient(90deg,#ff5f8f,#ffb547,#3fd1a0,#3fa9f5,#8a5cf6,#ff5f8f);background-size:300% 100%;animation:rb 8s linear infinite;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+@keyframes rb{to{background-position:300% 0}}
+.qtitle{font-weight:bold;font-size:15px;white-space:nowrap;background:linear-gradient(90deg,#ff5f8f,#8a5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.qbox input{border:1px solid #e6e1f5;background:#faf9ff;border-radius:10px;padding:7px 10px;font-size:14.5px;outline:none;color:var(--ink);width:150px;transition:border-color .2s,box-shadow .2s}
+.qbox input:focus{border-color:#8a5cf6;box-shadow:0 0 0 3px rgba(138,92,246,.15)}
+.qbox input.code{width:120px;letter-spacing:.25em;text-transform:uppercase}
+.qbox input.code::placeholder{letter-spacing:0;text-transform:none}
+.qbtn{border:none;border-radius:10px;padding:8px 16px;color:#fff;cursor:pointer;font-size:14.5px;background:linear-gradient(90deg,#ff5f8f,#8a5cf6);box-shadow:0 6px 14px rgba(138,92,246,.3);transition:transform .15s,filter .2s}
+.qbtn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.qstats{margin-left:auto;display:flex;gap:14px;align-items:center;font-size:13.5px;color:var(--ink2);white-space:nowrap}
+.qstats b{font-size:16px;color:var(--ink)}
+.qstats .live{margin:0}
+/* Trò chơi là phần chính */
+section.block#games{padding-top:22px}
+.gamesbox{background:rgba(255,255,255,.6)!important}
+.gc h3{color:var(--ink)}
+.gc:hover h3{color:#8a5cf6}
+.thumb{box-shadow:0 8px 20px rgba(60,40,120,.14)}
+.btn{background:linear-gradient(90deg,#ff5f8f,#8a5cf6)!important;box-shadow:0 8px 18px rgba(138,92,246,.28)!important}
+.btn.soft{background:#fff!important;color:var(--ink)!important;box-shadow:none!important}
+.step .n{background:linear-gradient(135deg,#ff5f8f,#8a5cf6)!important}
+.st.open{color:#16a37a}
+.head h2{background:linear-gradient(90deg,#1d1b2e,#5136d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media (max-width:640px){ .quick{padding:0 14px} .qbox input{width:calc(50% - 8px)} .qbox input.code{width:calc(50% - 8px)} .qtitle{width:100%} .qbtn{flex:1} .qstats{width:100%;margin-left:0;justify-content:space-between} }
 </style>
 </head>
 <body>
-<div id="scene"></div>
+<div class="bgfx"><i></i><i></i><i></i><i></i><i></i></div><div id="scene"></div>
 <div id="lamp"></div>
 <header class="top"><div class="bar glass">
   <a class="brand" href="#"><b>Phi</b> Board Games</a>
@@ -206,32 +250,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   <button class="toggle" id="modeBtn" type="button" aria-label="Chuyển ngày đêm"><span class="tl" id="modeLab">Ban ngày</span><span class="sw"><span class="st" style="left:12px;top:8px"></span><span class="st" style="left:20px;top:18px"></span><span class="st" style="left:8px;top:20px"></span><span class="k"></span></span></button>
 </div></header>
 
-<section class="hero"><div class="wrap">
-  <div class="card glass">
-    <div class="scenic" id="heroScene">
-      <div class="txt"><h1>Phi Board Games</h1><p>Board game tiếng Việt chơi cùng bạn bè ngay trên trình duyệt. Không cài đặt, không đăng ký.</p></div>
-    </div>
-    <form class="form" id="joinForm" autocomplete="off">
-      <h2>Vào bàn chơi</h2>
-      <p class="sub">Nhập tên và mã phòng bạn bè gửi cho bạn</p>
-      <div class="field"><label for="name">Tên của bạn</label><input id="name" maxlength="16" placeholder="Ví dụ: Phi"></div>
-      <div class="field"><label for="code">Mã phòng</label><input id="code" class="code" maxlength="6" placeholder="Gồm 4 ký tự, ví dụ K7QX"></div>
-      <button class="btn full" type="submit">Vào phòng <span class="ar">→</span></button>
-      <div class="or">hoặc</div>
-      <a class="btn soft full" href="#games">Chọn trò chơi để tạo phòng mới</a>
-      <div class="chips">
-        <div class="chip"><div class="num" id="sRooms">0</div><div class="lab">Phòng đang mở</div></div>
-        <div class="chip"><div class="num" id="sPlayers">0</div><div class="lab">Người đang chơi</div></div>
-        <div class="chip"><div class="num" id="sGames">1</div><div class="lab">Trò chơi</div></div>
-      </div>
-      <div class="live off" id="live"><i></i><span>Đang kết nối…</span></div>
-    </form>
-  </div>
-</div></section>
+<div class="quick"><form class="qbox" id="joinForm" autocomplete="off">
+  <span class="qtitle">Vào phòng nhanh</span>
+  <input id="name" maxlength="16" placeholder="Tên của bạn">
+  <input id="code" class="code" maxlength="6" placeholder="Mã phòng">
+  <button class="qbtn" type="submit">Vào phòng →</button>
+  <span class="qstats"><span><b id="sRooms">0</b> phòng mở</span><span><b id="sPlayers">0</b> người chơi</span><span class="live off" id="live"><i></i><span>Đang kết nối…</span></span><span style="display:none" id="sGames"></span></span>
+</form></div>
 
 <section class="block" id="games"><div class="wrap">
-  <div class="head reveal"><h2>Trò chơi</h2><p>Chọn một trò để chơi với máy hoặc tạo phòng mời bạn bè</p></div>
-  <div class="gamesbox glass reveal"><div class="games" id="gameList"></div></div>
+  <div class="head"><h2>Trò chơi</h2><p>Bấm vào hình để vào chơi ngay</p></div>
+  <div class="gamesbox glass"><div class="games" id="gameList"></div></div>
 </div></section>
 
 <section class="block" id="rooms"><div class="wrap">
@@ -290,16 +319,10 @@ function coverSVG(color, id){
     <path d="${ridge(id.length*3+2,225,40,7,400,275)}" fill="${color}"/>
     <rect width="400" height="275" fill="url(#c${id})" opacity=".55"/></svg>`;
 }
-document.getElementById('scene').innerHTML=sceneSVG(1440,900,{id:'bg',train:true,stars:110,trees:30});
-document.getElementById('heroScene').insertAdjacentHTML('afterbegin', sceneSVG(600,620,{id:'hs',stars:40,trees:12}));
 
-/* Ngày / đêm */
-function setMode(night){ document.body.classList.toggle('night', night); $('#modeLab').textContent=night?'Ban đêm':'Ban ngày'; try{ localStorage.setItem('bg-mode', night?'night':'day'); }catch(e){} }
-let saved=null; try{ saved=localStorage.getItem('bg-mode'); }catch(e){}
-const hr=new Date().getHours(); setMode(saved ? saved==='night' : (hr>=18||hr<6));
-$('#modeBtn').addEventListener('click',()=>setMode(!document.body.classList.contains('night')));
-addEventListener('pointermove',e=>{ const l=$('#lamp'); l.style.setProperty('--lx',e.clientX+'px'); l.style.setProperty('--ly',e.clientY+'px'); });
 
+
+document.body.classList.remove('night');
 /* Ảnh nhỏ minh hoạ từng game */
 function card(x,y,r,rank,suit,red,w){ w=w||46; const hgt=w*1.4; return `<g transform="translate(${x},${y}) rotate(${r})"><rect x="${-w/2}" y="${-hgt/2}" width="${w}" height="${hgt}" rx="5" fill="#fff" stroke="#c9c2b4"/><text x="${-w/2+5}" y="${-hgt/2+15}" font-size="14" font-family="Times New Roman" font-weight="bold" fill="${red?'#c0392b':'#1b1b1b'}">${rank}</text><text x="0" y="8" text-anchor="middle" font-size="24" fill="${red?'#c0392b':'#1b1b1b'}">${suit}</text></g>`; }
 const THUMBS={
@@ -389,7 +412,7 @@ function connect(){
   let any=false;
   BROKERS.forEach((u,i)=>{
     let c; try{ c=mqtt.connect(u,{clientId:'hub'+Math.random().toString(36).slice(2,10)+i,clean:true,keepalive:30,reconnectPeriod:4000,connectTimeout:7000}); }catch(e){ return; }
-    c.on('connect',()=>{ c.subscribe(TOPIC+'+'); if(!any){ any=true; const l=$('#live'); l.classList.remove('off'); l.innerHTML='<i></i><span>Cập nhật trực tiếp</span>'; } });
+    c.on('connect',()=>{ c.subscribe(TOPIC+'+'); if(!any){ any=true; const l=$('#live'); l.classList.remove('off'); l.innerHTML='<i></i><span>Trực tiếp</span>'; } });
     c.on('message',(topic,buf)=>{
       const key=topic.slice(TOPIC.length); const txt=buf?buf.toString():'';
       if(!txt){ delete ROOMS[key]; render(); return; }
@@ -398,7 +421,7 @@ function connect(){
     });
     c.on('error',()=>{});
   });
-  setTimeout(()=>{ if(!any) $('#live').innerHTML='<i></i><span>Chưa kết nối được — vẫn vào phòng bằng mã được</span>'; },12000);
+  setTimeout(()=>{ if(!any) $('#live').innerHTML='<i></i><span>Ngoại tuyến</span>'; },12000);
 }
 
 /* Vào phòng bằng mã */
