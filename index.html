@@ -2305,11 +2305,11 @@ function showLobby(){
   if (NET.mode==='host'){
     showLobbyView(`<h2>🌐 Phòng chơi online</h2>${invite}<h3>Người trong phòng (${people.length}/5)</h3><div class="lpeople">${ppl}</div>
       <label>Thêm bot cho đủ người: <select id="lobbyBots">${[0,1,2,3,4].map(n=>`<option value="${n}" ${n===(people.length>1?0:1)?'selected':''}>${n} bot</option>`).join('')}</select></label>`,
-      [{label:'📋 Sao chép lời mời', onClick:copyInvite},{label:'🚀 Bắt đầu ván', cls:'primary', onClick:hostStart},{label:'🚪 Rời phòng', onClick:()=>{ leaveRoom(); goMenu(); }}]);
+      [{label:'📋 Sao chép lời mời', onClick:copyInvite},{label:'🚀 Bắt đầu ván', cls:'primary', onClick:hostStart},{label:'🚪 Rời phòng', onClick:askLeave}]);
   } else {
     const h=hostPeer();
     showLobbyView(`<h2>🌐 Phòng ${esc(NET.code)}</h2>${h?`<p>Đã vào phòng của <b>${esc(cleanName(h.presence.name))}</b>. Chờ chủ phòng bắt đầu ván…</p><div class="spinner"></div>`:'<p class="warn">Chưa thấy chủ phòng. Kiểm tra lại mã phòng, hoặc chờ chủ phòng mở lại.</p>'}
-      <h3>Người trong phòng</h3><div class="lpeople">${ppl}</div>`, [{label:'🚪 Rời phòng', onClick:()=>{ leaveRoom(); goMenu(); }}]);
+      <h3>Người trong phòng</h3><div class="lpeople">${ppl}</div>`, [{label:'🚪 Rời phòng', onClick:askLeave}]);
   }
 }
 function copyInvite(){
@@ -2329,9 +2329,10 @@ function resumeRoom(){
 }
 function askLeave(){
   const host=NET.mode==='host';
-  showModal('🚪 Rời phòng?', `<p>${host?'Bạn là <b>chủ phòng</b>. Khi bạn rời đi, ván chơi của mọi người sẽ <b>tạm dừng</b> cho tới khi bạn bấm <b>“Vào lại phòng”</b> ở menu.':'Ghế của bạn vẫn được giữ. Khi vắng quá 15 giây, máy sẽ đi thay lượt cho bạn.'}</p><p>Muốn quay lại: ở menu bấm <b>↩ Vào lại phòng ${esc(NET.code)}</b>.</p>`,
-    [{label:'🚪 Rời phòng', cls:'primary', onClick:()=>{ hideModal(); const c=NET.code; saveLastRoom(c, host?'host':'guest'); leaveRoom(); goMenu(); toast('Đã rời phòng '+c+'. Bấm “Vào lại phòng” để quay lại.'); }},
-     {label:'Ở lại chơi tiếp', onClick:()=>hideModal()}], {center:true});
+  const inLobby=!NET.inGame;
+  showModal('🚪 Bạn chắc chắn muốn rời phòng?', `<p>${inLobby?(host?'Bạn là <b>chủ phòng</b>. Khi bạn rời, mọi người trong phòng phải chờ bạn mở lại phòng.':'Bạn sẽ ra khỏi phòng chờ.'):host?'Bạn là <b>chủ phòng</b>. Khi bạn rời đi, ván chơi của mọi người sẽ <b>tạm dừng</b> cho tới khi bạn bấm <b>“Vào lại phòng”</b> ở menu.':'Ghế của bạn vẫn được giữ. Khi vắng quá 15 giây, máy sẽ đi thay lượt cho bạn.'}</p><p>Muốn quay lại: ở menu bấm <b>↩ Vào lại phòng ${esc(NET.code)}</b>.</p>`,
+    [{label:'✅ Xác nhận rời phòng', cls:'primary', onClick:()=>{ hideModal(); const c=NET.code; saveLastRoom(c, host?'host':'guest'); leaveRoom(); goMenu(); toast('Đã rời phòng '+c+'. Bấm “↩ Vào lại phòng” để quay lại.'); }},
+     {label:'↩ Quay lại phòng', onClick:()=>hideModal()}], {center:true, key:'leave'});
 }
 function goMenu(){ refreshResume(); MUSIC.stop(); clearTimeout(UIS.botT); hideModal(); $('#lobby').classList.add('hidden'); $('#menu').classList.remove('hidden'); }
 function startLocal(){
@@ -2386,7 +2387,9 @@ function bind(){
   $('#sbHead').onclick=()=>{ const sb=$('#scoreBoard'); sb.classList.toggle('closed'); try{ localStorage.setItem('dr-sb', sb.classList.contains('closed')?'0':'1'); }catch(e){} };
   try{ const v=localStorage.getItem('dr-sb'); if (v==='0') $('#scoreBoard').classList.add('closed'); }catch(e){}
   $('#rulesBtn').onclick=showRules; $('#rulesBtn2').onclick=showRules;
-  $('#menuBtn').onclick=()=>goMenu();
+  $('#menuBtn').onclick=()=>{ if (NET.mode==='local') return goMenu();
+    showModal('☰ Về menu?', `<p>Bạn vẫn ở trong phòng <b>${esc(NET.code)}</b> (không bị rời phòng). Ở menu bấm <b>↩ Quay lại phòng</b> để chơi tiếp.</p>`,
+      [{label:'✅ Về menu', cls:'primary', onClick:()=>{ hideModal(); goMenu(); }},{label:'↩ Quay lại phòng', onClick:()=>hideModal()}], {center:true}); };
   $('#leaveBtn').onclick=askLeave;
   $('#musicBtn').onclick=()=>{ SFX.init(); MUSIC.on=!MUSIC.on; $('#musicBtn').classList.toggle('off', !MUSIC.on); $('#musicBtn').title=MUSIC.on?'Tắt nhạc nền':'Bật nhạc nền'; render(); };
   $('#soundBtn').onclick=()=>{ SFX.init(); SFX.on=!SFX.on; if(!SFX.on) MUSIC.stop(); else if(G) render(); $('#soundBtn').textContent=SFX.on?'🔊':'🔇'; $('#soundBtn2').textContent=SFX.on?'🔊 Âm thanh: bật':'🔇 Âm thanh: tắt'; };
