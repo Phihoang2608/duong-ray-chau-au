@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phỏm | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js"></script>
+<script src="../../core/cards.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script>
+const CSS=`.tbl{position:relative;margin:30px auto 0;width:min(1100px,94vw);height:min(560px,calc(100vh - 230px));min-height:380px}
+.tbl .arc{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:12.5px;letter-spacing:.18em;color:rgba(255,255,255,.45);white-space:nowrap}
+.tbl .dealer{position:absolute;left:50%;top:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:#fff}
+.tbl .dealer .dl{background:rgba(0,0,0,.35);border-radius:14px;padding:2px 12px;font-size:14px;letter-spacing:.12em}
+.tbl .dealer .cards{display:flex;gap:4px}
+.tbl .center{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);text-align:center;color:#fff}
+.tbl .st{background:rgba(0,0,0,.3);border-radius:16px;padding:6px 18px;font-size:17px}.tbl .st b{font-size:20px;color:#fde047}
+.tmr{background:#fff;color:#1f7a5c;border-radius:10px;padding:0 6px;font-weight:bold;font-size:13px}
+.betc{margin-top:2px}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:8px;margin:22px auto 0;width:min(900px,94vw);background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:18px;padding:10px 14px}
+.ctrl .chips{display:flex;gap:10px}.ctrl .ch{border:none;background:none;cursor:pointer;padding:0;transition:transform .15s}.ctrl .ch .chip{width:48px;height:48px;font-size:14px}
+.ctrl .ch.on{transform:translateY(-6px) scale(1.1)}.ctrl .ch:disabled{opacity:.35;cursor:not-allowed}
+.ctrl .btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}.ctrl .btns span b{color:#b5332f;font-size:17px}
+.xlog{width:min(900px,94vw);margin:10px auto 0;font-size:13.5px;color:#555268}.xlog div{border-bottom:1px dotted #e6e1f5;padding:2px 0}
+.note{text-align:center;font-size:12.5px;color:#8b889c;margin:8px 0 16px}
+@media (max-height:520px){ .tbl{margin-top:14px;height:calc(100vh - 150px);min-height:250px} .ctrl{margin-top:16px;padding:6px 10px} .xlog,.note{display:none} .tbl .arc{display:none} }
+.tbl .pot{display:flex;align-items:center;gap:8px;justify-content:center;background:rgba(0,0,0,.25);border-radius:20px;padding:4px 14px 4px 4px;margin-bottom:8px;font-size:15px}.tbl .pot b{color:#fde047;font-size:19px}
+.ph{height:min(470px,calc(100vh - 330px));min-height:330px}.ph .center{top:50%;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ph .arc{top:68%}
+.ph .deckp{position:relative;height:70px}.ph .deckp .pc{--cw:48px;box-shadow:3px 3px 0 #c9c3e0,6px 6px 0 #a8a1c8}.ph .deckp span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;color:#1d1b2e;border-radius:10px;padding:0 7px;font-weight:bold;font-size:13px}
+.pc.mini{--cw:34px;border-radius:5px}.pc.mini .br{display:none}.pc.mini .tl{left:3px;top:3px;font-size:calc(var(--cw)*.34)}.pc.mini .mid{font-size:calc(var(--cw)*.46);padding-top:30%}.pc.mini.court .mid{margin:0;background:none;border:none}.pc.mini.court .mid b{display:none}
+.ph .fan{display:flex;position:relative}.ph .fan .pc{--cw:30px;margin-left:-20px}.ph .fan .pc:first-child{margin-left:0}.ph .fan .cnt{position:absolute;right:-12px;top:-8px;background:#e11d48;color:#fff;border-radius:10px;font-size:11px;padding:0 6px;font-weight:bold}
+.ph .disc{display:flex;gap:3px;min-height:50px;align-items:center}.ph .disc i{display:inline-block;width:34px;height:48px;border:1.5px dashed rgba(255,255,255,.3);border-radius:5px}
+.ph .eaten{display:flex;gap:3px}
+.pc.eat{box-shadow:0 0 0 2.5px #f59e0b,0 0 10px rgba(245,158,11,.7)}
+.pc.top{box-shadow:0 0 0 3px #fde047,0 0 14px rgba(253,224,71,.9);animation:tp 1.2s infinite}@keyframes tp{50%{transform:translateY(-4px)}}
+.ph .lay{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:330px}.ph .grp{display:flex;gap:2px;padding:3px;border-radius:7px}.ph .grp.m{background:rgba(253,224,71,.22);outline:1.5px solid rgba(253,224,71,.6)}.ph .grp.r{opacity:.85}
+.ph .seatbox.me{flex-direction:column-reverse}
+.myhand{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:14px auto 0;width:min(1100px,96vw)}
+.myhand .grp{display:flex;gap:3px;padding:5px;border-radius:10px}.myhand .grp.m{background:rgba(253,224,71,.25);outline:2px solid rgba(234,179,8,.55)}
+.myhand .pc{--cw:clamp(44px,5.2vw,68px);cursor:pointer;transition:transform .15s}.myhand .pc:hover{transform:translateY(-6px)}.myhand .pc.sel{transform:translateY(-16px);box-shadow:0 0 0 3px #8a5cf6,0 10px 22px rgba(138,92,246,.45)}
+.ctrl{margin-top:10px}
+.tbtn.gold{border:none;color:#3d2a00;background:linear-gradient(135deg,#fde047,#f59e0b);font-weight:bold}
+@media (max-height:520px){ .ph{height:calc(100vh - 205px);min-height:200px;margin-top:8px} .ph .arc{display:none} .pc.mini{--cw:26px} .ph .disc{min-height:38px} .ph .disc i{width:26px;height:37px} .ph .fan .pc{--cw:22px} .ph .deckp{height:44px} .ph .center{left:31%;top:74%} .ph .st{display:none}.ph .deckp .pc{--cw:32px} .ph .st{font-size:13px;padding:3px 10px}
+  .myhand{margin-top:6px;gap:6px}.myhand .pc{--cw:40px} .ctrl{margin-top:6px} .ph .lay .grp{padding:1px} }
+`;
+Table.init({ id:'phom', prefix:'ph', title:'Phỏm (Tá Lả)', tagline:'Bốc, ăn, đánh — ghép phỏm để ít điểm rác nhất',
+  minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:3, turnLimit:30, botDelay:500, css:CSS,
+  newGame:PH.newGame, apply:PH.apply, tick:PH.tick, whoActs:PH.whoActs, botAction:PH.botAction, timeoutAction:PH.timeoutAction,
+  render:PHUI.render, tickView:PHUI.tickView,
+  rules:`<p><b>Chia bài:</b> mỗi người 9 lá, người đánh trước 10 lá. Bài còn lại úp giữa bàn.</p>
+  <p><b>Phỏm</b> là bộ từ 3 lá trở lên: cùng số (ví dụ 7♠ 7♥ 7♦) hoặc cùng chất liên tiếp (ví dụ 4♥ 5♥ 6♥). A đứng đầu: A-2-3 được, Q-K-A không được.</p>
+  <p><b>Đến lượt:</b> <b>Ăn</b> lá người trước vừa đánh nếu nó ghép thành phỏm với bài bạn, hoặc <b>Bốc</b> 1 lá. Sau đó chọn 1 lá rồi bấm <b>Đánh</b> (bấm lá 2 lần cũng được). Lá đã ăn được viền vàng và phải giữ trong phỏm; mỗi phỏm chứa tối đa 1 lá ăn.</p>
+  <p><b>Tiền ăn:</b> bị ăn trả ${PH_UNIT} xu; ăn ở vòng cuối (ăn chốt) trả ${PH_UNIT*4} xu.</p>
+  <p><b>Kết thúc:</b> sau ${PH_ROUNDS} vòng đánh, mọi người tự động hạ phỏm. Điểm rác: A = 1, 2–10 theo số, J = 11, Q = 12, K = 13. Ít điểm nhất về Nhất. Nhì trả Nhất ${PH_UNIT} xu, Ba trả ${PH_UNIT*2}, Bét trả ${PH_UNIT*3}, <b>Móm</b> (không có phỏm nào) trả ${PH_UNIT*4}.</p>
+  <p><b>Ù:</b> khi toàn bộ bài (trừ 1 lá đánh đi) đều nằm trong phỏm, bạn thắng ngay, mỗi người trả ${PH_UNIT*5} xu.</p>
+  <p>Bản này bỏ luật gửi bài và chuyển lượt để dễ chơi. <b>Xu ảo chỉ để giải trí.</b></p>` });
+</script>
+</body>
+</html>

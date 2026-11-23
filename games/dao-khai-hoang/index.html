@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đảo Khai Hoang | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js"></script>
+<script src="../../core/cards.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script>
+const CSS=`#kh{padding:8px 10px 16px}
+.khwrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px;max-width:1320px;margin:0 auto;align-items:start}
+.kbwrap{position:relative}.kb{width:100%;height:calc(100vh - 92px);min-height:420px;display:block;filter:drop-shadow(0 10px 22px rgba(20,60,100,.25))}
+.kst{position:absolute;left:50%;top:10px;transform:translateX(-50%);background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:16px;padding:5px 16px;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.12);white-space:nowrap}
+.kb text{font-family:"Times New Roman",serif;text-anchor:middle}.kb .nm{font-size:17px;font-weight:bold;fill:#2b2b2b}.kb .nm.hot{fill:#c0262d}.kb .pt{font-size:11.5px;font-weight:bold;fill:#3b2a14}
+.kb .hx.pick{cursor:pointer}.kb .hx.pick polygon{animation:hxp 1.2s infinite}@keyframes hxp{50%{stroke:#fde047;stroke-width:6}}
+.kb .spot{stroke-width:9;stroke-linecap:round;opacity:.45;cursor:pointer;animation:sp 1s infinite}.kb .spot:hover{opacity:1}@keyframes sp{50%{opacity:.85}}
+.kb .vspot{fill:#fff;stroke:var(--pc,#8a5cf6);stroke-width:4;cursor:pointer;animation:vs 1s infinite}.kb .vspot:hover{fill:#fde047}@keyframes vs{50%{r:13}}
+.kb .newp{animation:np .7s}@keyframes np{0%{opacity:0}40%{opacity:1}}
+.kb .rob{filter:drop-shadow(0 2px 3px #0008)}
+.side{display:flex;flex-direction:column;gap:8px;max-height:calc(100vh - 80px);overflow-y:auto;padding-right:2px}
+.box,.dice,.pl{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:14px;padding:7px 9px}
+.dice{display:flex;align-items:center;gap:8px}.die{width:36px;height:36px}.dice b{font-size:24px;color:#b5332f;min-width:28px}.dice span{color:#999;flex:1}.dice .tbtn{margin-left:auto}
+.dice.rolling .die{animation:roll .6s}@keyframes roll{0%{transform:rotate(-200deg) scale(.4)}}
+.pls{display:flex;flex-direction:column;gap:6px}.pl{border-left:6px solid var(--pc)}.pl.turn{box-shadow:0 0 0 2px var(--pc),0 0 14px rgba(0,0,0,.12)}.pl.win{background:#f0fdf4}
+.pl .ph{display:flex;align-items:center;gap:6px}.pl .ph i{width:12px;height:12px;border-radius:50%;background:var(--pc)}.pl .vp{margin-left:auto;font-size:20px;font-weight:bold;color:var(--pc)}
+.pl .ps{font-size:12.5px;color:#555}.pl em{font-style:normal;background:#fde68a;border-radius:6px;padding:0 4px;color:#7a4a00}
+.tmr{background:#f59e0b;color:#fff;border-radius:10px;padding:0 6px;font-weight:bold;font-size:12px}
+.res{display:flex;gap:5px;justify-content:space-between}.rc{flex:1;display:flex;flex-direction:column;align-items:center;border-radius:10px;background:color-mix(in srgb,var(--rc) 22%,#fff);border:2px solid var(--rc);padding:3px 0}.rc b{font-size:18px;line-height:1}.rc small{font-size:11px}
+.bl{display:grid;grid-template-columns:1fr 1fr;gap:5px}.bld{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 4px;font-size:13.5px}.bld span{display:flex;gap:2px}.bld.on{border-color:#8a5cf6;box-shadow:0 0 0 2px #8a5cf6;background:#f5f0ff}
+.cr{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:4px;background:var(--rc);color:#fff;font-size:11px;font-weight:bold;text-shadow:0 0 2px #000}
+.dv{display:flex;flex-direction:column;gap:4px}.dc{display:flex;align-items:center;gap:6px;font-size:14px}.dc .tbtn{margin-left:auto}.dc small{color:#888}.dpick{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:13px}
+.tr{font-size:13.5px;display:flex;flex-wrap:wrap;gap:5px;align-items:center}.tr select{font-family:inherit;font-size:13.5px;border:1px solid var(--line);border-radius:8px;padding:2px 4px}
+.tbtn.sm{padding:3px 9px;font-size:13px}.tbtn.wide{width:100%}.tbtn.gold{border:none;color:#3d2a00;background:linear-gradient(135deg,#fde047,#f59e0b);font-weight:bold;margin-top:6px}
+.xlog{font-size:12.5px;color:#555268}.xlog div{border-bottom:1px dotted #e6e1f5;padding:2px 0}
+@media (max-width:900px){ .khwrap{grid-template-columns:1fr} .kb{height:auto;max-height:70vh} .side{max-height:none} }
+@media (max-height:520px){ .khwrap{grid-template-columns:minmax(0,1fr) 300px;gap:6px} .kb{height:calc(100vh - 62px);min-height:0;max-height:none} .side{max-height:calc(100vh - 58px)} .kst{font-size:12.5px;padding:2px 10px;top:2px} #kh{padding:3px} .xlog{display:none} .pl .ps{font-size:11px} .box,.dice,.pl{padding:4px 6px} }
+`;
+Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
+  minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
+  newGame:KH.newGame, apply:KH.apply, tick:KH.tick, whoActs:KH.whoActs, botAction:KH.botAction, timeoutAction:KH.timeoutAction,
+  render:KHUI.render, tickView:KHUI.tickView,
+  rules:`<p><b>Mục tiêu:</b> đạt <b>${KH_WIN} điểm</b> trước. Nhà = 1 điểm, thành phố = 2 điểm, Đường dài nhất (từ 5 đoạn) = 2 điểm, Đạo quân mạnh nhất (từ 3 hiệp sĩ) = 2 điểm, thẻ Điểm thưởng = 1 điểm.</p>
+  <p><b>Xếp nhà đầu:</b> mỗi người đặt 1 nhà và 1 đường, sau đó đi ngược lại đặt thêm 1 lượt. Nhà thứ hai nhận ngay tài nguyên của các ô xung quanh. Hai nhà không được đặt sát nhau.</p>
+  <p><b>Mỗi lượt:</b> đổ 2 xúc xắc — ô đất mang số đó cho tài nguyên tới các nhà cạnh nó (thành phố nhận 2). Sau đó bạn xây dựng, mua thẻ, đổi hàng rồi bấm Kết thúc lượt.</p>
+  <p><b>Ra 7:</b> ai giữ hơn 7 lá tự mất một nửa; người đổ dời kẻ cướp sang ô khác (ô đó ngừng sản xuất) và lấy 1 lá của người có nhà cạnh ô.</p>
+  <p><b>Chi phí:</b> Đường = Gỗ + Gạch · Nhà = Gỗ + Gạch + Cừu + Lúa · Thành phố = 2 Lúa + 3 Quặng · Thẻ phát triển = Cừu + Lúa + Quặng.</p>
+  <p><b>Đổi hàng:</b> 4 lá cùng loại lấy 1 lá bất kỳ; có nhà ở cảng 3:1 hoặc cảng 2:1 thì đổi rẻ hơn.</p>
+  <p><b>Thẻ phát triển:</b> Hiệp sĩ (dời kẻ cướp), Làm đường (2 đường miễn phí), Được mùa (nhận 2 lá), Độc quyền (gom hết 1 loại tài nguyên của mọi người), Điểm thưởng. Mỗi lượt dùng tối đa 1 thẻ, không dùng thẻ vừa mua.</p>` });
+</script>
+</body>
+</html>

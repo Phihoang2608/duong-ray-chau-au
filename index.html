@@ -400,6 +400,15 @@ const THUMBS={
 </svg>`;
     return s.replace(/translate\((\d+),(\d+)\) scale\(\.6\)/g,(m,x,y)=>`translate(${x-30},${y-16}) scale(.6)`); },
   'tien-len':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1f6b4a"/><rect width="300" height="225" fill="url(#felt)" opacity=".0"/><ellipse cx="150" cy="240" rx="210" ry="120" fill="#24805a"/>${card(95,120,-24,'2','♥',1)}${card(125,108,-10,'A','♠',0)}${card(155,104,4,'K','♦',1)}${card(185,110,18,'Q','♣',0)}${card(212,124,30,'J','♥',1)}${card(60,60,-8,'3','♠',0,36)}${card(250,58,12,'3','♦',1,36)}</svg>`,
+  'poker':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#123b2c"/><ellipse cx="150" cy="118" rx="146" ry="96" fill="#1f7a5c" stroke="#6b3f22" stroke-width="10"/>${card(84,96,0,'A','♥',1,34)}${card(117,96,0,'K','♥',1,34)}${card(150,96,0,'Q','♥',1,34)}${card(183,96,0,'J','♥',1,34)}${card(216,96,0,'10','♥',1,34)}
+    ${[['#e11d48',70,175],['#8a5cf6',84,168],['#22b38a',98,176],['#3fa9f5',214,172],['#e11d48',228,166]].map(([c,x,y])=>`<circle cx="${x}" cy="${y}" r="11" fill="${c}" stroke="#fff" stroke-width="2.5" stroke-dasharray="4 3"/>`).join('')}<text x="150" y="182" text-anchor="middle" font-family="Times New Roman" font-size="17" fill="#fde047" font-weight="bold">TẤT TAY</text></svg>`,
+  'xi-dach':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#14532d"/><path d="M0 0 H300 V150 Q150 235 0 150Z" fill="#1f7a5c"/><path d="M30 40 Q150 110 270 40" fill="none" stroke="#ffffff40" stroke-width="2"/>${card(120,120,-10,'A','♠',0,44)}${card(168,120,10,'K','♥',1,44)}<text x="150" y="208" text-anchor="middle" font-family="Times New Roman" font-size="24" fill="#fde047" font-weight="bold">21</text></svg>`,
+  'ba-cay':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#7c2d12"/><ellipse cx="150" cy="115" rx="140" ry="95" fill="#9a3412"/>${card(112,110,-14,'J','♦',1,42)}${card(150,104,0,'Q','♠',0,42)}${card(188,110,14,'K','♥',1,42)}<text x="150" y="200" text-anchor="middle" font-family="Times New Roman" font-size="20" fill="#fde68a" font-weight="bold">BA TIÊN</text></svg>`,
+  'dao-khai-hoang':()=>{ const C=['#2f7d32','#c2562b','#8bc34a','#e8b923','#7b8794','#e9d8a6']; const H=[[0,-1,0],[1,-1,3],[-1,0,2],[0,0,5],[1,0,1],[-1,1,4],[0,1,3],[2,-1,2],[-2,1,0]]; const N=[6,9,4,0,8,10,5,11,3];
+    let s=`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#2a7fb5"/><path d="M10 40 q15 -8 30 0 M240 190 q15 -8 30 0 M230 30 q12 -6 24 0" stroke="#fff6" fill="none" stroke-width="2"/>`;
+    H.forEach(([q,r,c],i)=>{ const x=150+38*Math.sqrt(3)*(q+r/2), y=112+38*1.5*r; const p=[0,1,2,3,4,5].map(k=>{ const a=Math.PI/180*(60*k-90); return (x+37*Math.cos(a)).toFixed(1)+','+(y+37*Math.sin(a)).toFixed(1); }).join(' ');
+      s+=`<polygon points="${p}" fill="${C[c]}" stroke="#f7ecd0" stroke-width="3"/>`; if(N[i]) s+=`<circle cx="${x}" cy="${y}" r="12" fill="#fbf3dc"/><text x="${x}" y="${y+5}" text-anchor="middle" font-family="Times New Roman" font-weight="bold" font-size="14" fill="${N[i]===6||N[i]===8?'#c0262d':'#333'}">${N[i]}</text>`; });
+    return s+`<path d="M138 60 L138 50 L146 43 L154 50 L154 60Z" fill="#e11d48" stroke="#111" stroke-width="1.5"/><line x1="170" y1="150" x2="200" y2="133" stroke="#111" stroke-width="7"/><line x1="170" y1="150" x2="200" y2="133" stroke="#2563eb" stroke-width="4"/></svg>`; },
   'ma-soi':()=>{ let st=''; for(let i=0;i<40;i++) st+=`<circle cx="${(i*71)%300}" cy="${(i*43)%120}" r="${i%3?0.8:1.4}" fill="#fff"/>`;
     return `<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1b2537"/>${st}<circle cx="210" cy="62" r="34" fill="#f3f0dc"/><circle cx="198" cy="54" r="6" fill="#dcd7bd"/><circle cx="222" cy="72" r="4" fill="#dcd7bd"/>
     <path d="M0 175 L40 150 L80 168 L130 140 L180 165 L230 145 L300 170 L300 225 L0 225Z" fill="#0f1622"/>
@@ -424,12 +433,20 @@ const GAMES = [
     desc:'Tiến Lên miền Nam: ai đánh hết 13 lá trước sẽ thắng. Chặt heo bằng tứ quý, đôi thông như ngoài đời.', color:'#1f7a5c', ready:true },
   { id:'bau-cua', title:'Bầu Cua Tôm Cá', sub:'Lắc bát, mở xem', cat:'Dân gian · Xúc xắc', players:'1–6', time:'5 phút', level:'Dễ',
     desc:'Đặt cược vào Nai, Bầu, Gà, Cá, Cua, Tôm rồi lắc bát. Chơi bằng xu ảo cùng bạn bè hoặc với máy.', color:'#b5332f', ready:true },
+  { id:'poker', title:'Poker Texas Hold\'em', sub:'Tố, theo hay bỏ bài', cat:'Bài lá · Chiến thuật', players:'2–8', time:'20 phút', level:'Trung bình',
+    desc:'2 lá tẩy, 5 lá chung, 4 vòng cược. Có mù nhỏ, mù lớn, tất tay và hũ phụ. Chơi bằng phỉnh ảo.', color:'#145a43', ready:true },
+  { id:'phom', title:'Phỏm', sub:'Ăn bài, xếp phỏm, ù', cat:'Bài lá · Dân gian', players:'2–4', time:'15 phút', level:'Trung bình',
+    desc:'Bốc hoặc ăn bài người trước, ghép phỏm, ù sớm nhất hoặc về nhất với ít điểm rác.', color:'#8f7a45', ready:true },
+  { id:'xi-dach', title:'Xì Dách', sub:'Rút đủ 21 điểm', cat:'Bài lá · Nhà cái', players:'1–7', time:'5 phút', level:'Dễ',
+    desc:'Đấu với nhà cái: rút thêm hay dằn. Xì bàn, xì dách, ngũ linh ăn đậm. Chơi bằng xu ảo.', color:'#166534', ready:true },
+  { id:'ba-cay', title:'Ba Cây', sub:'3 lá, so nút', cat:'Bài lá · Dân gian', players:'2–8', time:'3 phút', level:'Dễ',
+    desc:'Mỗi người 3 lá, ai nhiều nút nhất ăn cả bàn. Ba tiên là lớn nhất, bằng nút thì so chất.', color:'#9a3412', ready:true },
+  { id:'da-quy', title:'Thương Nhân Đá Quý', sub:'Gom đá quý, xây đế chế buôn bán', cat:'Chiến thuật · Thu thập', players:'2–4', time:'30 phút', level:'Trung bình',
+    desc:'Thu thập đá quý để mua mỏ, xưởng và thương điếm, mời quý tộc ghé thăm. Đạt 15 điểm uy tín để thắng.', color:'#5b4f86', ready:true },
+  { id:'dao-khai-hoang', title:'Đảo Khai Hoang', sub:'Khai thác, xây làng, mở đường', cat:'Chiến thuật · Xây dựng', players:'2–4', time:'45 phút', level:'Khó',
+    desc:'Đổ xúc xắc lấy gỗ, gạch, cừu, lúa, quặng để xây nhà, thành phố và đường. Có cảng, kẻ cướp và thẻ phát triển. Đạt 10 điểm để thắng.', color:'#2a7fb5', ready:true },
   { id:'ma-soi', title:'Ma Sói', sub:'Làng quê và những kẻ giấu mặt', cat:'Nhập vai · Suy luận', players:'5–12', time:'20–30 phút', level:'Dễ',
     desc:'Dân làng tìm ra Ma Sói qua thảo luận và bỏ phiếu. Có người dẫn tự động, không cần quản trò.', color:'#34405a', ready:false },
-  { id:'da-quy', title:'Thương Nhân Đá Quý', sub:'Gom đá quý, xây đế chế buôn bán', cat:'Chiến thuật · Thu thập', players:'2–4', time:'30 phút', level:'Trung bình',
-    desc:'Thu thập đá quý để mua thẻ phát triển và thu hút quý tộc. Người đầu tiên đạt 15 điểm uy tín sẽ thắng.', color:'#5b4f86', ready:false },
-  { id:'phom', title:'Phỏm', sub:'Ăn bài, xếp phỏm, ù', cat:'Bài lá · Dân gian', players:'2–4', time:'15 phút', level:'Trung bình',
-    desc:'Xếp bài thành phỏm, ăn bài của người trước và tìm cách ù sớm nhất.', color:'#8f7a45', ready:false },
   { id:'co-ty-phu', title:'Cờ Tỷ Phú', sub:'Mua đất, xây nhà, thu tiền thuê', cat:'Gia đình · Kinh doanh', players:'2–6', time:'40 phút', level:'Dễ',
     desc:'Gieo xúc xắc đi quanh bàn cờ, mua đất và xây khách sạn. Người còn trụ lại cuối cùng là tỷ phú.', color:'#2e6a86', ready:false }
 ];

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poker | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js"></script>
+<script src="../../core/cards.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script>
+const CSS=`.tbl{position:relative;margin:30px auto 0;width:min(1100px,94vw);height:min(560px,calc(100vh - 230px));min-height:380px}
+.tbl .arc{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:12.5px;letter-spacing:.18em;color:rgba(255,255,255,.45);white-space:nowrap}
+.tbl .dealer{position:absolute;left:50%;top:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:#fff}
+.tbl .dealer .dl{background:rgba(0,0,0,.35);border-radius:14px;padding:2px 12px;font-size:14px;letter-spacing:.12em}
+.tbl .dealer .cards{display:flex;gap:4px}
+.tbl .center{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);text-align:center;color:#fff}
+.tbl .st{background:rgba(0,0,0,.3);border-radius:16px;padding:6px 18px;font-size:17px}.tbl .st b{font-size:20px;color:#fde047}
+.tmr{background:#fff;color:#1f7a5c;border-radius:10px;padding:0 6px;font-weight:bold;font-size:13px}
+.betc{margin-top:2px}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:8px;margin:22px auto 0;width:min(900px,94vw);background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:18px;padding:10px 14px}
+.ctrl .chips{display:flex;gap:10px}.ctrl .ch{border:none;background:none;cursor:pointer;padding:0;transition:transform .15s}.ctrl .ch .chip{width:48px;height:48px;font-size:14px}
+.ctrl .ch.on{transform:translateY(-6px) scale(1.1)}.ctrl .ch:disabled{opacity:.35;cursor:not-allowed}
+.ctrl .btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}.ctrl .btns span b{color:#b5332f;font-size:17px}
+.xlog{width:min(900px,94vw);margin:10px auto 0;font-size:13.5px;color:#555268}.xlog div{border-bottom:1px dotted #e6e1f5;padding:2px 0}
+.note{text-align:center;font-size:12.5px;color:#8b889c;margin:8px 0 16px}
+@media (max-height:520px){ .tbl{margin-top:14px;height:calc(100vh - 150px);min-height:250px} .ctrl{margin-top:16px;padding:6px 10px} .xlog,.note{display:none} .tbl .arc{display:none} }
+.tbl .pot{display:flex;align-items:center;gap:8px;justify-content:center;background:rgba(0,0,0,.25);border-radius:20px;padding:4px 14px 4px 4px;margin-bottom:8px;font-size:15px}.tbl .pot b{color:#fde047;font-size:19px}
+.pk .center{top:47%}.pk .board{display:flex;gap:6px;justify-content:center;margin-bottom:8px}.pk .board .pc{--cw:clamp(42px,4.6vw,62px)}
+.pk .slot{width:clamp(42px,4.6vw,62px);aspect-ratio:5/7;border:2px dashed rgba(255,255,255,.25);border-radius:8px}
+.pk .arc{top:24%}.pk .role{display:inline-block;margin-left:5px;font-size:11px;font-weight:bold;background:#e0e7ff;color:#3b2f7a;border-radius:9px;padding:0 6px}.pk .role.d{background:#fde047;color:#5b4300}
+.pk .betc{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:bold;color:#fde047}.pk .betc .chip{width:26px;height:26px;font-size:9px}
+.pk .pc.hl{box-shadow:0 0 0 3px #fde047,0 0 18px rgba(253,224,71,.8)}
+.ctrl .rz{gap:10px}.ctrl .rz input{width:min(360px,60vw);accent-color:#8a5cf6}.tbtn.sm{padding:4px 10px;font-size:13px}
+@media (max-height:520px){ .pk .center{top:36%} .pk .board .pc,.pk .slot{--cw:36px;width:36px} .pk .board{margin-bottom:4px} .pk .st{display:none} .pk .pot{font-size:13px;margin:0} .ctrl{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:6px} .ctrl .rz input{width:150px} }
+.tbtn.gold{border:none;color:#3d2a00;background:linear-gradient(135deg,#fde047,#f59e0b);font-weight:bold}
+`;
+Table.init({ id:'poker', prefix:'pk', title:'Poker Texas Hold\'em', tagline:'2 lá tẩy, 5 lá chung — tố, theo hay bỏ',
+  minPlayers:2, maxPlayers:8, botOptions:[1,2,3,4,5,6,7], defaultBots:4, turnLimit:30, botDelay:400, css:CSS,
+  newGame:PK.newGame, apply:PK.apply, tick:PK.tick, whoActs:PK.whoActs, botAction:PK.botAction, timeoutAction:PK.timeoutAction,
+  render:PKUI.render, tickView:PKUI.tickView,
+  rules:`<p><b>Mục tiêu:</b> ghép bộ 5 lá mạnh nhất từ 2 lá tẩy của bạn và 5 lá chung giữa bàn, hoặc khiến mọi người bỏ bài.</p>
+  <p><b>Mỗi ván:</b> hai người sau nút D đặt mù nhỏ ${PK_SB} và mù lớn ${PK_BB}. Có 4 vòng cược: trước Flop, Flop (3 lá chung), Turn (lá thứ 4), River (lá thứ 5).</p>
+  <p><b>Đến lượt:</b> <b>Bỏ bài</b>, <b>Xem</b> (khi không ai cược), <b>Theo</b> bằng mức cao nhất, hoặc <b>Tố</b> lên ít nhất bằng lần tố trước. Kéo thanh trượt hoặc bấm ½ hũ / 1 hũ / Tất tay. Hết 30 giây sẽ tự xem hoặc bỏ.</p>
+  <p><b>Thứ tự bộ (mạnh → yếu):</b> Thùng phá sảnh, Tứ quý, Cù lũ, Thùng, Sảnh, Sám cô, Thú (hai đôi), Một đôi, Mậu thầu.</p>
+  <p>Có hũ phụ khi ai đó tất tay. Hết phỉnh được cấp lại ${PK_START}. <b>Phỉnh ảo chỉ để giải trí.</b></p>` });
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ba Cây | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js"></script>
+<script src="../../core/cards.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script>
+const CSS=`.tbl{position:relative;margin:30px auto 0;width:min(1100px,94vw);height:min(560px,calc(100vh - 230px));min-height:380px}
+.tbl .arc{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:12.5px;letter-spacing:.18em;color:rgba(255,255,255,.45);white-space:nowrap}
+.tbl .dealer{position:absolute;left:50%;top:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;color:#fff}
+.tbl .dealer .dl{background:rgba(0,0,0,.35);border-radius:14px;padding:2px 12px;font-size:14px;letter-spacing:.12em}
+.tbl .dealer .cards{display:flex;gap:4px}
+.tbl .center{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);text-align:center;color:#fff}
+.tbl .st{background:rgba(0,0,0,.3);border-radius:16px;padding:6px 18px;font-size:17px}.tbl .st b{font-size:20px;color:#fde047}
+.tmr{background:#fff;color:#1f7a5c;border-radius:10px;padding:0 6px;font-weight:bold;font-size:13px}
+.betc{margin-top:2px}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:8px;margin:22px auto 0;width:min(900px,94vw);background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:18px;padding:10px 14px}
+.ctrl .chips{display:flex;gap:10px}.ctrl .ch{border:none;background:none;cursor:pointer;padding:0;transition:transform .15s}.ctrl .ch .chip{width:48px;height:48px;font-size:14px}
+.ctrl .ch.on{transform:translateY(-6px) scale(1.1)}.ctrl .ch:disabled{opacity:.35;cursor:not-allowed}
+.ctrl .btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}.ctrl .btns span b{color:#b5332f;font-size:17px}
+.xlog{width:min(900px,94vw);margin:10px auto 0;font-size:13.5px;color:#555268}.xlog div{border-bottom:1px dotted #e6e1f5;padding:2px 0}
+.note{text-align:center;font-size:12.5px;color:#8b889c;margin:8px 0 16px}
+@media (max-height:520px){ .tbl{margin-top:14px;height:calc(100vh - 150px);min-height:250px} .ctrl{margin-top:16px;padding:6px 10px} .xlog,.note{display:none} .tbl .arc{display:none} }
+.tbl .pot{display:flex;align-items:center;gap:8px;justify-content:center;background:rgba(0,0,0,.25);border-radius:20px;padding:4px 14px 4px 4px;margin-bottom:8px;font-size:15px}.tbl .pot b{color:#fde047;font-size:19px}
+`;
+Table.init({ id:'ba-cay', prefix:'b3', title:'Ba Cây', tagline:'Mỗi người 3 lá, ai nhiều nút nhất ăn cả bàn',
+  minPlayers:2, maxPlayers:8, botOptions:[1,2,3,4,5,6,7], defaultBots:3, botDelay:500, css:CSS,
+  newGame:BCY.newGame, apply:BCY.apply, tick:BCY.tick, whoActs:BCY.whoActs, botAction:BCY.botAction,
+  render:BCYUI.render, tickView:BCYUI.tickView,
+  rules:`<p><b>Cách chơi:</b> mỗi ván mọi người góp tiền cược vào bàn, mỗi người nhận 3 lá úp. Bấm <b>Lật bài</b> (hoặc chờ 12 giây) để mở.</p>
+  <p><b>Tính nút:</b> A = 1, từ 2 đến 9 theo số, 10 J Q K = 0. Cộng 3 lá, lấy số hàng đơn vị: ví dụ 7 + 8 + 5 = 20 → 0 nút (bù); 9 + 9 + 1 = 19 → 9 nút.</p>
+  <p><b>Ba tiên</b> (3 lá đều là J, Q, K) lớn nhất. Bằng nút thì so lá cao nhất: chất <b>Rô &gt; Cơ &gt; Bích &gt; Nhép</b>, cùng chất thì A lớn nhất.</p>
+  <p>Người thắng ăn hết tiền trên bàn. Chủ phòng chọn được mức cược. <b>Xu ảo chỉ để giải trí.</b></p>` });
+</script>
+</body>
+</html>
