@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tú Lơ Khơ — Tiến Lên | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script>
+const CSS=`
+.tl-table{position:relative;height:calc(100vh - 56px);min-height:520px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.felt{position:relative;flex:1;border-radius:36px;background:radial-gradient(ellipse at 50% 40%,#2f9e77 0%,#1f7a5c 55%,#155a44 100%);box-shadow:inset 0 0 60px rgba(0,0,0,.35),0 18px 40px rgba(20,60,50,.25);overflow:hidden}
+.felt .rim{position:absolute;inset:14px;border-radius:28px;border:2px solid rgba(255,255,255,.18);pointer-events:none}
+.felt.shake{animation:fsh .6s}@keyframes fsh{20%,60%{transform:translate(-8px,3px)}40%,80%{transform:translate(8px,-3px)}}
+.pc{--cw:clamp(46px,6.2vw,78px);width:var(--cw);height:calc(var(--cw)*1.42);border-radius:8px;background:linear-gradient(160deg,#fff,#f4f1ea);border:1px solid #cfc8b8;box-shadow:0 3px 8px rgba(0,0,0,.25);position:relative;color:#1b1b1b;flex:none;transition:transform .18s,box-shadow .18s;user-select:none}
+.pc.red{color:#c8283a}
+.pc .tl,.pc .br{position:absolute;font-size:calc(var(--cw)*.22);line-height:1;font-weight:bold;text-align:center}
+.pc .tl{left:5px;top:5px}.pc .br{right:5px;bottom:5px;transform:rotate(180deg)}
+.pc .mid{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:calc(var(--cw)*.5)}
+.pc.back{background:repeating-linear-gradient(45deg,#ff7aa8 0 6px,#ff5f8f 6px 12px);border:3px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.3)}
+.pc.back::after{content:"";position:absolute;inset:5px;border-radius:4px;border:1.5px solid rgba(255,255,255,.7);background:linear-gradient(135deg,rgba(138,92,246,.55),rgba(255,95,143,.2))}
+.seat{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff}
+.seat.top{top:16px;left:50%;transform:translateX(-50%)}.seat.left{left:18px;top:50%;transform:translateY(-60%)}.seat.right{right:18px;top:50%;transform:translateY(-60%)}
+.seat .who,.mybar .who{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.25);padding:4px 12px 4px 4px;border-radius:24px;border:2px solid transparent}
+.seat .who small{opacity:.8}.seat .sc,.mybar .sc{font-size:12.5px;opacity:.9}
+.seat.turn .who,.mine.turn .mybar .who{border-color:#ffd36b;box-shadow:0 0 18px rgba(255,211,107,.7);animation:tpul 1.4s infinite}
+@keyframes tpul{50%{box-shadow:0 0 6px rgba(255,211,107,.4)}}
+.seat.passed{opacity:.6}
+.seat .fan{display:flex;--cw:34px}.seat .fan .pc{--cw:34px;margin-left:-22px;transform:rotate(calc((var(--i) - 6) * 3deg))}.seat .fan .pc:first-child{margin-left:0}
+.seat .cnt{font-size:13px;background:rgba(0,0,0,.3);border-radius:10px;padding:0 8px}
+.seat .bub{position:absolute;top:-8px;right:-30px;background:#fff;color:#555;border-radius:12px;padding:2px 9px;font-size:13px;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+.tm{min-width:30px;height:30px;border-radius:50%;background:#fff;color:#1f7a5c;font-weight:bold;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.tm.hot{background:#ef4444;color:#fff;animation:tpul .6s infinite}.tm.big{min-width:40px;height:40px;font-size:18px}
+.center{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:#fff;text-align:center}
+.pile{display:flex;gap:4px}
+.pile .pc{animation:pin .45s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*40ms)}
+.pile.in-bottom .pc{--fx:0;--fy:220px}.pile.in-top .pc{--fx:0;--fy:-220px}.pile.in-left .pc{--fx:-320px;--fy:0}.pile.in-right .pc{--fx:320px;--fy:0}
+.pile:not([class*=in-]) .pc{animation:none}
+@keyframes pin{from{transform:translate(var(--fx),var(--fy)) rotate(25deg) scale(.7);opacity:.3}}
+.plabel{background:rgba(0,0,0,.28);padding:4px 14px;border-radius:14px;font-size:15px}.plabel.big{font-size:20px;padding:8px 20px}
+.round{font-size:12.5px;opacity:.75;letter-spacing:.1em}
+.mine{position:absolute;left:0;right:0;bottom:10px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff}
+.mybar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.mine .hint{background:rgba(0,0,0,.3);padding:5px 14px;border-radius:14px;font-size:15px}.hint .ok{color:#bbf7d0;font-weight:bold}.hint .no{color:#fecaca}
+.hand{display:flex;justify-content:center;padding:0 10px;max-width:100%}
+.hand .pc{margin-left:calc(var(--cw)*-.38);cursor:pointer}.hand .pc:first-child{margin-left:0}
+.hand .pc:hover{transform:translateY(-8px)}.hand .pc.sel{transform:translateY(-22px);box-shadow:0 0 0 3px #ffd36b,0 10px 18px rgba(0,0,0,.35)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.acts .tbtn{min-width:96px}
+.tlog{position:absolute;left:24px;bottom:24px;font-size:13px;color:#fff;opacity:.8;max-width:240px;pointer-events:none}.tlog div{background:rgba(0,0,0,.22);border-radius:8px;padding:1px 8px;margin-top:3px}
+.rt{width:100%;border-collapse:collapse}.rt td,.rt th{padding:6px;border-bottom:1px solid #eee;text-align:left}.rt tr.w td{background:#fff6d6}
+@media (max-width:900px){ .tlog{display:none} .seat.left,.seat.right{top:38%} .seat .fan{display:none} }
+@media (max-height:520px){ .round{display:none} .seat.top{top:6px} .center{top:47%!important} .center .pc{--cw:42px} .plabel{font-size:13px}  .tl-table{height:calc(100vh - 50px);min-height:0;padding:4px} .pc{--cw:clamp(40px,5vw,60px)} .seat .fan{display:none} .mine{bottom:4px;gap:3px} .center{top:40%} .tlog{display:none} }
+`;
+Table.init({ id:'tien-len', prefix:'tl', title:'Tú Lơ Khơ — Tiến Lên', tagline:'Tiến Lên miền Nam: ai đánh hết bài trước sẽ thắng',
+  minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:3, turnLimit:30, botDelay:1100, css:CSS,
+  newGame:TL.newGame, apply:TL.apply, whoActs:TL.whoActs, botAction:TL.botAction, timeoutAction:TL.timeoutAction,
+  render:TLUI.render, tickView:TLUI.tickView,
+  rules:`<p><b>Mục tiêu:</b> đánh hết 13 lá bài trước những người khác.</p>
+  <p><b>Thứ tự lá:</b> 3 nhỏ nhất, rồi 4, 5 … 10, J, Q, K, A, và <b>2 (heo)</b> lớn nhất. Cùng số thì so chất: Bích ♠ &lt; Chuồn ♣ &lt; Rô ♦ &lt; Cơ ♥.</p>
+  <p><b>Các bộ được đánh:</b> lá lẻ, đôi, sám cô (3 lá cùng số), tứ quý (4 lá), sảnh (từ 3 lá liên tiếp, không có heo), đôi thông (từ 3 đôi liên tiếp).</p>
+  <p><b>Chặn bài:</b> đánh cùng kiểu, cùng số lá nhưng lớn hơn. Không chặn được thì bỏ lượt — đã bỏ thì chờ vòng sau. Khi mọi người bỏ hết, người đánh cuối được ra bài mới.</p>
+  <p><b>Chặt heo:</b> 3 đôi thông hoặc tứ quý chặt được 1 heo; tứ quý hoặc 4 đôi thông chặt được đôi heo; tứ quý chặt 3 đôi thông; 4 đôi thông chặt tứ quý.</p>
+  <p><b>Tính điểm:</b> người thua mất 1 điểm mỗi lá còn lại, mỗi heo còn trên tay mất thêm 4, chưa đánh lá nào (cóng) bị nhân đôi. Người thắng nhận hết.</p>
+  <p><b>Mỗi lượt có 30 giây.</b> Hết giờ thì tự bỏ lượt (hoặc tự đánh lá nhỏ nhất nếu đang được ra bài).</p>` });
+</script>
+</body>
+</html>

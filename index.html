@@ -388,6 +388,17 @@ const THUMBS={
     R.forEach(([a,b,c])=>{ const A=C[a],B=C[b]; s+=`<line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#3b2a1a" stroke-width="9" stroke-linecap="round"/><line x1="${A[0]}" y1="${A[1]}" x2="${B[0]}" y2="${B[1]}" stroke="${c}" stroke-width="6.5" stroke-dasharray="14 3"/>`; });
     C.forEach(p=>s+=`<circle cx="${p[0]}" cy="${p[1]}" r="6.5" fill="#fffaf0" stroke="#5b4326" stroke-width="2.5"/>`);
     s+=`<g transform="translate(220,135) rotate(12)"><rect x="-26" y="-11" width="34" height="18" rx="8" fill="#1d4ed8" stroke="#111" stroke-width="2"/><rect x="6" y="-15" width="16" height="22" rx="2" fill="#123a9c" stroke="#111" stroke-width="2"/><rect x="-20" y="-20" width="7" height="10" fill="#222"/><circle cx="-16" cy="10" r="5" fill="#111"/><circle cx="2" cy="10" r="5" fill="#111"/></g></svg>`; return s; },
+  'bau-cua':()=>{ const S=[['#a86b3c','N'],['#4f9a3a','B'],['#e2572f','G'],['#2f86c9','C'],['#d23a3a','C'],['#ef7b9a','T']];
+    let s=`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#b5332f"/><rect x="14" y="14" width="272" height="197" rx="14" fill="#fff4e3" stroke="#e9c46a" stroke-width="4"/>`;
+    S.forEach(([c],i)=>{ const x=26+(i%3)*88, y=24+Math.floor(i/3)*92; s+=`<rect x="${x}" y="${y}" width="80" height="84" rx="12" fill="#fff" stroke="${c}" stroke-width="3"/><g transform="translate(${x+10},${y+6}) scale(.6)">${typeof BCART!=='undefined'?'':''}</g>`; });
+    s+=`<g transform="translate(66,40) scale(.6)"><ellipse cx="50" cy="62" rx="15" ry="20" fill="#b9814f"/><path d="M38 50 Q34 30 22 22 M62 50 Q66 30 78 22" stroke="#6b4423" stroke-width="4" fill="none"/></g>
+      <g transform="translate(154,40) scale(.6)"><circle cx="50" cy="34" r="12" fill="#7cc25b"/><ellipse cx="50" cy="64" rx="22" ry="24" fill="#5fa83f"/></g>
+      <g transform="translate(242,40) scale(.6)"><ellipse cx="54" cy="62" rx="22" ry="18" fill="#f07b2f"/><circle cx="34" cy="40" r="11" fill="#f07b2f"/><path d="M28 30 Q30 22 34 28 Q36 20 40 28 Q44 22 42 32Z" fill="#d42a2a"/></g>
+      <g transform="translate(66,132) scale(.6)"><path d="M70 50 L90 34 L86 50 L90 66Z" fill="#1f6fae"/><ellipse cx="46" cy="50" rx="30" ry="18" fill="#3b95d8"/></g>
+      <g transform="translate(154,132) scale(.6)"><path d="M30 44 Q16 30 22 18 Q30 26 34 42Z M70 44 Q84 30 78 18 Q70 26 66 42Z" fill="#d23a3a"/><ellipse cx="50" cy="58" rx="26" ry="18" fill="#e04848"/></g>
+      <g transform="translate(242,132) scale(.6)"><path d="M30 34 Q56 20 72 40 Q84 56 70 72 Q62 80 54 74" fill="none" stroke="#ef7b9a" stroke-width="16" stroke-linecap="round"/></g>
+</svg>`;
+    return s.replace(/translate\((\d+),(\d+)\) scale\(\.6\)/g,(m,x,y)=>`translate(${x-30},${y-16}) scale(.6)`); },
   'tien-len':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1f6b4a"/><rect width="300" height="225" fill="url(#felt)" opacity=".0"/><ellipse cx="150" cy="240" rx="210" ry="120" fill="#24805a"/>${card(95,120,-24,'2','♥',1)}${card(125,108,-10,'A','♠',0)}${card(155,104,4,'K','♦',1)}${card(185,110,18,'Q','♣',0)}${card(212,124,30,'J','♥',1)}${card(60,60,-8,'3','♠',0,36)}${card(250,58,12,'3','♦',1,36)}</svg>`,
   'ma-soi':()=>{ let st=''; for(let i=0;i<40;i++) st+=`<circle cx="${(i*71)%300}" cy="${(i*43)%120}" r="${i%3?0.8:1.4}" fill="#fff"/>`;
     return `<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1b2537"/>${st}<circle cx="210" cy="62" r="34" fill="#f3f0dc"/><circle cx="198" cy="54" r="6" fill="#dcd7bd"/><circle cx="222" cy="72" r="4" fill="#dcd7bd"/>
@@ -409,8 +420,10 @@ const GAMES = [
     desc:'Thu thập bài toa tàu, chiếm các tuyến đường sắt và nối liền các thành phố trên vé hành trình. Có đường hầm, phà và nhà ga.', color:'#1f6f74', ready:true },
   { id:'duong-ray-bac-my', title:'Đường Ray Bắc Mỹ', sub:'Từ Vancouver đến La Habana', cat:'Chiến thuật · Xây dựng', players:'2–5', time:'45–60 phút', level:'Trung bình',
     desc:'Bản đồ mới khắp Mỹ, Canada và Mexico. Vượt dãy Rocky bằng đường hầm, đi phà sang Cuba. Luật chơi như Đường Ray Châu Âu.', color:'#8a4b2e', ready:true },
-  { id:'tien-len', title:'Tiến Lên', sub:'Bài lá miền Nam', cat:'Bài lá · Đánh nhanh', players:'2–4', time:'10 phút', level:'Dễ',
-    desc:'Ai đánh hết bài trước sẽ thắng. Chặt heo, đánh đôi thông và sảnh như ngoài đời.', color:'#8a4b3c', ready:false },
+  { id:'tien-len', title:'Tú Lơ Khơ', sub:'Tiến Lên miền Nam', cat:'Bài lá · Đánh nhanh', players:'2–4', time:'10 phút', level:'Dễ',
+    desc:'Tiến Lên miền Nam: ai đánh hết 13 lá trước sẽ thắng. Chặt heo bằng tứ quý, đôi thông như ngoài đời.', color:'#1f7a5c', ready:true },
+  { id:'bau-cua', title:'Bầu Cua Tôm Cá', sub:'Lắc bát, mở xem', cat:'Dân gian · Xúc xắc', players:'1–6', time:'5 phút', level:'Dễ',
+    desc:'Đặt cược vào Nai, Bầu, Gà, Cá, Cua, Tôm rồi lắc bát. Chơi bằng xu ảo cùng bạn bè hoặc với máy.', color:'#b5332f', ready:true },
   { id:'ma-soi', title:'Ma Sói', sub:'Làng quê và những kẻ giấu mặt', cat:'Nhập vai · Suy luận', players:'5–12', time:'20–30 phút', level:'Dễ',
     desc:'Dân làng tìm ra Ma Sói qua thảo luận và bỏ phiếu. Có người dẫn tự động, không cần quản trò.', color:'#34405a', ready:false },
   { id:'da-quy', title:'Thương Nhân Đá Quý', sub:'Gom đá quý, xây đế chế buôn bán', cat:'Chiến thuật · Thu thập', players:'2–4', time:'30 phút', level:'Trung bình',
