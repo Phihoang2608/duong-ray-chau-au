@@ -176,6 +176,24 @@ const CSS=`.bank .tok{border-radius:18px;border:3px solid var(--gc,#c9a24e);back
 
 @media (max-height:520px){ .rcd,.rsv .dqc,.rslot{width:22px!important;height:31px!important;border-radius:3px} .rsv{flex-direction:column;gap:2px} .pl{grid-template-columns:36px 1fr auto!important} .stat{font-size:11px;padding:3px 6px} .stat .big{font-size:13px} .goldbox{margin-top:2px;padding-top:2px} .goldbox small,.goldbox .bt{display:none} .side{gap:4px} .pcn{min-width:0} .goldbox .gn{display:none} }
 @media (max-width:999px) and (min-height:521px){ .side{grid-column:1/-1} .players{flex-direction:row;flex-wrap:wrap} }
+
+/* viền đá ngân khố: vòng vàng mảnh lấp lánh */
+.bank .tok{border:none!important;background:none!important;box-shadow:none!important;margin:1px 0}
+.bank .tok svg{position:relative;z-index:2}
+.bank .tok span,.bank .tok .gn,.bank .tok i{z-index:3}
+.bank .tok::before{content:"";position:absolute;left:50%;top:42%;width:min(92%,calc(var(--ch,200px)*.36));aspect-ratio:1;border-radius:50%;padding:2px;box-sizing:border-box;z-index:1;
+  background:conic-gradient(#6b4a12,#ffe9a8 8%,#b8892e 18%,#fff9e0 26%,#8a6418 38%,#e9c46a 52%,#fffbe8 60%,#9a7020 72%,#ffe9a8 86%,#6b4a12);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  transform:translate(-50%,-50%);animation:ringspin 7s linear infinite;filter:drop-shadow(0 0 2px rgba(255,233,168,.55))}
+.bank .tok::after{content:"";position:absolute;left:50%;top:42%;width:min(84%,calc(var(--ch,200px)*.33));aspect-ratio:1;border-radius:50%;z-index:1;transform:translate(-50%,-50%) scale(.7);
+  background:radial-gradient(circle,var(--gc) 0%,color-mix(in srgb,var(--gc) 55%,transparent) 35%,transparent 70%);opacity:0;transition:opacity .25s,transform .25s}
+@keyframes ringspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bank .tok.on::before{background:conic-gradient(var(--gc),#fff 10%,var(--gc) 25%,color-mix(in srgb,var(--gc) 60%,#000) 45%,#fff 60%,var(--gc) 75%,color-mix(in srgb,var(--gc) 60%,#000) 90%,var(--gc));padding:3px;filter:drop-shadow(0 0 4px var(--gc)) drop-shadow(0 0 7px var(--gc));animation-duration:2.4s}
+.bank .tok.on::after{opacity:.95;transform:translate(-50%,-50%) scale(1);animation:gpulse 1.4s ease-in-out infinite}
+@keyframes gpulse{50%{opacity:.6}}
+.bank .tok.on{filter:none!important;transform:translateY(-3px) scale(1.04)!important}
+.bank .tok.on .fgem{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 6px var(--gc))!important}
+.bank .tok[data-tok="4"]{--gc:#b9c0d0}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
