@@ -26,11 +26,11 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .dqn{position:relative;width:112px;transition:transform .25s,box-shadow .25s;border-radius:9px;box-shadow:0 8px 18px rgba(0,0,0,.5)}
 .dqn svg{display:block;width:112px;height:112px}.dqn span{position:absolute;left:30%;right:4%;bottom:3px;font-size:9.5px;color:#fff5d6;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px #000}
 .row{display:flex;gap:11px}
-.dqc,.deck{position:relative;width:110px;height:154px;border-radius:10px;flex:none;cursor:pointer;transition:transform .25s ease,box-shadow .25s;box-shadow:0 10px 20px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.4);will-change:transform}
+.dqc,.deck{position:relative;width:148px;height:207px;border-radius:10px;flex:none;cursor:pointer;transition:transform .25s ease,filter .25s;will-change:transform}.dqc{filter:drop-shadow(0 8px 10px rgba(0,0,0,.6))}.deck{box-shadow:0 10px 20px rgba(0,0,0,.55)}
 .dqc svg,.deck svg{display:block;width:100%;height:100%}
 .dqc.empty{background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.18);box-shadow:none;cursor:default}
-.dqc.can{box-shadow:0 0 0 3px #4ade80,0 0 22px rgba(74,222,128,.65),0 10px 20px rgba(0,0,0,.55)}
-.dqc.pk,.deck.pk{box-shadow:0 0 0 4px #c4a5ff,0 0 28px rgba(167,139,250,.9),0 12px 24px rgba(0,0,0,.6);transform:translateY(-8px) scale(1.05)}
+.dqc.can{filter:drop-shadow(0 0 3px #4ade80) drop-shadow(0 0 10px rgba(74,222,128,.8)) drop-shadow(0 8px 10px rgba(0,0,0,.6))}
+.dqc.pk{filter:drop-shadow(0 0 4px #c4a5ff) drop-shadow(0 0 14px rgba(167,139,250,.95));transform:translateY(-8px) scale(1.05)}.deck.pk{box-shadow:0 0 0 4px #c4a5ff,0 0 28px rgba(167,139,250,.9);transform:translateY(-8px) scale(1.05)}
 .dqc.deal{animation:dqdeal .7s cubic-bezier(.2,1.2,.3,1) both}@keyframes dqdeal{from{transform:perspective(600px) rotateY(180deg) translateY(-30px) scale(.7);opacity:0}}
 .deck .dl{position:absolute;left:0;right:0;bottom:9px;text-align:center;color:#fff;text-shadow:0 1px 3px #000}.deck .dl b{display:block;font-size:22px;line-height:1}.deck .dl span{font-size:11.5px;letter-spacing:.04em}
 .deck::after{content:"";position:absolute;inset:0;border-radius:10px;box-shadow:3px 3px 0 #3b2a10,6px 6px 0 #241806;z-index:-1}
@@ -82,6 +82,10 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .dqpop{position:fixed;z-index:250;min-width:220px;max-width:300px;padding:10px 12px;border-radius:14px;background:linear-gradient(160deg,#2b1d0e,#1a1208);border:2px solid #c9a24e;box-shadow:0 14px 34px rgba(0,0,0,.6),0 0 0 4px rgba(201,162,78,.2);color:#f6ead0;display:flex;flex-direction:column;gap:7px;animation:popin .2s ease-out}
 @keyframes popin{from{transform:scale(.85);opacity:0}}
 .dqpop>b{font-size:15px;color:#ffd76a}.dqpop .pay{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px}.dqpop .pay span{display:flex;align-items:center;gap:2px;font-weight:bold}.dqpop .warn{color:#fca5a5}.dqpop .pb{display:flex;gap:6px;flex-wrap:wrap}
+.cs .pt2{font:bold 62px "Times New Roman",serif;fill:#ffe9a8;stroke:#3a2400;stroke-width:5px;paint-order:stroke;text-anchor:middle}
+.cs .cq2{font:bold 32px "Times New Roman",serif;fill:#fff;text-anchor:middle}
+.cs .jn2{font:bold 34px "Times New Roman",serif;fill:#fff3cf;stroke:#2a1606;stroke-width:4px;paint-order:stroke;text-anchor:middle;letter-spacing:.02em}.cs .jn2.dk{fill:#23262d;stroke:#f4f6fa;stroke-width:1.4px}
+.shine2{animation:shine2 7s infinite}@keyframes shine2{0%,72%{transform:translateX(0)}100%{transform:translateX(900px)}}
 .dqfly{position:fixed;z-index:300;pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.55))}.dqfly svg{width:100%;height:100%;display:block}
 .dqsp{position:fixed;z-index:301;width:7px;height:7px;margin:-3px;border-radius:50%;pointer-events:none;box-shadow:0 0 10px 3px rgba(255,240,180,.8)}
 @media (max-width:1180px){ .dqwrap{grid-template-columns:auto 96px} .players{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}.pl{flex:1;min-width:240px} .tok{width:74px;height:86px} }

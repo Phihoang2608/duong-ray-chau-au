@@ -51,13 +51,15 @@ const DQART=(()=>{
     const st=[]; for(let i=0;i<10;i++){ const a=i*Math.PI/5-Math.PI/2, rr=i%2?r*.24:r*.55; st.push([cx+Math.cos(a)*rr,cy+Math.sin(a)*rr]); }
     s+=`<polygon points="${pts(st.map(p=>[p[0]+r*.04,p[1]+r*.05]))}" fill="#7a4a00" opacity=".6"/><polygon points="${pts(st)}" fill="url(#dqCoinStar)"/>`;
     return s+`<ellipse cx="${f(cx-r*.35)}" cy="${f(cy-r*.45)}" rx="${f(r*.35)}" ry="${f(r*.14)}" fill="#fff" opacity=".5" transform="rotate(-35 ${f(cx-r*.35)} ${f(cy-r*.45)})"/>`+tw(cx+r*.3,cy-r*.45,r*.28,(seed%3)*.7); }
-  function gem(c,cx,cy,r,seed){ seed=seed||c*13+5;
+  function gemVec(c,cx,cy,r,seed){ seed=seed||c*13+5;
     if(c===0) return stepCut(cx,cy,r,0,seed);
     if(c===1) return brilliant(cx,cy,r,1,.82,1,seed);
     if(c===2) return brilliant(cx,cy,r,2,1,1,seed+3);
     if(c===3) return brilliant(cx,cy,r,3,1,1,seed+9);
     if(c===4) return cabochon(cx,cy,r,seed);
     return coin(cx,cy,r,seed); }
+  const GEMS=[0,1,2,3,4,5].map(c=>'assets/gem-'+c+'.webp');
+  function gem(c,cx,cy,r,seed){ const w=r*2.35; return `<image href="${GEMS[c]}" x="${f(cx-w/2)}" y="${f(cy-w/2)}" width="${f(w)}" height="${f(w)}"/>`+(r>=7?tw(cx+r*.35,cy-r*.45,r*.38,((seed||c)%7)*.45):''); }
   const gemSVG=(c,sz,seed)=>`<svg class="gemi" viewBox="-12 -12 24 24" width="${sz}" height="${sz}">${gem(c,0,0,10.5,seed)}</svg>`;
   // ---------- defs dùng chung ----------
   function defs(){ let d='<radialGradient id="dqOnyx" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#6a6f86"/><stop offset=".35" stop-color="#22232c"/><stop offset="1" stop-color="#030305"/></radialGradient>';
@@ -327,29 +329,35 @@ const DQART=(()=>{
   // ---------- ngọc nổi trong ngân khố ----------
   let fgN=0;
   function outline(c,r){ if(c===0){ const a=r*.78,b=r,k=r*.3; return `<polygon points="${pts([[-a+k,-b],[a-k,-b],[a,-b+k],[a,b-k],[a-k,b],[-a+k,b],[-a,b-k],[-a,-b+k]])}"/>`; } if(c===1) return `<ellipse rx="${f(r*.82)}" ry="${r}"/>`; if(c===4) return `<ellipse rx="${r}" ry="${f(r*.92)}"/>`; return `<circle r="${r}"/>`; }
-  function floatGem(c,n){ const id='dqfg'+(fgN++); let s=`<svg viewBox="-20 -22 40 46" class="fgem"><defs><clipPath id="${id}">${outline(c,13)}</clipPath></defs>`;
-    if(!n) return s+`<g opacity=".25">${outline(c,13).replace('/>',' fill="none" stroke="#fff" stroke-dasharray="2 2"/>')}</g></svg>`;
-    s+=`<ellipse class="fsh" cx="0" cy="19" rx="11" ry="2.6" fill="#000" opacity=".45"/>`;
-    s+=`<g class="fl" style="animation-delay:${-c*.7}s">`;
-    if(n>2) s+=`<g opacity=".85">${G(c,-9,6,8,1,1,c+70)}</g>`; if(n>1) s+=`<g opacity=".9">${G(c,9,7,8,1,1,c+80)}</g>`;
-    s+=gem(c,0,0,13,c*5+1)+`<g clip-path="url(#${id})"><rect class="sweep" x="-30" y="-20" width="12" height="40" fill="url(#dqSweep)" transform="skewX(-20)" style="animation-delay:${c*.9}s"/></g>`;
+  function floatGem(c,n){ const id='dqfg'+(fgN++); let s=`<svg viewBox="-20 -22 40 46" class="fgem"><defs><mask id="${id}" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="-20" y="-22" width="40" height="46"><image href="${GEMS[c]}" x="-15" y="-15" width="30" height="30"/></mask></defs>`;
+    if(!n) return s+`<image href="${GEMS[c]}" x="-15" y="-15" width="30" height="30" opacity=".18" style="filter:grayscale(1)"/></svg>`;
+    s+=`<ellipse class="fsh" cx="0" cy="19" rx="11" ry="2.6" fill="#000" opacity=".45"/><g class="fl" style="animation-delay:${-c*.7}s">`;
+    if(n>2) s+=`<image href="${GEMS[c]}" x="-19" y="-2" width="17" height="17" opacity=".9"/>`; if(n>1) s+=`<image href="${GEMS[c]}" x="3" y="0" width="17" height="17" opacity=".95"/>`;
+    s+=`<image href="${GEMS[c]}" x="-15" y="-15" width="30" height="30"/><g mask="url(#${id})"><rect class="sweep" x="-30" y="-20" width="12" height="40" fill="url(#dqSweep)" transform="skewX(-20)" style="animation-delay:${c*.9}s"/></g>`;
     s+=tw(9,-10,4,c*.5)+tw(-10,4,3,c*.5+1.3)+tw(4,9,2.5,c*.5+2.1)+`</g></svg>`; return s; }
   // ---------- thẻ ----------
   const cache={};
-  function card(id){ if(cache[id]) return cache[id]; const C=DQ.CARDS[id], c=C.col, R=rng(id*97+13), lv=C.lv;
+  // khung thật: kích thước gốc 480 x h, vùng trống bên trong, vị trí dải tên
+  const FR={1:{h:699,in:[79,83,399,604],ny:652,nw:300,dark:1},2:{h:681,in:[88,97,391,582],ny:606,nw:190,dark:0},3:{h:649,in:[110,113,369,538],ny:0,nw:0,dark:0}};
+  const CH=672;
+  function card(id){ if(cache[id]) return cache[id]; const C=DQ.CARDS[id], c=C.col, R=rng(id*97+13), lv=C.lv, F=FR[lv], ky=CH/F.h;
     const M=lv===1?{p:'url(#dqSilverM)',d:'#5d6470'}:{p:'url(#dqGoldM)',d:'#6e4200'};
+    const x0=F.in[0], y0=F.in[1]*ky, x1=F.in[2], y1=F.in[3]*ky, iw=x1-x0, ih=y1-y0;
+    const sc=Math.max((iw+16)/100,(ih+16)/140), ox=(x0+x1)/2-50*sc, oy=(y0+y1)/2-70*sc;
     const art=backdrop(lv,c,R)+`<g transform="translate(60,76)">${itemOf(id)[1](c,M)}</g>`+[0,1,2,3].map(k=>tw(36+R()*50,44+R()*60,2.5+R()*2.5,R()*3)).join('');
     const cid='dqcl'+id, nm=jewelName(id);
-    let s=`<svg viewBox="0 0 100 140" class="cs"><defs><clipPath id="${cid}"><rect x="3" y="3" width="94" height="134" rx="7"/></clipPath></defs>`;
-    s+=`<rect x="0" y="0" width="100" height="140" rx="9" fill="url(#dqGold)"/><g clip-path="url(#${cid})">${art}`;
-    s+=`<rect x="3" y="3" width="94" height="31" fill="url(#dqBand${c})"/><path d="M3 34 H97" stroke="url(#dqGold)" stroke-width="2"/><path d="M3 36 H97" stroke="#000" stroke-opacity=".25" stroke-width="1"/>`;
-    s+=`<path d="M27 123 H97 V136 H27 L31 129.5Z" fill="${mix(sh(c,-.55),'#1a0f05',.35)}" opacity=".92"/><path d="M27 123 H97" stroke="url(#dqGold)" stroke-width="1"/><text x="63" y="132.4" class="jn" ${nm.length>17?'textLength="62" lengthAdjust="spacingAndGlyphs"':''}>${nm}</text>`;
-    s+=`<rect x="-60" y="0" width="80" height="140" fill="url(#dqShine)" class="shine"/></g>`;
-    s+=`<rect x="5.5" y="5.5" width="89" height="129" rx="6" fill="none" stroke="#fff4c8" stroke-opacity=".55" stroke-width=".8"/>`;
-    if(C.pts) s+=`<text x="14" y="28" class="pt">${C.pts}</text>`;
-    s+=`<g filter="url(#dqDrop)">${gem(c,82,18.5,11.5,c*5+1)}</g>`;
-    const cs=C.cost.map((v,k)=>[k,v]).filter(x=>x[1]); cs.forEach(([k,v],i)=>{ const y=111-i*20;
-      s+=`<g filter="url(#dqDrop)">${gem(k,13,y,8.5,k*5+1)}</g><circle cx="21.5" cy="${y+6.5}" r="6.4" fill="#1d140a" stroke="url(#dqGold)" stroke-width="1"/><text x="21.5" y="${y+9.9}" class="cq">${v}</text>`; });
+    let s=`<svg viewBox="0 0 480 ${CH}" class="cs"><defs><clipPath id="${cid}"><rect x="${x0-8}" y="${f(y0-8)}" width="${iw+16}" height="${f(ih+16)}"/></clipPath><linearGradient id="${cid}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>`;
+    s+=`<g clip-path="url(#${cid})"><g transform="translate(${f(ox)},${f(oy)}) scale(${f(sc*100)/100})">${art}</g><rect x="${x0}" y="${f(y0)}" width="${iw}" height="${f(ih*.22)}" fill="url(#${cid}t)"/><rect x="-200" y="0" width="160" height="${CH}" fill="url(#dqShine)" class="shine2"/></g>`;
+    s+=`<image href="assets/frame-${lv}.webp" x="0" y="0" width="480" height="${CH}" preserveAspectRatio="none"/>`;
+    // điểm và ngọc thưởng
+    if(C.pts) s+=`<circle cx="${x0+46}" cy="${f(y0+46)}" r="40" fill="#1a1006" fill-opacity=".78" stroke="url(#dqGoldM)" stroke-width="5"/><text x="${x0+46}" y="${f(y0+68)}" class="pt2">${C.pts}</text>`;
+    s+=`<g filter="url(#dqDrop)">${gem(c,x1-44,y0+44,36,c*5+1)}</g>`;
+    // giá
+    const cs=C.cost.map((v,k)=>[k,v]).filter(x=>x[1]); const base=lv===3?y1-82:y1-40;
+    cs.forEach(([k,v],i)=>{ const y=base-i*64; s+=`<g filter="url(#dqDrop)">${gem(k,x0+36,y,25,k*5+1)}</g><circle cx="${x0+68}" cy="${f(y+20)}" r="20" fill="#1d140a" stroke="url(#dqGoldM)" stroke-width="3"/><text x="${x0+68}" y="${f(y+31)}" class="cq2">${v}</text>`; });
+    // tên món đồ
+    if(F.ny) s+=`<text x="240" y="${f(F.ny*ky+9)}" class="jn2 ${F.dark?'dk':''}" ${nm.length>14?`textLength="${F.nw}" lengthAdjust="spacingAndGlyphs"`:''}>${nm}</text>`;
+    else s+=`<rect x="${x0}" y="${f(y1-42)}" width="${iw}" height="42" fill="#1a0a24" fill-opacity=".85"/><path d="M${x0} ${f(y1-42)} H${x1}" stroke="url(#dqGoldM)" stroke-width="2"/><text x="${(x0+x1)/2}" y="${f(y1-11)}" class="jn2" ${nm.length>14?`textLength="${iw-20}" lengthAdjust="spacingAndGlyphs"`:''}>${nm}</text>`;
     s+=`</svg>`;
     return cache[id]=s; }
   function back(lv){ return `<svg viewBox="0 0 100 140" class="cs"><rect width="100" height="140" rx="9" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqDeck${lv})"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqLattice)"/>
