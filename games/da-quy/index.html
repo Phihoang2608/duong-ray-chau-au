@@ -17,8 +17,13 @@
 <script src="art.js"></script>
 <script src="ui.js"></script>
 <script>
-const CSS=`.cs .pt3{font:bold 96px "Times New Roman",serif;fill:#ffe9a8;stroke:#3a2400;stroke-width:6px;paint-order:stroke;text-anchor:middle}
-.cs .cq3{font:bold 76px "Times New Roman",serif;fill:#fff;stroke:#000;stroke-width:5px;paint-order:stroke;text-anchor:middle}
+const CSS=`.bank .tok{border-radius:18px;border:3px solid var(--gc,#c9a24e);background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.16),rgba(0,0,0,.45) 75%);box-shadow:inset 0 0 0 2px rgba(255,233,168,.45),inset 0 0 14px rgba(0,0,0,.6),0 0 10px var(--gg,rgba(201,162,78,.35)),0 4px 8px rgba(0,0,0,.45);margin:2px 0;box-sizing:border-box}
+.bank .tok[data-tok="0"]{--gc:#2fcf7a;--gg:rgba(47,207,122,.45)}.bank .tok[data-tok="1"]{--gc:#4c8dff;--gg:rgba(76,141,255,.45)}.bank .tok[data-tok="2"]{--gc:#ff4d6a;--gg:rgba(255,77,106,.45)}
+.bank .tok[data-tok="3"]{--gc:#e8eef7;--gg:rgba(232,238,247,.45)}.bank .tok[data-tok="4"]{--gc:#8a8f9c;--gg:rgba(160,165,180,.35)}.bank .tok[data-tok="5"]{--gc:#f5c518;--gg:rgba(245,197,24,.5)}
+.bank .tok.on{border-width:4px;box-shadow:inset 0 0 0 2px #fff,0 0 18px var(--gc),0 0 34px var(--gg)}
+.bank .tok .gn{bottom:3px}.bank .tok span{right:-4px}
+.cs .pt3{font:bold 108px "Times New Roman",serif;fill:#ffe9a8;stroke:#3a2400;stroke-width:6px;paint-order:stroke;text-anchor:middle}
+.cs .cq3{font:bold 88px "Times New Roman",serif;fill:#fff;stroke:#000;stroke-width:5px;paint-order:stroke;text-anchor:middle}
 /* nút bấm kiểu đá quý */
 #dq .tbtn,.dqpop .tbtn{position:relative;overflow:hidden;border:2px solid #e9c46a;border-radius:14px;padding:9px 18px;font:bold 16px "Times New Roman",serif;letter-spacing:.03em;color:#fff;cursor:pointer;
   background:linear-gradient(160deg,#9a6cff 0%,#6a3fd8 45%,#3b1f8f 100%);box-shadow:inset 0 2px 0 rgba(255,255,255,.45),inset 0 -4px 8px rgba(0,0,0,.35),0 4px 0 #6b4a1e,0 8px 16px rgba(0,0,0,.45);text-shadow:0 1px 2px rgba(0,0,0,.6);transition:transform .15s,filter .15s,box-shadow .15s}
@@ -144,7 +149,9 @@ const CSS=`.cs .pt3{font:bold 96px "Times New Roman",serif;fill:#ffe9a8;stroke:#
  .row{gap:8px}
  .dqc,.deck{width:var(--cw);height:var(--ch)}
  .bank{justify-content:center;padding:8px 4px;gap:4px}
- .tok{width:calc(var(--ch)*.36);height:calc(var(--ch)*.43)}
+ .tok{width:calc(var(--ch)*.38);height:calc(var(--ch)*.395)}
+ .bank{justify-content:space-between!important}
+ .bank .tok svg{height:82%}
  .pcn{min-width:0}
  .goldbox .gn{display:none}
  .goldbox .bt{font-size:13px}

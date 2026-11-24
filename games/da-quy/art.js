@@ -347,9 +347,9 @@ const DQART=(()=>{
     s+=`<g clip-path="url(#${cid})"><g transform="scale(5)">${art}</g>${(window.DQ_CARD_IMGS||[]).includes(id+1)?`<image href="assets/cards/${num}.webp" x="0" y="0" width="500" height="700" preserveAspectRatio="xMidYMid slice"/>`:''}`;
     s+=`<rect width="500" height="700" fill="url(#${cid}a)"/><rect x="-200" y="0" width="160" height="700" fill="url(#dqShine)" class="shine2"/></g>`;
     s+=`<rect x="3" y="3" width="494" height="694" rx="24" fill="none" stroke="${BC}" stroke-width="6"/>`;
-    if(C.pts) s+=`<circle cx="78" cy="78" r="62" fill="#140c04" fill-opacity=".85" stroke="url(#dqGoldM)" stroke-width="7"/><circle cx="78" cy="78" r="52" fill="none" stroke="#ffe9a8" stroke-opacity=".35" stroke-width="2"/><text x="78" y="110" class="pt3">${C.pts}</text>`;
+    if(C.pts) s+=`<circle cx="84" cy="84" r="70" fill="#140c04" fill-opacity=".85" stroke="url(#dqGoldM)" stroke-width="8"/><circle cx="84" cy="84" r="59" fill="none" stroke="#ffe9a8" stroke-opacity=".35" stroke-width="2"/><text x="84" y="121" class="pt3">${C.pts}</text>`;
     s+=`<circle cx="424" cy="76" r="58" fill="#140c04" fill-opacity=".55"/><g filter="url(#dqDrop)">${gem(c,424,76,48,c*5+1)}</g>`;
-    C.cost.map((v,k)=>[k,v]).filter(x=>x[1]).forEach(([k,v],i)=>{ const y=566-i*100; s+=`<rect x="10" y="${y-46}" width="160" height="92" rx="46" fill="#140c04" fill-opacity=".82" stroke="url(#dqGoldM)" stroke-width="4"/><g filter="url(#dqDrop)">${gem(k,56,y,38,k*5+1)}</g><text x="128" y="${y+27}" class="cq3">${v}</text>`; });
+    C.cost.map((v,k)=>[k,v]).filter(x=>x[1]).forEach(([k,v],i)=>{ const y=560-i*110; s+=`<rect x="8" y="${y-51}" width="182" height="102" rx="51" fill="#140c04" fill-opacity=".82" stroke="url(#dqGoldM)" stroke-width="5"/><g filter="url(#dqDrop)">${gem(k,59,y,43,k*5+1)}</g><text x="143" y="${y+31}" class="cq3">${v}</text>`; });
     s+=`<path d="M120 640 H380 L396 662 L380 684 H120 L104 662Z" fill="#140c04" fill-opacity=".82" stroke="${BC}" stroke-width="3"/><text x="250" y="674" class="jn2" ${nm.length>15?'textLength="250" lengthAdjust="spacingAndGlyphs"':''}>${nm}</text>`;
     s+=`</svg>`;
     return cache[id]=s; }
