@@ -10,7 +10,7 @@ const DQ = (()=>{
   [1,2,3].forEach(lv=>{ for(let col=0;col<5;col++) PAT[lv].forEach(([pts,amt],k)=>{ const cost=[0,0,0,0,0]; const others=[1,2,3,4].map(d=>(col+d)%5); const rot=(k+col)%4;
     amt.forEach((v,j)=>{ if(v) cost[others[(j+rot)%4]]+=v; }); CARDS.push({id:CARDS.length,lv,col,pts,cost}); }); });
   const NOBLES=[[3,3,3,0,0],[0,3,3,3,0],[0,0,3,3,3],[3,0,0,3,3],[3,3,0,0,3],[4,4,0,0,0],[0,4,4,0,0],[0,0,4,4,0],[0,0,0,4,4],[4,0,0,0,4]].map((req,id)=>({id,req,pts:3}));
-  const NOBLE_NAMES=['Lý Thái Tổ','Trần Nhân Tông','Lê Thánh Tông','Quang Trung','Tần Thủy Hoàng','Khang Hy','Napoléon','Louis XIV','Charlemagne','Alexander Đại đế'];
+  const NOBLE_NAMES=['Elizabeth I','Nữ hoàng Victoria','Catherine Đại đế','Marie Antoinette','Henry VIII','Richard Tim Sư Tử','Napoléon','Louis XIV','Charlemagne','Alexander Đại đế'];
   const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
   const tokCount=n=>n<=2?4:n===3?5:7;
   function newGame(seats,t){ const n=seats.length, k=tokCount(n);

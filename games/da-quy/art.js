@@ -358,12 +358,12 @@ const DQART=(()=>{
     ${lv===1?gem(0,50,52,12,3):lv===2?gem(2,50,52,12,5):gem(3,50,52,12,9)}<text x="50" y="23" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="9" letter-spacing="1.5" fill="url(#dqGold)" stroke="#2a1606" stroke-width=".6" paint-order="stroke">CẤP</text><text x="50" y="98" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="${lv===3?25:28}" fill="url(#dqGold)" stroke="#2a1606" stroke-width="1.4" paint-order="stroke">${['','I','II','III'][lv]}</text><path d="M32 103 H68" stroke="url(#dqGold)" stroke-width=".8"/></svg>`; }
   // ---------- quý tộc: các vị vua nổi tiếng ----------
   const KINGS=[
-    {hat:'mien',robe:'#e3a417',trim:'#b5332f',beard:'long',hair:'#1c1410',bg:2},
-    {hat:'xung',robe:'#d99a12',trim:'#7a1430',beard:'short',hair:'#1c1410',bg:0},
-    {hat:'canh',robe:'#e9b730',trim:'#2a4a8a',beard:'mus',hair:'#1c1410',bg:1},
-    {hat:'khan',robe:'#a3201f',trim:'#e9b730',beard:'short',hair:'#1c1410',bg:3},
-    {hat:'mien',robe:'#1d1b22',trim:'#b5332f',beard:'long',hair:'#1c1410',bg:2,dark:1},
-    {hat:'qing',robe:'#e9b730',trim:'#2a4a8a',beard:'mus',hair:'#1c1410',bg:1},
+    {hat:'crown',robe:'#1d1b22',trim:'#e9b730',beard:'',hair:'#b5532a',bg:3},
+    {hat:'crown',robe:'#1d1b22',trim:'#e9b730',beard:'',hair:'#5a3a22',bg:1},
+    {hat:'crown',robe:'#2a4a8a',trim:'#e9b730',beard:'',hair:'#8a6a4a',bg:4},
+    {hat:'wig',robe:'#8fb3d9',trim:'#fff',beard:'',hair:'#e8e4da',bg:3},
+    {hat:'crown',robe:'#a3201f',trim:'#e9b730',beard:'short',hair:'#b5532a',bg:0},
+    {hat:'crown',robe:'#a3201f',trim:'#e9b730',beard:'short',hair:'#b8862f',bg:2},
     {hat:'bicorne',robe:'#1e3a78',trim:'#b5332f',beard:'',hair:'#5a3a22',bg:4},
     {hat:'wig',robe:'#2a3f9a',trim:'#fff',beard:'thin',hair:'#2a1a10',bg:3},
     {hat:'crown',robe:'#a3201f',trim:'#e9b730',beard:'white',hair:'#e8e4da',bg:0},
