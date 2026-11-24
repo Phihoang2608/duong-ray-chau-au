@@ -30,7 +30,7 @@ const DQUI=(()=>{
     [3,2,1].forEach(lv=>{ h+=`<div class="row"><div class="deck ${pick&&pick.deck===lv?'pk':''}" data-deck="${lv}" title="Giữ chỗ 1 thẻ úp">${A.back(lv)}<div class="dl"><b>${S.decks[lv].length}</b><span>${LVN[lv]}</span></div></div>`;
       S.board[lv].forEach((id,i)=>{ h+= id==null?'<div class="dqc empty"></div>':cardEl(id,`data-lv="${lv}" data-i="${i}"`,(newIds.includes(id)?'deal ':'')+(pick&&pick.lv===lv&&pick.i===i?'pk ':'')+(P&&DQ.payPlan(P,DQ.CARDS[id])?'can':'')); });
       h+=`</div>`; });
-    h+=`</div><div class="bank"><div class="bt">Ngân khố</div>${S.bank.map((v,c)=>`<div class="tok ${sel.includes(c)?'on':''} ${c===5?'gold':''}" data-tok="${c}" title="${DQ_COL[c]}">${A.chip(c,v)}<span>${v}</span>${sel.filter(x=>x===c).length>1?'<i>×2</i>':''}</div>`).join('')}
+    h+=`</div><div class="bank"><div class="bt">Ngân khố</div>${S.bank.map((v,c)=>`<div class="tok ${sel.includes(c)?'on':''} ${c===5?'gold':''}" data-tok="${c}" title="${DQ_COL[c]}">${A.floatGem(c,v)}<span>${v}</span>${sel.filter(x=>x===c).length>1?'<i>×2</i>':''}</div>`).join('')}
       <button class="tbtn pri" data-a="take" ${my&&S.step==='main'&&validTake(S)?'':'disabled'}>Lấy đá${sel.length?' ('+sel.length+')':''}</button>
       <small>3 màu khác nhau, hoặc bấm 2 lần 1 màu (còn từ 4 viên) để lấy 2.</small></div>
       <div class="players">${S.seats.map((p,i)=>{ const Q=S.P[i]; return `<div class="pl ${S.turn===i?'turn':''} ${i===ME?'me':''} ${S.phase==='over'&&S.winner===i?'win':''}" data-p="${i}">
@@ -42,7 +42,7 @@ const DQUI=(()=>{
       if (S.phase==='over') act=`<b class="big">${api.esc(S.seats[S.winner].name)} thắng với ${S.P[S.winner].pts} điểm uy tín!</b> ${api.mode()!=='client'?'<button class="tbtn pri" data-a="again">Chơi ván mới</button>':''}`;
       else if (my && S.step==='discard') act=`<b class="warn">Bạn có ${DQ.tot(P.tok)} viên đá — bấm vào đá đang nhấp nháy ở bảng của bạn để trả lại ${DQ.tot(P.tok)-10} viên.</b>`;
       else if (pick){ const cid=pick.deck?null:(pick.res!=null?P.res[pick.res]:S.board[pick.lv][pick.i]); const card=cid!=null?DQ.CARDS[cid]:null; const plan=card&&DQ.payPlan(P,card);
-        act=`${card?`<div class="pv">${A.card(cid)}</div>`:`<div class="pv">${A.back(pick.deck)}</div>`}<div class="pinfo"><b>${pick.deck?'Thẻ úp · '+LVN[pick.deck]:'Thẻ '+DQ_COL[card.col]+(card.pts?' · '+card.pts+' điểm uy tín':'')}</b>
+        act=`${card?`<div class="pv">${A.card(cid)}</div>`:`<div class="pv">${A.back(pick.deck)}</div>`}<div class="pinfo"><b>${pick.deck?'Thẻ úp · '+LVN[pick.deck]:A.jewelName(cid)+(card.pts?' · '+card.pts+' điểm uy tín':'')}</b>
           ${plan?`<div class="pay">Trả: ${plan.pay.map((v,c)=>v?`<span>${A.gemSVG(c,18,c)}${v}</span>`:'').join('')}${plan.gold?`<span>${A.gemSVG(5,18,5)}${plan.gold}</span>`:''}${plan.pay.every(v=>!v)&&!plan.gold?' miễn phí':''}</div>`:card?'<div class="pay">Chưa đủ đá để mua</div>':''}
           <div class="pb">${card?`<button class="tbtn pri" data-a="buy" ${my&&plan?'':'disabled'}>Mua thẻ</button>`:''}${pick.res==null?`<button class="tbtn gold" data-a="reserve" ${my&&P.res.length<3?'':'disabled'}>Giữ chỗ${S.bank[5]?' + 1 Vàng':''}</button>`:''}<button class="tbtn" data-a="cancel">Đóng</button></div></div>`; }
       else act = my?'<span>Đến lượt bạn: chọn đá ở ngân khố, hoặc bấm vào một thẻ để mua hoặc giữ chỗ.</span>':`<span>Đang chờ ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')}…</span>`;

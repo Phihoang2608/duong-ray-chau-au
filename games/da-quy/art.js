@@ -75,6 +75,20 @@ const DQART=(()=>{
     [['#2e8b67','#0c3b2a'],['#c8901e','#5a3a05'],['#3f57c9','#111a55']].forEach(([a,b],i)=>{ d+=`<radialGradient id="dqDeck${i+1}" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`; });
     d+='<pattern id="dqLattice" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="none"/><path d="M0 0 H10 M0 0 V10" stroke="#fff" stroke-opacity=".14" stroke-width="1"/><circle cx="5" cy="5" r=".9" fill="#fff" fill-opacity=".2"/></pattern>';
     d+='<filter id="dqDrop" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-opacity=".45"/></filter>';
+    d+='<linearGradient id="dqGoldM" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="12" y2="130"><stop offset="0" stop-color="#fff6c4"/><stop offset=".15" stop-color="#e7b733"/><stop offset=".3" stop-color="#8a5a06"/><stop offset=".45" stop-color="#f9dc6e"/><stop offset=".6" stop-color="#b07c0e"/><stop offset=".75" stop-color="#ffeaa0"/><stop offset=".9" stop-color="#9a6a0a"/><stop offset="1" stop-color="#e9c04a"/></linearGradient>';
+    d+='<linearGradient id="dqSilverM" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="12" y2="130"><stop offset="0" stop-color="#ffffff"/><stop offset=".15" stop-color="#c3cad4"/><stop offset=".3" stop-color="#6b7480"/><stop offset=".45" stop-color="#eef2f7"/><stop offset=".6" stop-color="#8d96a2"/><stop offset=".75" stop-color="#f7f9fc"/><stop offset=".9" stop-color="#7b8490"/><stop offset="1" stop-color="#d5dbe3"/></linearGradient>';
+    d+='<radialGradient id="dqPearl" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f1ece2"/><stop offset="1" stop-color="#c9bfae"/></radialGradient>';
+    d+='<radialGradient id="dqOrb" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff6c4"/><stop offset=".35" stop-color="#e9b730"/><stop offset=".8" stop-color="#9a6406"/><stop offset="1" stop-color="#5e3a00"/></radialGradient>';
+    d+='<radialGradient id="dqSpot" cx="50%" cy="45%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
+    d+='<linearGradient id="dqSweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>';
+    d+='<linearGradient id="dqSatin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbf3e6"/><stop offset=".5" stop-color="#e9d9c0"/><stop offset="1" stop-color="#c9b394"/></linearGradient>';
+    d+='<linearGradient id="dqWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a4f24"/><stop offset="1" stop-color="#4a230c"/></linearGradient>';
+    d+='<filter id="dqBlur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="2"/></filter>';
+    d+='<pattern id="dqWeave" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 0 L4 4 M4 0 L0 4" stroke="#fff" stroke-opacity=".08" stroke-width=".6"/></pattern>';
+    d+='<pattern id="dqDamask" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10 3 Q14 7 10 11 Q6 7 10 3Z M0 13 Q4 17 0 21 M20 13 Q16 17 20 21" fill="#e9c04a" opacity=".14"/><circle cx="10" cy="15" r=".9" fill="#e9c04a" opacity=".22"/></pattern>';
+    for(let c=0;c<5;c++){ d+=`<radialGradient id="dqVel1_${c}" cx="55%" cy="45%" r="80%"><stop offset="0" stop-color="${mix('#5a1a24',sh(c,-.2),.4)}"/><stop offset="1" stop-color="${mix('#1a0608',sh(c,-.8),.3)}"/></radialGradient>`;
+      d+=`<radialGradient id="dqVel3_${c}" cx="55%" cy="40%" r="80%"><stop offset="0" stop-color="${mix('#3a1660',sh(c,-.1),.45)}"/><stop offset="1" stop-color="${mix('#0c0420',sh(c,-.8),.35)}"/></radialGradient>`;
+      d+=`<linearGradient id="dqBand${c}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${mix('#fffdf5',sh(c,.6),.3)}"/><stop offset="1" stop-color="${mix('#f3e6c4',sh(c,.2),.35)}"/></linearGradient>`; }
     return `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${d}</defs></svg>`; }
   // ---------- tinh thể ----------
   function crystal(x,y,h,w,c,ang){ const t=`rotate(${ang} ${f(x)} ${f(y)})`;
@@ -139,22 +153,93 @@ const DQART=(()=>{
       s+=`<path d="M51 40 L0 22 L0 52Z" fill="#fff8c4" opacity=".18"/><path d="M51 40 L100 26 L100 50Z" fill="#fff8c4" opacity=".12"/>`;
       s+=gem(c,51,40,4,51); }
     return s; }
+  // ---------- trang sức ----------
+  const G=(c,x,y,r,sx,sy,seed)=>`<g transform="translate(${f(x)},${f(y)}) scale(${sx||1},${sy||1})">${gem(c,0,0,r,seed)}</g>`;
+  const pearl=(x,y,r)=>`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="url(#dqPearl)" stroke="#b9ae9a" stroke-width=".3"/>`;
+  const shadow=(x,y,w)=>`<ellipse cx="${f(x)}" cy="${f(y)}" rx="${f(w)}" ry="${f(w*.22)}" fill="#000" opacity=".45" filter="url(#dqBlur)"/>`;
+  const J={
+    ring(c,x,y,M){ return shadow(x,y+22,20)+`<ellipse cx="${x}" cy="${y+6}" rx="16" ry="16.5" fill="none" stroke="${M.d}" stroke-width="6"/><ellipse cx="${x}" cy="${y+6}" rx="16" ry="16.5" fill="none" stroke="${M.p}" stroke-width="4.6"/><path d="M${x-14},${y+12} A16 16.5 0 0 0 ${x+8} ${y+21}" stroke="#fff" stroke-opacity=".6" stroke-width="1.2" fill="none"/>
+      <path d="M${x-9},${y-8} L${x-6},${y-18} M${x+9},${y-8} L${x+6},${y-18} M${x-3},${y-6} L${x-3},${y-19} M${x+3},${y-6} L${x+3},${y-19}" stroke="${M.p}" stroke-width="2.2"/><path d="M${x-11},${y-7} Q${x},${y-2} ${x+11},${y-7}" stroke="${M.p}" stroke-width="3" fill="none"/>`+G(c,x,y-17,10.5,1,1,7)+G(3,x-14,y-6,3,1,1,3)+G(3,x+14,y-6,3,1,1,4)+`<path d="M${x-8},${y-26} L${x-6},${y-21} M${x+8},${y-26} L${x+6},${y-21}" stroke="${M.p}" stroke-width="2"/>`; },
+    earrings(c,x,y,M){ let o=shadow(x,y+26,24); [-13,13].forEach((d,k)=>{ const X=x+d;
+      o+=`<path d="M${X},${y-28} q-6,-8 0,-12 q6,-2 6,5" stroke="${M.p}" stroke-width="1.8" fill="none"/>`+G(3,X,y-26,3.4,1,1,k)+`<line x1="${X}" y1="${y-22}" x2="${X}" y2="${y-14}" stroke="${M.p}" stroke-width="1.6"/>${pearl(X,y-15,2.2)}<path d="M${X-6},${y-10} Q${X},${y-15} ${X+6},${y-10} L${X+8},${y+6} Q${X},${y+24} ${X-8},${y+6}Z" fill="${M.p}" stroke="${M.d}" stroke-width=".6"/>`+G(c,X,y+3,7.5,.85,1.35,11+k); }); return o; },
+    pendant(c,x,y,M){ return `<path d="M${x-36},${y-44} Q${x},${y+4} ${x+36},${y-44}" stroke="${M.p}" stroke-width="1.6" fill="none" stroke-dasharray="2.2 1.2"/>`+shadow(x,y+28,16)+`<ellipse cx="${x}" cy="${y-17}" rx="3" ry="4" fill="none" stroke="${M.p}" stroke-width="2"/>
+      <path d="M${x},${y-14} C${x+17},${y-12} ${x+17},${y+22} ${x},${y+26} C${x-17},${y+22} ${x-17},${y-12} ${x},${y-14}Z" fill="${M.p}" stroke="${M.d}" stroke-width=".8"/>`+G(c,x,y+6,10,.95,1.25,13)+[0,1,2,3,4,5,6,7].map(k=>{ const a=k/8*Math.PI*2; return pearl(x+Math.cos(a)*14,y+6+Math.sin(a)*17,1.5); }).join(''); },
+    brooch(c,x,y,M){ let o=shadow(x,y+24,22); for(let k=0;k<8;k++){ const a=k*45; o+=`<ellipse cx="${x}" cy="${y-14}" rx="6" ry="13" fill="${M.p}" stroke="${M.d}" stroke-width=".6" transform="rotate(${a} ${x} ${y})"/><ellipse cx="${x}" cy="${y-15}" rx="2" ry="8" fill="#fff" opacity=".25" transform="rotate(${a} ${x} ${y})"/>`; }
+      for(let k=0;k<8;k++){ const a=(k*45+22.5)*Math.PI/180; o+=G(k%2?3:c,x+Math.cos(a)*17,y+Math.sin(a)*17,k%2?2.6:3.4,1,1,k); } return o+`<circle cx="${x}" cy="${y}" r="12.5" fill="${M.d}"/>`+G(c,x,y,11,1,1,17); },
+    bracelet(c,x,y,M){ let o=shadow(x,y+18,34)+`<path d="M${x-32},${y} A32 13 0 0 1 ${x+32} ${y}" stroke="${M.d}" stroke-width="8" fill="none"/><path d="M${x-32},${y} A32 13 0 0 1 ${x+32} ${y}" stroke="${M.p}" stroke-width="5" fill="none" opacity=".7"/><path d="M${x-32},${y} A32 13 0 0 0 ${x+32} ${y}" stroke="${M.d}" stroke-width="10" fill="none"/><path d="M${x-32},${y} A32 13 0 0 0 ${x+32} ${y}" stroke="${M.p}" stroke-width="7.5" fill="none"/>`;
+      for(let k=0;k<9;k++){ const a=(15+k*18.75)*Math.PI/180; o+=G(k%2?3:c,x+Math.cos(a)*32,y+Math.sin(a)*13,k%2?2.6:4.4,1,.85,k); } return o; },
+    necklace(c,x,y,M){ let o=''; const P=t=>[x+(t-.5)*74, y-40+Math.pow(Math.abs(t-.5)*2,1.6)*-0+ (1-Math.pow((t-.5)*2,2))*40]; o+=shadow(x,y+30,26);
+      o+=`<path d="M${x-37},${y-40} Q${x},${y+40} ${x+37},${y-40}" stroke="${M.p}" stroke-width="1.6" fill="none"/>`;
+      for(let k=1;k<12;k++){ const t=k/12, p=P(t); o+= k%2? pearl(p[0],p[1],2.4) : G(c,p[0],p[1],3.4,1,1,k); }
+      return o+`<path d="M${x},${y} L${x},${y+5}" stroke="${M.p}" stroke-width="1.6"/>`+G(3,x,y+2,3,1,1,5)+`<path d="M${x-9},${y+8} L${x+9},${y+8} L${x},${y+30}Z" fill="${M.d}"/>`+G(c,x,y+15,9,1,1.3,21); },
+    hairpin(c,x,y,M){ let o=shadow(x,y+30,26)+`<line x1="${x+26}" y1="${y+30}" x2="${x-8}" y2="${y-14}" stroke="${M.d}" stroke-width="4" stroke-linecap="round"/><line x1="${x+26}" y1="${y+30}" x2="${x-8}" y2="${y-14}" stroke="${M.p}" stroke-width="2.6" stroke-linecap="round"/>`;
+      const fx=x-12, fy=y-20; [0,1,2].forEach(k=>{ const dx=fx-8+k*8; o+=`<line x1="${dx}" y1="${fy+4}" x2="${dx}" y2="${fy+22+k%2*6}" stroke="${M.p}" stroke-width=".9"/>`+G(k===1?c:3,dx,fy+24+k%2*6,k===1?3.6:2.4,1,1.3,k); });
+      for(let k=0;k<5;k++){ const a=(k*72-90)*Math.PI/180; o+=G(c,fx+Math.cos(a)*9,fy+Math.sin(a)*9,5.2,.8,1.2,k+30).replace('scale(','rotate('+(k*72)+') scale('); }
+      return o+pearl(fx,fy,4.2)+[0,1,2,3,4].map(k=>{ const a=(k*72-54)*Math.PI/180; return G(3,fx+Math.cos(a)*12,fy+Math.sin(a)*12,1.8,1,1,k); }).join(''); },
+    box(c,x,y,M){ let o=shadow(x,y+30,36)+`<path d="M${x-32},${y} L${x-28},${y-32} L${x+28},${y-32} L${x+32},${y}Z" fill="url(#dqWood)" stroke="#2a1306" stroke-width="1"/><path d="M${x-28},${y-2} L${x-25},${y-28} L${x+25},${y-28} L${x+28},${y-2}Z" fill="#7a1430"/><path d="M${x-25},${y-28} L${x+25},${y-28}" stroke="${M.p}" stroke-width="2"/>`;
+      o+=`<rect x="${x-34}" y="${y}" width="68" height="28" rx="2" fill="url(#dqWood)" stroke="#2a1306" stroke-width="1"/><rect x="${x-34}" y="${y}" width="68" height="4" fill="#5e0f24"/><rect x="${x-34}" y="${y+24}" width="68" height="4" fill="${M.p}"/><rect x="${x-4}" y="${y+8}" width="8" height="9" rx="1.5" fill="${M.p}" stroke="${M.d}" stroke-width=".5"/><circle cx="${x}" cy="${y+12}" r="1.4" fill="#2a1306"/>`;
+      o+=`<path d="M${x-28},${y+1} Q${x-14},${y-12} ${x},${y+1} Q${x+14},${y-12} ${x+28},${y+1}" stroke="#fff" stroke-width="0" fill="none"/>`;
+      [-20,-6,8,22].forEach((d,k)=>{ o+= k===1||k===2 ? `<ellipse cx="${x+d}" cy="${y-2}" rx="6" ry="5" fill="none" stroke="${M.p}" stroke-width="2.2"/>`+G(k===1?c:3,x+d,y-8,k===1?4.8:3.4,1,1,k) : G(c,x+d,y-4,4,1,1,k+40); });
+      return o+[0,1,2,3,4,5,6].map(k=>pearl(x-26+k*5,y-15-Math.sin(k/6*Math.PI)*7,1.8)).join(''); },
+    crown(c,x,y,M){ let o=shadow(x,y+22,34)+`<path d="M${x-26},${y+6} Q${x-24},${y-26} ${x},${y-28} Q${x+24},${y-26} ${x+26},${y+6}Z" fill="#8a1028"/><path d="M${x-14},${y-20} Q${x},${y-30} ${x+14},${y-20}" stroke="#fff" stroke-opacity=".25" stroke-width="3" fill="none"/>`;
+      o+=`<path d="M${x-30},${y+16} L${x-32},${y-14} L${x-20},${y-2} L${x-12},${y-24} L${x-4},${y-6} L${x},${y-30} L${x+4},${y-6} L${x+12},${y-24} L${x+20},${y-2} L${x+32},${y-14} L${x+30},${y+16}Z" fill="${M.p}" stroke="${M.d}" stroke-width="1"/>`;
+      [[-32,-14],[-12,-24],[0,-30],[12,-24],[32,-14]].forEach(([a,b])=>o+=pearl(x+a,y+b-1,2.6));
+      o+=`<rect x="${x-31}" y="${y+6}" width="62" height="12" rx="2" fill="${M.p}" stroke="${M.d}" stroke-width="1"/><rect x="${x-31}" y="${y+8}" width="62" height="2" fill="#fff" opacity=".35"/>`;
+      [-22,-11,11,22].forEach((d,k)=>o+=G(k%2?3:c,x+d,y+12,k%2?2.8:4.2,1,1,k));
+      return o+G(c,x,y+11,6.5,1,1,9)+G(c,x,y-12,5,1,1.2,19)+G(3,x-12,y-12,2.4,1,1,3)+G(3,x+12,y-12,2.4,1,1,4)+`<path d="M${x},${y-38} v-8 M${x-3},${y-43} h6" stroke="${M.p}" stroke-width="2.2"/>`; },
+    scepter(c,x,y,M){ let o=shadow(x+4,y+38,22)+`<g transform="rotate(-28 ${x} ${y})"><rect x="${x-3}" y="${y-22}" width="6" height="62" rx="2.5" fill="${M.p}" stroke="${M.d}" stroke-width=".8"/><rect x="${x-1.6}" y="${y-22}" width="1.4" height="62" fill="#fff" opacity=".35"/>`;
+      [-8,6,20,32].forEach((d,k)=>o+=`<rect x="${x-4.5}" y="${y+d}" width="9" height="3.6" rx="1.5" fill="${M.d}"/>`+G(k%2?c:3,x,y+d+1.8,k%2?2.6:2,1,1,k));
+      o+=`<circle cx="${x}" cy="${y+43}" r="4" fill="${M.p}" stroke="${M.d}"/><path d="M${x-9},${y-22} Q${x},${y-30} ${x+9},${y-22} L${x+5},${y-18} L${x-5},${y-18}Z" fill="${M.p}" stroke="${M.d}" stroke-width=".6"/>`;
+      o+=[-1,0,1].map(k=>`<path d="M${x+k*7},${y-26} Q${x+k*14},${y-40} ${x+k*4},${y-52}" stroke="${M.p}" stroke-width="2" fill="none"/>`).join('');
+      return o+G(c,x,y-36,11,1,1,23)+`<path d="M${x},${y-50} v-9 M${x-3.5},${y-55} h7" stroke="${M.p}" stroke-width="2.2"/></g>`; },
+    collar(c,x,y,M){ let o=shadow(x,y+34,30)+`<path d="M${x-36},${y-30} Q${x},${y+22} ${x+36},${y-30} L${x+28},${y-34} Q${x},${y+10} ${x-28},${y-34}Z" fill="${M.p}" stroke="${M.d}" stroke-width="1"/>`;
+      for(let k=0;k<9;k++){ const t=k/8, px=x-32+64*t, py=y-32+ (1-Math.pow(2*t-1,2))*38; o+=G(k%2?3:c,px,py-2,k%2?2.4:3.6,1,1,k);
+        if(k>0&&k<8&&k%2===0){ o+=`<line x1="${px}" y1="${py+2}" x2="${px}" y2="${py+10}" stroke="${M.p}" stroke-width="1"/>`+G(c,px,py+15,4.6,.85,1.35,k+50); } }
+      return o+`<line x1="${x}" y1="${y+8}" x2="${x}" y2="${y+14}" stroke="${M.p}" stroke-width="1.4"/>`+G(c,x,y+24,8,.9,1.35,61); },
+    orb(c,x,y,M){ return shadow(x,y+30,24)+`<circle cx="${x}" cy="${y+6}" r="22" fill="url(#dqOrb)" stroke="${M.d}" stroke-width="1"/><path d="M${x-22},${y+6} A22 7 0 0 0 ${x+22} ${y+6}" stroke="${M.d}" stroke-width="5" fill="none"/><path d="M${x-22},${y+6} A22 7 0 0 0 ${x+22} ${y+6}" stroke="${M.p}" stroke-width="3.4" fill="none"/>
+      <path d="M${x},${y-16} Q${x-8},${y+6} ${x},${y+28}" stroke="${M.d}" stroke-width="5" fill="none"/><path d="M${x},${y-16} Q${x-8},${y+6} ${x},${y+28}" stroke="${M.p}" stroke-width="3.4" fill="none"/><ellipse cx="${x-9}" cy="${y-5}" rx="7" ry="4" fill="#fff" opacity=".45" transform="rotate(-35 ${x-9} ${y-5})"/>`
+      +[-16,-8,8,16].map((d,k)=>G(k%2?3:c,x+d,y+6+Math.sqrt(1-(d/22)**2)*7-.5,k%2?2:3,1,1,k)).join('')+G(c,x-5.5,y+6,4.4,1,1,7)
+      +`<rect x="${x-2.4}" y="${y-34}" width="4.8" height="18" fill="${M.p}" stroke="${M.d}" stroke-width=".6"/><rect x="${x-8}" y="${y-29}" width="16" height="4.8" fill="${M.p}" stroke="${M.d}" stroke-width=".6"/>`+G(c,x,y-26.6,3.2,1,1,8); }
+  };
+  const JT={1:['ring','earrings','pendant','brooch'],2:['bracelet','necklace','hairpin','box'],3:['crown','scepter','collar','orb']};
+  const JN={ring:'Nhẫn',earrings:'Bông tai',pendant:'Mặt dây',brooch:'Ghim cài',bracelet:'Vòng tay',necklace:'Dây chuyền',hairpin:'Trâm tóc',box:'Hộp ngọc',crown:'Vương miện',scepter:'Quyền trượng',collar:'Kiềng cổ',orb:'Quả cầu vua'};
+  function jewelOf(id){ const C=DQ.CARDS[id]; const same=DQ.CARDS.filter(x=>x.lv===C.lv&&x.col===C.col); const k=same.indexOf(C); return JT[C.lv][k%4]; }
+  function jewelName(id){ return JN[jewelOf(id)]+' '+DQ_COL[DQ.CARDS[id].col]; }
+  function backdrop(lv,c,R){ let s='';
+    if(lv===1){ s+=`<rect width="100" height="140" fill="url(#dqVel1_${c})"/><path d="M0 0 L100 0 L100 140 L0 140Z" fill="url(#dqWeave)" opacity=".35"/>`;
+      s+=`<path d="M10 120 Q8 92 30 90 L84 90 Q98 92 96 120 Q94 132 80 132 L24 132 Q12 132 10 120Z" fill="${mix('#4a1020',sh(c,-.5),.35)}"/><path d="M18 96 Q55 86 92 96" stroke="#fff" stroke-opacity=".12" stroke-width="3" fill="none"/>`; }
+    else if(lv===2){ s+=`<rect width="100" height="140" fill="url(#dqSatin)"/>`; for(let i=0;i<6;i++){ const x=R()*100; s+=`<path d="M${f(x)} 30 Q${f(x+(R()-.5)*30)} 80 ${f(x+(R()-.5)*20)} 140" stroke="#fff" stroke-opacity=".35" stroke-width="${f(2+R()*4)}" fill="none"/><path d="M${f(x+5)} 30 Q${f(x+(R()-.5)*30)} 80 ${f(x+(R()-.5)*20)} 140" stroke="#8a6a50" stroke-opacity=".12" stroke-width="3" fill="none"/>`; }
+      s+=`<rect width="100" height="140" fill="${sh(c,0)}" opacity=".16"/>`; }
+    else { s+=`<rect width="100" height="140" fill="url(#dqVel3_${c})"/><rect width="100" height="140" fill="url(#dqDamask)"/>`;
+      s+=`<ellipse cx="60" cy="118" rx="34" ry="8" fill="#000" opacity=".35"/><path d="M28 112 L92 112 L88 124 L32 124Z" fill="url(#dqGoldM)"/><ellipse cx="60" cy="112" rx="32" ry="6" fill="${mix('#3b0a1e',sh(c,-.6),.4)}" stroke="url(#dqGoldM)" stroke-width="1.6"/>`; }
+    return s+`<ellipse cx="60" cy="74" rx="40" ry="44" fill="url(#dqSpot)"/>`; }
+  // ---------- ngọc nổi trong ngân khố ----------
+  let fgN=0;
+  function outline(c,r){ if(c===0){ const a=r*.78,b=r,k=r*.3; return `<polygon points="${pts([[-a+k,-b],[a-k,-b],[a,-b+k],[a,b-k],[a-k,b],[-a+k,b],[-a,b-k],[-a,-b+k]])}"/>`; } if(c===1) return `<ellipse rx="${f(r*.82)}" ry="${r}"/>`; if(c===4) return `<ellipse rx="${r}" ry="${f(r*.92)}"/>`; return `<circle r="${r}"/>`; }
+  function floatGem(c,n){ const id='dqfg'+(fgN++); let s=`<svg viewBox="-20 -22 40 46" class="fgem"><defs><clipPath id="${id}">${outline(c,13)}</clipPath></defs>`;
+    if(!n) return s+`<g opacity=".25">${outline(c,13).replace('/>',' fill="none" stroke="#fff" stroke-dasharray="2 2"/>')}</g></svg>`;
+    s+=`<ellipse class="fsh" cx="0" cy="19" rx="11" ry="2.6" fill="#000" opacity=".45"/>`;
+    s+=`<g class="fl" style="animation-delay:${-c*.7}s">`;
+    if(n>2) s+=`<g opacity=".85">${G(c,-9,6,8,1,1,c+70)}</g>`; if(n>1) s+=`<g opacity=".9">${G(c,9,7,8,1,1,c+80)}</g>`;
+    s+=gem(c,0,0,13,c*5+1)+`<g clip-path="url(#${id})"><rect class="sweep" x="-30" y="-20" width="12" height="40" fill="url(#dqSweep)" transform="skewX(-20)" style="animation-delay:${c*.9}s"/></g>`;
+    s+=tw(9,-10,4,c*.5)+tw(-10,4,3,c*.5+1.3)+tw(4,9,2.5,c*.5+2.1)+`</g></svg>`; return s; }
   // ---------- thẻ ----------
   const cache={};
-  function card(id){ if(cache[id]) return cache[id]; const C=DQ.CARDS[id], c=C.col, R=rng(id*97+13), v=id%(C.lv===1?3:2);
-    let art=C.lv===1?sceneMine(c,R,v):C.lv===2?sceneShop(c,R,v):scenePalace(c,R,v);
-    const cid='dqcl'+id;
+  function card(id){ if(cache[id]) return cache[id]; const C=DQ.CARDS[id], c=C.col, R=rng(id*97+13), lv=C.lv;
+    const M=lv===1?{p:'url(#dqSilverM)',d:'#5d6470'}:{p:'url(#dqGoldM)',d:'#6e4200'};
+    const art=backdrop(lv,c,R)+J[jewelOf(id)](c,60,76,M)+[0,1,2,3].map(k=>tw(36+R()*50,44+R()*60,2.5+R()*2.5,R()*3)).join('');
+    const cid='dqcl'+id, nm=jewelName(id);
     let s=`<svg viewBox="0 0 100 140" class="cs"><defs><clipPath id="${cid}"><rect x="3" y="3" width="94" height="134" rx="7"/></clipPath></defs>`;
     s+=`<rect x="0" y="0" width="100" height="140" rx="9" fill="url(#dqGold)"/><g clip-path="url(#${cid})">${art}`;
-    s+=`<rect x="3" y="3" width="94" height="31" fill="url(#dqBand)"/><path d="M3 34 H97" stroke="url(#dqGold)" stroke-width="2"/><path d="M3 36 H97" stroke="#000" stroke-opacity=".2" stroke-width="1"/>`;
+    s+=`<rect x="3" y="3" width="94" height="31" fill="url(#dqBand${c})"/><path d="M3 34 H97" stroke="url(#dqGold)" stroke-width="2"/><path d="M3 36 H97" stroke="#000" stroke-opacity=".25" stroke-width="1"/>`;
+    s+=`<path d="M27 123 H97 V136 H27 L31 129.5Z" fill="${mix(sh(c,-.55),'#1a0f05',.35)}" opacity=".92"/><path d="M27 123 H97" stroke="url(#dqGold)" stroke-width="1"/><text x="63" y="132.4" class="jn" ${nm.length>17?'textLength="62" lengthAdjust="spacingAndGlyphs"':''}>${nm}</text>`;
     s+=`<rect x="-60" y="0" width="80" height="140" fill="url(#dqShine)" class="shine"/></g>`;
     s+=`<rect x="5.5" y="5.5" width="89" height="129" rx="6" fill="none" stroke="#fff4c8" stroke-opacity=".55" stroke-width=".8"/>`;
-    if(C.pts) s+=`<text x="13" y="28" class="pt">${C.pts}</text>`;
-    s+=`<g filter="url(#dqDrop)">${gem(c,82,18.5,11.5,id)}</g>`;
-    // chi phí
-    const cs=C.cost.map((v,k)=>[k,v]).filter(x=>x[1]); cs.forEach(([k,v],i)=>{ const y=127-i*20.5;
-      s+=`<g filter="url(#dqDrop)"><circle cx="15" cy="${y}" r="9" fill="url(#dqChip${k})" stroke="${sh(k,-.8)}" stroke-width="1.2"/><circle cx="15" cy="${y}" r="7" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width=".7" stroke-dasharray="2 1.6"/></g><text x="15" y="${y+4.6}" class="cn ${k===3?'dk':''}">${v}</text>`; });
-    s+=`<text x="96" y="137" class="lvl">${'◆'.repeat(C.lv)}</text></svg>`;
+    if(C.pts) s+=`<text x="14" y="28" class="pt">${C.pts}</text>`;
+    s+=`<g filter="url(#dqDrop)">${gem(c,82,18.5,11.5,c*5+1)}</g>`;
+    const cs=C.cost.map((v,k)=>[k,v]).filter(x=>x[1]); cs.forEach(([k,v],i)=>{ const y=111-i*20;
+      s+=`<g filter="url(#dqDrop)">${gem(k,13,y,8.5,k*5+1)}</g><circle cx="21.5" cy="${y+6.5}" r="6.4" fill="#1d140a" stroke="url(#dqGold)" stroke-width="1"/><text x="21.5" y="${y+9.9}" class="cq">${v}</text>`; });
+    s+=`</svg>`;
     return cache[id]=s; }
   function back(lv){ return `<svg viewBox="0 0 100 140" class="cs"><rect width="100" height="140" rx="9" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqDeck${lv})"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqLattice)"/>
     <rect x="9" y="9" width="82" height="122" rx="5" fill="none" stroke="url(#dqGold)" stroke-width="1.5"/><circle cx="50" cy="56" r="25" fill="#00000040" stroke="url(#dqGold)" stroke-width="2"/>
@@ -198,5 +283,5 @@ const DQART=(()=>{
     return s+'</svg>'; }
   // ---------- thẻ thưởng nhỏ trong bảng người chơi ----------
   function bonus(c,n){ return `<svg viewBox="0 0 30 40" class="bon"><rect x="1" y="1" width="28" height="38" rx="4" fill="url(#dqBon${c})" stroke="${sh(c,-.8)}" stroke-width="1"/><rect x="3" y="3" width="24" height="34" rx="3" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width=".8"/>${gem(c,15,13,7.5,c)}<text x="15" y="35" class="cn ${c===3?'dk':''}" style="font-size:13px">${n}</text></svg>`; }
-  return {defs,gem,gemSVG,card,back,noble,chip,bonus,sh,PAL};
+  return {defs,gem,gemSVG,card,back,noble,chip,bonus,sh,PAL,floatGem,jewelName};
 })();

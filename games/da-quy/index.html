@@ -43,7 +43,7 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .tw{animation:tw 3.4s infinite;transform-box:fill-box;transform-origin:center}@keyframes tw{0%,62%,100%{opacity:0;transform:scale(.15) rotate(0)}74%{opacity:1;transform:scale(1) rotate(45deg)}86%{opacity:0;transform:scale(.3) rotate(90deg)}}
 .bank{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:18px;background:linear-gradient(180deg,rgba(80,50,20,.55),rgba(40,25,10,.55));border:2px solid rgba(201,162,78,.6);box-shadow:inset 0 0 20px rgba(0,0,0,.5)}
 .bank .bt{font-weight:bold;font-size:15px;color:#ffe7a8;letter-spacing:.06em}.bank small{font-size:11px;color:#d9cdb2;text-align:center;line-height:1.2}
-.tok{position:relative;width:82px;height:96px;cursor:pointer;transition:transform .2s,filter .2s}.tok svg{width:100%;height:100%;overflow:visible}
+.tok{position:relative;width:82px;height:90px;cursor:pointer;transition:transform .2s,filter .2s}.tok svg{width:100%;height:100%;overflow:visible}
 .tok:hover{transform:translateY(-4px) scale(1.05)}.tok.on{transform:translateY(-8px) scale(1.08);filter:drop-shadow(0 0 10px #c4a5ff) drop-shadow(0 0 4px #fff)}
 .tok span{position:absolute;right:2px;bottom:6px;background:#1d1b2e;color:#fff;border:2px solid #c9a24e;border-radius:12px;font-size:13px;padding:0 7px;font-weight:bold}
 .tok i{position:absolute;left:0;top:2px;background:#8a5cf6;color:#fff;border-radius:9px;font-size:12px;padding:0 6px;font-style:normal}
@@ -66,6 +66,12 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .pinfo{display:flex;flex-direction:column;gap:6px}.pay{display:flex;gap:8px;align-items:center;font-size:14px}.pay span{display:flex;align-items:center;gap:2px;font-weight:bold}.pb{display:flex;gap:8px}
 .tbtn.gold{border:none;color:#3d2a00;background:linear-gradient(135deg,#fde047,#f59e0b);font-weight:bold}
 .xlog{position:relative;width:min(1100px,94%);margin:12px auto 0;font-size:13.5px;color:#cfc4ad}.xlog div{border-bottom:1px dotted rgba(255,255,255,.15);padding:2px 0}
+.fgem{overflow:visible}.fl{animation:fl 3.6s ease-in-out infinite;transform-box:view-box;transform-origin:0 0}@keyframes fl{0%,100%{transform:translateY(1.5px) rotate(-4deg)}50%{transform:translateY(-3px) rotate(4deg)}}
+.fsh{animation:fsh 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes fsh{50%{transform:scale(.8);opacity:.25}}
+.sweep{animation:sweep 3.8s ease-in-out infinite}@keyframes sweep{0%,55%{transform:skewX(-20deg) translateX(0)}100%{transform:skewX(-20deg) translateX(60px)}}
+.tok:hover .fl{animation-duration:1.4s}.tok.on .fgem{filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #c4a5ff)}
+.cs .jn{font:bold 7.6px "Times New Roman",serif;fill:#ffeab0;text-anchor:middle;letter-spacing:.02em}
+.cs .cq{font:bold 9.5px "Times New Roman",serif;fill:#fff;text-anchor:middle}
 .dqfly{position:fixed;z-index:300;pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.55))}.dqfly svg{width:100%;height:100%;display:block}
 .dqsp{position:fixed;z-index:301;width:7px;height:7px;margin:-3px;border-radius:50%;pointer-events:none;box-shadow:0 0 10px 3px rgba(255,240,180,.8)}
 @media (max-width:1180px){ .dqwrap{grid-template-columns:auto 96px} .players{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}.pl{flex:1;min-width:240px} .tok{width:74px;height:86px} }
@@ -74,7 +80,7 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
   .players{grid-column:auto;flex-direction:column}.pl{min-width:0;padding:4px 6px}
   .dqc,.deck{width:58px;height:81px;border-radius:6px} .row,.dqboard{gap:5px} .nobles{gap:5px} .dqn,.dqn svg{width:52px;height:52px}.dqn span{display:none}
   .deck .dl b{font-size:13px}.deck .dl span{display:none}.deck .dl{bottom:3px}
-  .tok{width:50px;height:46px}.tok span{font-size:10px;padding:0 4px;bottom:0}.bank{padding:4px 3px;gap:2px}.bank small{display:none}.bank .bt{font-size:11px} .bank .tbtn{padding:4px 6px;font-size:12px}
+  .tok{width:50px;height:50px}.tok span{font-size:10px;padding:0 4px;bottom:0}.bank{padding:4px 3px;gap:2px}.bank small{display:none}.bank .bt{font-size:11px} .bank .tbtn{padding:4px 6px;font-size:12px}
   .pl .ph{font-size:13px}.pl .pts{font-size:18px}.bon,.resn{width:21px;height:28px}.pl .tk{font-size:11px}.pl .tk svg{width:12px;height:12px}.pl .ft{display:none}
   .mine{position:fixed;left:auto;right:8px;bottom:6px;width:250px;z-index:20;margin:0;border-radius:12px;padding:4px 6px;gap:4px;background:rgba(12,28,40,.95);justify-content:flex-start} .mine .rs em{display:none} .pb .tbtn{padding:4px 7px;font-size:12px} .pay{font-size:12px} .pinfo{gap:3px} .pinfo>b{font-size:12px} .mine .rs .lb{display:none} .mine .rs .dqc,.mine .pv{width:40px;height:56px} .mine .act{min-width:0;font-size:13px;gap:6px} .xlog{display:none} }
 `;
