@@ -17,7 +17,15 @@
 <script src="art.js"></script>
 <script src="ui.js"></script>
 <script>
-const CSS=`.bank .tok{border-radius:18px;border:3px solid var(--gc,#c9a24e);background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.16),rgba(0,0,0,.45) 75%);box-shadow:inset 0 0 0 2px rgba(255,233,168,.45),inset 0 0 14px rgba(0,0,0,.6),0 0 10px var(--gg,rgba(201,162,78,.35)),0 4px 8px rgba(0,0,0,.45);margin:2px 0;box-sizing:border-box}
+const CSS=`.bank .tok .gn{display:none!important}
+.dqgain{position:fixed;z-index:9998;display:flex;flex-direction:column;gap:5px;pointer-events:none;font-family:"Times New Roman",serif}
+.dqgain .gi{display:flex;align-items:center;gap:6px;padding:4px 12px 4px 6px;border-radius:999px;background:linear-gradient(160deg,rgba(40,26,12,.95),rgba(20,12,4,.95));border:1.5px solid #e9c46a;box-shadow:0 6px 16px rgba(0,0,0,.5),0 0 12px rgba(233,196,106,.35);color:#fff3cf;font-size:16px;white-space:nowrap}
+.dqgain .gi svg{width:24px;height:24px}.dqgain .gi.cd{padding-left:12px;color:#ffe08a}.dqgain .gi.pt{padding-left:12px;color:#7dffb0;font-size:18px}
+.dqshow{position:fixed;z-index:9997;display:flex;align-items:center;gap:10px;pointer-events:none}
+.dqshow .sc{width:min(190px,24vw);aspect-ratio:5/7;filter:drop-shadow(0 14px 28px rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(255,220,140,.5))}
+.dqshow .sc svg{width:100%;height:100%;display:block}
+.dqgain.in{position:static}
+.bank .tok{border-radius:18px;border:3px solid var(--gc,#c9a24e);background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.16),rgba(0,0,0,.45) 75%);box-shadow:inset 0 0 0 2px rgba(255,233,168,.45),inset 0 0 14px rgba(0,0,0,.6),0 0 10px var(--gg,rgba(201,162,78,.35)),0 4px 8px rgba(0,0,0,.45);margin:2px 0;box-sizing:border-box}
 .bank .tok[data-tok="0"]{--gc:#2fcf7a;--gg:rgba(47,207,122,.45)}.bank .tok[data-tok="1"]{--gc:#4c8dff;--gg:rgba(76,141,255,.45)}.bank .tok[data-tok="2"]{--gc:#ff4d6a;--gg:rgba(255,77,106,.45)}
 .bank .tok[data-tok="3"]{--gc:#e8eef7;--gg:rgba(232,238,247,.45)}.bank .tok[data-tok="4"]{--gc:#8a8f9c;--gg:rgba(160,165,180,.35)}.bank .tok[data-tok="5"]{--gc:#f5c518;--gg:rgba(245,197,24,.5)}
 .bank .tok.on{border-width:4px;box-shadow:inset 0 0 0 2px #fff,0 0 18px var(--gc),0 0 34px var(--gg)}
