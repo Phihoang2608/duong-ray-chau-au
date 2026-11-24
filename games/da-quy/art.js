@@ -76,6 +76,7 @@ const DQART=(()=>{
       d+=`<linearGradient id="dqBon${c}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${sh(c,.5)}"/><stop offset=".5" stop-color="${sh(c,0)}"/><stop offset="1" stop-color="${sh(c,-.55)}"/></linearGradient>`; }
     [['#2e8b67','#0c3b2a'],['#c8901e','#5a3a05'],['#3f57c9','#111a55']].forEach(([a,b],i)=>{ d+=`<radialGradient id="dqDeck${i+1}" cx="50%" cy="45%" r="75%"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`; });
     d+='<pattern id="dqLattice" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="none"/><path d="M0 0 H10 M0 0 V10" stroke="#fff" stroke-opacity=".14" stroke-width="1"/><circle cx="5" cy="5" r=".9" fill="#fff" fill-opacity=".2"/></pattern>';
+    d+='<radialGradient id="dqBackVig" cx=".5" cy=".45" r=".7"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".65"/></radialGradient>';
     d+='<linearGradient id="dqLeftDk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>';
     d+='<filter id="dqDim" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="1.1"/><feColorMatrix type="matrix" values=".98 .04 .04 0 .03  .04 .98 .04 0 .03  .04 .04 .98 0 .03  0 0 0 1 0"/></filter>';
     d+='<filter id="dqDrop" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-opacity=".45"/></filter>';
@@ -355,9 +356,23 @@ const DQART=(()=>{
     s+=`<path d="M120 640 H380 L396 662 L380 684 H120 L104 662Z" fill="#140c04" fill-opacity=".82" stroke="${BC}" stroke-width="3"/><text x="250" y="674" class="jn2" ${nm.length>15?'textLength="250" lengthAdjust="spacingAndGlyphs"':''}>${nm}</text>`;
     s+=`</svg>`;
     return cache[id]=s; }
-  function back(lv){ return `<svg viewBox="0 0 100 140" class="cs"><rect width="100" height="140" rx="9" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqDeck${lv})"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqLattice)"/>
-    <rect x="9" y="9" width="82" height="122" rx="5" fill="none" stroke="url(#dqGold)" stroke-width="1.5"/><circle cx="50" cy="52" r="22" fill="#00000040" stroke="url(#dqGold)" stroke-width="2"/>
-    ${lv===1?gem(0,50,52,12,3):lv===2?gem(2,50,52,12,5):gem(3,50,52,12,9)}<text x="50" y="23" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="9" letter-spacing="1.5" fill="url(#dqGold)" stroke="#2a1606" stroke-width=".6" paint-order="stroke">CẤP</text><text x="50" y="98" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="${lv===3?25:28}" fill="url(#dqGold)" stroke="#2a1606" stroke-width="1.4" paint-order="stroke">${['','I','II','III'][lv]}</text><path d="M32 103 H68" stroke="url(#dqGold)" stroke-width=".8"/></svg>`; }
+  function back(lv){
+    const G='url(#dqGold)', ink='#2a1606';
+    const corner=(x,y,sx,sy)=>`<g transform="translate(${x} ${y}) scale(${sx} ${sy})" fill="none" stroke="${G}" stroke-width="1.1" stroke-linecap="round"><path d="M0 14 Q0 0 14 0"/><path d="M3 15 Q4 4 15 3"/><path d="M6 6 q4 1 5 5 q-4 -1 -5 -5z" fill="${G}" stroke="none"/><circle cx="16" cy="2" r="1.1" fill="${G}" stroke="none"/><circle cx="2" cy="16" r="1.1" fill="${G}" stroke="none"/></g>`;
+    const fleur=`<g fill="${G}" stroke="${ink}" stroke-width=".5"><path d="M50 30 c4 6 6 10 2 16 c-1 2-1 4 0 5 h-4 c1-1 1-3 0-5 c-4-6-2-10 2-16z"/><path d="M47 44 c-6-6-12-2-10 4 c2-3 6-3 9 0z"/><path d="M53 44 c6-6 12-2 10 4 c-2-3-6-3-9 0z"/><rect x="43" y="49" width="14" height="2.6" rx="1"/><path d="M48 51.6 h4 l-1 6 h-2z"/></g>`;
+    const coronet=`<g fill="${G}" stroke="${ink}" stroke-width=".5"><path d="M36 50 l2-12 l6 7 l6-11 l6 11 l6-7 l2 12z"/><rect x="35" y="50" width="30" height="4" rx="1.2"/><circle cx="38" cy="37" r="1.8"/><circle cx="50" cy="33" r="2"/><circle cx="62" cy="37" r="1.8"/></g><g fill="#fff8e0" opacity=".9"><circle cx="42" cy="52" r=".9"/><circle cx="50" cy="52" r=".9"/><circle cx="58" cy="52" r=".9"/></g>`;
+    const crown=`<g fill="${G}" stroke="${ink}" stroke-width=".5"><path d="M33 52 l-2-16 l8 8 l5-14 l6 10 l6-10 l5 14 l8-8 l-2 16z"/><rect x="32" y="52" width="36" height="5" rx="1.5"/><circle cx="31" cy="35" r="2"/><circle cx="44" cy="29" r="2"/><circle cx="56" cy="29" r="2"/><circle cx="69" cy="35" r="2"/><path d="M50 24 v-6 M47.5 21 h5" stroke="${G}" stroke-width="1.6"/><circle cx="50" cy="26" r="2.3"/></g><g fill="#fff8e0" opacity=".9">${[37,43,50,57,63].map(x=>`<circle cx="${x}" cy="54.5" r="1"/>`).join('')}</g>`;
+    const emb=lv===1?fleur:lv===2?coronet:crown;
+    const laurel=(side)=>`<g transform="translate(50 93) scale(${side} 1)" fill="${G}"><path d="M3 19 Q20 14 21 -8" fill="none" stroke="${G}" stroke-width=".9"/>${[0,1,2,3,4,5].map(k=>{const a=(70-k*17)*Math.PI/180, x=Math.cos(a)*19, y=Math.sin(a)*19; const ang=(70-k*17)-90; return `<ellipse cx="${(x+1.5).toFixed(1)}" cy="${(y-1).toFixed(1)}" rx="3.6" ry="1.4" transform="rotate(${ang-25} ${(x+1.5).toFixed(1)} ${(y-1).toFixed(1)})"/><ellipse cx="${(x-1.8).toFixed(1)}" cy="${(y+0.5).toFixed(1)}" rx="3.2" ry="1.2" opacity=".85" transform="rotate(${ang+35} ${(x-1.8).toFixed(1)} ${(y+0.5).toFixed(1)})"/>`;}).join('')}</g>`;
+    return `<svg viewBox="0 0 100 140" class="cs"><rect width="100" height="140" rx="9" fill="${G}"/><rect x="2.5" y="2.5" width="95" height="135" rx="7.5" fill="#1a0f08"/><rect x="4" y="4" width="92" height="132" rx="6.5" fill="url(#dqDeck${lv})"/>
+    <rect x="4" y="4" width="92" height="132" rx="6.5" fill="url(#dqLattice)" opacity=".8"/><rect x="4" y="4" width="92" height="132" rx="6.5" fill="url(#dqBackVig)"/>
+    <rect x="8" y="8" width="84" height="124" rx="4" fill="none" stroke="${G}" stroke-width="1.4"/><rect x="11" y="11" width="78" height="118" rx="3" fill="none" stroke="${G}" stroke-width=".5" opacity=".8"/>
+    ${corner(10,10,1,1)}${corner(90,10,-1,1)}${corner(10,130,1,-1)}${corner(90,130,-1,-1)}
+    <path d="M30 18 H70" stroke="${G}" stroke-width=".6"/>${emb}
+    ${laurel(1)}${laurel(-1)}
+    <text x="50" y="72" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="8" letter-spacing="2.5" fill="${G}" stroke="${ink}" stroke-width=".5" paint-order="stroke">CẤP</text>
+    <text x="50" y="104" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="${lv===3?24:27}" fill="${G}" stroke="${ink}" stroke-width="1.3" paint-order="stroke">${['','I','II','III'][lv]}</text>
+    <path d="M30 122 H70" stroke="${G}" stroke-width=".6"/><path d="M50 118 l3 4 l-3 4 l-3 -4z" fill="${G}"/></svg>`; }
   // ---------- quý tộc: các vị vua nổi tiếng ----------
   const KINGS=[
     {hat:'crown',robe:'#1d1b22',trim:'#e9b730',beard:'',hair:'#b5532a',bg:3},
