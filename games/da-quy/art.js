@@ -337,27 +337,20 @@ const DQART=(()=>{
     s+=tw(9,-10,4,c*.5)+tw(-10,4,3,c*.5+1.3)+tw(4,9,2.5,c*.5+2.1)+`</g></svg>`; return s; }
   // ---------- thẻ ----------
   const cache={};
-  // khung thật: kích thước gốc 480 x h, vùng trống bên trong, vị trí dải tên
-  const FR={1:{h:699,in:[79,83,399,604],ny:652,nw:300,dark:1},2:{h:681,in:[88,97,391,582],ny:606,nw:190,dark:0},3:{h:649,in:[110,113,369,538],ny:0,nw:0,dark:0}};
-  const CH=672;
-  function card(id){ if(cache[id]) return cache[id]; const C=DQ.CARDS[id], c=C.col, R=rng(id*97+13), lv=C.lv, F=FR[lv], ky=CH/F.h;
+  // lá bài: tranh vẽ toàn lá (ảnh Gemini assets/cards/NNN.webp), nếu chưa có ảnh thì dùng hình vẽ vector bên dưới
+  function card(id){ if(cache[id]) return cache[id]; const C=DQ.CARDS[id], c=C.col, R=rng(id*97+13), lv=C.lv;
     const M=lv===1?{p:'url(#dqSilverM)',d:'#5d6470'}:{p:'url(#dqGoldM)',d:'#6e4200'};
-    const x0=F.in[0], y0=F.in[1]*ky, x1=F.in[2], y1=F.in[3]*ky, iw=x1-x0, ih=y1-y0;
-    const sc=Math.max((iw+16)/100,(ih+16)/140), ox=(x0+x1)/2-50*sc, oy=(y0+y1)/2-70*sc;
-    const art=backdrop(lv,c,R)+`<g transform="translate(60,76)">${itemOf(id)[1](c,M)}</g>`+[0,1,2,3].map(k=>tw(36+R()*50,44+R()*60,2.5+R()*2.5,R()*3)).join('');
-    const cid='dqcl'+id, nm=jewelName(id);
-    let s=`<svg viewBox="0 0 480 ${CH}" class="cs"><defs><clipPath id="${cid}"><rect x="${x0-8}" y="${f(y0-8)}" width="${iw+16}" height="${f(ih+16)}"/></clipPath><linearGradient id="${cid}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>`;
-    s+=`<g clip-path="url(#${cid})"><g transform="translate(${f(ox)},${f(oy)}) scale(${f(sc*100)/100})">${art}</g><rect x="${x0}" y="${f(y0)}" width="${iw}" height="${f(ih*.22)}" fill="url(#${cid}t)"/><rect x="-200" y="0" width="160" height="${CH}" fill="url(#dqShine)" class="shine2"/></g>`;
-    s+=`<image href="assets/frame-${lv}.webp" x="0" y="0" width="480" height="${CH}" preserveAspectRatio="none"/>`;
-    // điểm và ngọc thưởng
-    if(C.pts) s+=`<circle cx="${x0+46}" cy="${f(y0+46)}" r="40" fill="#1a1006" fill-opacity=".78" stroke="url(#dqGoldM)" stroke-width="5"/><text x="${x0+46}" y="${f(y0+68)}" class="pt2">${C.pts}</text>`;
-    s+=`<g filter="url(#dqDrop)">${gem(c,x1-44,y0+44,36,c*5+1)}</g>`;
-    // giá
-    const cs=C.cost.map((v,k)=>[k,v]).filter(x=>x[1]); const base=lv===3?y1-82:y1-40;
-    cs.forEach(([k,v],i)=>{ const y=base-i*64; s+=`<g filter="url(#dqDrop)">${gem(k,x0+36,y,25,k*5+1)}</g><circle cx="${x0+68}" cy="${f(y+20)}" r="20" fill="#1d140a" stroke="url(#dqGoldM)" stroke-width="3"/><text x="${x0+68}" y="${f(y+31)}" class="cq2">${v}</text>`; });
-    // tên món đồ
-    if(F.ny) s+=`<text x="240" y="${f(F.ny*ky+9)}" class="jn2 ${F.dark?'dk':''}" ${nm.length>14?`textLength="${F.nw}" lengthAdjust="spacingAndGlyphs"`:''}>${nm}</text>`;
-    else s+=`<rect x="${x0}" y="${f(y1-42)}" width="${iw}" height="42" fill="#1a0a24" fill-opacity=".85"/><path d="M${x0} ${f(y1-42)} H${x1}" stroke="url(#dqGoldM)" stroke-width="2"/><text x="${(x0+x1)/2}" y="${f(y1-11)}" class="jn2" ${nm.length>14?`textLength="${iw-20}" lengthAdjust="spacingAndGlyphs"`:''}>${nm}</text>`;
+    const art=backdrop(lv,c,R)+`<g transform="translate(60,76)">${itemOf(id)[1](c,M)}</g>`;
+    const cid='dqcl'+id, nm=jewelName(id), num=String(id+1).padStart(3,'0'), BC=lv===1?'url(#dqSilverM)':'url(#dqGoldM)';
+    let s=`<svg viewBox="0 0 500 700" class="cs"><defs><clipPath id="${cid}"><rect x="0" y="0" width="500" height="700" rx="26"/></clipPath>
+      <linearGradient id="${cid}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".6"/><stop offset=".2" stop-color="#000" stop-opacity="0"/><stop offset=".78" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></linearGradient></defs>`;
+    s+=`<g clip-path="url(#${cid})"><g transform="scale(5)">${art}</g>${(window.DQ_CARD_IMGS||[]).includes(id+1)?`<image href="assets/cards/${num}.webp" x="0" y="0" width="500" height="700" preserveAspectRatio="xMidYMid slice"/>`:''}`;
+    s+=`<rect width="500" height="700" fill="url(#${cid}a)"/><rect x="-200" y="0" width="160" height="700" fill="url(#dqShine)" class="shine2"/></g>`;
+    s+=`<rect x="3" y="3" width="494" height="694" rx="24" fill="none" stroke="${BC}" stroke-width="6"/>`;
+    if(C.pts) s+=`<circle cx="62" cy="62" r="42" fill="#140c04" fill-opacity=".8" stroke="url(#dqGoldM)" stroke-width="5"/><text x="62" y="85" class="pt2">${C.pts}</text>`;
+    s+=`<g filter="url(#dqDrop)">${gem(c,436,62,38,c*5+1)}</g>`;
+    C.cost.map((v,k)=>[k,v]).filter(x=>x[1]).forEach(([k,v],i)=>{ const y=568-i*72; s+=`<g filter="url(#dqDrop)">${gem(k,52,y,28,k*5+1)}</g><circle cx="88" cy="${y+22}" r="21" fill="#140c04" stroke="url(#dqGoldM)" stroke-width="3"/><text x="88" y="${y+34}" class="cq2">${v}</text>`; });
+    s+=`<path d="M120 640 H380 L396 662 L380 684 H120 L104 662Z" fill="#140c04" fill-opacity=".82" stroke="${BC}" stroke-width="3"/><text x="250" y="674" class="jn2" ${nm.length>15?'textLength="250" lengthAdjust="spacingAndGlyphs"':''}>${nm}</text>`;
     s+=`</svg>`;
     return cache[id]=s; }
   function back(lv){ return `<svg viewBox="0 0 100 140" class="cs"><rect width="100" height="140" rx="9" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqDeck${lv})"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqLattice)"/>
