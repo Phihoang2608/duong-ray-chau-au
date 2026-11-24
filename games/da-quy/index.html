@@ -199,6 +199,16 @@ const CSS=`.bank .tok{border-radius:18px;border:3px solid var(--gc,#c9a24e);back
 .bank .tok::before{background:conic-gradient(#5b6270,#f4f7fb 8%,#9aa3b2 18%,#ffffff 26%,#6b7383 38%,#d5dbe5 52%,#ffffff 60%,#7a8292 72%,#eef2f8 86%,#5b6270)!important;filter:drop-shadow(0 0 2px rgba(220,230,245,.6))!important}
 .bank .tok[data-tok="4"]{--gc:#a855f7}
 .bank .tok .gn{font-size:10px!important;font-weight:normal!important;color:#cfc4ad!important;letter-spacing:0}
+
+/* nền tiệc quý tộc vẽ tay, hơi mờ */
+#dq{background:#2a1d12!important;isolation:isolate;overflow:hidden}
+#dq::before{content:"";position:absolute;inset:-12px;z-index:-2;background:url(assets/banquet.webp) center/cover no-repeat;filter:blur(2.5px) saturate(1.1) brightness(1.08);opacity:1;border-radius:0}
+#dq::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,rgba(30,18,8,.05),rgba(30,18,8,.28) 90%);pointer-events:none}
+.bank,.pl,.stat,.xlog{backdrop-filter:blur(2px)}
+.pl{background:linear-gradient(160deg,rgba(40,26,14,.78),rgba(25,16,8,.72))!important}
+.bank{background:linear-gradient(180deg,rgba(40,26,14,.8),rgba(25,16,8,.75))!important}
+.stat{background:rgba(35,22,10,.75)!important}
+.xlog{background:rgba(35,22,10,.6);border-radius:10px;padding:6px 10px!important}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
