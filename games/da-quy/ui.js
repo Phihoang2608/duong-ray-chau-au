@@ -44,14 +44,25 @@ const DQUI=(()=>{
       let act='';
       if (S.phase==='over') act=`<b class="big">${api.esc(S.seats[S.winner].name)} thắng với ${S.P[S.winner].pts} điểm uy tín!</b> ${api.mode()!=='client'?'<button class="tbtn pri" data-a="again">Chơi ván mới</button>':''}`;
       else if (my && S.step==='discard') act=`<b class="warn">Bạn có ${DQ.tot(P.tok)} viên đá — bấm vào đá đang nhấp nháy ở bảng của bạn để trả lại ${DQ.tot(P.tok)-10} viên.</b>`;
-      else if (pick){ const cid=pick.deck?null:(pick.res!=null?P.res[pick.res]:S.board[pick.lv][pick.i]); const card=cid!=null?DQ.CARDS[cid]:null; const plan=card&&DQ.payPlan(P,card);
-        act=`${card?`<div class="pv">${A.card(cid)}</div>`:`<div class="pv">${A.back(pick.deck)}</div>`}<div class="pinfo"><b>${pick.deck?'Thẻ úp · '+LVN[pick.deck]:A.jewelName(cid)+(card.pts?' · '+card.pts+' điểm uy tín':'')}</b>
-          ${plan?`<div class="pay">Trả: ${plan.pay.map((v,c)=>v?`<span>${A.gemSVG(c,18,c)}${v}</span>`:'').join('')}${plan.gold?`<span>${A.gemSVG(5,18,5)}${plan.gold}</span>`:''}${plan.pay.every(v=>!v)&&!plan.gold?' miễn phí':''}</div>`:card?'<div class="pay">Chưa đủ đá để mua</div>':''}
-          <div class="pb">${card?`<button class="tbtn pri" data-a="buy" ${my&&plan?'':'disabled'}>Mua thẻ</button>`:''}${pick.res==null?`<button class="tbtn gold" data-a="reserve" ${my&&P.res.length<3?'':'disabled'}>Giữ chỗ${S.bank[5]?' + 1 Vàng':''}</button>`:''}<button class="tbtn" data-a="cancel">Đóng</button></div></div>`; }
+      else if (pick) act=`<span>Đã chọn thẻ — bấm <b>Mua thẻ</b> hoặc <b>Giữ chỗ</b> ở khung cạnh lá bài.</span>`;
       else act = my?'<span>Đến lượt bạn: chọn đá ở ngân khố, hoặc bấm vào một thẻ để mua hoặc giữ chỗ.</span>':`<span>Đang chờ ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')}…</span>`;
       h+=`<div class="act">${act}</div></div>`; }
     h+=`<div class="xlog">${S.log.slice(0,4).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
     root.innerHTML=h;
+    // khung mua / giữ chỗ nổi ngay cạnh lá bài được chọn
+    if (P && pick && S.phase==='play' && !(my&&S.step==='discard')){ const cid=pick.deck?null:(pick.res!=null?P.res[pick.res]:S.board[pick.lv][pick.i]); const card=cid!=null?DQ.CARDS[cid]:null; const plan=card&&DQ.payPlan(P,card);
+      const need=card?card.cost.map((v,c)=>Math.max(0,v-P.bonus[c]-P.tok[c])):null; const lack=need?Math.max(0,need.reduce((a,b)=>a+b,0)-P.tok[5]):0;
+      const pop=document.createElement('div'); pop.className='dqpop';
+      pop.innerHTML=`<b>${pick.deck?'Thẻ úp · '+LVN[pick.deck]:A.jewelName(cid)+(card.pts?' · '+card.pts+' điểm':'')}</b>
+        ${card?(plan?`<div class="pay">Trả: ${plan.pay.map((v,c)=>v?`<span>${A.gemSVG(c,18,c)}${v}</span>`:'').join('')}${plan.gold?`<span>${A.gemSVG(5,18,5)}${plan.gold}</span>`:''}${plan.pay.every(v=>!v)&&!plan.gold?'<span>miễn phí</span>':''}</div>`:`<div class="pay warn">Còn thiếu ${lack} viên: ${need.map((v,c)=>v?`<span>${A.gemSVG(c,16,c)}${v}</span>`:'').join('')}</div>`):''}
+        ${!my?'<div class="pay">Chưa đến lượt bạn</div>':''}
+        <div class="pb">${card?`<button class="tbtn pri" data-a="buy" ${my&&plan?'':'disabled'}>Mua thẻ</button>`:''}${pick.res==null?`<button class="tbtn gold" data-a="reserve" ${my&&P.res.length<3?'':'disabled'}>Giữ chỗ${S.bank[5]?' + 1 Vàng':''}</button>`:''}<button class="tbtn" data-a="cancel">Đóng</button></div>
+        ${pick.res==null&&P.res.length>=3?'<div class="pay warn">Đã giữ đủ 3 thẻ</div>':''}`;
+      root.appendChild(pop);
+      const el=root.querySelector(pick.deck?`[data-deck="${pick.deck}"]`:pick.res!=null?`[data-res="${pick.res}"]`:`[data-lv="${pick.lv}"][data-i="${pick.i}"]`);
+      if(el){ const r=el.getBoundingClientRect(), pr=pop.getBoundingClientRect(), W=innerWidth, H=innerHeight;
+        let x=r.right+10, y=r.top+r.height/2-pr.height/2; if(x+pr.width>W-6) x=r.left-pr.width-10; if(x<6) x=Math.max(6,Math.min(W-pr.width-6,r.left+r.width/2-pr.width/2));
+        y=Math.max(6,Math.min(H-pr.height-6,y)); pop.style.left=x+'px'; pop.style.top=y+'px'; } }
     if(isNew){ lastEv=ev.n; {
       const target=rectOf(`.pl[data-p="${ev.seat}"]`);
       if(ev.k==='take'){ const bg=rectOf(`.pl[data-p="${ev.seat}"] .bag`); ev.g.forEach((c,k)=>fly(pre.tok&&pre.tok[k],bg,A.gemSVG(c,46,c),46,46,k*120,k===ev.g.length-1?bump(ev.seat):null)); SFX.clack(ev.g.length); }
@@ -75,7 +86,9 @@ const DQUI=(()=>{
       pick=null; SFX.pop(); render(S,ME,api); return; }
     const rt=e.target.closest('[data-ret]'); if(rt){ api.act({t:'ret',c:+rt.dataset.ret}); return; }
     const cd=e.target.closest('[data-lv],[data-res],[data-deck]'); if(cd){ const d=cd.dataset;
-      pick = d.deck?{deck:+d.deck}:d.res!=null?{res:+d.res}:{lv:+d.lv,i:+d.i}; sel=[]; SFX.pop(); render(S,ME,api); return; }
+      const np = d.deck?{deck:+d.deck}:d.res!=null?{res:+d.res}:{lv:+d.lv,i:+d.i};
+      if (pick && JSON.stringify(pick)===JSON.stringify(np) && my && !np.deck){ const cid=np.res!=null?S.P[ME].res[np.res]:S.board[np.lv][np.i]; if(DQ.payPlan(S.P[ME],DQ.CARDS[cid])){ api.act(np.res!=null?{t:'buy',res:np.res}:{t:'buy',lv:np.lv,i:np.i}); pick=null; return; } }
+      pick=np; sel=[]; SFX.pop(); render(S,ME,api); return; }
     const b=e.target.closest('[data-a]'); if(!b||b.disabled) return; SFX.pop(); const a=b.dataset.a;
     if (a==='cancel'){ pick=null; render(S,ME,api); return; }
     if (a==='again'){ api.rematch(); return; }

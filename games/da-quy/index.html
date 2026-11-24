@@ -79,6 +79,9 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .pl.turn .bag{animation:bagb 1.6s ease-in-out infinite}@keyframes bagb{50%{transform:translateY(-3px) rotate(-3deg)}}
 .flm{animation:flm .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center bottom}@keyframes flm{to{transform:scale(.85,1.12)}}
 .pend{animation:pend 2s ease-in-out infinite;transform-box:view-box;transform-origin:0 -12px}@keyframes pend{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-14deg)}}
+.dqpop{position:fixed;z-index:250;min-width:220px;max-width:300px;padding:10px 12px;border-radius:14px;background:linear-gradient(160deg,#2b1d0e,#1a1208);border:2px solid #c9a24e;box-shadow:0 14px 34px rgba(0,0,0,.6),0 0 0 4px rgba(201,162,78,.2);color:#f6ead0;display:flex;flex-direction:column;gap:7px;animation:popin .2s ease-out}
+@keyframes popin{from{transform:scale(.85);opacity:0}}
+.dqpop>b{font-size:15px;color:#ffd76a}.dqpop .pay{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px}.dqpop .pay span{display:flex;align-items:center;gap:2px;font-weight:bold}.dqpop .warn{color:#fca5a5}.dqpop .pb{display:flex;gap:6px;flex-wrap:wrap}
 .dqfly{position:fixed;z-index:300;pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.55))}.dqfly svg{width:100%;height:100%;display:block}
 .dqsp{position:fixed;z-index:301;width:7px;height:7px;margin:-3px;border-radius:50%;pointer-events:none;box-shadow:0 0 10px 3px rgba(255,240,180,.8)}
 @media (max-width:1180px){ .dqwrap{grid-template-columns:auto 96px} .players{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}.pl{flex:1;min-width:240px} .tok{width:74px;height:86px} }
