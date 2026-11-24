@@ -17,7 +17,23 @@
 <script src="art.js"></script>
 <script src="ui.js"></script>
 <script>
-const CSS=`#dqzoom{position:fixed;inset:0;z-index:9999;background:rgba(10,6,3,.82);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;padding:20px;cursor:zoom-out;font-family:"Times New Roman",serif}
+const CSS=`.cs .pt3{font:bold 96px "Times New Roman",serif;fill:#ffe9a8;stroke:#3a2400;stroke-width:6px;paint-order:stroke;text-anchor:middle}
+.cs .cq3{font:bold 76px "Times New Roman",serif;fill:#fff;stroke:#000;stroke-width:5px;paint-order:stroke;text-anchor:middle}
+/* nút bấm kiểu đá quý */
+#dq .tbtn,.dqpop .tbtn{position:relative;overflow:hidden;border:2px solid #e9c46a;border-radius:14px;padding:9px 18px;font:bold 16px "Times New Roman",serif;letter-spacing:.03em;color:#fff;cursor:pointer;
+  background:linear-gradient(160deg,#9a6cff 0%,#6a3fd8 45%,#3b1f8f 100%);box-shadow:inset 0 2px 0 rgba(255,255,255,.45),inset 0 -4px 8px rgba(0,0,0,.35),0 4px 0 #6b4a1e,0 8px 16px rgba(0,0,0,.45);text-shadow:0 1px 2px rgba(0,0,0,.6);transition:transform .15s,filter .15s,box-shadow .15s}
+#dq .tbtn::before,.dqpop .tbtn::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 45%,transparent 60%);transform:translateX(-120%);transition:transform .6s}
+#dq .tbtn:not(:disabled):hover::before,.dqpop .tbtn:not(:disabled):hover::before{transform:translateX(120%)}
+#dq .tbtn:not(:disabled):hover,.dqpop .tbtn:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.12)}
+#dq .tbtn:not(:disabled):active,.dqpop .tbtn:not(:disabled):active{transform:translateY(3px);box-shadow:inset 0 2px 0 rgba(255,255,255,.3),0 1px 0 #6b4a1e,0 3px 6px rgba(0,0,0,.4)}
+#dq .tbtn.pri,.dqpop .tbtn.pri{background:linear-gradient(160deg,#4be38f 0%,#159a55 45%,#0b5c32 100%)}
+#dq .tbtn.gold,.dqpop .tbtn.gold{color:#3d2a00;text-shadow:0 1px 0 rgba(255,255,255,.5);background:linear-gradient(160deg,#fff3a0 0%,#f5c518 40%,#b7791f 100%)}
+#dq .tbtn:not(.pri):not(.gold),.dqpop .tbtn:not(.pri):not(.gold){background:linear-gradient(160deg,#6b7280 0%,#3f4654 50%,#23272f 100%)}
+#dq .tbtn:disabled,.dqpop .tbtn:disabled{filter:grayscale(.85) brightness(.6);cursor:not-allowed;box-shadow:inset 0 2px 0 rgba(255,255,255,.15),0 2px 0 #3a2a10}
+.bank .tbtn{width:100%;padding:9px 4px!important}
+.dqpop{padding:14px 16px!important;min-width:250px!important;background:linear-gradient(160deg,#2f2010,#160e05)!important;border:2px solid #e9c46a!important}
+.dqpop .pb{margin-top:8px;gap:8px!important}
+#dqzoom{position:fixed;inset:0;z-index:9999;background:rgba(10,6,3,.82);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;padding:20px;cursor:zoom-out;font-family:"Times New Roman",serif}
 #dqzoom.on{display:flex;animation:dqzi .25s ease}@keyframes dqzi{from{opacity:0;transform:scale(.92)}}
 #dqzoom .zc{width:min(420px,80vw,calc(85vh*5/7));aspect-ratio:5/7;filter:drop-shadow(0 20px 40px #000)}#dqzoom .zn{width:min(420px,80vw,70vh);aspect-ratio:1;filter:drop-shadow(0 20px 40px #000)}
 #dqzoom svg{width:100%;height:100%;display:block}
