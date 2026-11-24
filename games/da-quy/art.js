@@ -354,8 +354,8 @@ const DQART=(()=>{
     s+=`</svg>`;
     return cache[id]=s; }
   function back(lv){ return `<svg viewBox="0 0 100 140" class="cs"><rect width="100" height="140" rx="9" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqDeck${lv})"/><rect x="3" y="3" width="94" height="134" rx="7" fill="url(#dqLattice)"/>
-    <rect x="9" y="9" width="82" height="122" rx="5" fill="none" stroke="url(#dqGold)" stroke-width="1.5"/><circle cx="50" cy="56" r="25" fill="#00000040" stroke="url(#dqGold)" stroke-width="2"/>
-    ${lv===1?gem(0,50,56,13,3):lv===2?gem(2,50,56,13,5):gem(3,50,56,13,9)}${[...Array(lv)].map((_,i)=>`<path d="M${50+(i-(lv-1)/2)*12} 84 l4 5 l-4 5 l-4 -5z" fill="url(#dqGold)"/>`).join('')}</svg>`; }
+    <rect x="9" y="9" width="82" height="122" rx="5" fill="none" stroke="url(#dqGold)" stroke-width="1.5"/><circle cx="50" cy="52" r="22" fill="#00000040" stroke="url(#dqGold)" stroke-width="2"/>
+    ${lv===1?gem(0,50,52,12,3):lv===2?gem(2,50,52,12,5):gem(3,50,52,12,9)}<text x="50" y="23" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="9" letter-spacing="1.5" fill="url(#dqGold)" stroke="#2a1606" stroke-width=".6" paint-order="stroke">CẤP</text><text x="50" y="98" text-anchor="middle" font-family="Times New Roman,serif" font-weight="bold" font-size="${lv===3?25:28}" fill="url(#dqGold)" stroke="#2a1606" stroke-width="1.4" paint-order="stroke">${['','I','II','III'][lv]}</text><path d="M32 103 H68" stroke="url(#dqGold)" stroke-width=".8"/></svg>`; }
   // ---------- quý tộc: các vị vua nổi tiếng ----------
   const KINGS=[
     {hat:'mien',robe:'#e3a417',trim:'#b5332f',beard:'long',hair:'#1c1410',bg:2},
@@ -407,7 +407,7 @@ const DQART=(()=>{
   function noble(id){ if(ncache[id]) return ncache[id]; const N=DQ.NOBLES[id]; const req=N.req.map((v,k)=>[k,v]).filter(x=>x[1]); const nid='dqnc'+id;
     let s=`<svg viewBox="0 0 100 100" class="ns"><defs><clipPath id="${nid}"><path d="M30 92 L30 30 Q30 8 60 8 Q90 8 90 30 L90 92Z"/></clipPath></defs>`;
     s+=`<rect width="100" height="100" rx="8" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="94" rx="6" fill="url(#dqMarble)"/>`;
-    s+=`<g clip-path="url(#${nid})"><rect x="30" y="8" width="60" height="84" fill="url(#dqSky${KINGS[id].bg})"/><rect x="30" y="8" width="60" height="84" fill="url(#dqDamask)" opacity=".7"/>${king(id)}</g>`;
+    s+=`<g clip-path="url(#${nid})"><rect x="30" y="8" width="60" height="84" fill="url(#dqSky${KINGS[id].bg})"/><rect x="30" y="8" width="60" height="84" fill="url(#dqDamask)" opacity=".7"/>${(window.DQ_NOBLE_IMGS||[]).includes(id)?`<image href="assets/nobles/${id}.webp" x="30" y="8" width="60" height="84" preserveAspectRatio="xMidYMin slice"/>`:king(id)}</g>`;
     s+=`<path d="M30 92 L30 30 Q30 8 60 8 Q90 8 90 30 L90 92Z" fill="none" stroke="url(#dqGold)" stroke-width="2.5"/>`;
     s+=`<path d="M6 6 H24 V22 Q24 30 15 33 Q6 30 6 22Z" fill="url(#dqGold)"/><text x="15" y="26" class="npt">3</text>`;
     req.forEach(([k,v],i)=>{ const y=40+i*19; s+=`<g filter="url(#dqDrop)"><rect x="7" y="${y}" width="16" height="17" rx="2.5" fill="url(#dqBon${k})" stroke="${sh(k,-.8)}" stroke-width=".8"/></g><text x="15" y="${y+13}" class="cn ${k===3?'dk':''}" style="font-size:12px">${v}</text>`; });
