@@ -1,1 +1,1 @@
-window.DQ_CARD_IMGS=[];
+window.DQ_CARD_IMGS=[33,34,35,36];
