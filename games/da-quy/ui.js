@@ -7,7 +7,14 @@ const DQUI=(()=>{
   const $=s=>document.querySelector(s);
   const A=DQART;
   function validTake(S){ if(!sel.length) return false; if(sel.length===2&&sel[0]===sel[1]) return S.bank[sel[0]]>=4; const avail=[0,1,2,3,4].filter(c=>S.bank[c]>0).length; return sel.length===Math.min(3,avail); }
-  function cardEl(id, attrs, cls){ return `<div class="dqc ${cls||''}" ${attrs||''}>${A.card(id)}</div>`; }
+  function cardEl(id, attrs, cls){ return `<div class="dqc ${cls||''}" data-cid="${id}" ${attrs||''}>${A.card(id)}</div>`; }
+  // phóng to lá bài / quý tộc: chuột phải hoặc giữ lâu (điện thoại)
+  function zoomEl(el){ let ov=document.getElementById('dqzoom'); if(!ov){ ov=document.createElement('div'); ov.id='dqzoom'; document.body.appendChild(ov); ov.addEventListener('click',()=>ov.classList.remove('on')); }
+    if(el.dataset.cid!=null){ const id=+el.dataset.cid, C=DQ.CARDS[id];
+      ov.innerHTML=`<div class="zc">${A.card(id)}</div><div class="zi"><b>${A.jewelName(id)}</b><span>Cấp ${['','I','II','III'][C.lv]} · ${C.pts?C.pts+' điểm':'0 điểm'} · thưởng ${DQ_COL[C.col]}</span><small>Bấm ra ngoài để đóng</small></div>`; }
+    else if(el.dataset.nb!=null){ const id=+el.dataset.nb;
+      ov.innerHTML=`<div class="zn">${A.noble(id)}</div><div class="zi"><b>${DQ.NOBLE_NAMES[id]}</b><span>Quý tộc · 3 điểm · ghé thăm khi đủ thẻ thưởng</span><small>Bấm ra ngoài để đóng</small></div>`; }
+    else return; ov.classList.add('on'); }
   // ---------- hiệu ứng bay ----------
   function fly(from, to, html, w, h, delay, done){ if(!from||!to) return; const el=document.createElement('div'); el.className='dqfly'; el.innerHTML=html;
     const x0=from.left+from.width/2-w/2, y0=from.top+from.height/2-h/2, x1=to.left+to.width/2-w/2, y1=to.top+to.height/2-h/2;
@@ -20,7 +27,10 @@ const DQUI=(()=>{
   function bump(seat){ return ()=>{ const b=root.querySelector(`.pl[data-p="${seat}"] .bag`); if(b){ b.animate([{transform:'scale(1)'},{transform:'scale(1.25,.85)'},{transform:'scale(.92,1.1)'},{transform:'scale(1)'}],{duration:450}); sparkle(b.getBoundingClientRect(),10); } }; }
   function rectOf(sel){ const e=root&&root.querySelector(sel); return e?e.getBoundingClientRect():null; }
   function render(S,ME,api){
-    if(!root){ document.getElementById('tb-game').innerHTML=A.defs()+'<div id="dq"></div>'; root=$('#dq'); root.addEventListener('click',onClick); root.addEventListener('mousemove',onMove); }
+    if(!root){ document.getElementById('tb-game').innerHTML=A.defs()+'<div id="dq"></div>'; root=$('#dq'); root.addEventListener('click',onClick); root.addEventListener('mousemove',onMove);
+      root.addEventListener('contextmenu',e=>{ const el=e.target.closest('[data-cid],[data-nb]'); if(el){ e.preventDefault(); zoomEl(el); } });
+      let lp=null; root.addEventListener('touchstart',e=>{ const el=e.target.closest('[data-cid],[data-nb]'); if(!el) return; lp=setTimeout(()=>{ lp='done'; zoomEl(el); },550); },{passive:true});
+      const cancel=()=>{ if(lp&&lp!=='done') clearTimeout(lp); }; root.addEventListener('touchend',e=>{ if(lp==='done'){ e.preventDefault(); } cancel(); lp=null; }); root.addEventListener('touchmove',cancel,{passive:true}); }
     const t=api.now(), my=S.phase==='play'&&S.turn===ME, P=ME>=0?S.P[ME]:null;
     if (!my){ sel=[]; if(pick&&pick.res==null) pick=null; }
     if(lastEv===null) lastEv=S.ev?S.ev.n:0; const ev=S.ev, isNew=ev&&ev.n!==lastEv; const pre={};
