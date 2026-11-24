@@ -23,8 +23,8 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .dqwrap{position:relative;display:grid;grid-template-columns:auto 106px minmax(270px,330px);gap:16px;justify-content:center;align-items:start}
 .dqboard{display:flex;flex-direction:column;gap:11px}
 .nobles{display:flex;gap:12px;justify-content:center;margin-bottom:4px}
-.dqn{position:relative;width:104px;transition:transform .25s,box-shadow .25s;border-radius:9px;box-shadow:0 8px 18px rgba(0,0,0,.5)}
-.dqn svg{display:block;width:104px;height:104px}.dqn span{position:absolute;left:30%;right:4%;bottom:3px;font-size:9.5px;color:#fff5d6;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px #000}
+.dqn{position:relative;width:112px;transition:transform .25s,box-shadow .25s;border-radius:9px;box-shadow:0 8px 18px rgba(0,0,0,.5)}
+.dqn svg{display:block;width:112px;height:112px}.dqn span{position:absolute;left:30%;right:4%;bottom:3px;font-size:9.5px;color:#fff5d6;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px #000}
 .row{display:flex;gap:11px}
 .dqc,.deck{position:relative;width:110px;height:154px;border-radius:10px;flex:none;cursor:pointer;transition:transform .25s ease,box-shadow .25s;box-shadow:0 10px 20px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.4);will-change:transform}
 .dqc svg,.deck svg{display:block;width:100%;height:100%}
@@ -43,9 +43,9 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .tw{animation:tw 3.4s infinite;transform-box:fill-box;transform-origin:center}@keyframes tw{0%,62%,100%{opacity:0;transform:scale(.15) rotate(0)}74%{opacity:1;transform:scale(1) rotate(45deg)}86%{opacity:0;transform:scale(.3) rotate(90deg)}}
 .bank{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:18px;background:linear-gradient(180deg,rgba(80,50,20,.55),rgba(40,25,10,.55));border:2px solid rgba(201,162,78,.6);box-shadow:inset 0 0 20px rgba(0,0,0,.5)}
 .bank .bt{font-weight:bold;font-size:15px;color:#ffe7a8;letter-spacing:.06em}.bank small{font-size:11px;color:#d9cdb2;text-align:center;line-height:1.2}
-.tok{position:relative;width:82px;height:90px;cursor:pointer;transition:transform .2s,filter .2s}.tok svg{width:100%;height:100%;overflow:visible}
+.tok{position:relative;width:82px;height:100px;cursor:pointer;transition:transform .2s,filter .2s}.tok svg{width:100%;height:100%;overflow:visible}
 .tok:hover{transform:translateY(-4px) scale(1.05)}.tok.on{transform:translateY(-8px) scale(1.08);filter:drop-shadow(0 0 10px #c4a5ff) drop-shadow(0 0 4px #fff)}
-.tok span{position:absolute;right:2px;bottom:6px;background:#1d1b2e;color:#fff;border:2px solid #c9a24e;border-radius:12px;font-size:13px;padding:0 7px;font-weight:bold}
+.tok span{position:absolute;right:2px;bottom:20px;background:#1d1b2e;color:#fff;border:2px solid #c9a24e;border-radius:12px;font-size:13px;padding:0 7px;font-weight:bold}
 .tok i{position:absolute;left:0;top:2px;background:#8a5cf6;color:#fff;border-radius:9px;font-size:12px;padding:0 6px;font-style:normal}
 .tok.gold{cursor:default}
 .players{display:flex;flex-direction:column;gap:9px}
@@ -72,6 +72,13 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
 .tok:hover .fl{animation-duration:1.4s}.tok.on .fgem{filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #c4a5ff)}
 .cs .jn{font:bold 7.6px "Times New Roman",serif;fill:#ffeab0;text-anchor:middle;letter-spacing:.02em}
 .cs .cq{font:bold 9.5px "Times New Roman",serif;fill:#fff;text-anchor:middle}
+.tok .gn{position:absolute;left:-6px;right:-6px;bottom:0;text-align:center;font-style:normal;font-size:12.5px;font-weight:bold;color:#ffe7a8;text-shadow:0 1px 3px #000;letter-spacing:.02em}
+.ns .kn{font:bold 8.4px "Times New Roman",serif;fill:#ffe7a8;text-anchor:middle}
+.pl{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:center;border-left:6px solid var(--pc)!important}
+.bagw{width:62px;height:66px}.bag{width:62px;height:66px;display:block;overflow:visible;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}.bag .bgn{font:bold 15px "Times New Roman",serif;fill:#fff;text-anchor:middle;stroke:#0008;stroke-width:2.4px;paint-order:stroke}
+.pl.turn .bag{animation:bagb 1.6s ease-in-out infinite}@keyframes bagb{50%{transform:translateY(-3px) rotate(-3deg)}}
+.flm{animation:flm .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center bottom}@keyframes flm{to{transform:scale(.85,1.12)}}
+.pend{animation:pend 2s ease-in-out infinite;transform-box:view-box;transform-origin:0 -12px}@keyframes pend{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-14deg)}}
 .dqfly{position:fixed;z-index:300;pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.55))}.dqfly svg{width:100%;height:100%;display:block}
 .dqsp{position:fixed;z-index:301;width:7px;height:7px;margin:-3px;border-radius:50%;pointer-events:none;box-shadow:0 0 10px 3px rgba(255,240,180,.8)}
 @media (max-width:1180px){ .dqwrap{grid-template-columns:auto 96px} .players{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}.pl{flex:1;min-width:240px} .tok{width:74px;height:86px} }
@@ -81,7 +88,7 @@ const CSS=`#dq{position:relative;margin:6px auto 14px;max-width:1360px;padding:1
   .dqc,.deck{width:58px;height:81px;border-radius:6px} .row,.dqboard{gap:5px} .nobles{gap:5px} .dqn,.dqn svg{width:52px;height:52px}.dqn span{display:none}
   .deck .dl b{font-size:13px}.deck .dl span{display:none}.deck .dl{bottom:3px}
   .tok{width:50px;height:50px}.tok span{font-size:10px;padding:0 4px;bottom:0}.bank{padding:4px 3px;gap:2px}.bank small{display:none}.bank .bt{font-size:11px} .bank .tbtn{padding:4px 6px;font-size:12px}
-  .pl .ph{font-size:13px}.pl .pts{font-size:18px}.bon,.resn{width:21px;height:28px}.pl .tk{font-size:11px}.pl .tk svg{width:12px;height:12px}.pl .ft{display:none}
+  .pl .ph{font-size:13px}.pl .pts{font-size:18px}.bon,.resn{width:21px;height:28px} .pl{grid-template-columns:40px 1fr;gap:4px} .bagw,.bag{width:40px;height:43px} .tok .gn{font-size:9px} .tok{height:58px} .tok span{bottom:12px}.pl .tk{font-size:11px}.pl .tk svg{width:12px;height:12px}.pl .ft{display:none}
   .mine{position:fixed;left:auto;right:8px;bottom:6px;width:250px;z-index:20;margin:0;border-radius:12px;padding:4px 6px;gap:4px;background:rgba(12,28,40,.95);justify-content:flex-start} .mine .rs em{display:none} .pb .tbtn{padding:4px 7px;font-size:12px} .pay{font-size:12px} .pinfo{gap:3px} .pinfo>b{font-size:12px} .mine .rs .lb{display:none} .mine .rs .dqc,.mine .pv{width:40px;height:56px} .mine .act{min-width:0;font-size:13px;gap:6px} .xlog{display:none} }
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
