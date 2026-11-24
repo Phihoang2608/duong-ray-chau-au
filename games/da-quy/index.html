@@ -103,6 +103,56 @@ const CSS=`#dqzoom{position:fixed;inset:0;z-index:9999;background:rgba(10,6,3,.8
   .tok{width:50px;height:50px}.tok span{font-size:10px;padding:0 4px;bottom:0}.bank{padding:4px 3px;gap:2px}.bank small{display:none}.bank .bt{font-size:11px} .bank .tbtn{padding:4px 6px;font-size:12px}
   .pl .ph{font-size:13px}.pl .pts{font-size:18px}.bon,.resn{width:21px;height:28px} .pl{grid-template-columns:40px 1fr;gap:4px} .bagw,.bag{width:40px;height:43px} .tok .gn{font-size:9px} .tok{height:58px} .tok span{bottom:12px}.pl .tk{font-size:11px}.pl .tk svg{width:12px;height:12px}.pl .ft{display:none}
   .mine{position:fixed;left:auto;right:8px;bottom:6px;width:250px;z-index:20;margin:0;border-radius:12px;padding:4px 6px;gap:4px;background:rgba(12,28,40,.95);justify-content:flex-start} .mine .rs em{display:none} .pb .tbtn{padding:4px 7px;font-size:12px} .pay{font-size:12px} .pinfo{gap:3px} .pinfo>b{font-size:12px} .mine .rs .lb{display:none} .mine .rs .dqc,.mine .pv{width:40px;height:56px} .mine .act{min-width:0;font-size:13px;gap:6px} .xlog{display:none} }
+
+/* ===== bố cục mới: vừa 1 màn hình ===== */
+.side{display:flex;flex-direction:column;gap:8px;min-width:0}
+.stat{background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.05));border:1.5px solid rgba(201,162,78,.55);border-radius:12px;padding:7px 12px;font-size:15px;line-height:1.3}
+.stat .me{color:#ffd76a}.stat .warn{color:#fca5a5}.stat .big{font-size:18px;color:#ffd76a}
+.goldbox{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:6px;padding:6px 4px 4px;border-top:2px dashed rgba(253,224,71,.55);width:100%}
+.goldbox .bt{color:#fde047;font-size:14px}
+.bank .gems{display:flex;flex-direction:column;align-items:center;gap:2px}
+.bon.gph{visibility:hidden}
+.pl{grid-template-columns:56px 1fr auto!important}
+.rsv{display:flex;gap:4px;align-items:center}
+.rslot{width:44px;height:62px;border:1.5px dashed rgba(255,255,255,.2);border-radius:5px}
+.rcd,.rsv .dqc{width:44px!important;height:62px!important;border-radius:5px;flex:none}
+.rcd svg{width:100%;height:100%;display:block}
+.rb{filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
+@media (min-width:1000px) and (min-height:600px){
+ #dq{height:var(--H,calc(100vh - 70px));box-sizing:border-box;margin:0 auto;max-width:1900px;padding:12px 14px;overflow:hidden;
+   --ch:calc((var(--H,780px) - 70px)/3.62);--cw:calc(var(--ch)*.715)}
+ .dqwrap{height:100%;grid-template-columns:auto calc(var(--ch)*.55) minmax(330px,1fr);gap:14px;align-items:stretch}
+ .dqboard{gap:8px;justify-content:center}
+ .nobles{gap:10px;margin:0}
+ .dqn,.dqn svg{width:calc(var(--ch)*.56);height:calc(var(--ch)*.56)}
+ .row{gap:8px}
+ .dqc,.deck{width:var(--cw);height:var(--ch)}
+ .bank{justify-content:center;padding:8px 4px;gap:4px}
+ .tok{width:calc(var(--ch)*.36);height:calc(var(--ch)*.43)}
+ .pcn{min-width:0}
+ .goldbox .gn{display:none}
+ .goldbox .bt{font-size:13px}
+ .bank small{font-size:11px}
+ .side{height:100%;max-width:620px}
+ .players{flex:1;min-height:0;display:flex;flex-direction:column;gap:7px;justify-content:flex-start}
+ .pl{padding:6px 10px}
+ .pl .ph{font-size:15px}.pl .pts{font-size:24px}
+ .pl .ft{font-size:11.5px;margin-top:3px}
+ /* người đang tới lượt: phóng to khu đá */
+ .pl.turn{padding:10px 12px}
+ .pl.turn .bon{width:44px;height:58px}
+ .pl.turn .tk{font-size:18px;gap:3px}.pl.turn .tk svg{width:26px;height:26px}
+ .pl.turn .pts{font-size:34px}.pl.turn .ph{font-size:17px}
+ .pl.turn .rcd,.pl.turn .rsv .dqc,.pl.turn .rslot{width:60px!important;height:84px!important}
+ .pl.turn .bagw,.pl.turn .bag{width:66px;height:70px}
+ .pl.turn{grid-template-columns:66px 1fr auto!important}
+ .xlog{width:auto;margin:0;font-size:12.5px;max-height:84px;overflow:hidden}
+ .mine{display:none}
+}
+@media (min-width:1000px) and (min-height:600px) and (max-width:1300px){ .dqwrap{grid-template-columns:auto calc(var(--ch)*.5) minmax(300px,1fr);gap:10px} .rcd,.rsv .dqc,.rslot{width:36px!important;height:50px!important} }
+
+@media (max-height:520px){ .rcd,.rsv .dqc,.rslot{width:22px!important;height:31px!important;border-radius:3px} .rsv{flex-direction:column;gap:2px} .pl{grid-template-columns:36px 1fr auto!important} .stat{font-size:11px;padding:3px 6px} .stat .big{font-size:13px} .goldbox{margin-top:2px;padding-top:2px} .goldbox small,.goldbox .bt{display:none} .side{gap:4px} .pcn{min-width:0} .goldbox .gn{display:none} }
+@media (max-width:999px) and (min-height:521px){ .side{grid-column:1/-1} .players{flex-direction:row;flex-wrap:wrap} }
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
