@@ -845,8 +845,12 @@ body{background:#140609!important}
 .mebadge{display:inline-block;margin-left:4px;padding:0 6px;border-radius:7px;font:bold 10px/16px "Times New Roman",serif;color:#3a2410;background:linear-gradient(180deg,#ffe48a,#c99626);vertical-align:middle}
 
 /* thẻ mua được: điện thoại (chế độ nhẹ) dùng viền phát sáng tĩnh thay cho filter */
-.dqlite #dq .dqc.can{filter:none!important;border-radius:7px;box-shadow:0 0 0 2px #4ade80,0 0 10px 2px rgba(74,222,128,.85)!important;position:relative}
-.dqlite #dq .dqc.can::after{content:"✓";position:absolute;right:-5px;bottom:-5px;width:18px;height:18px;border-radius:50%;background:#16a34a;color:#fff;font:bold 12px/18px Arial;text-align:center;box-shadow:0 0 0 1.5px #fff;z-index:3;pointer-events:none}
+.dqlite #dq .dqc.can{filter:none!important;border-radius:7px;box-shadow:0 0 0 1.5px rgba(74,222,128,.8),0 0 8px 1px rgba(74,222,128,.5)!important;position:relative}
+
+/* hiệu ứng TẮT: không chuyển động lặp, không bóng mờ */
+.dqoff *,.dqoff *::before,.dqoff *::after{animation:none!important;transition:none!important}
+.dqoff #dq::after{display:none}
+.dqoff .tok::before{display:none}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
