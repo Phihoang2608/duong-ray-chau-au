@@ -249,6 +249,9 @@ const CSS=`.bank .tok .gn{display:none!important}
 .bag .bgn{font:bold 17px "Times New Roman",serif!important;fill:#fff!important;stroke:#1a0b2e!important;stroke-width:3.2px!important;paint-order:stroke!important;opacity:1!important}
 .bag .bgd{stroke-width:2.6px}
 #tb-modal{z-index:100000!important}
+
+.ovl{position:absolute;left:8px;top:8px;z-index:4;font:bold 11px "Times New Roman",serif;font-style:normal;color:#fff;background:#dc2626;border:1px solid #fecaca;border-radius:8px;padding:1px 6px;animation:blinkTxt .8s ease-in-out infinite;white-space:nowrap}
+.bagw.over .bag{filter:drop-shadow(0 0 8px #ef4444) drop-shadow(0 0 3px #ef4444)}.bagw.over .bgn{fill:#fecaca!important}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
@@ -260,7 +263,7 @@ Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline
   <p>• <b>Giữ chỗ</b> 1 thẻ (trên bàn hoặc úp từ chồng bài) và nhận 1 viên <b>Vàng</b> — vàng thay được mọi màu. Giữ tối đa 3 thẻ.</p>
   <p>• <b>Mua</b> 1 thẻ trên bàn hoặc thẻ đang giữ: trả số đá ghi ở góc dưới. Mỗi thẻ đã mua cho bạn <b>giảm giá vĩnh viễn 1 viên</b> màu của thẻ đó. Thẻ có viền xanh là thẻ bạn mua được ngay.</p>
   <p><b>Quý tộc:</b> khi số thẻ bạn sở hữu đủ yêu cầu của một quý tộc, quý tộc tự ghé thăm, cộng 3 điểm.</p>
-  <p>Giữ tối đa 10 viên đá; thừa phải trả lại. Mỗi lượt có 60 giây.</p>` });
+  <p><b>Giới hạn 10 viên:</b> trong lượt bạn được phép có hơn 10 viên. Chỉ khi kết thúc lượt mới kiểm tra: nếu túi quá tải (hơn 10 viên), bạn chọn trả bớt những viên tùy ý cho đến khi còn đúng 10 viên, rồi lượt chuyển sang người tiếp theo. Mỗi lượt có 60 giây.</p>` });
 </script>
 </body>
 </html>
