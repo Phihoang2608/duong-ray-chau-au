@@ -217,6 +217,19 @@ const CSS=`.bank .tok .gn{display:none!important}
 .bank{background:linear-gradient(180deg,rgba(40,26,14,.8),rgba(25,16,8,.75))!important}
 .stat{background:rgba(35,22,10,.75)!important}
 .xlog{background:rgba(35,22,10,.6);border-radius:10px;padding:6px 10px!important}
+
+.dqn{transition:transform .2s}.dqn:hover{transform:translateY(-3px) scale(1.04)}
+@media (min-width:1000px) and (min-height:600px){ .dqn,.dqn svg{width:calc(var(--ch)*.68);height:calc(var(--ch)*.68)} }
+.pl{position:relative}
+.pl.turn{border:3px solid var(--pc,#fbbf24)!important;animation:turnGlow 1.4s ease-in-out infinite}
+@keyframes turnGlow{0%,100%{box-shadow:0 0 0 2px rgba(255,230,140,.9),0 0 14px var(--pc,#fbbf24)}50%{box-shadow:0 0 0 2px rgba(255,255,255,1),0 0 32px 6px var(--pc,#fbbf24)}}
+.tbadge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font:bold 12px "Times New Roman",serif;font-style:normal;padding:2px 10px;border-radius:9px;background:linear-gradient(#ffe48a,#c99626);color:#3b2406;border:1px solid #fff3c4;white-space:nowrap;z-index:3;animation:blinkTxt 1s steps(1) infinite alternate,none}
+.blink{animation:blinkTxt .9s ease-in-out infinite}
+@keyframes blinkTxt{0%,100%{opacity:1;text-shadow:0 0 10px #ffd76a}50%{opacity:.25;text-shadow:none}}
+.tbadge{animation:badgePulse 1s ease-in-out infinite}
+@keyframes badgePulse{50%{opacity:.55;transform:translateX(-50%) scale(.94)}}
+.bon{filter:drop-shadow(0 2px 3px rgba(0,0,0,.6)) drop-shadow(0 0 2px rgba(255,255,255,.25))}
+.bon .cn{fill:#fff;stroke:#000;stroke-width:3px}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,

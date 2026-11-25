@@ -22,7 +22,8 @@ const SFX = {
   },
   draw(){ this.noise(.16,{vol:.35,freq:900,sweep:4000,q:.8}); this.tone(1400,.05,{type:'triangle',vol:.12,at:.1}); },
   flip(){ this.noise(.07,{vol:.25,freq:3000,q:1.5}); },
-  clack(n){ for(let i=0;i<n;i++){ const at=i*.13; this.noise(.06,{vol:.5,freq:700,q:2,at}); this.tone(110+i*12,.08,{type:'triangle',vol:.35,at}); this.noise(.04,{vol:.25,freq:2500,q:3,at:at+.05}); } },
+  stone(at=0,v=1){ const p=.9+Math.random()*.25; this.noise(.025,{vol:.55*v,freq:3200*p,q:4,at}); this.tone(2350*p,.07,{vol:.22*v,at,attack:.001}); this.tone(3650*p,.045,{vol:.12*v,at,attack:.001}); this.tone(420*p,.05,{type:'triangle',vol:.18*v,at,attack:.001}); },
+  clack(n){ for(let i=0;i<n;i++){ const at=i*.16; this.stone(at,1); this.stone(at+.055,.55); this.stone(at+.1,.25); } },
   whistle(){
     if(!this.ok()) return; const c=this.ctx, t=c.currentTime;
     [[523,.0],[659,.0],[784,.0]].forEach(([f])=>{ const o=c.createOscillator(), g=c.createGain(), bp=c.createBiquadFilter(), lfo=c.createOscillator(), lg=c.createGain();

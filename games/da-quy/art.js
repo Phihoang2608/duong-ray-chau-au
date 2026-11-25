@@ -449,6 +449,13 @@ const DQART=(()=>{
         s+=`<g transform="translate(0,${y}) scale(1,.82)">${gem(c,0,0,11.5,c*3+i)}</g><ellipse cx="-12" cy="${y-11}" rx="9" ry="3" fill="#fff" opacity=".35" transform="rotate(-18 -12 ${y-11})"/>`; } }
     return s+'</svg>'; }
   // ---------- thẻ thưởng nhỏ trong bảng người chơi ----------
-  function bonus(c,n){ return `<svg viewBox="0 0 30 40" class="bon"><rect x="1" y="1" width="28" height="38" rx="4" fill="url(#dqBon${c})" stroke="${sh(c,-.8)}" stroke-width="1"/><rect x="3" y="3" width="24" height="34" rx="3" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width=".8"/>${gem(c,15,13,7.5,c)}<text x="15" y="35" class="cn ${c===3?'dk':''}" style="font-size:13px">${n}</text></svg>`; }
+  function bonus(c,n){ const L=sh(c,.65),M=sh(c,.05),D=sh(c,-.55),X=sh(c,-.8), dk=c===3||c===4?'':'';
+    return `<svg viewBox="0 0 30 40" class="bon"><polygon points="7,1 23,1 29,7 29,33 23,39 7,39 1,33 1,7" fill="${D}" stroke="#e8ecf2" stroke-width="1.1"/>`
+     +`<polygon points="9,5 21,5 25,9 25,31 21,35 9,35 5,31 5,9" fill="${M}"/>`
+     +`<polygon points="7,1 23,1 21,5 9,5" fill="${L}" opacity=".95"/><polygon points="1,7 7,1 9,5 5,9" fill="${L}" opacity=".7"/><polygon points="23,1 29,7 25,9 21,5" fill="${sh(c,.3)}"/>`
+     +`<polygon points="29,7 29,33 25,31 25,9" fill="${sh(c,-.3)}"/><polygon points="1,7 5,9 5,31 1,33" fill="${sh(c,.25)}"/>`
+     +`<polygon points="1,33 5,31 9,35 7,39" fill="${sh(c,-.4)}"/><polygon points="7,39 9,35 21,35 23,39" fill="${X}"/><polygon points="23,39 21,35 25,31 29,33" fill="${sh(c,-.65)}"/>`
+     +`<polygon points="9,5 21,5 15,13" fill="#fff" opacity=".22"/><polygon points="5,9 9,5 12,12" fill="#fff" opacity=".35"/><path d="M8 8 L12 6" stroke="#fff" stroke-width="1.2" stroke-linecap="round" opacity=".9"/>`
+     +`<circle cx="22" cy="8" r=".9" fill="#fff"/><text x="15" y="25.5" class="cn" style="font-size:16px">${n}</text></svg>`; }
   return {defs,gem,gemSVG,card,back,noble,chip,bonus,sh,PAL,floatGem,jewelName,bag};
 })();
