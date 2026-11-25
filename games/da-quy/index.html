@@ -578,6 +578,34 @@ body{background:#140609!important}
  #dq .dqpop>*{font-size:11.5px!important}#dq .dqpop>b{font-size:13px!important}
  #dq .dqpop svg{width:14px!important;height:14px!important}
 }
+
+#dq{touch-action:pan-x pan-y}
+#dq.zoomed{overflow:auto!important;-webkit-overflow-scrolling:touch}
+#dq.zoomed .dqwrap{height:auto!important}
+/* xoay ngang: khung người chơi dài hơn một chút */
+@media (orientation:landscape) and (max-height:500px){
+ .pl{padding:6px 7px!important;grid-template-columns:34px minmax(0,1fr) auto!important;gap:5px!important}
+ .pl.turn{padding:7px 7px!important}
+ .bagw,.bag,.pl.turn .bagw,.pl.turn .bag{width:34px!important;height:38px!important}
+ .bag .bgn{font-size:13px!important}
+ .pl .ph,.pl.turn .ph{font-size:12.5px!important}
+ .pl .pts,.pl.turn .pts{font-size:18px!important}
+ .ckw,.pl.turn .ckw{width:24px!important;height:28px!important}.tms,.pl.turn .tms{font-size:13px!important}
+ .gr2{margin-top:4px!important;row-gap:4px!important}
+ .bon,.pl.turn .gr2 .gb .bon{width:18px!important;height:24px!important}
+ .pl .tk,.pl.turn .gr2 .tk{font-size:11.5px!important}.pl .tk svg,.pl.turn .gr2 .tk svg{width:13px!important;height:13px!important}
+ .rsv .rslot,.rsv .rcd,.rsv .dqc,.pl.turn .rsv .rslot,.pl.turn .rsv .rcd,.pl.turn .rsv .dqc{width:27px!important;height:38px!important}
+ .players{gap:6px!important}
+ .dqtools{flex-wrap:wrap;max-width:200px;justify-content:flex-end}
+}
+
+@media (orientation:landscape) and (max-height:500px){
+ .dqtools{position:fixed!important;right:8px!important;bottom:7px!important;max-width:none!important;flex-wrap:nowrap!important}
+ .side{padding-bottom:42px!important}
+}
+@media (max-width:640px) and (orientation:portrait){
+ .dqtools button[data-tool="zin"],.dqtools button[data-tool="zout"]{display:none}
+}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
