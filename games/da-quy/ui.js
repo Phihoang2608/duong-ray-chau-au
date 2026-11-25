@@ -27,6 +27,7 @@ const DQUI=(()=>{
       document.body.appendChild(box); const bw=box.offsetWidth, bh=box.offsetHeight; box.style.left=Math.max(4,r.left+r.width/2-bw/2)+'px'; box.style.top=(r.top+r.height*.35-bh)+'px';
       box.animate([{opacity:0,transform:'translateY(6px) scale(.8)'},{opacity:1,transform:'translateY(-14px) scale(1)',offset:.18},{opacity:1,transform:'translateY(-22px)',offset:.75},{opacity:0,transform:'translateY(-34px)'}],{duration:2000,easing:'ease-out',fill:'both'}).onfinish=()=>box.remove(); },delay||0); }
   const WOB={};
+  try{ if(matchMedia('(pointer:coarse)').matches||innerWidth<900||/lite=1/.test(location.search)) document.documentElement.classList.add('dqlite'); }catch(e){}
   function buyFly(from,seat,id,done,fromRes){ const pl=root&&root.querySelector(`.pl[data-p="${seat}"]`); if(!from||!pl) return; const C=DQ.CARDS[id];
     const wob=()=>{ WOB[seat+'_'+C.col]=Date.now()+900; const t2=root.querySelector(`.pl[data-p="${seat}"] [data-bc="${C.col}"]`); if(t2){ t2.classList.remove('wob'); void t2.offsetWidth; t2.classList.add('wob'); t2.animate([{transform:'rotate(0) scale(1)'},{transform:'rotate(-14deg) scale(1.2)'},{transform:'rotate(12deg) scale(1.2)'},{transform:'rotate(-9deg) scale(1.12)'},{transform:'rotate(6deg) scale(1.06)'},{transform:'rotate(0) scale(1)'}],{duration:700,easing:'ease-out'}); sparkle(t2.getBoundingClientRect(),12,A.PAL[C.col][1]); } };
     let w=from.width, h=from.height; if(fromRes&&(w<60)){ w=60; h=84; }
