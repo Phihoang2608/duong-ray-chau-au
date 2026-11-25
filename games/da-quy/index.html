@@ -606,6 +606,92 @@ body{background:#140609!important}
 @media (max-width:640px) and (orientation:portrait){
  .dqtools button[data-tool="zin"],.dqtools button[data-tool="zout"]{display:none}
 }
+
+/* ---- khung người chơi: Đá đang có (trên, to) + Thẻ giảm giá (dưới, ô vuông nhỏ) ---- */
+.gr3{display:flex;flex-direction:column;gap:5px;margin-top:6px;min-width:0}
+.g3row{display:flex;align-items:center;gap:8px;min-width:0}
+.g3l{flex:0 0 58px;font:italic 11px/1.1 "Times New Roman",serif;color:#e9d9b0;opacity:.85;text-align:right;padding-right:6px;border-right:1px solid rgba(233,217,176,.35);white-space:normal}
+.g3c{flex:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:6px;align-items:center;justify-items:center;min-width:0}
+.gtk{display:inline-flex;align-items:center;gap:2px;padding:2px 4px;border-radius:999px;background:rgba(0,0,0,.28);border:1px solid rgba(233,196,106,.25);font:bold 17px "Times New Roman",serif;color:#fff;text-shadow:0 1px 2px #000;white-space:nowrap}
+.gtk svg{width:24px;height:24px;flex:0 0 auto}
+.gtk b{min-width:9px;text-align:center}
+.gtk.z{opacity:.32;background:none;border-color:transparent}
+.pl.turn .gtk{font-size:20px;padding:3px 6px}.pl.turn .gtk svg{width:29px;height:29px}
+.gb{display:inline-flex}
+.sq{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:4px;font:bold 12px "Times New Roman",serif;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.25),0 1px 2px rgba(0,0,0,.5)}
+.sq0{background:linear-gradient(135deg,#6ee7b7,#059669 55%,#065f46)}
+.sq1{background:linear-gradient(135deg,#93c5fd,#2563eb 55%,#1e3a8a)}
+.sq2{background:linear-gradient(135deg,#fca5a5,#dc2626 55%,#7f1d1d)}
+.sq3{background:linear-gradient(135deg,#ffffff,#e2e8f0 55%,#94a3b8);color:#1f2937;text-shadow:none}
+.sq4{background:linear-gradient(135deg,#6b7280,#27272a 55%,#000)}
+.sq.z{opacity:.4}
+.pl.turn .sq{width:22px;height:22px;font-size:13.5px}
+.gb.wob .sq{box-shadow:0 0 10px #fff6c8,0 0 5px #ffe27a}
+.gtk[data-ret]{cursor:pointer;background:rgba(239,68,68,.22);box-shadow:0 0 0 2px #ef4444,0 0 12px 2px rgba(239,68,68,.7);animation:retRing 1s ease-in-out infinite;position:relative}
+.gtk[data-ret]::after{content:"";position:absolute;inset:-4px;border:1.5px dashed #fecaca;border-radius:999px;animation:retSpin 4s linear infinite;pointer-events:none}
+.gr3 .retcap{margin-top:3px}
+/* điện thoại dọc */
+@media (max-width:640px) and (orientation:portrait){
+ .g3l{flex-basis:44px;font-size:9.5px}
+ .g3c{column-gap:3px}
+ .gtk,.pl.turn .gtk{font-size:14px;padding:1px 3px}.gtk svg,.pl.turn .gtk svg{width:19px;height:19px}
+ .sq,.pl.turn .sq{width:16px;height:16px;font-size:10.5px}
+}
+/* điện thoại ngang */
+@media (orientation:landscape) and (max-height:500px){
+ .gr3{gap:3px;margin-top:3px}
+ .g3l{display:none}
+ .g3c{column-gap:3px}
+ .gtk,.pl.turn .gtk{font-size:12.5px;padding:0 3px;gap:1px}.gtk svg,.pl.turn .gtk svg{width:16px;height:16px}
+ .sq,.pl.turn .sq{width:14px;height:14px;font-size:9.5px;border-radius:3px}
+}
+
+/* đá đang có: viên đá to, số nằm trong huy hiệu góc dưới — không chồng nhau */
+.g3c{grid-template-columns:repeat(6,auto)!important;justify-content:start;column-gap:9px!important}
+.gtk{position:relative;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0!important;border-radius:50%;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.08),rgba(0,0,0,.35));border:1px solid rgba(233,196,106,.3)}
+.gtk svg{width:28px!important;height:28px!important}
+.gtk b{position:absolute;right:-7px;bottom:-5px;min-width:17px;height:17px;padding:0 3px;box-sizing:border-box;border-radius:9px;display:flex;align-items:center;justify-content:center;font:bold 12.5px/1 "Times New Roman",serif;color:#fff6d0;background:linear-gradient(180deg,#3a2410,#140a04);border:1px solid #e9c46a;text-shadow:none;box-shadow:0 1px 3px rgba(0,0,0,.6)}
+.gtk.z b{color:#aaa;border-color:#777}
+.pl.turn .gtk{width:40px;height:40px}.pl.turn .gtk svg{width:33px!important;height:33px!important}
+.pl.turn .gtk b{min-width:20px;height:20px;font-size:14.5px;right:-8px}
+.pl.turn .g3c{column-gap:12px!important}
+@media (max-width:640px) and (orientation:portrait){
+ .g3c{column-gap:7px!important}
+ .gtk,.pl.turn .gtk{width:28px;height:28px}.gtk svg,.pl.turn .gtk svg{width:23px!important;height:23px!important}
+ .gtk b,.pl.turn .gtk b{min-width:15px;height:15px;font-size:11px;right:-6px;bottom:-4px}
+ .pl.turn .g3c{column-gap:8px!important}
+}
+@media (orientation:landscape) and (max-height:500px){
+ .g3c,.pl.turn .g3c{column-gap:7px!important}
+ .gtk,.pl.turn .gtk{width:22px;height:22px}.gtk svg,.pl.turn .gtk svg{width:18px!important;height:18px!important}
+ .gtk b,.pl.turn .gtk b{min-width:13px;height:13px;font-size:9.5px;right:-5px;bottom:-3px;padding:0 2px}
+}
+
+@media (min-width:641px){
+ .g3l{flex-basis:46px!important;font-size:10.5px!important}
+ .pl.turn .gtk{width:36px!important;height:36px!important}.pl.turn .gtk svg{width:30px!important;height:30px!important}
+ .pl.turn .g3c{column-gap:10px!important}
+ .rsv .rslot,.rsv .rcd,.rsv .dqc,.pl.turn .rsv .rslot,.pl.turn .rsv .rcd,.pl.turn .rsv .dqc{width:50px!important;height:70px!important}
+ .pcn{min-width:0;overflow:visible}
+}
+
+@media (min-width:641px){
+ .g3row{flex-direction:column!important;align-items:flex-start!important;gap:2px!important}
+ .g3l{flex:none!important;border:none!important;padding:0!important;text-align:left!important;font-size:10.5px!important;line-height:1!important}
+ .g3l br{display:none}
+ .g3c{width:100%;column-gap:8px!important}
+ .gtk{width:31px!important;height:31px!important}.gtk svg{width:26px!important;height:26px!important}
+ .pl.turn .gtk{width:33px!important;height:33px!important}.pl.turn .gtk svg{width:28px!important;height:28px!important}
+ .pl.turn .g3c{column-gap:8px!important}
+ .gr3{gap:4px}
+}
+
+.g3c{grid-template-columns:repeat(6,var(--tw,31px))!important;justify-items:center}
+.pl.turn{--tw:33px}
+@media (max-width:640px) and (orientation:portrait){ .pl,.pl.turn{--tw:28px} }
+@media (orientation:landscape) and (max-height:500px){ .pl,.pl.turn{--tw:22px} }
+
+.dqingame #pbg-fab{display:none!important}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
