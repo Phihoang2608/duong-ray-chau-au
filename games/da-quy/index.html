@@ -721,6 +721,17 @@ body{background:#140609!important}
 @media (max-width:640px) and (orientation:portrait){ .pl .pts,.pl.turn .pts{width:36px;height:40px}.pl .pts b,.pl.turn .pts b{font-size:17px;top:3px} }
 @media (orientation:landscape) and (max-height:500px){ .pl .pts,.pl.turn .pts{width:26px!important;height:29px!important}.pl .pts b,.pl.turn .pts b{font-size:12.5px!important;top:2px} }
 .dqpp{color:#ffe27a!important;font-size:24px!important;text-shadow:0 0 8px rgba(0,0,0,.9),0 2px 2px #000,0 0 16px rgba(255,215,110,.8)!important}
+
+/* ---- chồng thẻ úp: nhỏ, nằm nghiêng, chỉ hiện số khi còn dưới 5 ---- */
+#dq .deck{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;position:relative;display:flex;align-items:center;justify-content:center}
+#dq .deck>svg{width:74%!important;height:74%!important;transform:rotate(-14deg);border-radius:6px;transition:transform .2s;
+ box-shadow:3px 3px 0 -1px #3a2410,3px 3px 0 0 #c9a24e,6px 6px 0 -1px #3a2410,6px 6px 0 0 #b8862b,8px 10px 14px rgba(0,0,0,.6)}
+#dq .deck:hover>svg{transform:rotate(-8deg) translateY(-3px)}
+#dq .deck.pk>svg{transform:rotate(-4deg) scale(1.05);box-shadow:0 0 0 3px #ffe08a,0 0 18px #ffd34d}
+#dq .deck .dl{display:none!important}
+#dq .deck.empty>svg{opacity:.25;box-shadow:none}
+.dlow{position:absolute;right:2px;bottom:4px;z-index:2;padding:1px 7px;border-radius:9px;font:bold 11px "Times New Roman",serif;color:#fff;background:linear-gradient(180deg,#dc2626,#7f1d1d);border:1px solid #fecaca;box-shadow:0 1px 4px rgba(0,0,0,.6);white-space:nowrap}
+.dqlite #dq .deck>svg{box-shadow:3px 3px 0 0 #c9a24e,6px 6px 0 0 #b8862b}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
