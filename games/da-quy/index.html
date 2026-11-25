@@ -667,7 +667,7 @@ body{background:#140609!important}
  .gtk b,.pl.turn .gtk b{min-width:13px;height:13px;font-size:9.5px;right:-5px;bottom:-3px;padding:0 2px}
 }
 
-@media (min-width:641px){
+@media (min-width:641px) and (min-height:501px){
  .g3l{flex-basis:46px!important;font-size:10.5px!important}
  .pl.turn .gtk{width:36px!important;height:36px!important}.pl.turn .gtk svg{width:30px!important;height:30px!important}
  .pl.turn .g3c{column-gap:10px!important}
@@ -675,7 +675,7 @@ body{background:#140609!important}
  .pcn{min-width:0;overflow:visible}
 }
 
-@media (min-width:641px){
+@media (min-width:641px) and (min-height:501px){
  .g3row{flex-direction:column!important;align-items:flex-start!important;gap:2px!important}
  .g3l{flex:none!important;border:none!important;padding:0!important;text-align:left!important;font-size:10.5px!important;line-height:1!important}
  .g3l br{display:none}
@@ -692,6 +692,35 @@ body{background:#140609!important}
 @media (orientation:landscape) and (max-height:500px){ .pl,.pl.turn{--tw:22px} }
 
 .dqingame #pbg-fab{display:none!important}
+
+/* ---- nút đá quý vẽ mặt giác (lục bảo / vàng / đá đen) ---- */
+#dq .tbtn.pri,.dqpop .tbtn.pri,#dq .tbtn.gold,.dqpop .tbtn.gold,#dq .dqpop .tbtn:not(.pri):not(.gold),.dqpop .tbtn:not(.pri):not(.gold){
+ background:url(assets/ui/btn-emerald.svg) center/100% 100% no-repeat!important;
+ clip-path:polygon(6.7% 0,93.3% 0,100% 50%,93.3% 100%,6.7% 100%,0 50%)!important;
+ border:none!important;box-shadow:none!important;min-height:44px;padding:11px 30px!important;
+ filter:drop-shadow(0 3px 2px rgba(0,0,0,.55)) drop-shadow(0 0 6px rgba(52,211,153,.25))}
+#dq .tbtn.gold,.dqpop .tbtn.gold{background-image:url(assets/ui/btn-gold.svg)!important;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55)) drop-shadow(0 0 7px rgba(245,197,24,.35))}
+#dq .dqpop .tbtn:not(.pri):not(.gold),.dqpop .tbtn:not(.pri):not(.gold){background-image:url(assets/ui/btn-onyx.svg)!important;min-height:38px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55))}
+#dq .tbtn.pri:not(:disabled):hover,.dqpop .tbtn.pri:not(:disabled):hover{filter:drop-shadow(0 3px 2px rgba(0,0,0,.55)) drop-shadow(0 0 12px rgba(74,222,128,.75)) brightness(1.08)}
+#dq .tbtn.gold:not(:disabled):hover,.dqpop .tbtn.gold:not(:disabled):hover{filter:drop-shadow(0 3px 2px rgba(0,0,0,.55)) drop-shadow(0 0 12px rgba(253,230,138,.8)) brightness(1.06)}
+#dq .tbtn.pri:disabled,.dqpop .tbtn.pri:disabled,#dq .tbtn.gold:disabled,.dqpop .tbtn.gold:disabled{filter:grayscale(.75) brightness(.62) drop-shadow(0 2px 2px rgba(0,0,0,.5))!important}
+/* chữ trên nút: lục bảo = vàng kim chạm, vàng = nâu đỏ khắc chìm */
+.tbtn.pri .gtx{background:linear-gradient(180deg,#fffdf0 0%,#fff1b8 45%,#f2c94c 70%,#fff6d0 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #032414) drop-shadow(0 0 1.5px #021a0e) drop-shadow(0 0 4px rgba(2,26,14,.9))!important;letter-spacing:.06em;font-size:1.05em}
+.tbtn.gold .gtx{background:linear-gradient(180deg,#5a1a06 0%,#3b0f02 60%,#6b2a08 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 rgba(255,248,215,.9))!important;letter-spacing:.05em}
+.tbtn:disabled .gtx{background:linear-gradient(#f5f5f5,#cfcfcf)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #000)!important}
+.dqlite #dq .tbtn.pri,.dqlite .dqpop .tbtn{filter:none!important}
+@media (orientation:landscape) and (max-height:500px){
+ .bank .tbtn.pri{min-height:30px!important;padding:6px 2px!important}
+ #dq .dqpop .tbtn.pri,#dq .dqpop .tbtn.gold,#dq .dqpop .tbtn:not(.pri):not(.gold){min-height:30px!important}
+}
+/* ---- điểm: huy hiệu khiên quý tộc, bỏ chữ "điểm" ---- */
+.pl .pts{position:relative;display:inline-flex!important;align-items:center;justify-content:center;width:40px;height:45px;margin-left:auto;background:url(assets/ui/crest.svg) center/contain no-repeat;font-size:0!important;flex:0 0 auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+.pl .pts small{display:none!important}
+.pl .pts b{position:relative;top:4px;font:bold 19px/1 "Times New Roman",serif;background:linear-gradient(180deg,#fffbe6,#f6d77a 55%,#c99626);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 #2a0613) drop-shadow(0 0 2px rgba(0,0,0,.8))}
+.pl.turn .pts{width:48px;height:54px}.pl.turn .pts b{font-size:23px;top:5px}
+@media (max-width:640px) and (orientation:portrait){ .pl .pts,.pl.turn .pts{width:36px;height:40px}.pl .pts b,.pl.turn .pts b{font-size:17px;top:3px} }
+@media (orientation:landscape) and (max-height:500px){ .pl .pts,.pl.turn .pts{width:26px!important;height:29px!important}.pl .pts b,.pl.turn .pts b{font-size:12.5px!important;top:2px} }
+.dqpp{color:#ffe27a!important;font-size:24px!important;text-shadow:0 0 8px rgba(0,0,0,.9),0 2px 2px #000,0 0 16px rgba(255,215,110,.8)!important}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
