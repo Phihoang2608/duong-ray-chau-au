@@ -851,6 +851,26 @@ body{background:#140609!important}
 .dqoff *,.dqoff *::before,.dqoff *::after{animation:none!important;transition:none!important}
 .dqoff #dq::after{display:none}
 .dqoff .tok::before{display:none}
+
+/* trò chuyện trong phòng: nút 💬 trong hàng nút nhỏ (chỉ khi chơi online) + khung chat theo phong cách game */
+.dqchatb{position:relative;display:none!important}
+body.online .dqchatb{display:flex!important}
+.dqcu{position:absolute;top:-5px;right:-5px;min-width:15px;height:15px;border-radius:8px;background:#ef4444;color:#fff;font:bold 10px/15px Arial;font-style:normal;padding:0 3px;display:none}
+#tb-chat{background:linear-gradient(180deg,#4a1426,#250812)!important;border:1.5px solid #c9a24e!important;color:#f6ead0;font-family:"Times New Roman",serif}
+#tb-chat .hd{color:#ffe08a;border-color:rgba(201,162,78,.5)!important}
+#tb-chat .cm{color:#f6ead0}#tb-chat .cm b{color:#ffe08a}
+#tb-chat form{border-color:rgba(201,162,78,.5)!important}
+#tb-chat input{background:#140609!important;color:#fff!important;border-color:#c9a24e!important}
+#tb-chat .qk button{background:rgba(0,0,0,.3)!important;color:#f6e3a6!important;border-color:rgba(201,162,78,.5)!important}
+@media (max-width:640px),(orientation:landscape) and (max-height:500px){
+ #tb-chat{right:6px!important;left:auto!important;bottom:52px!important;width:min(320px,calc(100vw - 12px))!important;z-index:9000!important}
+ #tb-chat .ls{height:min(200px,40vh)!important}
+}
+
+#tb-chat .cm{background:rgba(0,0,0,.3)!important;border:1px solid rgba(201,162,78,.35);border-radius:10px;padding:4px 8px}
+#tb-chat .cm.me{background:linear-gradient(180deg,#7a1f3d,#4a0f24)!important;border-color:#e9c46a;color:#fff6d8!important}
+#tb-chat .cm.me b{color:#ffe08a!important}
+@media (max-width:640px) and (orientation:portrait){ .dqtools{flex-wrap:wrap;row-gap:4px} .dqttl{flex:1 1 100%!important} }
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
