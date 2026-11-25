@@ -77,7 +77,7 @@ const Table = (()=>{
   function shell(){
     const st=document.createElement('style'); st.textContent=CSS+(CFG.css||''); document.head.appendChild(st);
     document.body.insertAdjacentHTML('afterbegin',`<div class="tb-bg"><i></i><i></i><i></i><i></i></div>
-    <header class="tb-top"><a class="tbtn" href="../../index.html">← Sảnh</a><h1>${esc(CFG.title)}</h1><span class="sp"></span>
+    <header class="tb-top"><a class="tbtn home" href="../../index.html" title="Quay về danh sách các trò chơi">🏠 Menu trò chơi</a><h1>${esc(CFG.title)}</h1><span class="sp"></span>
       <span class="code" id="tb-code"></span><button class="tbtn" id="tb-chatbtn" style="display:none">Trò chuyện<span class="bd" id="tb-unread" style="display:none"></span></button>
       <button class="tbtn" id="tb-sound">Âm thanh: bật</button><button class="tbtn" id="tb-rules">Luật chơi</button><button class="tbtn" id="tb-leave" style="display:none">Rời phòng</button></header>
     <div class="tb-wrap"><div id="tb-screen" class="tb-screen"><div class="tb-panel" id="tb-box"></div></div><div id="tb-game"></div></div>

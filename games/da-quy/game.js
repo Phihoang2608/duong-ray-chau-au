@@ -22,11 +22,11 @@ const DQ = (()=>{
     S.log.unshift('Bắt đầu! Ai đạt '+DQ_WIN+' điểm uy tín trước sẽ kết thúc vòng chơi.'); return S; }
   const tot=a=>a.reduce((s,x)=>s+x,0);
   function payPlan(P,card){ const need=[0,0,0,0,0]; let gold=0; for(let c=0;c<5;c++){ const n=Math.max(0,card.cost[c]-P.bonus[c]); const use=Math.min(n,P.tok[c]); need[c]=use; gold+=n-use; } return gold<=P.tok[5]?{pay:need,gold}:null; }
-  function ev(S,o){ S.evN++; S.ev=Object.assign({n:S.evN},o); }
+  function ev(S,o){ if(S.log.length>160) S.log.length=160; S.evN++; S.ev=Object.assign({n:S.evN},o); }
   function refill(S,lv,idx){ const d=S.decks[lv]; if(d.length) S.board[lv][idx]=d.pop(); else S.board[lv][idx]=null; }
   function apply(S,seat,a,t){
     if (!a||S.phase!=='play'||seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
-    if (S.step==='discard'){ if(a.t!=='ret') return false; const c=a.c; if(!(c>=0&&c<6)||!P.tok[c]) return false; P.tok[c]--; S.bank[c]++; ev(S,{k:'ret',seat,c});
+    if (S.step==='discard'){ if(a.t!=='ret') return false; const c=a.c; if(!(c>=0&&c<6)||!P.tok[c]) return false; P.tok[c]--; S.bank[c]++; S.log.unshift(S.seats[seat].name+' trả 1 '+DQ_COL[c]+'.'); ev(S,{k:'ret',seat,c});
       if (tot(P.tok)<=DQ_MAXTOK) endTurn(S,t); return true; }
     if (a.t==='take'){ const g=a.g||[]; if(!g.length||g.some(c=>!(c>=0&&c<5))) return false;
       if (g.length===2 && g[0]===g[1]){ if(S.bank[g[0]]<4) return false; }

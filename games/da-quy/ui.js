@@ -37,7 +37,16 @@ const DQUI=(()=>{
   function rectOf(sel){ const e=root&&root.querySelector(sel); return e?e.getBoundingClientRect():null; }
   function fit(){ if(!root) return; const top=root.getBoundingClientRect().top+scrollY; root.style.setProperty('--H',Math.max(560,innerHeight-top-8)+'px'); }
   addEventListener('resize',()=>{ if(window.__S) render(window.__S,Table.API.me(),Table.API); });
-  function render(S,ME,api){
+  const GS={buf:{},ld:false,
+    load(){ if(this.ld||!SFX.ctx) return; this.ld=true; ['chip-lay-1','chip-lay-2','chip-lay-3','chips-collide-1','chips-collide-2','chips-collide-3','chips-collide-4','glass_002','glass_003'].forEach(n=>fetch('assets/sfx/'+n+'.mp3').then(r=>r.arrayBuffer()).then(a=>SFX.ctx.decodeAudioData(a)).then(b=>this.buf[n]=b).catch(()=>{})); },
+    play(n,vol,at,rate){ if(!SFX.ok||!SFX.ok()) return false; const b=this.buf[n]; if(!b) return false; const c=SFX.ctx,s=c.createBufferSource(),g=c.createGain(); s.buffer=b; s.playbackRate.value=rate||1; g.gain.value=vol; s.connect(g); g.connect(SFX.master); s.start(c.currentTime+(at||0)); return true; },
+    pick(){ this.load(); const r=.95+Math.random()*.12; if(!this.play('chip-lay-'+(1+Math.floor(Math.random()*3)),.75,0,r)) SFX.stone(0,.8); else this.play('glass_00'+(2+Math.floor(Math.random()*2)),.12,0,1.3); },
+    take(n){ this.load(); for(let i=0;i<n;i++){ const at=i*.17, r=.93+Math.random()*.14; if(!this.play('chips-collide-'+(1+Math.floor(Math.random()*4)),.8,at,r)){ SFX.clack(n); return; } this.play('glass_00'+(2+(i%2)),.14,at+.02,1.2+Math.random()*.2); } } };
+  document.addEventListener('pointerdown',()=>{ SFX.init&&SFX.init(); setTimeout(()=>GS.load(),50); },{once:true});
+  function logH(l,api){ let h=api.esc(l); DQ_COL.forEach((n,c)=>{ h=h.split(n).join(`<span class="lg">${A.gemSVG(c,18,c)}<b class="lg${c}">${n}</b></span>`); }); return h; }
+  function showHist(){ const api=Table.API, S=window.__S; if(!S) return; const L=S.log; api.modal('📜 Lịch sử ván chơi', `<div class="dqhist">${L.map((l,i)=>`<div><i>${L.length-i}</i>${logH(l,api)}</div>`).join('')}</div>`, [{t:'Đóng',pri:1}]); }
+  function ensureHdr(){ if(document.getElementById('dq-hist')) return; const snd=document.getElementById('tb-sound'); if(!snd) return; const b=document.createElement('button'); b.className='tbtn'; b.id='dq-hist'; b.textContent='📜 Lịch sử'; b.onclick=showHist; snd.parentNode.insertBefore(b,snd); }
+  function render(S,ME,api){ ensureHdr();
     if(!root){ document.getElementById('tb-game').innerHTML=A.defs()+'<div id="dq"></div>'; root=$('#dq'); root.addEventListener('click',onClick); root.addEventListener('mousemove',onMove);
       root.addEventListener('contextmenu',e=>{ const el=e.target.closest('[data-cid],[data-nb]'); if(el){ e.preventDefault(); zoomEl(el); } });
       let lp=null; root.addEventListener('touchstart',e=>{ const el=e.target.closest('[data-cid],[data-nb]'); if(!el) return; lp=setTimeout(()=>{ lp='done'; zoomEl(el); },550); },{passive:true});
@@ -73,7 +82,7 @@ const DQUI=(()=>{
         <div class="gr">${[0,1,2,3,4,5].map(c=>`<div class="gc">${c<5?A.bonus(c,Q.bonus[c]):'<div class="bon gph"></div>'}<span class="tk ${Q.tok[c]?'':'z'}" ${mine&&S.step==='discard'&&my&&Q.tok[c]?`data-ret="${c}"`:''}>${A.gemSVG(c,17,c)}<b>${Q.tok[c]}</b></span></div>`).join('')}</div>
         <div class="ft">Túi ${DQ.tot(Q.tok)}/10${Q.nobles.length?' · Vua: '+Q.nobles.map(id=>DQ.NOBLE_NAMES[id]).join(', '):''}</div></div>
         <div class="rsv" title="Thẻ giữ chỗ (tối đa 3)">${rsv}</div></div>`; }).join('')}</div>
-      <div class="xlog">${S.log.slice(0,4).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div></div></div>`;
+      <div class="xlog"><button class="hbtn" data-hist="1">📜 Lịch sử</button>${S.log.slice(0,4).map(l=>`<div>${logH(l,api)}</div>`).join('')}</div></div></div>`;
     root.innerHTML=h;
     // khung mua / giữ chỗ nổi ngay cạnh lá bài được chọn
     if (P && pick && S.phase==='play' && !(my&&S.step==='discard')){ const cid=pick.deck?null:(pick.res!=null?P.res[pick.res]:S.board[pick.lv][pick.i]); const card=cid!=null?DQ.CARDS[cid]:null; const plan=card&&DQ.payPlan(P,card);
@@ -91,9 +100,9 @@ const DQUI=(()=>{
         if(pick.res!=null){ x=Math.max(6,Math.min(W-pr.width-6,r.right-pr.width)); y=r.bottom+8; } y=Math.max(6,Math.min(H-pr.height-6,y)); pop.style.left=x+'px'; pop.style.top=y+'px'; } }
     if(isNew){ lastEv=ev.n; {
       const target=rectOf(`.pl[data-p="${ev.seat}"]`);
-      if(ev.k==='take'){ const bg=rectOf(`.pl[data-p="${ev.seat}"] .bag`); ev.g.forEach((c,k)=>fly(pre.tok&&pre.tok[k],bg,A.gemSVG(c,46,c),46,46,k*120,k===ev.g.length-1?bump(ev.seat):null)); SFX.clack(ev.g.length);
+      if(ev.k==='take'){ const bg=rectOf(`.pl[data-p="${ev.seat}"] .bag`); ev.g.forEach((c,k)=>fly(pre.tok&&pre.tok[k],bg,A.gemSVG(c,46,c),46,46,k*120,k===ev.g.length-1?bump(ev.seat):null)); GS.take(ev.g.length);
         const cnt={}; ev.g.forEach(c=>cnt[c]=(cnt[c]||0)+1); gain(ev.seat,Object.keys(cnt).map(c=>({icon:A.gemSVG(+c,24,+c),t:'+'+cnt[c]+' '+DQ_COL[c]})),700); }
-      else if(ev.k==='ret'){ fly(pre.from,rectOf(`[data-tok="${ev.c}"]`),A.gemSVG(ev.c,40,ev.c),40,40,0); SFX.clack(1); }
+      else if(ev.k==='ret'){ fly(pre.from,rectOf(`[data-tok="${ev.c}"]`),A.gemSVG(ev.c,40,ev.c),40,40,0); GS.take(1); }
       else if(ev.k==='buy'){ { const C=DQ.CARDS[ev.id]; fly(pre.card,target,A.card(ev.id),130,182,0,()=>sparkle(target,16,A.PAL[C.col][1])); showCard(ev.seat,ev.id,750,[{t:'+1 thẻ cấp '+['','I','II','III'][C.lv],cls:'cd'},{icon:A.gemSVG(C.col,24,C.col),t:'+1 thưởng '+DQ_COL[C.col]}].concat(C.pts?[{t:'+'+C.pts+' điểm',cls:'pt'}]:[])); } SFX.flip(); if(ev.seat===ME&&DQ.CARDS[ev.id].pts){ setTimeout(()=>SFX.reward(),700); api.toast('+'+DQ.CARDS[ev.id].pts+' điểm uy tín',true); } }
       else if(ev.k==='reserve'){ fly(pre.card, rectOf(`.pl[data-p="${ev.seat}"] .rsv`), ev.id!=null?A.card(ev.id):A.back(ev.deck||1),110,154,0); if(ev.id!=null&&ev.seat===ME) showCard(ev.seat,ev.id,750); gain(ev.seat,[{t:'Giữ chỗ thẻ cấp '+['','I','II','III'][ev.lv||DQ.CARDS[ev.id]?.lv||ev.deck],cls:'cd'}].concat(S.P[ev.seat]?[{icon:A.gemSVG(5,24,5),t:'+1 Vàng'}]:[]),850); setTimeout(()=>fly(rectOf('[data-tok="5"]'),rectOf(`.pl[data-p="${ev.seat}"] .bag`),A.gemSVG(5,40,5),40,40,0,bump(ev.seat)),250); SFX.flip(); }
       else if(ev.k==='noble'){ fly(pre.nob,target,A.noble(ev.id),96,96,0,()=>sparkle(target,26,'#ffe27a')); gain(ev.seat,[{t:DQ.NOBLE_NAMES[ev.id]+' ghé thăm',cls:'cd'},{t:'+3 điểm',cls:'pt'}],800); SFX.ding(); if(ev.seat===ME){ SFX.reward(); api.toast(DQ.NOBLE_NAMES[ev.id]+' ghé thăm bạn: +3 điểm!',true); FX.confetti(innerWidth/2,innerHeight*.4,60); } else api.toast(DQ.NOBLE_NAMES[ev.id]+' ghé thăm '+api.esc(S.seats[ev.seat].name)); }
@@ -110,8 +119,8 @@ const DQUI=(()=>{
       else if (sel.includes(c)) sel=sel.length===2&&sel[0]===sel[1]?[]:sel.filter(x=>x!==c);
       else if (sel.length===2&&sel[0]===sel[1]) sel=[c];
       else if (sel.length<3 && S.bank[c]>0) sel.push(c);
-      pick=null; SFX.stone?SFX.stone(0,.8):SFX.pop(); render(S,ME,api); return; }
-    const rt=e.target.closest('[data-ret]'); if(rt){ api.act({t:'ret',c:+rt.dataset.ret}); return; }
+      pick=null; GS.pick(); render(S,ME,api); return; }
+    if(e.target.closest('[data-hist]')){ showHist(); return; } const rt=e.target.closest('[data-ret]'); if(rt){ api.act({t:'ret',c:+rt.dataset.ret}); return; }
     const cd=e.target.closest('[data-lv],[data-res],[data-deck]'); if(cd){ const d=cd.dataset;
       const np = d.deck?{deck:+d.deck}:d.res!=null?{res:+d.res}:{lv:+d.lv,i:+d.i};
       if (pick && JSON.stringify(pick)===JSON.stringify(np) && my && !np.deck){ const cid=np.res!=null?S.P[ME].res[np.res]:S.board[np.lv][np.i]; if(DQ.payPlan(S.P[ME],DQ.CARDS[cid])){ api.act(np.res!=null?{t:'buy',res:np.res}:{t:'buy',lv:np.lv,i:np.i}); pick=null; return; } }
