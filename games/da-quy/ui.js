@@ -24,7 +24,7 @@ const DQUI=(()=>{
     an.onfinish=()=>{ el.remove(); done&&done(); }; }
   function bagPop(seat,list,delay){ setTimeout(()=>{ const bg=root&&root.querySelector(`.pl[data-p="${seat}"] .bag`); if(!bg) return; const r=bg.getBoundingClientRect();
       const box=document.createElement('div'); box.className='dqbp'; box.innerHTML=list.map(x=>`<span>${x.n>0?'+':''}${x.n}${A.gemSVG(x.c,16,x.c)}</span>`).join('');
-      document.body.appendChild(box); const bw=box.offsetWidth; box.style.left=Math.max(4,r.left+r.width/2-bw/2)+'px'; box.style.top=(r.top-6)+'px';
+      document.body.appendChild(box); const bw=box.offsetWidth, bh=box.offsetHeight; box.style.left=Math.max(4,r.left+r.width/2-bw/2)+'px'; box.style.top=(r.top+r.height*.35-bh)+'px';
       box.animate([{opacity:0,transform:'translateY(6px) scale(.8)'},{opacity:1,transform:'translateY(-14px) scale(1)',offset:.18},{opacity:1,transform:'translateY(-22px)',offset:.75},{opacity:0,transform:'translateY(-34px)'}],{duration:2000,easing:'ease-out',fill:'both'}).onfinish=()=>box.remove(); },delay||0); }
   function gain(seat,items,delay){ setTimeout(()=>{ const pl=root&&root.querySelector(`.pl[data-p="${seat}"]`); if(!pl) return; const r=pl.getBoundingClientRect();
       const box=document.createElement('div'); box.className='dqgain'; box.innerHTML=items.map(it=>`<div class="gi ${it.cls||''}">${it.icon||''}<b>${it.t}</b></div>`).join('');
@@ -100,7 +100,7 @@ ${ticks}${rn}
     else if (my && S.step==='discard') act=`<b class="warn blink">⚠️ Túi quá tải (${DQ.tot(P.tok)}/10)!</b> <span>Hết lượt phải trả bớt cho còn 10 viên — bấm viên đá đang nhấp nháy trong khung của bạn để trả <b>${DQ.tot(P.tok)-10}</b> viên tùy chọn.</span>`;
     else if (pick) act=`<span>Đã chọn thẻ — bấm <b>Mua</b> hoặc <b>Giữ chỗ</b> ở khung cạnh lá bài.</span>`;
     else act = (!my&&S.phase==='play'&&S.step==='discard')?`<span>⚠️ Túi của ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')} quá tải (${DQ.tot(S.P[S.turn].tok)}/10) — đang trả bớt cho còn 10 viên…</span>`:my?'<b class="me blink">Đến lượt bạn!</b> lấy đá ở ngân khố, hoặc bấm 1 lá để mua / giữ chỗ.':`<span>Đang chờ ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')}…</span>`;
-    h+=`<div class="side"><div class="stat ${S.phase==='play'?'hasck':''}">${S.phase==='play'?`<div class="bigck" title="Mỗi lượt 1 phút — hết giờ sẽ tự động đi và chuyển lượt">${clockSVG(Math.min(60,Math.max(0,(t-S.turnAt)/1000)).toFixed(2),1)}</div>`:''}<div class="sttx">${act}</div></div><div class="players">${S.seats.map((p,i)=>{ const Q=S.P[i], mine=i===ME;
+    h+=`<div class="side"><div class="stat"><div class="sttx">${act}</div></div><div class="players">${S.seats.map((p,i)=>{ const Q=S.P[i], mine=i===ME;
         const rsv=[0,1,2].map(r=>{ const id=Q.res[r]; if(id==null) return '<div class="rslot"></div>';
           return mine?cardEl(id,`data-res="${r}"`,'rcd '+(pick&&pick.res===r?'pk ':'')+(DQ.payPlan(P,DQ.CARDS[id])?'can':'')):`<div class="rcd rb" title="Thẻ giữ chỗ cấp ${DQ.CARDS[id].lv}">${A.back(DQ.CARDS[id].lv)}</div>`; }).join('');
         return `<div class="pl ${S.turn===i&&S.phase==='play'?'turn':''} ${mine?'me':''} ${S.phase==='over'&&S.winner===i?'win':''}" data-p="${i}" style="--pc:${PCOL[i]}">
