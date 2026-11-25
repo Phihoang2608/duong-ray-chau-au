@@ -2,7 +2,14 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3b0f1e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Đá Quý">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/apple-icon.png">
 <title>Thương Nhân Đá Quý | Phi Board Games</title>
 </head>
 <body>
@@ -494,6 +501,32 @@ const CSS=`.bank .tok .gn{display:none!important}
  .bank .tbtn.pri{padding:7px 0!important;font-size:10.5px!important;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 50%,calc(100% - 6px) 100%,6px 100%,0 50%)!important}
  .bank .tbtn.pri .gtx{letter-spacing:0!important}
  .dqpop{transform:scale(.8);transform-origin:top left}
+}
+
+/* ---- thanh trên cùng theo phong cách game ---- */
+body{background:#140609!important}
+.tb-top{background:linear-gradient(180deg,#4a1426 0%,#2b0b17 100%)!important;backdrop-filter:none!important;border-bottom:2px solid #c9a24e!important;box-shadow:0 2px 0 #5e1730,0 4px 14px rgba(0,0,0,.6)}
+.tb-top h1{font:bold 22px "Times New Roman",serif!important;letter-spacing:.04em;background:linear-gradient(180deg,#fff6d0 0%,#f2c94c 55%,#b8862b 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;filter:drop-shadow(0 1px 0 #2b0b17)}
+.tb-top .tbtn{font:bold 14px "Times New Roman",serif!important;color:#f6e3a6!important;background:linear-gradient(180deg,#6b1a33,#3a0d1c)!important;border:1px solid #c9a24e!important;border-radius:9px!important;box-shadow:inset 0 1px 0 rgba(255,230,160,.35),0 2px 4px rgba(0,0,0,.5)!important;text-decoration:none!important}
+.tb-top .tbtn:hover{filter:brightness(1.2)}
+.tb-top .home{color:#ffe08a!important}
+#dq{margin-top:6px}
+.dqtools{display:none}
+.dqtools a,.dqtools button{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:linear-gradient(180deg,#6b1a33,#3a0d1c);border:1px solid #c9a24e;color:#f6e3a6;font-size:15px;text-decoration:none;cursor:pointer;padding:0;box-shadow:0 2px 4px rgba(0,0,0,.5)}
+@media (orientation:landscape) and (max-height:500px){
+ .dqingame .tb-top{display:none!important}
+ #dq{margin-top:0!important;position:relative}
+ .dqtools{display:flex;position:absolute;right:8px;bottom:7px;z-index:40;gap:5px;padding:4px;border-radius:11px;background:rgba(20,6,9,.75)}
+ .side{padding-bottom:44px!important}
+}
+.dqfs #dq{border-radius:0}
+
+.dqttl{display:none}
+@media (max-width:640px) and (orientation:portrait){
+ .dqingame .tb-top{display:none!important}
+ #dq{margin-top:0!important}
+ .dqtools{display:flex;align-items:center;gap:5px;margin:0 0 6px;padding:2px 2px 6px;border-bottom:1px solid rgba(201,162,78,.5)}
+ .dqttl{display:block;flex:1;font:bold 18px "Times New Roman",serif;letter-spacing:.03em;background:linear-gradient(180deg,#fff6d0,#f2c94c 55%,#b8862b);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',

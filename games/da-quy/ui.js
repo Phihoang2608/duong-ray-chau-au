@@ -98,10 +98,17 @@ ${ticks}${rn}
 </svg>`; }
   function logH(l,api){ let h=api.esc(l); DQ_COL.forEach((n,c)=>{ h=h.split(n).join(`<span class="lg">${A.gemSVG(c,18,c)}<b class="lg${c}">${n}</b></span>`); }); return h; }
   function showHist(){ const api=Table.API, S=window.__S; if(!S) return; const L=S.log; api.modal('📜 Lịch sử ván chơi', `<div class="dqhist">${L.map((l,i)=>`<div><i>${L.length-i}</i>${logH(l,api)}</div>`).join('')}</div>`, [{t:'Đóng',pri:1}]); }
-  function ensureHdr(){ if(document.getElementById('dq-hist')) return; const snd=document.getElementById('tb-sound'); if(!snd) return; const b=document.createElement('button'); b.className='tbtn'; b.id='dq-hist'; b.textContent='📜 Lịch sử'; b.onclick=showHist; snd.parentNode.insertBefore(b,snd); }
+  function isFS(){ return !!(document.fullscreenElement||document.webkitFullscreenElement); }
+  function toggleFS(){ const d=document.documentElement, api=Table.API;
+    if(isFS()){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); return; }
+    const rq=d.requestFullscreen||d.webkitRequestFullscreen;
+    if(rq){ try{ const p=rq.call(d,{navigationUI:'hide'}); if(p&&p.catch) p.catch(()=>fsHelp()); }catch(e){ fsHelp(); } } else fsHelp(); }
+  function fsHelp(){ Table.API.modal('Chơi toàn màn hình', '<p>Trình duyệt này không cho bật toàn màn hình trực tiếp.</p><p><b>Cách chơi không còn thanh địa chỉ:</b></p><p>• <b>iPhone (Safari):</b> bấm nút Chia sẻ ⬆️ → <b>Thêm vào MH chính</b>, rồi mở game từ biểu tượng ngoài màn hình chính.</p><p>• <b>Android (Chrome):</b> bấm ⋮ → <b>Thêm vào màn hình chính</b> / <b>Cài đặt ứng dụng</b>.</p><p>• Nếu đang mở trong Zalo / Messenger: bấm ⋮ → <b>Mở bằng trình duyệt</b> trước.</p>', [{t:'Đã hiểu',pri:1}]); }
+  document.addEventListener('fullscreenchange',()=>{ document.documentElement.classList.toggle('dqfs',isFS()); const b=document.getElementById('dq-fs'); if(b) b.textContent=isFS()?'⛶ Thoát toàn màn hình':'⛶ Toàn màn hình'; setTimeout(()=>{ try{ fit(); }catch(e){} },300); });
+  function ensureHdr(){ if(document.getElementById('dq-hist')) return; const snd=document.getElementById('tb-sound'); if(!snd) return; const b=document.createElement('button'); b.className='tbtn'; b.id='dq-hist'; b.textContent='📜 Lịch sử'; b.onclick=showHist; snd.parentNode.insertBefore(b,snd); const f=document.createElement('button'); f.className='tbtn'; f.id='dq-fs'; f.textContent='⛶ Toàn màn hình'; f.onclick=toggleFS; snd.parentNode.insertBefore(f,b); }
   const PREV=[];
   function ting(){ if(!SFX.ok||!SFX.ok()) return; SFX.tone(2093,.45,{vol:.09,attack:.002}); SFX.tone(4186,.2,{vol:.03,attack:.001}); SFX.tone(3136,.35,{vol:.05,at:.06,attack:.002}); }
-  function render(S,ME,api){ ensureHdr(); setTimeout(()=>S.P.forEach((q,i)=>PREV[i]=q.pts),0);
+  function render(S,ME,api){ ensureHdr(); document.documentElement.classList.add('dqingame'); setTimeout(()=>S.P.forEach((q,i)=>PREV[i]=q.pts),0);
     if(!root){ document.getElementById('tb-game').innerHTML=A.defs()+'<div id="dq"></div>'; root=$('#dq'); root.addEventListener('click',onClick); root.addEventListener('mousemove',onMove);
       root.addEventListener('contextmenu',e=>{ const el=e.target.closest('[data-cid],[data-nb]'); if(el){ e.preventDefault(); zoomEl(el); } });
       let lp=null; root.addEventListener('touchstart',e=>{ const el=e.target.closest('[data-cid],[data-nb]'); if(!el) return; lp=setTimeout(()=>{ lp='done'; zoomEl(el); },550); },{passive:true});
@@ -114,7 +121,7 @@ ${ticks}${rn}
       if (ev.k==='buy'||ev.k==='reserve') pre.card = ev.res!=null ? (ev.seat===ME?rectOf(`[data-res="${ev.res}"]`):rectOf(`.pl[data-p="${ev.seat}"] .rsv`)) : ev.deck ? rectOf(`[data-deck="${ev.deck}"]`) : rectOf(`[data-lv="${ev.lv}"][data-i="${ev.i}"]`);
       if (ev.k==='noble') pre.nob=rectOf(`[data-nb="${ev.id}"]`); }
     const newIds=[]; [1,2,3].forEach(lv=>S.board[lv].forEach(id=>{ if(id!=null&&!seen.has(id)){ seen.add(id); if(!first) newIds.push(id); } })); first=false;
-    let h=`<div class="dqwrap"><div class="dqboard"><div class="nobles">${S.nobles.map(id=>`<div class="dqn" data-nb="${id}" title="${DQ.NOBLE_NAMES[id]}">${A.noble(id)}</div>`).join('')}</div>`;
+    let h=`<div class="dqtools"><b class="dqttl">Thương Nhân Đá Quý</b><a href="../../index.html" title="Menu trò chơi">🏠</a><button data-tool="fs" title="Toàn màn hình">⛶</button><button data-hist="1" title="Lịch sử">📜</button><button data-tool="snd" title="Âm thanh">${SFX.on===false?'🔇':'🔊'}</button><button data-tool="rules" title="Luật chơi">📖</button></div><div class="dqwrap"><div class="dqboard"><div class="nobles">${S.nobles.map(id=>`<div class="dqn" data-nb="${id}" title="${DQ.NOBLE_NAMES[id]}">${A.noble(id)}</div>`).join('')}</div>`;
     [3,2,1].forEach(lv=>{ h+=`<div class="row"><div class="deck ${pick&&pick.deck===lv?'pk':''}" data-deck="${lv}" title="Giữ chỗ 1 thẻ úp">${A.back(lv)}<div class="dl"><b>${S.decks[lv].length}</b><span>${LVN[lv]}</span></div></div>`;
       S.board[lv].forEach((id,i)=>{ h+= id==null?'<div class="dqc empty"></div>':cardEl(id,`data-lv="${lv}" data-i="${i}"`,(newIds.includes(id)?'deal ':'')+(pick&&pick.lv===lv&&pick.i===i?'pk ':'')+(P&&DQ.payPlan(P,DQ.CARDS[id])?'can':'')); });
       h+=`</div>`; });
@@ -178,7 +185,7 @@ ${ticks}${rn}
       else if (sel.length===2&&sel[0]===sel[1]) sel=[c];
       else if (sel.length<3 && S.bank[c]>0) sel.push(c);
       pick=null; GS.pick(); render(S,ME,api); return; }
-    if(e.target.closest('[data-hist]')){ showHist(); return; } const rt=e.target.closest('[data-ret]'); if(rt){ api.act({t:'ret',c:+rt.dataset.ret}); return; }
+    if(e.target.closest('[data-hist]')){ showHist(); return; } const tl=e.target.closest('[data-tool]'); if(tl){ const k=tl.dataset.tool; if(k==='fs') toggleFS(); else if(k==='snd'){ const sb=document.getElementById('tb-sound'); sb&&sb.click(); tl.textContent=SFX.on===false?'🔇':'🔊'; } else if(k==='rules'){ const rb=document.getElementById('tb-rules'); rb&&rb.click(); } return; } const rt=e.target.closest('[data-ret]'); if(rt){ api.act({t:'ret',c:+rt.dataset.ret}); return; }
     const cd=e.target.closest('[data-lv],[data-res],[data-deck]'); if(cd){ const d=cd.dataset;
       const np = d.deck?{deck:+d.deck}:d.res!=null?{res:+d.res}:{lv:+d.lv,i:+d.i};
       if (pick && JSON.stringify(pick)===JSON.stringify(np) && my && !np.deck){ const cid=np.res!=null?S.P[ME].res[np.res]:S.board[np.lv][np.i]; if(DQ.payPlan(S.P[ME],DQ.CARDS[cid])){ api.act(np.res!=null?{t:'buy',res:np.res}:{t:'buy',lv:np.lv,i:np.i}); pick=null; return; } }
