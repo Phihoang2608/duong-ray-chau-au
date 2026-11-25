@@ -422,13 +422,13 @@ const DQART=(()=>{
     return s; }
   const ncache={};
   function noble(id){ if(ncache[id]) return ncache[id]; const N=DQ.NOBLES[id]; const req=N.req.map((v,k)=>[k,v]).filter(x=>x[1]); const nid='dqnc'+id;
-    let s=`<svg viewBox="0 0 100 100" class="ns"><defs><clipPath id="${nid}"><rect x="3" y="3" width="94" height="94" rx="6"/></clipPath><linearGradient id="${nid}L" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>`;
-    s+=`<rect width="100" height="100" rx="8" fill="url(#dqGold)"/>`;
-    s+=`<g clip-path="url(#${nid})"><rect x="3" y="3" width="94" height="94" fill="url(#dqSky${KINGS[id].bg})"/>${(window.DQ_NOBLE_IMGS||[]).includes(id)?`<image href="assets/nobles/${id}.webp" x="3" y="3" width="94" height="94" preserveAspectRatio="xMidYMin slice"/>`:`<g transform="translate(-27 -5) scale(1.55)">${king(id)}</g>`}<rect x="3" y="3" width="30" height="94" fill="url(#${nid}L)"/></g>`;
-    s+=`<rect x="3" y="3" width="94" height="94" rx="6" fill="none" stroke="#fff3c4" stroke-opacity=".6" stroke-width="1"/>`;
-    s+=`<path d="M6 6 H24 V22 Q24 30 15 33 Q6 30 6 22Z" fill="url(#dqGold)" stroke="#4a2e06" stroke-width=".6"/><text x="15" y="26" class="npt">3</text>`;
-    req.forEach(([k,v],i)=>{ const y=35+i*16; s+=`<g filter="url(#dqDrop)"><rect x="7" y="${y}" width="16" height="15" rx="2.5" fill="url(#dqBon${k})" stroke="${sh(k,-.8)}" stroke-width=".8"/></g><text x="15" y="${y+12}" class="cn ${k===3?'dk':''}" style="font-size:12px">${v}</text>`; });
-    s+=`<path d="M3 85 H97 V91 Q97 97 91 97 H9 Q3 97 3 91Z" fill="#5a1020" opacity=".92"/><text x="50" y="94.5" class="kn" ${DQ.NOBLE_NAMES[id].length>14?'textLength="86" lengthAdjust="spacingAndGlyphs"':''}>${DQ.NOBLE_NAMES[id]}</text></svg>`;
+    let s=`<svg viewBox="0 0 100 100" class="ns"><defs><clipPath id="${nid}"><path d="M30 92 L30 30 Q30 8 60 8 Q90 8 90 30 L90 92Z"/></clipPath></defs>`;
+    s+=`<rect width="100" height="100" rx="8" fill="url(#dqGold)"/><rect x="3" y="3" width="94" height="94" rx="6" fill="url(#dqMarble)"/>`;
+    s+=`<g clip-path="url(#${nid})"><rect x="30" y="8" width="60" height="84" fill="url(#dqSky${KINGS[id].bg})"/><rect x="30" y="8" width="60" height="84" fill="url(#dqDamask)" opacity=".7"/>${(window.DQ_NOBLE_IMGS||[]).includes(id)?`<image href="assets/nobles/${id}.webp" x="30" y="8" width="60" height="84" preserveAspectRatio="xMidYMin slice"/>`:king(id)}</g>`;
+    s+=`<path d="M30 92 L30 30 Q30 8 60 8 Q90 8 90 30 L90 92Z" fill="none" stroke="url(#dqGold)" stroke-width="2.5"/>`;
+    s+=`<path d="M6 6 H24 V22 Q24 30 15 33 Q6 30 6 22Z" fill="url(#dqGold)"/><text x="15" y="26" class="npt">3</text>`;
+    req.forEach(([k,v],i)=>{ const y=40+i*19; s+=`<g filter="url(#dqDrop)"><rect x="7" y="${y}" width="16" height="17" rx="2.5" fill="url(#dqBon${k})" stroke="${sh(k,-.8)}" stroke-width=".8"/></g><text x="15" y="${y+13}" class="cn ${k===3?'dk':''}" style="font-size:12px">${v}</text>`; });
+    s+=`<path d="M28 86 H94 L90 92 L94 98 H28 L32 92Z" fill="#5a1020"/><text x="61" y="95" class="kn" ${DQ.NOBLE_NAMES[id].length>14?'textLength="58" lengthAdjust="spacingAndGlyphs"':''}>${DQ.NOBLE_NAMES[id]}</text></svg>`;
     return ncache[id]=s; }
   // ---------- túi đá của người chơi ----------
   function bag(color,n){ return `<svg viewBox="0 0 60 64" class="bag"><defs><radialGradient id="dqBag${color.slice(1)}" cx="38%" cy="35%" r="75%"><stop offset="0" stop-color="${mix(color,'#ffffff',.35)}"/><stop offset=".6" stop-color="${color}"/><stop offset="1" stop-color="${mix(color,'#000000',.55)}"/></radialGradient></defs>
