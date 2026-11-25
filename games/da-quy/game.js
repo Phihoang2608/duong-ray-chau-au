@@ -37,7 +37,7 @@ const DQ = (()=>{
       if (a.deck){ const d=S.decks[a.deck]; if(!d||!d.length) return false; id=d.pop(); }
       else { const lv=a.lv, i=a.i; if(!S.board[lv]||S.board[lv][i]==null) return false; id=S.board[lv][i]; refill(S,lv,i); }
       P.res.push(id); let g=0; if(S.bank[5]>0){ S.bank[5]--; P.tok[5]++; g=1; }
-      S.log.unshift(name+' giữ chỗ 1 thẻ cấp '+CARDS[id].lv+(g?' và nhận 1 Vàng':'')+'.'); ev(S,{k:'reserve',seat,id:a.deck?null:id,lv:a.lv,i:a.i,deck:a.deck||0}); return after(S,seat,t); }
+      S.log.unshift(name+' giữ chỗ 1 thẻ cấp '+CARDS[id].lv+(g?' và nhận 1 Vàng':'')+'.'); ev(S,{k:'reserve',seat,gold:!!g,id:a.deck?null:id,lv:a.lv,i:a.i,deck:a.deck||0}); return after(S,seat,t); }
     if (a.t==='buy'){ let id, from;
       if (a.res!=null){ id=P.res[a.res]; if(id==null) return false; from='res'; } else { if(!S.board[a.lv]||S.board[a.lv][a.i]==null) return false; id=S.board[a.lv][a.i]; from='board'; }
       const card=CARDS[id], plan=payPlan(P,card); if(!plan) return false;

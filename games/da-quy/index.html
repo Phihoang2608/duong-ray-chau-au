@@ -342,6 +342,19 @@ const CSS=`.bank .tok .gn{display:none!important}
 .rsvw{padding-left:8px}
 
 .tbtn.pri .gtx{filter:drop-shadow(0 1px 0 #021a0e) drop-shadow(0 0 1.5px #021a0e) drop-shadow(0 0 3px rgba(2,26,14,.8))}
+
+.dqbp{position:fixed;z-index:9998;pointer-events:none;display:flex;gap:4px;font:bold 13px "Times New Roman",serif;white-space:nowrap}
+.dqbp span{display:inline-flex;align-items:center;gap:1px;padding:1px 5px 1px 6px;border-radius:999px;background:rgba(20,12,4,.88);border:1px solid #e9c46a;color:#fff3cf;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.dqbp svg{width:16px;height:16px}
+
+.ckw .ckn{font:bold 6.6px "Times New Roman",serif!important;fill:#ffe9a8}
+.ckw .ckt{font:bold 12px "Times New Roman",serif!important}
+.tmr{display:inline-flex!important;align-items:center;gap:4px}
+.tms{font:bold 17px "Times New Roman",serif;color:#ffe08a;text-shadow:0 1px 2px #000}.tms small{font-size:10px;font-weight:normal;margin-left:2px;opacity:.8}
+.tms.low{color:#fca5a5;animation:blinkTxt .5s ease-in-out infinite}
+.pl.turn .tms{font-size:20px}
+
+.dqbp{gap:2px;font-size:12.5px}.dqbp span{padding:0 4px 0 5px}.dqbp svg{width:15px;height:15px}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,

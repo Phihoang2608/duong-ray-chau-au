@@ -22,6 +22,10 @@ const DQUI=(()=>{
     const mx=(x1-x0)/2, my=(y1-y0)/2-Math.min(160,Math.abs(x1-x0)*.25+60);
     const an=el.animate([{transform:'translate(0,0) scale(1) rotate(0)',opacity:1},{transform:`translate(${mx}px,${my}px) scale(1.25) rotate(${(Math.random()-.5)*30}deg)`,opacity:1,offset:.45},{transform:`translate(${x1-x0}px,${y1-y0}px) scale(.45) rotate(0)`,opacity:.2}],{duration:850,delay:delay||0,easing:'cubic-bezier(.4,.1,.3,1)',fill:'both'});
     an.onfinish=()=>{ el.remove(); done&&done(); }; }
+  function bagPop(seat,list,delay){ setTimeout(()=>{ const bg=root&&root.querySelector(`.pl[data-p="${seat}"] .bag`); if(!bg) return; const r=bg.getBoundingClientRect();
+      const box=document.createElement('div'); box.className='dqbp'; box.innerHTML=list.map(x=>`<span>${x.n>0?'+':''}${x.n}${A.gemSVG(x.c,16,x.c)}</span>`).join('');
+      document.body.appendChild(box); const bw=box.offsetWidth; box.style.left=Math.max(4,r.left+r.width/2-bw/2)+'px'; box.style.top=(r.top-6)+'px';
+      box.animate([{opacity:0,transform:'translateY(6px) scale(.8)'},{opacity:1,transform:'translateY(-14px) scale(1)',offset:.18},{opacity:1,transform:'translateY(-22px)',offset:.75},{opacity:0,transform:'translateY(-34px)'}],{duration:2000,easing:'ease-out',fill:'both'}).onfinish=()=>box.remove(); },delay||0); }
   function gain(seat,items,delay){ setTimeout(()=>{ const pl=root&&root.querySelector(`.pl[data-p="${seat}"]`); if(!pl) return; const r=pl.getBoundingClientRect();
       const box=document.createElement('div'); box.className='dqgain'; box.innerHTML=items.map(it=>`<div class="gi ${it.cls||''}">${it.icon||''}<b>${it.t}</b></div>`).join('');
       document.body.appendChild(box); const bw=box.offsetWidth, bh=box.offsetHeight;
@@ -45,7 +49,7 @@ const DQUI=(()=>{
   document.addEventListener('pointerdown',()=>{ SFX.init&&SFX.init(); setTimeout(()=>GS.load(),50); },{once:true});
   function clockSVG(el,big){ const left=Math.max(0,60-el), R=40, C=(2*Math.PI*R).toFixed(2);
     const ticks=[...Array(60)].map((_,k)=>{ const a=k*6*Math.PI/180, L=k%5?2.2:5, r1=34, r2=r1-L; return `<line x1="${(50+r1*Math.sin(a)).toFixed(2)}" y1="${(50-r1*Math.cos(a)).toFixed(2)}" x2="${(50+r2*Math.sin(a)).toFixed(2)}" y2="${(50-r2*Math.cos(a)).toFixed(2)}" stroke="${k%5?'#c9a55a':'#ffe9a8'}" stroke-width="${k%5?.6:1.4}"/>`; }).join('');
-    const rn=[['XII',0],['III',90],['IX',270]].map(([t,d])=>{ const a=d*Math.PI/180; return `<text x="${(50+23*Math.sin(a)).toFixed(1)}" y="${(50-23*Math.cos(a)+2.8).toFixed(1)}" class="ckn">${t}</text>`; }).join('');
+    const rn=[60,50,40,30,20,10].map((t,k)=>{ const a=k*60*Math.PI/180; return `<text x="${(50+24.5*Math.sin(a)).toFixed(1)}" y="${(50-24.5*Math.cos(a)+2.6).toFixed(1)}" class="ckn">${t}</text>`; }).join('');
     const pearls=[...Array(24)].map((_,k)=>{ const a=k*15*Math.PI/180; return `<circle cx="${(50+46.5*Math.sin(a)).toFixed(2)}" cy="${(50-46.5*Math.cos(a)).toFixed(2)}" r="${k%6?1.1:2}" fill="${k%6?'#fff6d8':'#e0115f'}" stroke="${k%6?'none':'#ffd9e6'}" stroke-width=".4"/>`; }).join('');
     return `<svg viewBox="-4 -19 108 123" class="ckw ${big?'big':''} ${left<=10?'low':''}" data-el="${el}">
 <defs><radialGradient id="ckF" cx="45%" cy="38%" r="70%"><stop offset="0" stop-color="#4a1630"/><stop offset=".7" stop-color="#22091a"/><stop offset="1" stop-color="#0d0309"/></radialGradient>
@@ -62,7 +66,7 @@ const DQUI=(()=>{
 ${ticks}${rn}
 <g class="ckhand" style="animation-delay:-${el}s"><path d="M48.6 50 L49.3 24 L50.7 24 L51.4 50 Z" fill="url(#ckG)" stroke="#2a1702" stroke-width=".7"/><path d="M50 12 Q46.5 18 48.3 23 Q45 20 43 22.5 Q46.5 25.5 50 28.5 Q53.5 25.5 57 22.5 Q55 20 51.7 23 Q53.5 18 50 12Z" fill="url(#ckG)" stroke="#2a1702" stroke-width=".6"/><circle cx="50" cy="36" r="2.6" fill="none" stroke="#ffe9a8" stroke-width="1.1"/><path d="M48.8 50 L46.5 60 Q50 63 53.5 60 L51.2 50Z" fill="url(#ckG)" stroke="#2a1702" stroke-width=".6"/><circle cx="50" cy="59" r="1.6" fill="url(#ckRb)"/></g>
 <circle cx="50" cy="50" r="4.2" fill="url(#ckG)" stroke="#5a3a08" stroke-width=".5"/><circle cx="50" cy="50" r="2.6" fill="url(#ckRb)"/><circle cx="49.2" cy="49.2" r=".8" fill="#fff"/>
-<g class="ckdig"><rect x="37" y="64" width="26" height="12" rx="6" fill="#0d0309" stroke="url(#ckG)" stroke-width=".9"/><text x="50" y="73.2" class="ckt">${left}</text></g>
+<g class="ckdig"><rect x="36" y="58" width="28" height="15" rx="7.5" fill="#0d0309" stroke="url(#ckG)" stroke-width=".9"/><text x="50" y="69.6" class="ckt">${left}</text></g>
 </svg>`; }
   function logH(l,api){ let h=api.esc(l); DQ_COL.forEach((n,c)=>{ h=h.split(n).join(`<span class="lg">${A.gemSVG(c,18,c)}<b class="lg${c}">${n}</b></span>`); }); return h; }
   function showHist(){ const api=Table.API, S=window.__S; if(!S) return; const L=S.log; api.modal('📜 Lịch sử ván chơi', `<div class="dqhist">${L.map((l,i)=>`<div><i>${L.length-i}</i>${logH(l,api)}</div>`).join('')}</div>`, [{t:'Đóng',pri:1}]); }
@@ -101,7 +105,7 @@ ${ticks}${rn}
           return mine?cardEl(id,`data-res="${r}"`,'rcd '+(pick&&pick.res===r?'pk ':'')+(DQ.payPlan(P,DQ.CARDS[id])?'can':'')):`<div class="rcd rb" title="Thẻ giữ chỗ cấp ${DQ.CARDS[id].lv}">${A.back(DQ.CARDS[id].lv)}</div>`; }).join('');
         return `<div class="pl ${S.turn===i&&S.phase==='play'?'turn':''} ${mine?'me':''} ${S.phase==='over'&&S.winner===i?'win':''}" data-p="${i}" style="--pc:${PCOL[i]}">
         ${S.turn===i&&S.phase==='play'?`<i class="tbadge">${mine?'Lượt của bạn':'Đang đi'}</i>`:''}${S.turn===i&&S.step==='discard'&&S.phase==='play'?'<i class="ovl">Quá tải!</i>':''}<div class="bagw ${DQ.tot(Q.tok)>10?'over':''}" title="Túi đá ${PCN[i]}">${A.bag(PCOL[i],DQ.tot(Q.tok))}</div><div class="pcn">
-        <div class="ph">${api.avatar(p.name,i)}<b>${api.esc(p.name)}</b>${mine?' <small>(bạn)</small>':''}${S.turn===i&&S.phase==='play'?`<span class="tmr">${clockSVG(Math.min(60,Math.max(0,(t-S.turnAt)/1000)).toFixed(2),0)}</span>`:''}<span class="pts ${(PREV[i]!=null&&Q.pts>PREV[i])?'up':''}"><small>điểm</small>${Q.pts}</span></div>
+        <div class="ph">${api.avatar(p.name,i)}<b>${api.esc(p.name)}</b>${mine?' <small>(bạn)</small>':''}${S.turn===i&&S.phase==='play'?`<span class="tmr">${clockSVG(Math.min(60,Math.max(0,(t-S.turnAt)/1000)).toFixed(2),0)}<b class="tms">${Math.max(0,60-Math.floor((t-S.turnAt)/1000))}<small>giây</small></b></span>`:''}<span class="pts ${(PREV[i]!=null&&Q.pts>PREV[i])?'up':''}"><small>điểm</small>${Q.pts}</span></div>
         <div class="gr2"><i class="gl" title="Mỗi thẻ đã mua giảm 1 viên cùng màu khi mua thẻ khác">Thẻ<br>giảm giá</i>${[0,1,2,3,4].map(c=>`<span class="gb" title="Giảm ${Q.bonus[c]} ${DQ_COL[c]} khi mua thẻ">${A.bonus(c,Q.bonus[c])}</span>`).join('')}<span></span><i class="gl" title="Số đá quý đang có trong túi">Đá<br>đang có</i>${[0,1,2,3,4,5].map(c=>`<span class="tk ${Q.tok[c]?'':'z'}" ${mine&&S.step==='discard'&&my&&Q.tok[c]?`data-ret="${c}"`:''}>${A.gemSVG(c,17,c)}<b>${Q.tok[c]}</b></span>`).join('')}</div>
         ${Q.nobles.length?`<div class="ft">👑 ${Q.nobles.map(id=>DQ.NOBLE_NAMES[id]).join(', ')}</div>`:''}</div>
         <div class="rsvw"><i class="rsvh">Thẻ dự trữ <b>${Q.res.length}/3</b></i><div class="rsv" title="Thẻ giữ chỗ (tối đa 3)">${rsv}</div></div></div>`; }).join('')}</div>
@@ -124,10 +128,10 @@ ${ticks}${rn}
     if(isNew){ lastEv=ev.n; {
       const target=rectOf(`.pl[data-p="${ev.seat}"]`);
       if(ev.k==='take'){ const bg=rectOf(`.pl[data-p="${ev.seat}"] .bag`); ev.g.forEach((c,k)=>fly(pre.tok&&pre.tok[k],bg,A.gemSVG(c,46,c),46,46,k*120,k===ev.g.length-1?bump(ev.seat):null)); GS.take(ev.g.length);
-        const cnt={}; ev.g.forEach(c=>cnt[c]=(cnt[c]||0)+1); gain(ev.seat,Object.keys(cnt).map(c=>({icon:A.gemSVG(+c,24,+c),t:'+'+cnt[c]+' '+DQ_COL[c]})),700); }
-      else if(ev.k==='ret'){ fly(pre.from,rectOf(`[data-tok="${ev.c}"]`),A.gemSVG(ev.c,40,ev.c),40,40,0); GS.take(1); }
+        const cnt={}; ev.g.forEach(c=>cnt[c]=(cnt[c]||0)+1); bagPop(ev.seat,Object.keys(cnt).map(c=>({c:+c,n:cnt[c]})),550); }
+      else if(ev.k==='ret'){ fly(pre.from,rectOf(`[data-tok="${ev.c}"]`),A.gemSVG(ev.c,40,ev.c),40,40,0); GS.take(1); bagPop(ev.seat,[{c:ev.c,n:-1}],0); }
       else if(ev.k==='buy'){ { const C=DQ.CARDS[ev.id]; fly(pre.card,target,A.card(ev.id),130,182,0,()=>sparkle(target,16,A.PAL[C.col][1])); showCard(ev.seat,ev.id,750,[{t:'+1 thẻ cấp '+['','I','II','III'][C.lv],cls:'cd'},{icon:A.gemSVG(C.col,24,C.col),t:'+1 thưởng '+DQ_COL[C.col]}].concat(C.pts?[{t:'+'+C.pts+' điểm',cls:'pt'}]:[])); } SFX.flip(); if(DQ.CARDS[ev.id].pts) setTimeout(ting,650); if(ev.seat===ME&&DQ.CARDS[ev.id].pts){ api.toast('+'+DQ.CARDS[ev.id].pts+' điểm uy tín',true); } }
-      else if(ev.k==='reserve'){ fly(pre.card, rectOf(`.pl[data-p="${ev.seat}"] .rsv`), ev.id!=null?A.card(ev.id):A.back(ev.deck||1),110,154,0); if(ev.id!=null&&ev.seat===ME) showCard(ev.seat,ev.id,750); gain(ev.seat,[{t:'Giữ chỗ thẻ cấp '+['','I','II','III'][ev.lv||DQ.CARDS[ev.id]?.lv||ev.deck],cls:'cd'}].concat(S.P[ev.seat]?[{icon:A.gemSVG(5,24,5),t:'+1 Vàng'}]:[]),850); setTimeout(()=>fly(rectOf('[data-tok="5"]'),rectOf(`.pl[data-p="${ev.seat}"] .bag`),A.gemSVG(5,40,5),40,40,0,bump(ev.seat)),250); SFX.flip(); }
+      else if(ev.k==='reserve'){ fly(pre.card, rectOf(`.pl[data-p="${ev.seat}"] .rsv`), ev.id!=null?A.card(ev.id):A.back(ev.deck||1),110,154,0); if(ev.id!=null&&ev.seat===ME) showCard(ev.seat,ev.id,750); gain(ev.seat,[{t:'Giữ chỗ thẻ cấp '+['','I','II','III'][ev.lv||DQ.CARDS[ev.id]?.lv||ev.deck],cls:'cd'}],850); if(ev.gold!==false) bagPop(ev.seat,[{c:5,n:1}],700); setTimeout(()=>fly(rectOf('[data-tok="5"]'),rectOf(`.pl[data-p="${ev.seat}"] .bag`),A.gemSVG(5,40,5),40,40,0,bump(ev.seat)),250); SFX.flip(); }
       else if(ev.k==='noble'){ fly(pre.nob,target,A.noble(ev.id),96,96,0,()=>sparkle(target,26,'#ffe27a')); gain(ev.seat,[{t:DQ.NOBLE_NAMES[ev.id]+' ghé thăm',cls:'cd'},{t:'+3 điểm',cls:'pt'}],800); setTimeout(ting,700); if(ev.seat===ME){ api.toast(DQ.NOBLE_NAMES[ev.id]+' ghé thăm bạn: +3 điểm!',true); FX.confetti(innerWidth/2,innerHeight*.4,60); } else api.toast(DQ.NOBLE_NAMES[ev.id]+' ghé thăm '+api.esc(S.seats[ev.seat].name)); }
       else if(ev.k==='over'){ SFX.ding(); if(S.winner===ME){ SFX.reward(); FX.confetti(innerWidth/2,innerHeight*.45,140); } }
       if (S.phase==='play'&&S.turn===ME&&ev.k!=='ret'&&SFX.hiss) SFX.hiss(); } }
@@ -137,7 +141,7 @@ ${ticks}${rn}
     c.classList.add('tilt'); c.style.transform=`perspective(600px) rotateY(${px*18}deg) rotateX(${-py*18}deg) translateY(-6px) scale(1.04)`; }
   let lastSec=-1;
   function tickView(S,ME,api){ if(!root||S.phase!=='play') return; const left=Math.max(0,60-Math.floor((api.now()-S.turnAt)/1000));
-    root.querySelectorAll('.ckt').forEach(e=>e.textContent=left); root.querySelectorAll('.ckw').forEach(w=>w.classList.toggle('low',left<=10));
+    root.querySelectorAll('.ckt').forEach(e=>e.textContent=left); root.querySelectorAll('.tms').forEach(e=>{ e.firstChild.textContent=left; e.classList.toggle('low',left<=10); }); root.querySelectorAll('.ckw').forEach(w=>w.classList.toggle('low',left<=10));
     if(left!==lastSec){ lastSec=left; if(left<=10&&left>0&&S.turn===ME&&SFX.ok&&SFX.ok()){ SFX.tone(left<=3?1900:1400,.05,{type:'triangle',vol:.12,attack:.001}); SFX.noise(.02,{vol:.15,freq:4000,q:3}); } } }
   function onClick(e){ const api=Table.API, S=window.__S, ME=api.me(); if(!S) return; const my=S.phase==='play'&&S.turn===ME;
     const tk=e.target.closest('[data-tok]'); if(tk){ if(!my||S.step!=='main') return; const c=+tk.dataset.tok; if(c===5){ api.toast('Vàng chỉ nhận được khi giữ chỗ thẻ'); return; }
