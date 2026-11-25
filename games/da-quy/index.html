@@ -795,6 +795,16 @@ body{background:#140609!important}
  html .pl .rsv{flex-direction:row!important;gap:2px!important}
  html .pl .rsv .rslot,html .pl .rsv .rcd,html .pl .rsv .dqc{width:20px!important;height:28px!important}
 }
+
+/* khung người chơi không bao giờ bị ép thấp hơn nội dung (cuộn khung bên phải nếu thiếu chỗ) */
+#dq .players>.pl{flex:0 0 auto!important;height:auto!important}
+#dq .side>*{flex-shrink:0!important}
+#dq .players{flex-shrink:0!important}
+
+/* chiều cao hàng đá/giảm giá cố định để khung người chơi luôn tính đủ chỗ */
+.g3row.g3tok{min-height:calc(var(--tw,31px) + 4px)}
+.g3row.g3bon{min-height:calc(var(--sqz,19px) + 2px)}
+.g3c{min-height:inherit}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
