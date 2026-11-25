@@ -378,6 +378,10 @@ const CSS=`.bank .tok .gn{display:none!important}
  text-shadow:0 1px 0 #3b0a1d!important;filter:drop-shadow(0 3px 0 #3b0a1d) drop-shadow(0 5px 8px rgba(0,0,0,.4));box-shadow:none!important}
 #tb-modal .tb-grid{display:flex;justify-content:center;margin-top:8px}
 #tb-modal .dqhist div{border-bottom:1px dashed rgba(120,80,20,.3)!important}
+
+.gb.wob{animation:gbWob .8s ease-out}
+@keyframes gbWob{0%{transform:rotate(0) scale(1)}15%{transform:rotate(-16deg) scale(1.3)}35%{transform:rotate(14deg) scale(1.3)}55%{transform:rotate(-10deg) scale(1.18)}75%{transform:rotate(6deg) scale(1.08)}100%{transform:rotate(0) scale(1)}}
+.gb.wob .bon{filter:drop-shadow(0 0 8px #fff6c8) drop-shadow(0 0 4px #ffe27a)}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
