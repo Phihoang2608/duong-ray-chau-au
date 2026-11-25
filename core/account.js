@@ -95,6 +95,7 @@
   #pbg-nav{display:inline-flex;gap:inherit;align-items:center}
   #pbg-nav a{position:relative}#pbg-nav .nb{position:absolute;top:-6px;right:-10px;background:#ef4444;color:#fff;border-radius:8px;font:bold 10px/15px Arial;padding:0 5px;font-style:normal}
   #pbg-nav .acc{font-weight:bold}
+  #pbg-nav .appb{background:linear-gradient(90deg,#16a34a,#0f7a43);color:#fff!important;border-radius:10px;font-weight:bold}
   @media (max-width:980px){ header .nav{display:flex!important;flex-wrap:wrap;gap:2px 4px!important;font-size:13px;flex:1 1 100%;order:5} header .nav>a{display:none} header .nav a{padding:5px 8px!important;white-space:nowrap} header .bar{flex-wrap:wrap!important} #pbg-nav{flex-wrap:nowrap;gap:2px} }
   
   `;
@@ -294,10 +295,34 @@
     fp.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>acceptFriend(b.dataset.acc));
     const hl=fp.querySelector('[data-hlogin]'); if(hl) hl.onclick=()=>openLogin();
     const hf=fp.querySelector('[data-hfr]'); if(hf) hf.onclick=()=>openDr('fr');
-    const nav=document.querySelector('header .nav'); if(nav&&!document.getElementById('pbg-nav')){ const w=document.createElement('span'); w.id='pbg-nav'; w.innerHTML=`<a href="#" data-n="fr">👥 Bạn bè</a><a href="#" data-n="chat">💬 Trò chuyện<em class="nb"></em></a><a href="#" data-n="me" class="acc">👤 <span>Đăng nhập</span></a>`; nav.appendChild(w);
-      w.querySelectorAll('a').forEach(a=>a.onclick=e=>{ e.preventDefault(); const k=a.dataset.n; if(!P.user&&k!=='chat'){ openLogin(); return; } if(innerWidth<1100||k==='me'){ openDr(k==='me'?'me':k); } else { const t=document.getElementById(k==='chat'?'pbg-hub-chat':'pbg-hub-fr'); t&&t.scrollIntoView({behavior:'smooth',block:'center'}); } }); }
+    const nav=document.querySelector('header .nav'); if(nav&&!document.getElementById('pbg-nav')){ const w=document.createElement('span'); w.id='pbg-nav'; w.innerHTML=`<a href="#" data-n="fr">👥 Bạn bè</a><a href="#" data-n="chat">💬 Trò chuyện<em class="nb"></em></a><a href="#" data-n="app" data-pbg-app class="appb">📲 Tải app</a><a href="#" data-n="me" class="acc">👤 <span>Đăng nhập</span></a>`; nav.appendChild(w);
+      appBtns(); w.querySelectorAll('a').forEach(a=>a.onclick=e=>{ e.preventDefault(); const k=a.dataset.n; if(k==='app'){ installApp(); return; } if(!P.user&&k!=='chat'){ openLogin(); return; } if(innerWidth<1100||k==='me'){ openDr(k==='me'?'me':k); } else { const t=document.getElementById(k==='chat'?'pbg-hub-chat':'pbg-hub-fr'); t&&t.scrollIntoView({behavior:'smooth',block:'center'}); } }); }
     const acc=document.querySelector('#pbg-nav .acc span'); if(acc) acc.textContent=P.user?((P.prof&&P.prof.name)||'Tài khoản'):'Đăng nhập';
     const nb=document.querySelector('#pbg-nav .nb'); if(nb){ nb.textContent=P.unread||''; nb.style.display=P.unread?'inline-block':'none'; } }
+
+
+  /* ---------- tải game thành app (PWA) ---------- */
+  const ROOT=BASE.replace(/core\/$/,'');
+  let deferredInstall=null;
+  const standalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+  addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredInstall=e; appBtns(); });
+  addEventListener('appinstalled',()=>{ deferredInstall=null; toast('🎉 Đã cài app Phi Board Games! Mở từ biểu tượng ngoài màn hình chính.',6000); appBtns(); });
+  function pwaSetup(){ try{ if(!document.querySelector('link[rel=manifest]')){ const l=document.createElement('link'); l.rel='manifest'; l.href=ROOT+'manifest.json'; document.head.appendChild(l); }
+      if(!document.querySelector('link[rel=apple-touch-icon]')){ const l=document.createElement('link'); l.rel='apple-touch-icon'; l.href=ROOT+'pwa/apple-icon.png'; document.head.appendChild(l); }
+      if(!document.querySelector('meta[name=theme-color]')){ const m=document.createElement('meta'); m.name='theme-color'; m.content='#5e1730'; document.head.appendChild(m); }
+      if('serviceWorker' in navigator) navigator.serviceWorker.register(ROOT+'sw.js',{scope:ROOT}).catch(()=>{}); }catch(e){} }
+  function installApp(){ if(standalone()){ toast('Bạn đang dùng app rồi 👍'); return; }
+    if(deferredInstall){ deferredInstall.prompt(); deferredInstall.userChoice.then(c=>{ if(c&&c.outcome==='accepted') toast('Đang cài app…'); deferredInstall=null; appBtns(); }); return; }
+    const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/i.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document), inapp=/FBAN|FBAV|Instagram|Zalo|Line\/|MicroMessenger|TikTok/i.test(ua);
+    const b=$('#pbg-login .box');
+    b.innerHTML=`<h3>📲 Tải app Phi Board Games</h3>
+      ${inapp?`<p><b>Bạn đang mở trong Zalo / Facebook / Messenger.</b> Bấm nút <b>⋮</b> hoặc <b>…</b> góc trên rồi chọn <b>Mở bằng trình duyệt</b> (Chrome / Safari), sau đó bấm lại nút Tải app.</p>`:''}
+      ${ios?`<p style="text-align:left">Trên iPhone / iPad (Safari):</p><ol style="text-align:left;margin:4px 0 8px 18px;padding:0;line-height:1.6"><li>Bấm nút <b>Chia sẻ</b> <span style="font-size:18px">⬆️</span> ở thanh dưới</li><li>Kéo xuống chọn <b>Thêm vào MH chính</b></li><li>Bấm <b>Thêm</b> — biểu tượng <b>Phi Games</b> sẽ hiện ngoài màn hình</li></ol>`
+          :`<p style="text-align:left">Trên Android (Chrome) hoặc máy tính:</p><ol style="text-align:left;margin:4px 0 8px 18px;padding:0;line-height:1.6"><li>Bấm nút <b>⋮</b> (góc trên bên phải trình duyệt)</li><li>Chọn <b>Cài đặt ứng dụng</b> hoặc <b>Thêm vào màn hình chính</b></li><li>Bấm <b>Cài đặt</b> — biểu tượng <b>Phi Games</b> sẽ hiện ngoài màn hình</li></ol><p style="font-size:13px">Máy tính dùng Chrome/Edge: có thể bấm biểu tượng <b>⊕</b> ở cuối thanh địa chỉ.</p>`}
+      <p style="font-size:13px">App chạy toàn màn hình, không có thanh địa chỉ, mở nhanh như ứng dụng thật.</p><button class="skip">Đóng</button>`;
+    b.querySelector('.skip').onclick=closeLogin; $('#pbg-login').classList.add('open'); }
+  P.install=installApp;
+  function appBtns(){ const hide=standalone(); document.querySelectorAll('[data-pbg-app]').forEach(e=>e.style.display=hide?'none':''); }
 
   /* ---------- nút nổi ---------- */
   function fab(){ try{ hubSide(); }catch(e){} const f=$('#pbg-fab'); if(!f) return; const pr=P.prof; f.querySelector('.av').innerHTML=pr?(/^https?:/.test(pr.avatar||'')?`<img src="${esc(pr.avatar)}">`:esc(pr.avatar||'👤')):'👤';
@@ -321,7 +346,7 @@
   P.setGame=function(title){ P.gameTitle=title; publish(); };
 
   /* ---------- khởi động ---------- */
-  function start(){ ui();
+  function start(){ ui(); pwaSetup();
     P.myId=ls.get('pbg-id')||('g'+Math.random().toString(36).slice(2,10)); ls.set('pbg-id',P.myId); lastId=P.myId;
     if(/\/games\//.test(location.pathname)) P.gameTitle=(document.title||'').split('|')[0].trim()||null;
     mqttStart();
