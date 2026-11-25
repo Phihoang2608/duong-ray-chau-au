@@ -71,6 +71,27 @@
   #pbg-toasts{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:9900;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
   .pbg-t{pointer-events:auto;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:12px;background:linear-gradient(180deg,#4a1426,#250812);border:1.5px solid #c9a24e;color:#f6ead0;font:14px "Times New Roman",serif;box-shadow:0 6px 18px rgba(0,0,0,.55);animation:pbgIn .3s ease-out;max-width:92vw}
   @keyframes pbgIn{from{opacity:0;transform:translateY(-10px)}}
+  .pbg-av.xs{width:24px;height:24px;font-size:13px;border-width:1px}
+  .pbg-chat{display:flex;flex-direction:column;gap:6px}
+  .pbg-msgs{max-height:320px;min-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:4px 2px}
+  #pbg-dr .pbg-msgs{max-height:calc(100vh - 250px)}
+  .pbg-msg{display:flex;gap:6px;align-items:flex-start}.pbg-msg.me{flex-direction:row-reverse}
+  .pbg-msg .bb{max-width:78%;padding:5px 9px;border-radius:12px;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,78,.35)}
+  .pbg-msg.me .bb{background:linear-gradient(180deg,#7a1f3d,#4a0f24);border-color:#e9c46a}
+  .pbg-msg .nm{font-size:11.5px;font-weight:bold;color:#ffe08a}.pbg-msg .nm i{font-weight:normal;opacity:.6;margin-left:3px}
+  .pbg-msg .tx{font-size:14px;line-height:1.35;word-break:break-word;color:#f6ead0}
+  .pbg-cin{display:flex;gap:6px}.pbg-cin input{flex:1;min-width:0;padding:8px 10px;border-radius:9px;border:1px solid #c9a24e;background:#140609;color:#fff;font:14px "Times New Roman",serif}
+  #pbg-hub-fr,#pbg-hub-chat{background:linear-gradient(180deg,rgba(74,20,38,.92),rgba(30,8,16,.94))!important;color:#f6ead0;border:1px solid rgba(201,162,78,.6)!important}
+  #pbg-hub-fr h3,#pbg-hub-chat h3{color:#ffe08a}
+  .pbg-h2{font-weight:bold;color:#ffe08a;font-size:13.5px;margin:10px 2px 4px}
+  .hrow{display:flex;align-items:center;gap:7px;padding:5px 2px;border-bottom:1px dashed rgba(201,162,78,.25);font-size:14px}
+  .hrow b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:bold}.hrow small{opacity:.75;font-size:11.5px;white-space:nowrap}
+  .hrow .pbg-b{padding:3px 8px;font-size:12px}
+  #pbg-nav{display:inline-flex;gap:inherit;align-items:center}
+  #pbg-nav a{position:relative}#pbg-nav .nb{position:absolute;top:-6px;right:-10px;background:#ef4444;color:#fff;border-radius:8px;font:bold 10px/15px Arial;padding:0 5px;font-style:normal}
+  #pbg-nav .acc{font-weight:bold}
+  @media (max-width:980px){ header .nav{display:flex!important;flex-wrap:wrap;gap:2px 4px!important;font-size:13px;flex:1 1 100%;order:5} header .nav>a{display:none} header .nav a{padding:5px 8px!important;white-space:nowrap} header .bar{flex-wrap:wrap!important} #pbg-nav{flex-wrap:nowrap;gap:2px} }
+  
   `;
   function ui(){
     const st=document.createElement('style'); st.textContent=CSS; document.head.appendChild(st);
@@ -131,9 +152,10 @@
        <div class="pbg-h">Thành tích</div><div class="pbg-st"><div><b>${g}</b><span>Ván đã chơi</span></div><div><b>${w}</b><span>Ván thắng</span></div><div><b>${g?Math.round(w*100/g):0}%</b><span>Tỉ lệ thắng</span></div><div><b>${Math.floor((s.minutes||0)/60)}g ${(s.minutes||0)%60}p</b><span>Thời gian chơi</span></div><div><b>${Object.values(P.friends).filter(f=>f.status==='friend').length}</b><span>Bạn bè</span></div><div><b>${pr.createdAt?new Date(pr.createdAt).toLocaleDateString('vi-VN'):'—'}</b><span>Ngày tham gia</span></div></div>
        ${Object.keys(by).length?`<div class="pbg-h">Theo từng game</div>`+Object.entries(by).map(([k,v])=>`<div class="pbg-row"><div class="i"><div class="n">${esc(v.title||k)}</div></div><div class="s">${v.games||0} ván · thắng ${v.wins||0}</div></div>`).join(''):''}
        <div style="margin-top:14px"><button class="pbg-b" data-out>Đăng xuất</button></div>`; }
+    else if(TAB==='chat'){ P.unread=0; body=`<div class="pbg-h">💬 Trò chuyện chung</div>`+chatBox('pbg-chat-dr'); }
     else if(TAB==='top'){ body=`<div class="pbg-h">🏆 Bảng xếp hạng (số ván thắng)</div><div data-top class="pbg-empty">Đang tải…</div>`; }
     d.innerHTML=`<div class="pbg-hd">${avHTML(pr.avatar)}<div><div class="pbg-nm">${esc(pr.name||'Người chơi')}</div><div class="pbg-sub">${esc(P.user&&P.user.email||'')}</div></div><button class="pbg-x">×</button></div>
-      <div class="pbg-tabs"><button data-t="on" class="${TAB==='on'?'on':''}">Online (${nOn})</button><button data-t="fr" class="${TAB==='fr'?'on':''}">Bạn bè${nIn?`<span class="bd">${nIn}</span>`:''}</button><button data-t="me" class="${TAB==='me'?'on':''}">Tôi</button><button data-t="top" class="${TAB==='top'?'on':''}">BXH</button></div>
+      <div class="pbg-tabs"><button data-t="on" class="${TAB==='on'?'on':''}">Online (${nOn})</button><button data-t="fr" class="${TAB==='fr'?'on':''}">Bạn bè${nIn?`<span class="bd">${nIn}</span>`:''}</button><button data-t="me" class="${TAB==='me'?'on':''}">Tôi</button><button data-t="chat" class="${TAB==='chat'?'on':''}">Chat${P.unread?`<span class="bd">${P.unread}</span>`:''}</button><button data-t="top" class="${TAB==='top'?'on':''}">BXH</button></div>
       <div class="pbg-body">${body}</div>`;
     d.querySelector('.pbg-x').onclick=closeDr;
     d.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{ TAB=b.dataset.t; drawDr(); });
@@ -146,6 +168,7 @@
     const out=d.querySelector('[data-out]'); if(out) out.onclick=()=>{ P.auth.signOut(); closeDr(); };
     const fd=d.querySelector('[data-find]'); if(fd) fd.onclick=()=>findUser(d.querySelector('[data-q]').value.trim(),d.querySelector('[data-res]'));
     if(TAB==='top') loadTop(d.querySelector('[data-top]'));
+    if(TAB==='chat') bindChat(document.getElementById('pbg-chat-dr'));
   }
   function inviteBtn(o){ return P.room&&o.id!==P.myId?`<button class="pbg-b y" data-inv="${esc(o.id)}">Mời chơi</button>`:''; }
 
@@ -185,13 +208,14 @@
   function mqttStart(){ if(P.mq) return; const go=()=>{ let bi=0; const conn=()=>{ const c=mqtt.connect(BROKERS[bi%BROKERS.length],{clientId:'pbg_'+P.myId+'_'+Math.random().toString(36).slice(2,6),clean:true,keepalive:30,reconnectPeriod:5000,connectTimeout:8000,
         will:{topic:TP+'on/'+P.myId,payload:'',retain:true,qos:0}});
       P.mq=c; let ok=false;
-      c.on('connect',()=>{ ok=true; c.subscribe(TP+'on/+'); c.subscribe(TP+'u/'+P.myId); if(P.user) c.subscribe(TP+'u/'+P.user.uid); publish(); setTimeout(()=>{ P.firstSync=false; },3500); });
+      c.on('connect',()=>{ ok=true; c.subscribe(TP+'on/+'); c.subscribe(TP+'chat'); c.subscribe(TP+'chathist'); c.subscribe(TP+'u/'+P.myId); if(P.user) c.subscribe(TP+'u/'+P.user.uid); publish(); setTimeout(()=>{ P.firstSync=false; },3500); });
       c.on('message',(t,m)=>onMsg(t,m.toString()));
       c.on('error',()=>{}); setTimeout(()=>{ if(!ok){ try{ c.end(true); }catch(e){} bi++; P.mq=null; conn(); } },9000); };
       conn(); if(P._iv) return; P._iv=1; setInterval(publish,60000); setInterval(()=>{ const now=Date.now(); let ch=false; for(const k in P.online){ if(now-P.online[k].ts>200000){ delete P.online[k]; ch=true; } } if(ch){ fab(); drawDr(); } else drawDr(); },30000);
       addEventListener('pagehide',()=>{ try{ P.mq.publish(TP+'on/'+P.myId,'',{retain:true}); }catch(e){} }); };
     if(window.mqtt) go(); else load('https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js').then(go).catch(()=>{}); }
   function onMsg(t,m){
+    if(t===TP+'chat'||t===TP+'chathist'){ let d; try{ d=JSON.parse(m); }catch(e){ return; } let ch=false; (Array.isArray(d)?d:[d]).forEach(x=>{ if(addChat(x,t===TP+'chat')) ch=true; }); if(ch) drawChat(); return; }
     if(t.startsWith(TP+'on/')){ const id=t.slice((TP+'on/').length); if(!m){ if(P.online[id]){ delete P.online[id]; fab(); drawDr(); } return; }
       let o; try{ o=JSON.parse(m); }catch(e){ return; } if(Date.now()-o.ts>200000) return;
       // cùng một tài khoản mở nhiều tab: chỉ giữ 1 dòng
@@ -205,10 +229,52 @@
     else if(msg.t==='facc') toast(`🤝 <span><b>${esc(msg.name)}</b> đã đồng ý kết bạn</span>`,5000);
   }
 
+
+  /* ---------- trò chuyện chung (MQTT: tin trực tiếp + 1 tin giữ lại chứa 40 tin gần nhất) ---------- */
+  P.chat=[]; P.unread=0; const seenC=new Set();
+  try{ JSON.parse(ls.get('pbg-chat')||'[]').forEach(m=>{ if(!seenC.has(m.id)){ seenC.add(m.id); P.chat.push(m); } }); }catch(e){}
+  function addChat(m,live){ if(!m||!m.id||seenC.has(m.id)||typeof m.text!=='string') return false; seenC.add(m.id); P.chat.push(m); P.chat.sort((a,b)=>a.t-b.t); if(P.chat.length>80) P.chat=P.chat.slice(-80); ls.set('pbg-chat',JSON.stringify(P.chat.slice(-40)));
+    if(live&&m.mine!==true&&!(P.user&&m.uid===P.user.uid)){ const open=$('#pbg-dr').classList.contains('open')&&TAB==='chat'; if(!open){ P.unread++; } } return true; }
+  function sendChat(text){ text=String(text||'').trim().slice(0,200); if(!text||!P.mq) return; if(!P.user){ openLogin('Đăng nhập để trò chuyện cùng mọi người.'); return; }
+    const me=myCard(), m={id:P.user.uid.slice(0,6)+Date.now().toString(36)+Math.random().toString(36).slice(2,5),uid:P.user.uid,name:me.name,av:me.av,t:Date.now(),text};
+    addChat(m,false); P.mq.publish(TP+'chat',JSON.stringify(m)); P.mq.publish(TP+'chathist',JSON.stringify(P.chat.slice(-40)),{retain:true}); drawChat(); }
+  function chatHTML(){ return P.chat.length?P.chat.slice(-60).map(m=>{ const me=P.user&&m.uid===P.user.uid, tm=new Date(m.t); return `<div class="pbg-msg ${me?'me':''}">${avHTML(m.av,'xs')}<div class="bb"><div class="nm">${esc(m.name)} <i>${tm.getHours()}:${String(tm.getMinutes()).padStart(2,'0')}</i></div><div class="tx">${esc(m.text)}</div></div></div>`; }).join(''):'<div class="pbg-empty">Chưa có tin nhắn nào. Hãy chào mọi người đi! 👋</div>'; }
+  function chatBox(id){ return `<div class="pbg-chat" id="${id}"><div class="pbg-msgs">${chatHTML()}</div><form class="pbg-cin"><input maxlength="200" placeholder="${P.user?'Nhập tin nhắn…':'Đăng nhập để trò chuyện'}" ${P.user?'':'readonly'}><button class="pbg-b g">Gửi</button></form></div>`; }
+  function bindChat(root){ if(!root) return; const f=root.querySelector('.pbg-cin'), inp=f.querySelector('input'); const ms=root.querySelector('.pbg-msgs'); ms.scrollTop=ms.scrollHeight;
+    inp.onfocus=()=>{ if(!P.user) openLogin('Đăng nhập để trò chuyện cùng mọi người.'); };
+    f.onsubmit=e=>{ e.preventDefault(); const v=inp.value; inp.value=''; sendChat(v); setTimeout(()=>{ const i=document.querySelector('#'+root.id+' .pbg-cin input'); i&&i.focus(); },30); }; }
+  function drawChat(){ const keep=id=>{ const r=document.getElementById(id); if(!r) return; const inp=r.querySelector('input'), v=inp?inp.value:'', foc=document.activeElement===inp; r.outerHTML=chatBox(id); const n=document.getElementById(id); bindChat(n); if(v){ n.querySelector('input').value=v; } if(foc) n.querySelector('input').focus(); };
+    keep('pbg-chat-hub'); if($('#pbg-dr').classList.contains('open')&&TAB==='chat'){ P.unread=0; keep('pbg-chat-dr'); } fab(); hubSide(); }
+  P.sendChat=sendChat;
+
+
+  /* ---------- trang chủ: khung Bạn bè + Trò chuyện + nút trên thanh đầu ---------- */
+  function hubSide(){ const side=document.querySelector('aside.side#rooms'); if(!side) return;
+    let fp=document.getElementById('pbg-hub-fr'); if(!fp){ fp=document.createElement('div'); fp.className='pane glass'; fp.id='pbg-hub-fr'; side.appendChild(fp);
+      const cp=document.createElement('div'); cp.className='pane glass'; cp.id='pbg-hub-chat'; side.appendChild(cp); cp.innerHTML=`<div class="ph"><h3>💬 Trò chuyện chung</h3><span class="cnt" id="pbg-cc">${P.chat.length}</span></div>`+chatBox('pbg-chat-hub'); bindChat(document.getElementById('pbg-chat-hub'));
+      const old=document.getElementById('onlineList'); if(old){ const pane=old.closest('.pane'); if(pane) pane.style.display='none'; } }
+    const cc=document.getElementById('pbg-cc'); if(cc) cc.textContent=P.chat.length;
+    const F=Object.entries(P.friends), fr=F.filter(([,f])=>f.status==='friend'), inc=F.filter(([,f])=>f.status==='incoming'); const onl=uid=>Object.values(P.online).find(o=>o.uid===uid);
+    const others=Object.values(P.online).filter(o=>o.id!==P.myId).sort((a,b)=>a.since-b.since);
+    fp.innerHTML=`<div class="ph"><h3>👥 Bạn bè & Online</h3><span class="cnt">${Object.keys(P.online).length}</span></div>
+      ${!P.user?`<div class="pbg-empty" style="color:inherit">Đăng nhập để kết bạn, mời bạn vào phòng và lưu thành tích.</div><button class="pbg-b g" data-hlogin style="width:100%;padding:9px">👤 Đăng nhập / Tạo tài khoản</button>`:''}
+      ${inc.length?`<div class="pbg-h2">Lời mời kết bạn</div>`+inc.map(([id,f])=>`<div class="hrow">${avHTML(f.av,'xs')}<b>${esc(f.name)}</b><button class="pbg-b g" data-acc="${esc(id)}">Đồng ý</button></div>`).join(''):''}
+      ${P.user?`<div class="pbg-h2">Bạn bè (${fr.length})</div>`+(fr.length?fr.map(([id,f])=>{ const o=onl(id); return `<div class="hrow">${avHTML(f.av,'xs')}<b><span class="pbg-dot ${o?'':'off'}"></span>${esc(f.name)}</b><small>${o?(o.game?esc(o.game):'ở sảnh'):'offline'}</small></div>`; }).join(''):'<div class="pbg-empty" style="color:inherit">Chưa có bạn — bấm "Kết bạn" ở người đang online bên dưới.</div>'):''}
+      <div class="pbg-h2">Đang online (${others.length+1})</div>${others.length?others.slice(0,30).map(o=>{ const f=o.uid&&P.friends[o.uid]; return `<div class="hrow">${avHTML(o.av,'xs')}<b><span class="pbg-dot"></span>${esc(o.name)}${o.guest?' <small>· khách</small>':''}</b><small>${ago(Date.now()-o.since)}${o.game?' · '+esc(o.game):''}</small>${P.user&&!o.guest?(f&&f.status==='friend'?'':f&&f.status==='outgoing'?'<button class="pbg-b" disabled>Đã gửi</button>':f&&f.status==='incoming'?`<button class="pbg-b g" data-acc="${esc(o.uid)}">Đồng ý</button>`:`<button class="pbg-b" data-add="${esc(o.uid)}">+ Kết bạn</button>`):''}</div>`; }).join(''):'<div class="pbg-empty" style="color:inherit">Chỉ có bạn đang online.</div>'}
+      ${P.user?`<button class="pbg-b" data-hfr style="width:100%;margin-top:8px;padding:8px">🔍 Tìm bạn theo tên · Xem tất cả</button>`:''}`;
+    fp.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addFriend(b.dataset.add));
+    fp.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>acceptFriend(b.dataset.acc));
+    const hl=fp.querySelector('[data-hlogin]'); if(hl) hl.onclick=()=>openLogin();
+    const hf=fp.querySelector('[data-hfr]'); if(hf) hf.onclick=()=>openDr('fr');
+    const nav=document.querySelector('header .nav'); if(nav&&!document.getElementById('pbg-nav')){ const w=document.createElement('span'); w.id='pbg-nav'; w.innerHTML=`<a href="#" data-n="fr">👥 Bạn bè</a><a href="#" data-n="chat">💬 Trò chuyện<em class="nb"></em></a><a href="#" data-n="me" class="acc">👤 <span>Đăng nhập</span></a>`; nav.appendChild(w);
+      w.querySelectorAll('a').forEach(a=>a.onclick=e=>{ e.preventDefault(); const k=a.dataset.n; if(!P.user&&k!=='chat'){ openLogin(); return; } if(innerWidth<1100||k==='me'){ openDr(k==='me'?'me':k); } else { const t=document.getElementById(k==='chat'?'pbg-hub-chat':'pbg-hub-fr'); t&&t.scrollIntoView({behavior:'smooth',block:'center'}); } }); }
+    const acc=document.querySelector('#pbg-nav .acc span'); if(acc) acc.textContent=P.user?((P.prof&&P.prof.name)||'Tài khoản'):'Đăng nhập';
+    const nb=document.querySelector('#pbg-nav .nb'); if(nb){ nb.textContent=P.unread||''; nb.style.display=P.unread?'inline-block':'none'; } }
+
   /* ---------- nút nổi ---------- */
-  function fab(){ const f=$('#pbg-fab'); if(!f) return; const pr=P.prof; f.querySelector('.av').innerHTML=pr?(/^https?:/.test(pr.avatar||'')?`<img src="${esc(pr.avatar)}">`:esc(pr.avatar||'👤')):'👤';
+  function fab(){ try{ hubSide(); }catch(e){} const f=$('#pbg-fab'); if(!f) return; const pr=P.prof; f.querySelector('.av').innerHTML=pr?(/^https?:/.test(pr.avatar||'')?`<img src="${esc(pr.avatar)}">`:esc(pr.avatar||'👤')):'👤';
     f.querySelector('.nm').textContent=P.user?(pr&&pr.name||'…'):'Đăng nhập'; f.querySelector('.on').textContent=Object.keys(P.online).length;
-    const n=incoming().length, bd=f.querySelector('.bd'); bd.textContent=n; bd.style.display=n?'inline-flex':'none'; }
+    const n=incoming().length+(P.unread||0), bd=f.querySelector('.bd'); bd.textContent=n; bd.style.display=n?'inline-flex':'none'; }
 
   /* ---------- nối với bàn chơi ---------- */
   let lastPhase=null, minT=null;
@@ -230,10 +296,10 @@
       return load(CDN+'firebase-app-compat.js').then(()=>Promise.all([load(CDN+'firebase-auth-compat.js'),load(CDN+'firebase-firestore-compat.js')])).then(()=>{
         firebase.initializeApp(cfg); P.auth=firebase.auth(); P.db=firebase.firestore(); P.fbOK=true;
         P.auth.onAuthStateChanged(u=>{ P.user=u; P.friends={}; if(P.unsubF){ P.unsubF(); P.unsubF=null; }
-          if(!u){ P.prof=null; P.myId=ls.get('pbg-id'); republishId(); fab(); drawDr(); if(!ls.get('pbg-skip')&&!document.body.classList.contains('ingame')) setTimeout(()=>{ if(!P.user) openLogin(); },1200); return; }
+          if(!u){ P.prof=null; P.myId=ls.get('pbg-id'); republishId(); fab(); drawDr(); drawChat(); if(!ls.get('pbg-skip')&&!document.body.classList.contains('ingame')) setTimeout(()=>{ if(!P.user) openLogin(); },1200); return; }
           uref(u.uid).get().then(d=>{ let pr=d.exists?d.data():null;
             if(!pr){ const nm=(u.displayName||(u.email||'').split('@')[0]||'Người chơi').slice(0,18); pr={name:nm,nameLower:nm.toLowerCase(),avatar:u.photoURL||AV[Math.floor(Math.random()*AV.length)],createdAt:Date.now(),stats:{games:0,wins:0,minutes:0}}; uref(u.uid).set(pr,{merge:true}); toast('🎉 Chào mừng '+esc(nm)+'! Bấm vào tên ở góc dưới để đổi tên, ảnh đại diện.',6000); }
-            P.prof=pr; if(pr.name) ls.set('bg-name',pr.name); uref(u.uid).set({lastSeen:Date.now()},{merge:true}); fab(); drawDr(); });
+            P.prof=pr; if(pr.name) ls.set('bg-name',pr.name); uref(u.uid).set({lastSeen:Date.now()},{merge:true}); fab(); drawDr(); drawChat(); });
           P.myId=u.uid; republishId();
           P.unsubF=uref(u.uid).collection('friends').onSnapshot(s=>{ P.friends={}; s.forEach(d=>P.friends[d.id]=d.data()); fab(); drawDr(); });
         });
