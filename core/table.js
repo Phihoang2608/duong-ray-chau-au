@@ -179,7 +179,7 @@ const Table = (()=>{
   }
 
   /* ---------- Phòng chờ ---------- */
-  function lobby(){
+  function lobby(){ try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S:null,ME:-1}); }catch(e){}
     setTop();
     const people = MODE==='host' ? [{name:myName(),host:1,me:1}, ...guests().map(g=>({name:clean(g.presence.name)}))]
       : (hostPeer()?[{name:clean(hostPeer().presence.name),host:1}]:[]).concat(PEERS.filter(p=>p.presence&&p.presence.role==='guest'&&fresh(p.peer)).map(p=>({name:clean(p.presence.name),me:p.sameTab})));

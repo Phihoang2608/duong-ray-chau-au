@@ -232,7 +232,7 @@
         P.auth.onAuthStateChanged(u=>{ P.user=u; P.friends={}; if(P.unsubF){ P.unsubF(); P.unsubF=null; }
           if(!u){ P.prof=null; P.myId=ls.get('pbg-id'); republishId(); fab(); drawDr(); if(!ls.get('pbg-skip')&&!document.body.classList.contains('ingame')) setTimeout(()=>{ if(!P.user) openLogin(); },1200); return; }
           uref(u.uid).get().then(d=>{ let pr=d.exists?d.data():null;
-            if(!pr){ const nm=(u.displayName||ls.get('bg-name')||(u.email||'').split('@')[0]||'Người chơi').slice(0,18); pr={name:nm,nameLower:nm.toLowerCase(),avatar:u.photoURL||AV[Math.floor(Math.random()*AV.length)],createdAt:Date.now(),stats:{games:0,wins:0,minutes:0}}; uref(u.uid).set(pr,{merge:true}); toast('🎉 Chào mừng '+esc(nm)+'! Bấm vào tên ở góc dưới để đổi tên, ảnh đại diện.',6000); }
+            if(!pr){ const nm=(u.displayName||(u.email||'').split('@')[0]||'Người chơi').slice(0,18); pr={name:nm,nameLower:nm.toLowerCase(),avatar:u.photoURL||AV[Math.floor(Math.random()*AV.length)],createdAt:Date.now(),stats:{games:0,wins:0,minutes:0}}; uref(u.uid).set(pr,{merge:true}); toast('🎉 Chào mừng '+esc(nm)+'! Bấm vào tên ở góc dưới để đổi tên, ảnh đại diện.',6000); }
             P.prof=pr; if(pr.name) ls.set('bg-name',pr.name); uref(u.uid).set({lastSeen:Date.now()},{merge:true}); fab(); drawDr(); });
           P.myId=u.uid; republishId();
           P.unsubF=uref(u.uid).collection('friends').onSnapshot(s=>{ P.friends={}; s.forEach(d=>P.friends[d.id]=d.data()); fab(); drawDr(); });
