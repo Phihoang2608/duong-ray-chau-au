@@ -359,6 +359,25 @@ const CSS=`.bank .tok .gn{display:none!important}
 .pl.turn .ckw{width:50px!important;height:57px!important}
 
 .dqbp{flex-direction:column;align-items:center}
+
+.dqpp{position:fixed;z-index:9999;pointer-events:none;font:bold 22px "Times New Roman",serif;color:#7dffb0;text-shadow:0 0 8px rgba(0,0,0,.9),0 2px 2px #000,0 0 14px rgba(125,255,176,.6)}
+.gb{display:inline-flex;transform-origin:50% 60%}
+/* ---- khung luật chơi / lịch sử ---- */
+#tb-modal{background:rgba(10,3,8,.6)!important;backdrop-filter:blur(3px)}
+#tb-modal .tb-panel{position:relative;max-width:640px!important;padding:26px 30px 22px!important;border-radius:18px!important;color:#3a2410!important;
+ background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.55),transparent 60%),linear-gradient(180deg,#fbf1d6 0%,#f2e1b5 55%,#e7cf93 100%)!important;
+ border:3px solid #b8862b!important;box-shadow:0 0 0 2px #f9e4a2 inset,0 0 0 7px #5e1730,0 0 0 9px #d4a548,0 25px 60px rgba(0,0,0,.7)!important;font-family:"Times New Roman",serif}
+#tb-modal .tb-panel::before{content:"";position:absolute;inset:8px;border:1.5px solid rgba(150,105,30,.55);border-radius:12px;pointer-events:none}
+#tb-modal .tb-panel::after{content:"";position:absolute;inset:0;border-radius:15px;pointer-events:none;opacity:.08;background:url(assets/damask.svg) 0 0/84px 116px repeat}
+#tb-modal .tb-panel h2{margin:0 0 6px;text-align:center;font:bold 28px "Times New Roman",serif;letter-spacing:.04em;color:#5e1730;text-shadow:0 1px 0 #fff6d8}
+#tb-modal .tb-panel h2::after{content:"❦ ✦ ❦";display:block;font-size:13px;color:#b8862b;letter-spacing:.5em;margin-top:4px}
+#tb-modal .tb-panel p{margin:7px 0;font-size:16px;line-height:1.5}
+#tb-modal .tb-panel b{color:#5e1730}
+#tb-modal .tb-panel .tbtn{border:none!important;padding:10px 34px!important;font:bold 16px "Times New Roman",serif!important;color:#fff6d8!important;border-radius:0!important;
+ clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,14px 100%,0 50%);background:linear-gradient(180deg,rgba(255,255,255,.4),rgba(255,255,255,.05) 48%,rgba(0,0,0,0) 52%,rgba(0,0,0,.3)),conic-gradient(from 210deg at 50% 55%,#5e1730,#e0115f,#7a1238,#ffb3cc,#5e1730,#c2185b,#7a1238,#ff8fb3,#5e1730)!important;
+ text-shadow:0 1px 0 #3b0a1d!important;filter:drop-shadow(0 3px 0 #3b0a1d) drop-shadow(0 5px 8px rgba(0,0,0,.4));box-shadow:none!important}
+#tb-modal .tb-grid{display:flex;justify-content:center;margin-top:8px}
+#tb-modal .dqhist div{border-bottom:1px dashed rgba(120,80,20,.3)!important}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
