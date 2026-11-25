@@ -722,16 +722,46 @@ body{background:#140609!important}
 @media (orientation:landscape) and (max-height:500px){ .pl .pts,.pl.turn .pts{width:26px!important;height:29px!important}.pl .pts b,.pl.turn .pts b{font-size:12.5px!important;top:2px} }
 .dqpp{color:#ffe27a!important;font-size:24px!important;text-shadow:0 0 8px rgba(0,0,0,.9),0 2px 2px #000,0 0 16px rgba(255,215,110,.8)!important}
 
-/* ---- chồng thẻ úp: nhỏ, nằm nghiêng, chỉ hiện số khi còn dưới 5 ---- */
-#dq .deck{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;position:relative;display:flex;align-items:center;justify-content:center}
-#dq .deck>svg{width:74%!important;height:74%!important;transform:rotate(-14deg);border-radius:6px;transition:transform .2s;
- box-shadow:3px 3px 0 -1px #3a2410,3px 3px 0 0 #c9a24e,6px 6px 0 -1px #3a2410,6px 6px 0 0 #b8862b,8px 10px 14px rgba(0,0,0,.6)}
-#dq .deck:hover>svg{transform:rotate(-8deg) translateY(-3px)}
-#dq .deck.pk>svg{transform:rotate(-4deg) scale(1.05);box-shadow:0 0 0 3px #ffe08a,0 0 18px #ffd34d}
-#dq .deck .dl{display:none!important}
-#dq .deck.empty>svg{opacity:.25;box-shadow:none}
-.dlow{position:absolute;right:2px;bottom:4px;z-index:2;padding:1px 7px;border-radius:9px;font:bold 11px "Times New Roman",serif;color:#fff;background:linear-gradient(180deg,#dc2626,#7f1d1d);border:1px solid #fecaca;box-shadow:0 1px 4px rgba(0,0,0,.6);white-space:nowrap}
-.dqlite #dq .deck>svg{box-shadow:3px 3px 0 0 #c9a24e,6px 6px 0 0 #b8862b}
+
+/* ---- hàng đá tự co theo chỗ trống: không bao giờ đè lên ô thẻ dự trữ ---- */
+.pl{grid-template-columns:auto minmax(0,1fr) auto!important}
+.pcn{min-width:0!important;overflow:hidden;padding-right:2px}
+.g3c{container-type:inline-size;width:100%;grid-template-columns:repeat(6,minmax(0,1fr))!important;column-gap:0!important;justify-items:center!important}
+.gtk{--s:min(var(--tw,31px),calc((100cqw - 6px)/6 - 8px));width:var(--s)!important;height:var(--s)!important}
+.gtk svg{width:calc(var(--s)*.82)!important;height:calc(var(--s)*.82)!important}
+.gtk b{right:calc(var(--s)*-.2)!important;bottom:calc(var(--s)*-.14)!important;min-width:calc(var(--s)*.52)!important;height:calc(var(--s)*.52)!important;font-size:calc(var(--s)*.38)!important;padding:0 2px!important}
+.sq{--q:min(var(--sqz,19px),calc((100cqw)/6 - 8px));width:var(--q)!important;height:var(--q)!important;font-size:calc(var(--q)*.62)!important}
+.pl.turn{--sqz:22px}
+@media (max-width:640px) and (orientation:portrait){ .pl,.pl.turn{--sqz:16px} }
+@media (orientation:landscape) and (max-height:500px){ .pl,.pl.turn{--sqz:15px} .g3row{gap:4px!important} }
+@media (min-width:641px) and (min-height:501px){ .pl.turn{--tw:33px} .pl{--tw:31px} }
+.rsvw{flex:0 0 auto}
+
+/* ---- cỡ bài tự co theo cả chiều rộng: luôn chừa đủ chỗ cho khung người chơi ---- */
+@media (min-width:1000px) and (min-height:600px){
+ #dq{--ch:min(calc((var(--H,780px) - 70px)/3.62),calc((100vw - 460px)/4.13))!important;--cw:calc(var(--ch)*.715)!important}
+ .dqwrap{grid-template-columns:auto calc(var(--ch)*.55) minmax(360px,1fr)!important}
+}
+@media (orientation:landscape) and (max-height:500px){
+ #dq{--ch:min(calc((var(--HL,300px) - 22px)/3),calc((100vw - 300px)/4.85))!important;--cw:calc(var(--ch)*.715)!important}
+ .dqwrap{grid-template-columns:auto calc(var(--ch)*.55) minmax(200px,1fr)!important}
+}
+
+/* ưu tiên cao nhất: kích thước viên đá theo chỗ trống thật */
+.pl .g3c .gtk{width:var(--s)!important;height:var(--s)!important}
+.pl .g3c .gtk svg{width:calc(var(--s)*.82)!important;height:calc(var(--s)*.82)!important}
+.pl .g3c .gtk b{right:calc(var(--s)*-.2)!important;bottom:calc(var(--s)*-.14)!important;min-width:calc(var(--s)*.52)!important;height:calc(var(--s)*.52)!important;font-size:calc(var(--s)*.38)!important}
+.pl .g3c .sq{width:var(--q)!important;height:var(--q)!important;font-size:calc(var(--q)*.62)!important}
+/* khung người chơi hẹp: đưa ô thẻ dự trữ xuống hàng dưới thay vì bóp nhỏ hàng đá */
+.players{container-type:inline-size}
+@container (max-width:470px){
+ html .pl{grid-template-columns:auto minmax(0,1fr)!important;grid-template-rows:auto auto!important;height:auto!important;align-items:start!important}
+ html .pl>.bagw,html .pl>.pcn{grid-row:1!important}
+ html .pl>.pcn{overflow:visible!important}
+ html .pl>.rsvw{grid-row:2!important}
+ html .pl .rsvw{grid-column:1/-1;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:8px!important;padding:5px 0 0!important;margin:5px 0 0!important;align-self:start!important;height:auto!important;border-left:none!important;border-top:1px solid rgba(233,196,106,.35)!important;border-image:none!important}
+ html .pl .rsvh{display:inline!important;font-size:11px!important}
+}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
