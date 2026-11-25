@@ -436,7 +436,7 @@ const DQART=(()=>{
     <path d="M14 30 Q12 44 18 52" stroke="#fff" stroke-opacity=".35" stroke-width="2.4" fill="none"/><path d="M16 14 Q30 22 44 14 L42 20 Q30 26 18 20Z" fill="${mix(color,'#000000',.3)}" stroke="${mix(color,'#000000',.6)}" stroke-width="1"/>
     ${n?`${gem(0,24,14,4.6,1)}${gem(2,34,12,4.2,2)}${gem(1,29,10,3.6,3)}`:''}
     <path d="M18 21 Q30 27 42 21" stroke="url(#dqGoldM)" stroke-width="2.2" fill="none"/><path d="M40 22 Q48 30 46 38 M40 22 Q50 26 52 32" stroke="url(#dqGoldM)" stroke-width="1.6" fill="none"/><circle cx="46" cy="39" r="2.2" fill="url(#dqCoin)"/><circle cx="52" cy="33" r="2.2" fill="url(#dqCoin)"/>
-    <text x="30" y="47" class="bgn">${n}</text></svg>`; }
+    <text x="30" y="47" class="bgn">${n}<tspan class="bgd" font-size="62%" dx="1">/10</tspan></text></svg>`; }
   // ---------- phỉnh đá ----------
   function chip(c,n){ const L=Math.min(Math.max(n,0),5); let s=`<svg viewBox="-34 -46 68 86" class="chip">`;
     if(!n) return s+`<ellipse cx="0" cy="16" rx="27" ry="21" fill="none" stroke="#ffffff55" stroke-width="2" stroke-dasharray="4 3"/></svg>`;

@@ -44,7 +44,7 @@ const DQ = (()=>{
       for(let c=0;c<5;c++){ P.tok[c]-=plan.pay[c]; S.bank[c]+=plan.pay[c]; } P.tok[5]-=plan.gold; S.bank[5]+=plan.gold;
       if (from==='res') P.res.splice(a.res,1); else refill(S,a.lv,a.i);
       P.cards.push(id); P.bonus[card.col]++; P.pts+=card.pts;
-      S.log.unshift(name+' mua thẻ '+DQ_COL[card.col]+(card.pts?' (+'+card.pts+' điểm)':'')+'.'); ev(S,{k:'buy',seat,id,lv:a.lv,i:a.i,res:a.res}); return after(S,seat,t); }
+      S.log.unshift(name+' mua thẻ cấp '+['','I','II','III'][card.lv]+' '+DQ_COL[card.col]+(card.pts?' — ghi +'+card.pts+' điểm (tổng '+P.pts+')':'')+'.'); ev(S,{k:'buy',seat,id,lv:a.lv,i:a.i,res:a.res}); return after(S,seat,t); }
     return false; }
   function after(S,seat,t){ const P=S.P[seat];
     if (tot(P.tok)>DQ_MAXTOK){ S.step='discard'; S.turnAt=t; return true; }

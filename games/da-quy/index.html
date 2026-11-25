@@ -238,6 +238,17 @@ const CSS=`.bank .tok .gn{display:none!important}
 .dqhist{max-height:60vh;overflow:auto;font-size:15px;text-align:left}.dqhist div{padding:5px 4px;border-bottom:1px dashed rgba(0,0,0,.15)}.dqhist i{display:inline-block;min-width:30px;color:#999;font-style:normal;font-size:12px}
 .dqhist .lg0{color:#047857}.dqhist .lg1{color:#1d4ed8}.dqhist .lg2{color:#b91c1c}.dqhist .lg3{color:#64748b}.dqhist .lg4{color:#111}.dqhist .lg5{color:#a16207}
 .tb-top .home{font-weight:bold}
+
+.bgd{font-weight:normal;opacity:.85}
+.deck .dl{left:7px!important;right:auto!important;top:6px!important;bottom:auto!important;text-align:left!important;background:rgba(0,0,0,.45);border-radius:6px;padding:1px 5px;line-height:1.1}
+.deck .dl b{display:inline!important;font-size:12px!important;margin-right:3px}.deck .dl span{display:inline!important;font-size:9px!important;opacity:.85;letter-spacing:0}
+.pts.up{animation:ptsUp 1.2s ease-out}
+@keyframes ptsUp{0%{transform:scale(1)}25%{transform:scale(1.7);color:#fff6b0;text-shadow:0 0 16px #ffd76a}100%{transform:scale(1)}}
+.pl .pts{display:inline-block;transform-origin:center}
+
+.bag .bgn{font:bold 17px "Times New Roman",serif!important;fill:#fff!important;stroke:#1a0b2e!important;stroke-width:3.2px!important;paint-order:stroke!important;opacity:1!important}
+.bag .bgd{stroke-width:2.6px}
+#tb-modal{z-index:100000!important}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
