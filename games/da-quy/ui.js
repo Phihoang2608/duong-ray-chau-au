@@ -16,6 +16,19 @@ const DQUI=(()=>{
       ov.innerHTML=`<div class="zn">${A.noble(id)}</div><div class="zi"><b>${DQ.NOBLE_NAMES[id]}</b><span>Quý tộc · 3 điểm · ghé thăm khi đủ thẻ thưởng</span><small>Bấm ra ngoài để đóng</small></div>`; }
     else return; ov.classList.add('on'); }
   // ---------- hiệu ứng bay ----------
+  function morph(par,html){ const t=document.createElement('template'); t.innerHTML=html; syncKids(par,t.content); }
+  function syncKids(a,b){ const A=a.childNodes, B=b.childNodes; let i=0;
+    for(;i<B.length;i++){ const o=A[i], n=B[i]; if(!o){ a.appendChild(n.cloneNode(true)); continue; }
+      if(o.isEqualNode(n)) continue;
+      if(o.nodeType!==n.nodeType||o.nodeName!==n.nodeName||o.nodeType!==1||(o.namespaceURI!==n.namespaceURI)||o.nodeName==='svg'&&o.childNodes.length!==n.childNodes.length){ a.replaceChild(n.cloneNode(true),o); continue; }
+      if(o.nodeType===3){ o.nodeValue=n.nodeValue; continue; }
+      const oa=o.attributes, na=n.attributes; for(let k=oa.length-1;k>=0;k--){ const at=oa[k]; if(!n.hasAttribute(at.name)) o.removeAttribute(at.name); }
+      for(let k=0;k<na.length;k++){ const at=na[k]; if(o.getAttribute(at.name)!==at.value) o.setAttribute(at.name,at.value); }
+      syncKids(o,n); }
+    while(A.length>B.length) a.removeChild(a.lastChild); }
+  const LITE=()=>document.documentElement.classList.contains('dqlite');
+  const _anim=Element.prototype.animate; if(!Element.prototype.__dqw){ Element.prototype.__dqw=1; Element.prototype.animate=function(kf,o){ return _anim.call(this,liteKF(kf),o); }; }
+  function liteKF(kf){ return LITE()&&Array.isArray(kf)?kf.map(f=>{ if(!f||f.filter==null) return f; const g=Object.assign({},f); delete g.filter; return g; }):kf; }
   function fly(from, to, html, w, h, delay, done){ if(!from||!to) return; const el=document.createElement('div'); el.className='dqfly'; el.innerHTML=html;
     const x0=from.left+from.width/2-w/2, y0=from.top+from.height/2-h/2, x1=to.left+to.width/2-w/2, y1=to.top+to.height/2-h/2;
     Object.assign(el.style,{left:x0+'px',top:y0+'px',width:w+'px',height:h+'px'}); document.body.appendChild(el);
@@ -50,7 +63,7 @@ const DQUI=(()=>{
       const el=document.createElement('div'); el.className='dqshow'; el.innerHTML=`<div class="sc">${A.card(id)}</div>`+(items?`<div class="dqgain in">${items.map(it=>`<div class="gi ${it.cls||''}">${it.icon||''}<b>${it.t}</b></div>`).join('')}</div>`:''); document.body.appendChild(el); const w=el.offsetWidth,h=el.offsetHeight;
       let x=r.left-w-14; if(x<6) x=Math.min(innerWidth-w-6,r.right+14); el.style.left=x+'px'; el.style.top=Math.max(6,Math.min(innerHeight-h-6,r.top+r.height/2-h/2))+'px';
       el.animate([{opacity:0,transform:'scale(.6) rotate(-6deg)'},{opacity:1,transform:'scale(1.04) rotate(0)',offset:.12},{opacity:1,transform:'scale(1)',offset:.2},{opacity:1,transform:'scale(1)',offset:.85},{opacity:0,transform:'translate(40px,0) scale(.5)'}],{duration:2600,easing:'ease-out',fill:'both'}).onfinish=()=>el.remove(); },delay||0); }
-  function sparkle(rect,n,col){ if(!rect) return; for(let i=0;i<(n||14);i++){ const p=document.createElement('div'); p.className='dqsp'; p.style.background=col||'#fff6c8'; p.style.left=(rect.left+rect.width/2)+'px'; p.style.top=(rect.top+rect.height/2)+'px'; document.body.appendChild(p);
+  function sparkle(rect,n,col){ if(!rect) return; n=n||14; if(LITE()) n=Math.ceil(n/3); for(let i=0;i<n;i++){ const p=document.createElement('div'); p.className='dqsp'; p.style.background=col||'#fff6c8'; p.style.left=(rect.left+rect.width/2)+'px'; p.style.top=(rect.top+rect.height/2)+'px'; document.body.appendChild(p);
       const a=Math.random()*Math.PI*2, d=30+Math.random()*60; p.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(.2)`,opacity:0}],{duration:700+Math.random()*400,easing:'ease-out'}).onfinish=()=>p.remove(); } }
   function bump(seat){ return ()=>{ const b=root.querySelector(`.pl[data-p="${seat}"] .bag`); if(b){ b.animate([{transform:'scale(1)'},{transform:'scale(1.25,.85)'},{transform:'scale(.92,1.1)'},{transform:'scale(1)'}],{duration:450}); sparkle(b.getBoundingClientRect(),10); } }; }
   function rectOf(sel){ const e=root&&root.querySelector(sel); return e?e.getBoundingClientRect():null; }
@@ -125,7 +138,7 @@ ${ticks}${rn}
         ${Q.nobles.length?`<div class="ft">👑 ${Q.nobles.map(id=>DQ.NOBLE_NAMES[id]).join(', ')}</div>`:''}</div>
         <div class="rsvw"><i class="rsvh">Thẻ dự trữ <b>${Q.res.length}/3</b></i><div class="rsv" title="Thẻ giữ chỗ (tối đa 3)">${rsv}</div></div></div>`; }).join('')}</div>
       <div class="xlog"><button class="hbtn" data-hist="1">📜 Lịch sử</button>${S.log.slice(0,4).map(l=>`<div>${logH(l,api)}</div>`).join('')}</div></div></div>`;
-    root.innerHTML=h;
+    if(root.firstChild) morph(root,h); else root.innerHTML=h;
     // khung mua / giữ chỗ nổi ngay cạnh lá bài được chọn
     if (P && pick && S.phase==='play' && !(my&&S.step==='discard')){ const cid=pick.deck?null:(pick.res!=null?P.res[pick.res]:S.board[pick.lv][pick.i]); const card=cid!=null?DQ.CARDS[cid]:null; const plan=card&&DQ.payPlan(P,card);
       const need=card?card.cost.map((v,c)=>Math.max(0,v-P.bonus[c]-P.tok[c])):null; const lack=need?Math.max(0,need.reduce((a,b)=>a+b,0)-P.tok[5]):0;
