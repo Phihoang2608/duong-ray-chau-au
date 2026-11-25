@@ -215,7 +215,7 @@ const Table = (()=>{
     document.body.classList.add('ingame'); setTop(); commit(); CFG.onStart && CFG.onStart();
   }
   function commit(){ S.v=(S.v||0)+1; if (MODE==='host'){ ROOM.presence({role:'host', name:myName(), pid:PID, lobby:false, st:S, now:Date.now()}).catch(()=>{}); announce(); } draw(); }
-  function draw(){ if(!S) return; document.body.classList.add('ingame'); setTop(); CFG.render(S, ME, API); }
+  function draw(){ if(!S) return; document.body.classList.add('ingame'); setTop(); CFG.render(S, ME, API); try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S,ME}); }catch(e){} }
   function act(a){
     SFX.init(); if (!S) return false;
     if (MODE==='client'){ if (waiting) return false; seq++; waiting=true; ROOM.presence({act:Object.assign({},a,{n:seq})}).catch(()=>{ waiting=false; }); setTimeout(()=>{ waiting=false; },4000); return true; }
@@ -268,6 +268,6 @@ const Table = (()=>{
   function setTop(){ const on=MODE!=='local'; $('#tb-chatbtn').style.display=on?'':'none'; $('#tb-leave').style.display=on?'':'none'; $('#tb-code').innerHTML=on&&CODE?`Phòng <b>${esc(CODE)}</b>`:''; if(!on) $('#tb-chat').classList.remove('show'); }
 
   const API={ act, now, toast, modal, esc, avatar, me:()=>ME, mode:()=>MODE, isMine:seat=>seat===ME, menu, rematch:()=>{ if(MODE==='client') return toast('Chờ chủ phòng bắt đầu ván mới'); S=CFG.newGame(S.seats, now(), S); commit(); } };
-  function init(cfg){ CFG=cfg; shell(); const m=(location.hash||'').match(/^#p-([a-z0-9]{4,6})$/i); if(m){ menu(); askJoin(m[1].toUpperCase()); } else menu(); }
+  function init(cfg){ CFG=cfg; shell(); if(!window.PBG&&!document.getElementById('pbg-js')){ const a=document.createElement('script'); a.id='pbg-js'; a.src='../../core/account.js'; document.head.appendChild(a); } const m=(location.hash||'').match(/^#p-([a-z0-9]{4,6})$/i); if(m){ menu(); askJoin(m[1].toUpperCase()); } else menu(); }
   return { init, API };
 })();

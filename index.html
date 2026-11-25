@@ -550,5 +550,6 @@ $('#joinForm').addEventListener('submit',e=>{
   s.onerror=()=>{ const s2=document.createElement('script'); s2.src='https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js'; s2.onload=connect; s2.onerror=connect; document.head.appendChild(s2); };
   document.head.appendChild(s); })();
 </script>
+<script src="core/account.js"></script>
 </body>
 </html>
