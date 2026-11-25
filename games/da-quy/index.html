@@ -308,6 +308,40 @@ const CSS=`.bank .tok .gn{display:none!important}
 .sttx{flex:1;min-width:0}
 @media (max-height:700px){.bigck .ckw{width:54px;height:60px}}
 @media (max-width:760px){.bigck .ckw{width:46px;height:51px}}
+
+/* ---- chữ trên nút đá quý ---- */
+#dq .tbtn.pri,.dqpop .tbtn.pri,#dq .tbtn.gold,.dqpop .tbtn.gold,.dqpop .tbtn{display:inline-flex!important;align-items:center;justify-content:center;gap:6px;text-align:center;line-height:1}
+.bank .tbtn.pri{display:flex!important;width:100%;box-sizing:border-box;padding:12px 16px!important;font-size:15px!important}
+.gtx{position:relative;z-index:2;font:bold 1em "Times New Roman",serif;letter-spacing:.05em;white-space:nowrap;
+ background:linear-gradient(180deg,#fffdf0 0%,#fff3c2 40%,#f2c94c 62%,#fff1b8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+ filter:drop-shadow(0 1px 0 #053b20) drop-shadow(0 0 2px rgba(0,0,0,.55))}
+#dq .tbtn.pri,.dqpop .tbtn.pri,#dq .tbtn.gold,.dqpop .tbtn.gold{text-shadow:none!important}
+.tbtn.gold .gtx{background:linear-gradient(180deg,#5a2c00 0%,#3a1a00 55%,#7a4205 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 rgba(255,240,190,.8))}
+.dqpop .tbtn:not(.pri):not(.gold) .gtx{background:linear-gradient(180deg,#fff 0%,#dfe3ea 55%,#9aa1ad 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #000)}
+.gct{position:relative;z-index:2;font:bold 12px "Times New Roman",serif;font-style:normal;min-width:18px;height:18px;line-height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7cf,#e2b13c 60%,#8a5a12);color:#3a2200;box-shadow:0 0 0 1px #5a3a08}
+.tbtn:disabled .gtx{filter:none;background:linear-gradient(#d6d6d6,#9a9a9a);-webkit-background-clip:text;background-clip:text}
+/* ---- lưới thẻ giảm giá / đá đang có ---- */
+.gr2{display:grid;grid-template-columns:max-content repeat(6,minmax(26px,1fr));align-items:center;justify-items:center;column-gap:6px;row-gap:5px;margin-top:6px;min-width:0}
+.gr2 .gl{justify-self:end;font:italic 11.5px/1.1 "Times New Roman",serif;color:#e9d9b0;white-space:nowrap;padding-right:4px;border-right:1px solid rgba(233,217,176,.35)}
+.gr2 .gb{display:flex}.gr2 .tk{justify-self:center}
+.pl.turn .gr2 .gl{font-size:13px}
+.pcn{min-width:0}
+/* ---- khu thẻ dự trữ ---- */
+.rsvw{display:flex;flex-direction:column;align-items:center;gap:4px;padding-left:12px;margin-left:4px;border-left:2px solid transparent;border-image:linear-gradient(transparent,rgba(233,196,106,.7),transparent) 1;align-self:stretch;justify-content:center}
+.rsvh{font:italic bold 12px "Times New Roman",serif;color:#f3d98b;letter-spacing:.03em;white-space:nowrap}.rsvh b{font-style:normal;color:#fff;font-weight:normal;opacity:.8;margin-left:2px}
+.pl.turn .rsvh{font-size:13.5px}
+
+.bank .tbtn.pri{padding:12px 6px!important;font-size:14.5px!important}
+.tbtn:disabled .gtx{background:linear-gradient(#f2f2f2,#c9c9c9)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #000)!important}
+.gr2{grid-template-columns:max-content repeat(6,minmax(30px,1fr));column-gap:4px}
+.gr2 .gl{text-align:right;font-size:10.5px!important;line-height:1.05}
+.gr2 .tk{gap:1px!important}
+.pl.turn .gr2 .tk{font-size:15px!important}.pl.turn .gr2 .tk svg{width:19px!important;height:19px!important}
+.pl.turn .gr2 .gb .bon{width:28px!important;height:38px!important}
+.pl.turn .rsv .rslot,.pl.turn .rsv .rcd,.pl.turn .rsv .dqc{width:50px!important;height:70px!important}
+.rsvw{padding-left:8px}
+
+.tbtn.pri .gtx{filter:drop-shadow(0 1px 0 #021a0e) drop-shadow(0 0 1.5px #021a0e) drop-shadow(0 0 3px rgba(2,26,14,.8))}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,

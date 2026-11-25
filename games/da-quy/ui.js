@@ -88,7 +88,7 @@ ${ticks}${rn}
       h+=`</div>`; });
     const gemTok=c=>`<div class="tok ${sel.includes(c)?'on':''} ${c===5?'gold':''}" data-tok="${c}" title="${DQ_COL[c]}">${A.floatGem(c,S.bank[c])}<span>${S.bank[c]}</span><em class="gn">${GN[c]}</em>${sel.filter(x=>x===c).length>1?'<i>×2</i>':''}</div>`;
     h+=`</div><div class="bank"><div class="bt">Ngân khố</div><div class="gems">${[0,1,2,3,4].map(gemTok).join('')}</div>
-      <button class="tbtn pri" data-a="take" ${my&&S.step==='main'&&validTake(S)?'':'disabled'}>Lấy đá${sel.length?' ('+sel.length+')':''}</button>
+      <button class="tbtn pri" data-a="take" ${my&&S.step==='main'&&validTake(S)?'':'disabled'}><span class="gtx">Lấy đá</span></button>
       <small>3 màu khác nhau, hoặc 2 viên cùng màu (còn từ 4).</small>
       <div class="goldbox"><div class="bt">Vàng</div>${gemTok(5)}<small>Nhận khi giữ chỗ thẻ</small></div></div>`;
     let act='';
@@ -102,9 +102,9 @@ ${ticks}${rn}
         return `<div class="pl ${S.turn===i&&S.phase==='play'?'turn':''} ${mine?'me':''} ${S.phase==='over'&&S.winner===i?'win':''}" data-p="${i}" style="--pc:${PCOL[i]}">
         ${S.turn===i&&S.phase==='play'?`<i class="tbadge">${mine?'Lượt của bạn':'Đang đi'}</i>`:''}${S.turn===i&&S.step==='discard'&&S.phase==='play'?'<i class="ovl">Quá tải!</i>':''}<div class="bagw ${DQ.tot(Q.tok)>10?'over':''}" title="Túi đá ${PCN[i]}">${A.bag(PCOL[i],DQ.tot(Q.tok))}</div><div class="pcn">
         <div class="ph">${api.avatar(p.name,i)}<b>${api.esc(p.name)}</b>${mine?' <small>(bạn)</small>':''}${S.turn===i&&S.phase==='play'?`<span class="tmr">${clockSVG(Math.min(60,Math.max(0,(t-S.turnAt)/1000)).toFixed(2),0)}</span>`:''}<span class="pts ${(PREV[i]!=null&&Q.pts>PREV[i])?'up':''}"><small>điểm</small>${Q.pts}</span></div>
-        <div class="gr"><div class="gc glab"><i class="l1" title="Mỗi thẻ đã mua giảm 1 viên cùng màu khi mua thẻ khác">Thẻ<br>giảm giá</i><i class="l2" title="Số đá quý đang có trong túi">Đá<br>đang có</i></div>${[0,1,2,3,4,5].map(c=>`<div class="gc">${c<5?`<span title="Giảm ${Q.bonus[c]} ${DQ_COL[c]} khi mua thẻ">${A.bonus(c,Q.bonus[c])}</span>`:'<div class="bon gph"></div>'}<span class="tk ${Q.tok[c]?'':'z'}" ${mine&&S.step==='discard'&&my&&Q.tok[c]?`data-ret="${c}"`:''}>${A.gemSVG(c,17,c)}<b>${Q.tok[c]}</b></span></div>`).join('')}</div>
+        <div class="gr2"><i class="gl" title="Mỗi thẻ đã mua giảm 1 viên cùng màu khi mua thẻ khác">Thẻ<br>giảm giá</i>${[0,1,2,3,4].map(c=>`<span class="gb" title="Giảm ${Q.bonus[c]} ${DQ_COL[c]} khi mua thẻ">${A.bonus(c,Q.bonus[c])}</span>`).join('')}<span></span><i class="gl" title="Số đá quý đang có trong túi">Đá<br>đang có</i>${[0,1,2,3,4,5].map(c=>`<span class="tk ${Q.tok[c]?'':'z'}" ${mine&&S.step==='discard'&&my&&Q.tok[c]?`data-ret="${c}"`:''}>${A.gemSVG(c,17,c)}<b>${Q.tok[c]}</b></span>`).join('')}</div>
         ${Q.nobles.length?`<div class="ft">👑 ${Q.nobles.map(id=>DQ.NOBLE_NAMES[id]).join(', ')}</div>`:''}</div>
-        <div class="rsv" title="Thẻ giữ chỗ (tối đa 3)">${rsv}</div></div>`; }).join('')}</div>
+        <div class="rsvw"><i class="rsvh">Thẻ dự trữ <b>${Q.res.length}/3</b></i><div class="rsv" title="Thẻ giữ chỗ (tối đa 3)">${rsv}</div></div></div>`; }).join('')}</div>
       <div class="xlog"><button class="hbtn" data-hist="1">📜 Lịch sử</button>${S.log.slice(0,4).map(l=>`<div>${logH(l,api)}</div>`).join('')}</div></div></div>`;
     root.innerHTML=h;
     // khung mua / giữ chỗ nổi ngay cạnh lá bài được chọn
@@ -114,7 +114,7 @@ ${ticks}${rn}
       pop.innerHTML=`<b>${pick.deck?'Thẻ úp · '+LVN[pick.deck]:A.jewelName(cid)+(card.pts?' · '+card.pts+' điểm':'')}</b>
         ${card?(plan?`<div class="pay">Trả: ${plan.pay.map((v,c)=>v?`<span>${A.gemSVG(c,18,c)}${v}</span>`:'').join('')}${plan.gold?`<span>${A.gemSVG(5,18,5)}${plan.gold}</span>`:''}${plan.pay.every(v=>!v)&&!plan.gold?'<span>miễn phí</span>':''}</div>`:`<div class="pay warn">Còn thiếu ${lack} viên: ${need.map((v,c)=>v?`<span>${A.gemSVG(c,16,c)}${v}</span>`:'').join('')}</div>`):''}
         ${!my?'<div class="pay">Chưa đến lượt bạn</div>':''}
-        <div class="pb">${card?`<button class="tbtn pri" data-a="buy" ${my&&plan?'':'disabled'}>Mua thẻ</button>`:''}${pick.res==null?`<button class="tbtn gold" data-a="reserve" ${my&&P.res.length<3?'':'disabled'}>Giữ chỗ${S.bank[5]?' + 1 Vàng':''}</button>`:''}<button class="tbtn" data-a="cancel">Đóng</button></div>
+        <div class="pb">${card?`<button class="tbtn pri" data-a="buy" ${my&&plan?'':'disabled'}><span class="gtx">Mua thẻ</span></button>`:''}${pick.res==null?`<button class="tbtn gold" data-a="reserve" ${my&&P.res.length<3?'':'disabled'}><span class="gtx">Giữ chỗ${S.bank[5]?' + 1 Vàng':''}</span></button>`:''}<button class="tbtn" data-a="cancel"><span class="gtx">Đóng</span></button></div>
         ${pick.res==null&&P.res.length>=3?'<div class="pay warn">Đã giữ đủ 3 thẻ</div>':''}`;
       root.appendChild(pop);
       const el=root.querySelector(pick.deck?`[data-deck="${pick.deck}"]`:pick.res!=null?`[data-res="${pick.res}"]`:`[data-lv="${pick.lv}"][data-i="${pick.i}"]`);
