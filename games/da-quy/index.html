@@ -288,6 +288,26 @@ const CSS=`.bank .tok .gn{display:none!important}
  clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,12px 100%,0 50%);
  background:linear-gradient(180deg,rgba(255,255,255,.4) 0,rgba(255,255,255,.08) 46%,rgba(0,0,0,0) 54%,rgba(0,0,0,.35) 100%),conic-gradient(from 210deg at 50% 55%,#111,#5b5f6b,#1c1d24,#a6abb8,#111,#4a4d57,#1c1d24,#8d92a0,#111)!important;
  box-shadow:none!important;filter:drop-shadow(0 3px 0 #000) drop-shadow(0 5px 8px rgba(0,0,0,.5))}
+
+/* ---- đồng hồ quý tộc ---- */
+.tmr{background:none!important;padding:0!important;display:inline-block;vertical-align:middle;margin-left:4px}
+.ckw{display:block;width:30px;height:35px;overflow:visible;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+.pl.turn .ckw{width:40px;height:45px}
+.ckw .ckn{font:bold 7px "Times New Roman",serif;fill:#ffe9a8;text-anchor:middle}
+.ckw .ckt{font:bold 9px "Times New Roman",serif;fill:#ffe9a8;text-anchor:middle}
+.ckw .ckhand{transform-box:view-box;transform-origin:50px 50px;animation:ckRot 60s linear forwards}
+@keyframes ckRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.ckw .ckarc{stroke:#f6d77a;animation:ckArc 60s linear forwards}
+@keyframes ckArc{from{stroke-dashoffset:0}to{stroke-dashoffset:var(--C)}}
+.ckw.low .ckarc{stroke:#ef4444}.ckw.low .ckt{fill:#fca5a5}.ckw.low{animation:ckPulse .5s ease-in-out infinite alternate}
+@keyframes ckPulse{to{filter:drop-shadow(0 0 8px #ef4444) drop-shadow(0 2px 3px rgba(0,0,0,.6))}}
+.ckw .ckcrown{transform-box:view-box;transform-origin:50px 0;animation:ckCrown 3s ease-in-out infinite}
+@keyframes ckCrown{50%{transform:translateY(-1.5px)}}
+.stat.hasck{display:flex;align-items:center;gap:12px;padding:6px 12px 6px 8px!important}
+.bigck{flex:0 0 auto}.bigck .ckw{width:72px;height:82px}
+.sttx{flex:1;min-width:0}
+@media (max-height:700px){.bigck .ckw{width:54px;height:60px}}
+@media (max-width:760px){.bigck .ckw{width:46px;height:51px}}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
