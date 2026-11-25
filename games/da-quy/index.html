@@ -443,6 +443,58 @@ const CSS=`.bank .tok .gn{display:none!important}
 .dqlite [filter]{filter:none!important}
 .dqlite .dqsp{box-shadow:none!important}
 .dqlite .bon,.dqlite .bag,.dqlite .dqc,.dqlite .dqn,.dqlite .tok svg,.dqlite .gtx,.dqlite .tbtn{filter:none!important}
+
+/* ---- điện thoại xoay ngang ---- */
+@media (orientation:landscape) and (max-height:500px){
+ html,body{overflow-x:hidden}
+ .tb-top{padding:3px 8px!important;gap:6px!important;min-height:0!important}
+ .tb-top h1{font-size:15px!important;margin:0!important}
+ .tb-top .tbtn{padding:3px 8px!important;font-size:12px!important}
+ #dq{--ch:calc((var(--HL,300px) - 26px)/3.62);--cw:calc(var(--ch)*.715);height:var(--HL,300px)!important;box-sizing:border-box;padding:5px!important;margin:0 auto!important;overflow:hidden;max-width:100vw}
+ .dqwrap{display:grid!important;height:100%;grid-template-columns:auto calc(var(--ch)*.62) minmax(0,1fr)!important;gap:6px!important;align-items:stretch!important}
+ .dqboard{display:flex;flex-direction:column;gap:3px!important;justify-content:space-between}
+ .nobles{gap:4px!important;margin:0!important;justify-content:center}
+ .dqn,.dqn svg{width:calc(var(--ch)*.6)!important;height:calc(var(--ch)*.6)!important}.dqn span{display:none!important}
+ .row{gap:3px!important}
+ .dqc,.deck{width:var(--cw)!important;height:var(--ch)!important;border-radius:5px!important}
+ .deck .dl{top:2px!important;left:2px!important;padding:0 3px!important}.deck .dl span{display:none!important}.deck .dl b{font-size:10px!important}
+ .bank{display:flex!important;flex-direction:column!important;justify-content:space-between!important;padding:4px 2px!important;gap:2px!important;height:100%;box-sizing:border-box;overflow:hidden}
+ .bank>.bt,.bank>small,.goldbox small,.goldbox .bt{display:none!important}
+ .bank .gems{display:flex!important;flex-direction:column!important;gap:1px!important;align-items:center}
+ .bank .tok{width:calc(var(--ch)*.55)!important;height:calc(var(--ch)*.5)!important;margin:0!important}
+ .bank .tok span{font-size:9px!important}
+ .bank .tbtn.pri{padding:6px 2px!important;font-size:11px!important;width:100%!important}
+ .goldbox{margin:0!important;padding:0!important;border:none!important;display:flex;justify-content:center}
+ .side{height:100%!important;min-width:0;display:flex!important;flex-direction:column;gap:4px!important;overflow-y:auto;overflow-x:hidden;max-width:none!important}
+ .stat{font-size:11.5px!important;padding:4px 8px!important;line-height:1.25!important}
+ .players{display:flex!important;flex-direction:column!important;gap:4px!important}
+ .pl{grid-template-columns:34px minmax(0,1fr) auto!important;gap:4px!important;padding:4px 6px!important;min-width:0!important;border-left-width:4px!important}
+ .pl.turn{padding:5px 6px!important;border-width:2px!important}
+ .bagw,.bag,.pl.turn .bagw,.pl.turn .bag{width:34px!important;height:37px!important}
+ .bag .bgn{font-size:13px!important}
+ .pl .ph,.pl.turn .ph{font-size:12px!important;gap:3px!important;flex-wrap:nowrap;white-space:nowrap}
+ .pl .ph .av,.pl .ph img,.pl .ph .avatar{width:18px!important;height:18px!important;font-size:10px!important}
+ .pl .pts,.pl.turn .pts{font-size:18px!important}.pl .pts small{font-size:9px!important}
+ .ckw,.pl.turn .ckw{width:24px!important;height:28px!important}.tms,.pl.turn .tms{font-size:13px!important}.tms small{display:none}
+ .gr2{margin-top:2px!important;row-gap:2px!important;column-gap:2px!important;grid-template-columns:max-content repeat(6,minmax(0,1fr))!important}
+ .gr2 .gl{font-size:8px!important;padding-right:2px!important}
+ .bon,.pl.turn .gr2 .gb .bon{width:17px!important;height:23px!important}
+ .pl .tk,.pl.turn .gr2 .tk{font-size:10.5px!important}.pl .tk svg,.pl.turn .gr2 .tk svg{width:11px!important;height:11px!important}
+ .rsvw{padding-left:4px!important;gap:1px!important}.rsvh{font-size:9px!important}.rsvh b{display:none}
+ .rsv{flex-direction:row!important;gap:2px!important}
+ .rsv .rslot,.rsv .rcd,.rsv .dqc,.pl.turn .rsv .rslot,.pl.turn .rsv .rcd,.pl.turn .rsv .dqc{width:24px!important;height:34px!important}
+ .tbadge{font-size:9px!important;top:-8px!important;padding:0 6px!important}
+ .ovl{font-size:9px!important;top:2px!important;left:2px!important}
+ .ft{display:none!important}
+ .xlog{display:none!important}
+ .retcap{font-size:10px!important;padding:2px 6px!important}
+}
+
+@media (orientation:landscape) and (max-height:500px){
+ .bank .tbtn.pri{padding:7px 0!important;font-size:10.5px!important;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 50%,calc(100% - 6px) 100%,6px 100%,0 50%)!important}
+ .bank .tbtn.pri .gtx{letter-spacing:0!important}
+ .dqpop{transform:scale(.8);transform-origin:top left}
+}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,

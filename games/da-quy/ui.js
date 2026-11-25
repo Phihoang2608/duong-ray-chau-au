@@ -67,7 +67,7 @@ const DQUI=(()=>{
       const a=Math.random()*Math.PI*2, d=30+Math.random()*60; p.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) scale(.2)`,opacity:0}],{duration:700+Math.random()*400,easing:'ease-out'}).onfinish=()=>p.remove(); } }
   function bump(seat){ return ()=>{ const b=root.querySelector(`.pl[data-p="${seat}"] .bag`); if(b){ b.animate([{transform:'scale(1)'},{transform:'scale(1.25,.85)'},{transform:'scale(.92,1.1)'},{transform:'scale(1)'}],{duration:450}); sparkle(b.getBoundingClientRect(),10); } }; }
   function rectOf(sel){ const e=root&&root.querySelector(sel); return e?e.getBoundingClientRect():null; }
-  function fit(){ if(!root) return; const top=root.getBoundingClientRect().top+scrollY; root.style.setProperty('--H',Math.max(560,innerHeight-top-8)+'px'); }
+  function fit(){ if(!root) return; const top=root.getBoundingClientRect().top+scrollY; root.style.setProperty('--H',Math.max(560,innerHeight-top-8)+'px'); root.style.setProperty('--HL',Math.max(240,innerHeight-top-4)+'px'); }
   addEventListener('resize',()=>{ if(window.__S) render(window.__S,Table.API.me(),Table.API); });
   const GS={buf:{},ld:false,
     load(){ if(this.ld||!SFX.ctx) return; this.ld=true; ['chip-lay-1','chip-lay-2','chip-lay-3','chips-collide-1','chips-collide-2','chips-collide-3','chips-collide-4','glass_002','glass_003'].forEach(n=>fetch('assets/sfx/'+n+'.mp3').then(r=>r.arrayBuffer()).then(a=>SFX.ctx.decodeAudioData(a)).then(b=>this.buf[n]=b).catch(()=>{})); },
