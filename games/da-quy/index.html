@@ -560,6 +560,24 @@ body{background:#140609!important}
  .dqtools a,.dqtools button{width:26px;height:26px;font-size:13px}
  .side{padding-bottom:38px!important}
 }
+
+@media (orientation:landscape) and (max-height:500px){
+ .dqpop{transform:none!important;padding:6px 10px!important;font-size:11.5px!important;max-width:220px}
+ .dqpop b{font-size:12.5px!important}
+ .dqpop .tbtn{padding:6px 16px!important;font-size:12px!important;margin:2px 0!important}
+ .dqpop .pb{gap:3px!important}
+}
+
+@media (orientation:landscape) and (max-height:500px){
+ html .dqpop{min-width:0!important;padding:7px 10px!important;gap:4px!important;font-size:11.5px!important}
+ html .dqpop .tbtn.pri,html .dqpop .tbtn.gold,html .dqpop .tbtn:not(.pri):not(.gold){padding:6px 16px!important;font-size:12px!important}
+}
+
+@media (orientation:landscape) and (max-height:500px){
+ #dq .dqpop .tbtn.pri,#dq .dqpop .tbtn.gold,#dq .dqpop .tbtn:not(.pri):not(.gold){padding:6px 16px!important;font-size:12px!important}
+ #dq .dqpop>*{font-size:11.5px!important}#dq .dqpop>b{font-size:13px!important}
+ #dq .dqpop svg{width:14px!important;height:14px!important}
+}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
