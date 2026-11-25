@@ -97,6 +97,11 @@ ${ticks}${rn}
 <circle cx="50" cy="50" r="4.2" fill="url(#ckG)" stroke="#5a3a08" stroke-width=".5"/><circle cx="50" cy="50" r="2.6" fill="url(#ckRb)"/><circle cx="49.2" cy="49.2" r=".8" fill="#fff"/>
 <g class="ckdig"><rect x="36" y="58" width="28" height="15" rx="7.5" fill="#0d0309" stroke="url(#ckG)" stroke-width=".9"/><text x="50" y="69.6" class="ckt">${left}</text></g>
 </svg>`; }
+  function lastBanner(S,ev,ME){ const n=S.seats.length, left=n-1-ev.seat, nm=S.seats[ev.seat].name;
+    const b=document.createElement('div'); b.className='dqlast';
+    b.innerHTML=`<div class="t">⚜ VÒNG CUỐI ⚜</div><div class="m"><b>${Table.API.esc(nm)}</b> đã đạt <b>${ev.pts} điểm</b>!</div><div class="s">${left>0?`Còn <b>${left}</b> lượt nữa — mọi người đi nốt vòng này rồi kết thúc.`:'Đây là lượt cuối cùng — tính điểm ngay!'}</div>`;
+    document.body.appendChild(b); setTimeout(()=>b.classList.add('out'),3600); setTimeout(()=>b.remove(),4200);
+    if(SFX.ok&&SFX.ok()){ [523,659,784,1047].forEach((f,i)=>SFX.tone(f,.35,{vol:.12,at:i*.13,type:'triangle'})); } }
   function logH(l,api){ let h=api.esc(l); DQ_COL.forEach((n,c)=>{ h=h.split(n).join(`<span class="lg">${A.gemSVG(c,18,c)}<b class="lg${c}">${n}</b></span>`); }); return h; }
   function showHist(){ const api=Table.API, S=window.__S; if(!S) return; const L=S.log; api.modal('📜 Lịch sử ván chơi', `<div class="dqhist">${L.map((l,i)=>`<div><i>${L.length-i}</i>${logH(l,api)}</div>`).join('')}</div>`, [{t:'Đóng',pri:1}]); }
   let ZM=1;
@@ -142,7 +147,8 @@ ${ticks}${rn}
     else if (my && S.step==='discard') act=`<b class="warn blink">⚠️ Túi quá tải (${DQ.tot(P.tok)}/10)!</b> <span>Hết lượt phải trả bớt cho còn 10 viên — bấm viên đá đang nhấp nháy trong khung của bạn để trả <b>${DQ.tot(P.tok)-10}</b> viên tùy chọn.</span>`;
     else if (pick) act=`<span>Đã chọn thẻ — bấm <b>Mua</b> hoặc <b>Giữ chỗ</b> ở khung cạnh lá bài.</span>`;
     else act = (!my&&S.phase==='play'&&S.step==='discard')?`<span>⚠️ Túi của ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')} quá tải (${DQ.tot(S.P[S.turn].tok)}/10) — đang trả bớt cho còn 10 viên…</span>`:my?'<b class="me blink">Đến lượt bạn!</b> lấy đá ở ngân khố, hoặc bấm 1 lá để mua / giữ chỗ.':`<span>Đang chờ ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')}…</span>`;
-    h+=`<div class="side"><div class="stat"><div class="sttx">${act}</div></div><div class="players">${S.seats.map((p,i)=>{ const Q=S.P[i], mine=i===ME;
+    const lastTxt=S.last&&S.phase==='play'?`<div class="lastbar">⚜ VÒNG CUỐI — ${S.seats.length-1-S.turn>0?`còn <b>${S.seats.length-1-S.turn}</b> lượt nữa sau lượt này`:'<b>lượt cuối cùng</b>'} ⚜</div>`:'';
+    h+=`<div class="side">${lastTxt}<div class="stat"><div class="sttx">${act}</div></div><div class="players">${S.seats.map((p,i)=>{ const Q=S.P[i], mine=i===ME;
         const rsv=[0,1,2].map(r=>{ const id=Q.res[r]; if(id==null) return '<div class="rslot"></div>';
           return mine?cardEl(id,`data-res="${r}"`,'rcd '+(pick&&pick.res===r?'pk ':'')+(DQ.payPlan(P,DQ.CARDS[id])?'can':'')):`<div class="rcd rb" title="Thẻ giữ chỗ cấp ${DQ.CARDS[id].lv}">${A.back(DQ.CARDS[id].lv)}</div>`; }).join('');
         return `<div class="pl ${S.turn===i&&S.phase==='play'?'turn':''} ${mine?'me':''} ${S.phase==='over'&&S.winner===i?'win':''}" data-p="${i}" style="--pc:${PCOL[i]}">
@@ -175,6 +181,7 @@ ${ticks}${rn}
       else if(ev.k==='buy'){ const C=DQ.CARDS[ev.id], sd=ev.seat; SFX.flip(); buyFly(pre.card,sd,ev.id,()=>{ SFX.stone&&SFX.stone(0,.6); if(C.pts) setTimeout(()=>ptsPop(sd,C.pts),150); },ev.res!=null); if(sd===ME&&C.pts) setTimeout(()=>api.toast('+'+C.pts+' điểm uy tín',true),1300); }
       else if(ev.k==='reserve'){ fly(pre.card, rectOf(`.pl[data-p="${ev.seat}"] .rsv`), ev.id!=null?A.card(ev.id):A.back(ev.deck||1),110,154,0); gain(ev.seat,[{t:'Giữ chỗ thẻ cấp '+['','I','II','III'][ev.lv||DQ.CARDS[ev.id]?.lv||ev.deck],cls:'cd'}],850); if(ev.gold!==false) bagPop(ev.seat,[{c:5,n:1}],700); setTimeout(()=>fly(rectOf('[data-tok="5"]'),rectOf(`.pl[data-p="${ev.seat}"] .bag`),A.gemSVG(5,40,5),40,40,0,bump(ev.seat)),250); SFX.flip(); }
       else if(ev.k==='noble'){ fly(pre.nob,target,A.noble(ev.id),96,96,0,()=>sparkle(target,26,'#ffe27a')); gain(ev.seat,[{t:DQ.NOBLE_NAMES[ev.id]+' ghé thăm',cls:'cd'},],800); setTimeout(()=>ptsPop(ev.seat,3),900); if(ev.seat===ME){ api.toast(DQ.NOBLE_NAMES[ev.id]+' ghé thăm bạn: +3 điểm!',true); FX.confetti(innerWidth/2,innerHeight*.4,60); } else api.toast(DQ.NOBLE_NAMES[ev.id]+' ghé thăm '+api.esc(S.seats[ev.seat].name)); }
+      else if(ev.k==='last'){ setTimeout(()=>lastBanner(S,ev,ME),900); }
       else if(ev.k==='over'){ SFX.ding(); if(S.winner===ME){ SFX.reward(); FX.confetti(innerWidth/2,innerHeight*.45,140); } }
       if (S.phase==='play'&&S.turn===ME&&ev.k!=='ret'&&SFX.hiss) SFX.hiss(); } }
   }

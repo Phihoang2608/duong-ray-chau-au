@@ -52,7 +52,7 @@ const DQ = (()=>{
   function endTurn(S,t){ const seat=S.turn, P=S.P[seat], n=S.seats.length;
     const ok=S.nobles.filter(id=>NOBLES[id].req.every((r,c)=>P.bonus[c]>=r));
     if (ok.length){ const id=ok[0]; S.nobles=S.nobles.filter(x=>x!==id); P.nobles.push(id); P.pts+=3; S.log.unshift(NOBLE_NAMES[id]+' ghé thăm '+S.seats[seat].name+' (+3 điểm).'); ev(S,{k:'noble',seat,id,from:S.nobles.length}); }
-    if (P.pts>=DQ_WIN && !S.last){ S.last=true; S.log.unshift(S.seats[seat].name+' đạt '+P.pts+' điểm — chơi nốt vòng này!'); }
+    if (P.pts>=DQ_WIN && !S.last){ S.last=true; S.lastBy=seat; S.log.unshift('⚠️ VÒNG CUỐI: '+S.seats[seat].name+' đạt '+P.pts+' điểm — những người còn lại đi nốt vòng này!'); ev(S,{k:'last',seat,pts:P.pts}); }
     S.step='main';
     if ((S.last || S.round>=60) && seat===n-1){ finish(S,t); return; }
     S.turn=(seat+1)%n; if(S.turn===0) S.round++; S.turnAt=t;

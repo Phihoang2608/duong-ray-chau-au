@@ -762,6 +762,20 @@ body{background:#140609!important}
  html .pl .rsvw{grid-column:1/-1;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:8px!important;padding:5px 0 0!important;margin:5px 0 0!important;align-self:start!important;height:auto!important;border-left:none!important;border-top:1px solid rgba(233,196,106,.35)!important;border-image:none!important}
  html .pl .rsvh{display:inline!important;font-size:11px!important}
 }
+
+.dqlast{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%) scale(.6);z-index:9990;opacity:0;animation:lastIn .5s cubic-bezier(.2,1.4,.4,1) forwards;
+ min-width:min(440px,90vw);padding:18px 26px;text-align:center;font-family:"Times New Roman",serif;color:#fff3cf;border-radius:16px;
+ background:radial-gradient(ellipse at 50% 0,rgba(255,230,160,.25),transparent 60%),linear-gradient(180deg,#6b1a33,#2a0812);
+ border:3px solid #e9c46a;box-shadow:0 0 0 2px #5e1730,0 0 0 6px #c9a24e,0 0 40px rgba(255,200,80,.6),0 20px 50px rgba(0,0,0,.7)}
+.dqlast .t{font-size:30px;font-weight:bold;letter-spacing:.08em;background:linear-gradient(180deg,#fffbe6,#f6d77a 55%,#c99626);-webkit-background-clip:text;background-clip:text;color:transparent}
+.dqlast .m{font-size:18px;margin-top:6px}.dqlast .s{font-size:15px;margin-top:4px;opacity:.9}.dqlast b{color:#ffe08a}
+.dqlast.out{animation:lastOut .5s ease-in forwards}
+@keyframes lastIn{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes lastOut{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-60%) scale(.9)}}
+.lastbar{margin-bottom:6px;padding:6px 10px;border-radius:10px;text-align:center;font:bold 14px "Times New Roman",serif;color:#ffe08a;letter-spacing:.04em;
+ background:linear-gradient(90deg,#4a0b22,#7a1238,#4a0b22);border:1.5px solid #e9c46a;box-shadow:0 0 12px rgba(255,200,80,.35);animation:blinkTxt 1.6s ease-in-out infinite}
+.lastbar b{color:#fff}
+@media (orientation:landscape) and (max-height:500px){ .lastbar{font-size:11px;padding:3px 6px;margin-bottom:3px} .dqlast .t{font-size:22px} }
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
