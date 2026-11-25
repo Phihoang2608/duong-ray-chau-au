@@ -834,6 +834,15 @@ body{background:#140609!important}
  .g3l::before{content:attr(data-s);font-size:9.5px;font-style:italic}
  html .pl{align-items:center!important}
 }
+
+/* ---- khung của chính mình luôn đứng đầu và nổi bật trên màn hình của mình ---- */
+#dq .players>.pl.me{order:-1}
+#dq .pl.me{background:linear-gradient(180deg,rgba(120,30,60,.55),rgba(40,10,20,.75))!important;box-shadow:0 0 0 2px #e9c46a,0 0 16px rgba(233,196,106,.45)!important}
+#dq .pl.me.turn{box-shadow:0 0 0 3px #ffe08a,0 0 24px rgba(255,215,110,.75)!important}
+#dq .pl.me .ph>b{color:#ffe08a;font-size:1.12em}
+#dq .pl:not(.me){opacity:.93}
+@media (min-width:641px) and (min-height:501px){ #dq .pl.me{--tw:33px;--sqz:22px} #dq .pl.me .gtk{font-size:19px} }
+.mebadge{display:inline-block;margin-left:4px;padding:0 6px;border-radius:7px;font:bold 10px/16px "Times New Roman",serif;color:#3a2410;background:linear-gradient(180deg,#ffe48a,#c99626);vertical-align:middle}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
