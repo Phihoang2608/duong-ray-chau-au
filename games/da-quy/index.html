@@ -743,7 +743,7 @@ body{background:#140609!important}
  .dqwrap{grid-template-columns:auto calc(var(--ch)*.55) minmax(360px,1fr)!important}
 }
 @media (orientation:landscape) and (max-height:500px){
- #dq{--ch:min(calc((var(--HL,300px) - 22px)/3),calc((100vw - 300px)/4.85))!important;--cw:calc(var(--ch)*.715)!important}
+ #dq{--ch:min(calc((var(--HL,300px) - 22px)/3),calc((100vw - 360px)/4.85))!important;--cw:calc(var(--ch)*.715)!important}
  .dqwrap{grid-template-columns:auto calc(var(--ch)*.55) minmax(200px,1fr)!important}
 }
 
@@ -776,6 +776,25 @@ body{background:#140609!important}
  background:linear-gradient(90deg,#4a0b22,#7a1238,#4a0b22);border:1.5px solid #e9c46a;box-shadow:0 0 12px rgba(255,200,80,.35);animation:blinkTxt 1.6s ease-in-out infinite}
 .lastbar b{color:#fff}
 @media (orientation:landscape) and (max-height:500px){ .lastbar{font-size:11px;padding:3px 6px;margin-bottom:3px} .dqlast .t{font-size:22px} }
+
+/* ---- chồng thẻ úp: nhỏ, nằm nghiêng, chỉ hiện số khi còn dưới 5 ---- */
+#dq .deck{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;position:relative;display:flex;align-items:center;justify-content:center}
+#dq .deck>svg{width:74%!important;height:74%!important;transform:rotate(-14deg);border-radius:6px;transition:transform .2s;
+ box-shadow:3px 3px 0 -1px #3a2410,3px 3px 0 0 #c9a24e,6px 6px 0 -1px #3a2410,6px 6px 0 0 #b8862b,8px 10px 14px rgba(0,0,0,.6)}
+#dq .deck:hover>svg{transform:rotate(-8deg) translateY(-3px)}
+#dq .deck.pk>svg{transform:rotate(-4deg) scale(1.05);box-shadow:0 0 0 3px #ffe08a,0 0 18px #ffd34d}
+#dq .deck .dl{display:none!important}
+#dq .deck.empty>svg{opacity:.25;box-shadow:none}
+.dlow{position:absolute;right:2px;bottom:4px;z-index:2;padding:1px 7px;border-radius:9px;font:bold 11px "Times New Roman",serif;color:#fff;background:linear-gradient(180deg,#dc2626,#7f1d1d);border:1px solid #fecaca;box-shadow:0 1px 4px rgba(0,0,0,.6);white-space:nowrap}
+.dqlite #dq .deck>svg{box-shadow:3px 3px 0 0 #c9a24e,6px 6px 0 0 #b8862b}
+/* ---- điện thoại ngang: thẻ dự trữ luôn ở cột phải trong khung người chơi ---- */
+@media (orientation:landscape) and (max-height:500px){
+ html .pl{grid-template-columns:auto minmax(0,1fr) auto!important;grid-template-rows:auto!important;align-items:center!important}
+ html .pl>.rsvw{grid-column:auto!important;grid-row:1!important;flex-direction:column!important;border-top:none!important;border-left:1px solid rgba(233,196,106,.45)!important;padding:0 0 0 5px!important;margin:0!important;align-self:center!important}
+ html .pl .rsvh{display:none!important}
+ html .pl .rsv{flex-direction:row!important;gap:2px!important}
+ html .pl .rsv .rslot,html .pl .rsv .rcd,html .pl .rsv .dqc{width:20px!important;height:28px!important}
+}
 `;
 Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
