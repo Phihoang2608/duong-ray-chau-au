@@ -641,6 +641,23 @@ body.landphone .vticket.imgt .vt-done{font-size:10px;padding:2px 6px}
 body.landphone #hand{grid-template-columns:repeat(5,1fr)!important;gap:5px 4px!important}
 body.landphone .hcard.zero{display:none}
 .hcard .cnt{z-index:2}
+
+/* vé nhỏ gọn: 2 vé mỗi hàng */
+#tkPanel #tickets{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;max-width:400px}
+#tkPanel .vticket.imgt{width:auto!important;max-width:195px}
+body.landphone #tkPanel #tickets{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important;max-width:300px}
+body.landphone #tkPanel .vticket.imgt{max-width:146px}
+.tpicks{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;max-width:540px;margin:0 auto}
+.tpick .vticket.imgt{max-width:265px;margin:0 auto}
+body.landphone .tpicks{max-width:420px}
+.vticket.imgt .vt-longtag{font-size:9.5px;padding:0 5px;left:6px;bottom:4px}
+.vticket.imgt .vt-done{font-size:11px;padding:2px 7px}
+
+body.landphone .tpicks{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-width:680px!important;gap:8px!important}
+body.landphone .tpick .vticket.imgt{max-width:200px}
+body.landphone #tkPanel #tickets{max-width:270px!important}
+body.landphone #tkPanel .vticket.imgt{max-width:130px}
+@media (max-width:600px){ .tpicks{max-width:100%} .tpick .vticket.imgt{max-width:none} }
 </style>
 </head>
 <body>
