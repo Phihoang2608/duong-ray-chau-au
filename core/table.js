@@ -73,6 +73,37 @@ const Table = (()=>{
   #fxcanvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:65}
   #tmsg{display:none}
   @media (max-width:640px){ .tb-top h1{font-size:16px} .tb-top .code{display:none} }
+  /* ===== giao diện quý tộc (đỏ rượu + vàng) cho sảnh, phòng chờ, hộp thoại ===== */
+  .tb-panel{background:radial-gradient(ellipse at 50% 0,rgba(255,230,160,.12),transparent 60%),linear-gradient(180deg,#4a1426,#250812)!important;border:1.5px solid #c9a24e!important;color:#f6ead0!important;box-shadow:0 0 0 1px #5e1730,0 20px 50px rgba(0,0,0,.55)!important;font-family:"Times New Roman",serif}
+  .tb-panel::before{display:none!important}
+  .tb-panel h2{color:#ffe08a!important;letter-spacing:.03em}
+  .tb-panel .sub,.tb-panel label,.tb-panel .mute{color:#e9d9b0!important}
+  .tb-panel label{font-weight:bold;font-size:14px;margin-top:14px}
+  .tb-panel input,.tb-panel select{background:#140609!important;color:#fff!important;border:1px solid #c9a24e!important}
+  .tb-panel .tbtn{background:linear-gradient(180deg,#6b1a33,#3a0d1c)!important;color:#f6e3a6!important;border:1px solid #c9a24e!important}
+  .tb-panel .tbtn.pri{background:linear-gradient(180deg,#22c55e,#0f7a43)!important;color:#fff!important;border-color:#bbf7d0!important;box-shadow:0 4px 12px rgba(16,122,67,.45)!important}
+  .tb-panel .tbtn.sm{padding:4px 9px;font-size:12.5px;border-radius:8px}
+  .tb-code{background:linear-gradient(180deg,#fffbe6,#f6d77a 55%,#c99626)!important;-webkit-background-clip:text!important;background-clip:text!important}
+  .tb-link{background:rgba(0,0,0,.3)!important;border-color:rgba(201,162,78,.5)!important;color:#e9d9b0!important}
+  .tb-screen:has(.tb-lobby) .tb-panel{max-width:560px}
+  #tb-code{color:#e9d9b0!important}#tb-code b{color:#ffe08a!important;letter-spacing:.08em}
+  .tb-people2{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+  .tb-pc{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:12px;background:rgba(0,0,0,.25);border:1px solid rgba(201,162,78,.35);animation:tbpop .4s}
+  .tb-pc.me{border-color:#e9c46a;box-shadow:0 0 10px rgba(233,196,106,.35)}
+  .tb-pc .av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;flex:0 0 auto;border:1.5px solid #c9a24e;overflow:hidden}
+  .tb-pc .av.em{background:#140609;font-size:19px}.tb-pc .av img{width:100%;height:100%;object-fit:cover}
+  .tb-pc .nm{flex:1;min-width:0;display:flex;flex-direction:column}.tb-pc .nm b{color:#fff3cf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tb-pc .nm i{font-size:11.5px;color:#ffe08a}
+  .tb-pc .ac{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .tb-pc .tag{font-size:12px;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.08);color:#e9d9b0;white-space:nowrap}.tb-pc .tag.me{background:linear-gradient(180deg,#ffe48a,#c99626);color:#3a2410;font-weight:bold}.tb-pc .tag.fr{color:#86efac}
+  .tb-inv{max-height:200px;overflow:auto;border-radius:12px;background:rgba(0,0,0,.2);border:1px solid rgba(201,162,78,.3);padding:4px 8px}
+  .tb-lchat{border-radius:12px;background:rgba(0,0,0,.25);border:1px solid rgba(201,162,78,.35);overflow:hidden}
+  .tb-lchat .ls{height:150px;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px}
+  .tb-lchat .cm{align-self:flex-start;max-width:85%;padding:5px 10px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(201,162,78,.3);color:#f6ead0;font-size:14px}
+  .tb-lchat .cm b{color:#ffe08a;margin-right:5px}.tb-lchat .cm.me{align-self:flex-end;background:linear-gradient(180deg,#7a1f3d,#4a0f24);border-color:#e9c46a}
+  .tb-lchat .qk{display:flex;flex-wrap:wrap;gap:4px;padding:0 8px 6px}.tb-lchat .qk button{border:1px solid rgba(201,162,78,.5);background:rgba(0,0,0,.3);color:#f6e3a6;border-radius:12px;padding:2px 9px;cursor:pointer;font:13px "Times New Roman",serif}
+  .tb-lchat form{display:flex;gap:6px;padding:6px 8px;border-top:1px solid rgba(201,162,78,.35)}.tb-lchat input{margin:0!important}
+  @media (max-width:520px){ .tb-pc{flex-wrap:wrap}.tb-pc .ac{flex:1 1 100%;justify-content:flex-start;padding-left:43px} .tb-code{font-size:36px} }
+  
   `;
   function shell(){
     const st=document.createElement('style'); st.textContent=CSS+(CFG.css||''); document.head.appendChild(st);
@@ -102,6 +133,10 @@ const Table = (()=>{
     $('#tb-modal').classList.add('show');
   }
   function closeModal(){ $('#tb-modal').classList.remove('show'); }
+  window.addEventListener('pbg-rel',()=>{ if(ROOM&&document.querySelector('#tb-box .tb-lobby')) lobby(); });
+  function acct(){ const P=window.PBG; return P&&P.user?{uid:P.user.uid, av:(P.prof&&P.prof.avatar)||null}:{uid:null,av:null}; }
+  let lastAcct=''; setInterval(()=>{ const a=acct(), k=a.uid+'|'+a.av; if(k!==lastAcct){ lastAcct=k; if(ROOM) ROOM.presence(a).catch(()=>{}); if(ROOM&&document.querySelector('#tb-box .tb-lobby')) lobby(); } },1500);
+  function avHTML(av,name,i){ return av&&/^https?:/.test(av)?`<span class="av im"><img src="${esc(av)}" alt=""></span>`:av?`<span class="av em">${esc(av)}</span>`:avatar(name,i); }
   function box(html){ document.body.classList.remove('ingame'); $('#tb-box').innerHTML=html; }
   function avatar(name,i){ return `<span class="av" style="background:${COLORS[i%COLORS.length]}">${esc((name||'?').charAt(0).toUpperCase())}</span>`; }
 
@@ -149,7 +184,7 @@ const Table = (()=>{
     leaveQuiet(); ROOM=r; CODE=code; MODE='host'; LOBBY=true; lastAct={}; resetChat(); saveLast('host'); document.body.classList.add('online');
     r.onPeers(ch=>{ if(ROOM!==r) return; PEERS=ch.peers; const me=PEERS.find(p=>p.sameTab); if(me) MYPEER=me.peer; onHostPeers(); });
     if (fixed && savedS){ S=savedS; savedS=null; LOBBY=false; const mine=S.seats.find(p=>p.pid===PID); if(mine) mine.peer=null; setTimeout(()=>{ if(mine) mine.peer=MYPEER; ME=S.seats.indexOf(mine); commit(); },500); return; }
-    r.presence({role:'host', name:myName(), pid:PID, lobby:true}).catch(()=>{});
+    r.presence(Object.assign({role:'host', name:myName(), pid:PID, lobby:true},acct())).catch(()=>{});
     lobby();
   }
   async function joinRoom(code){
@@ -159,7 +194,7 @@ const Table = (()=>{
     let r; try{ r=await A.join(CFG.prefix+'-'+code.toLowerCase(),{host:false}); }catch(e){ return fail('Không vào được phòng '+esc(code)+'. Kiểm tra lại mã và mạng.', ()=>joinRoom(code)); }
     leaveQuiet(); ROOM=r; CODE=code; MODE='client'; S=null; ME=-1; seq=0; resetChat(); saveLast('guest'); document.body.classList.add('online');
     r.onPeers(ch=>{ if(ROOM!==r) return; PEERS=ch.peers; const me=PEERS.find(p=>p.sameTab); if(me) MYPEER=me.peer; onClientPeers(); });
-    r.presence({role:'guest', name:myName(), pid:PID, act:null}).catch(()=>{});
+    r.presence(Object.assign({role:'guest', name:myName(), pid:PID, act:null},acct())).catch(()=>{});
     lobby(); setTimeout(()=>{ if(MODE==='client' && !hostPeer() && !S) lobby(); },5000);
   }
   function leaveQuiet(){ try{ ROOM && ROOM.leave(); }catch(e){} ROOM=null; PEERS=[]; annKey=''; }
@@ -181,25 +216,39 @@ const Table = (()=>{
   /* ---------- Phòng chờ ---------- */
   function lobby(){ try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S:null,ME:-1}); }catch(e){}
     setTop();
-    const people = MODE==='host' ? [{name:myName(),host:1,me:1}, ...guests().map(g=>({name:clean(g.presence.name)}))]
-      : (hostPeer()?[{name:clean(hostPeer().presence.name),host:1}]:[]).concat(PEERS.filter(p=>p.presence&&p.presence.role==='guest'&&fresh(p.peer)).map(p=>({name:clean(p.presence.name),me:p.sameTab})));
-    const ppl=people.map((p,i)=>`<span class="tb-pp">${avatar(p.name,i)}${esc(p.name)}${p.host?' (chủ phòng)':''}${p.me?' — bạn':''}</span>`).join('');
+    const A0=acct(), P=window.PBG, pv=pr=>({uid:pr.uid||null,av:pr.av||null});
+    const people = MODE==='host' ? [Object.assign({name:myName(),host:1,me:1},A0), ...guests().map(g=>Object.assign({name:clean(g.presence.name)},pv(g.presence)))]
+      : (hostPeer()?[Object.assign({name:clean(hostPeer().presence.name),host:1},pv(hostPeer().presence))]:[]).concat(PEERS.filter(p=>p.presence&&p.presence.role==='guest'&&fresh(p.peer)).map(p=>Object.assign({name:clean(p.presence.name),me:p.sameTab},p.sameTab?A0:pv(p.presence))));
+    const relBtn=p=>{ if(p.me) return '<span class="tag me">Bạn</span>'; if(!p.uid) return '<span class="tag">Khách</span>'; if(!P||!P.user) return `<button class="tbtn sm" data-plogin>Đăng nhập để kết bạn</button>`;
+      const r=P.rel(p.uid); return (r==='friend'?'<span class="tag fr">👥 Bạn bè</span>':r==='outgoing'?'<span class="tag">Đã gửi</span>':r==='incoming'?`<button class="tbtn sm pri" data-pacc="${esc(p.uid)}">Đồng ý kết bạn</button>`:`<button class="tbtn sm" data-padd="${esc(p.uid)}" data-pn="${esc(p.name)}" data-pa="${esc(p.av||'')}">+ Kết bạn</button>`)+`<button class="tbtn sm" data-pprof="${esc(p.uid)}" data-pn="${esc(p.name)}" data-pa="${esc(p.av||'')}">Hồ sơ</button>`; };
+    const ppl=people.map((p,i)=>`<div class="tb-pc ${p.me?'me':''}">${avHTML(p.av,p.name,i)}<div class="nm"><b>${esc(p.name)}</b>${p.host?'<i>👑 Chủ phòng</i>':''}</div><div class="ac">${relBtn(p)}</div></div>`).join('');
+    const ci=$('#l-chatf input'), cv=ci?ci.value:'', cf=ci&&document.activeElement===ci;
+    const chatBlock=`<label>💬 Trò chuyện trong phòng</label><div class="tb-lchat"><div class="ls" id="l-chatls"></div><div class="qk">${['Chào cả nhà!','Sẵn sàng!','Chờ chút nhé','Vào nhanh nào'].map(q=>`<button data-q="${q}">${q}</button>`).join('')}</div><form id="l-chatf" autocomplete="off"><input maxlength="80" placeholder="Nhắn cho cả phòng…"><button class="tbtn pri" type="submit">Gửi</button></form></div>`;
+    const inviteBlock=`<label>📨 Mời bạn bè vào phòng</label><div class="tb-inv" id="l-inv"></div>`;
     if (MODE==='host'){
       const free=Math.max(0, CFG.maxPlayers-people.length), def=people.length>=CFG.minPlayers?0:Math.min(free,Math.max(1,CFG.minPlayers-people.length));
       const prev=$('#l-bots')?+$('#l-bots').value:null;
-      box(`<h2>Phòng chơi</h2><div class="tb-code">${esc(CODE)}</div><p class="sub">Gửi mã phòng hoặc đường dẫn cho bạn bè — họ nhập tên là vào được</p>
+      box(`<div class="tb-lobby"><h2>Phòng chơi</h2><div class="tb-code">${esc(CODE)}</div><p class="sub">Gửi mã phòng hoặc đường dẫn cho bạn bè — họ nhập tên là vào được</p>
         <div class="tb-link">${esc(inviteLink())}</div>
-        <label>Người trong phòng (${people.length}/${CFG.maxPlayers})</label><div class="tb-people">${ppl}</div>
+        <label>Người trong phòng (${people.length}/${CFG.maxPlayers})</label><div class="tb-people2">${ppl}</div>
         <label>Thêm máy chơi cùng</label><select id="l-bots">${Array.from({length:free+1},(_,n)=>`<option value="${n}" ${n===(prev!=null&&prev<=free?prev:def)?'selected':''}>${n} máy</option>`).join('')}</select>${CFG.difficulty?`<label>Độ khó của máy</label><select id="l-diff">${[['easy','Dễ — chơi bừa, không để ý quý tộc'],['med','Trung bình — như người mới chơi'],['hard','Khó — máy chơi giỏi']].map(([v,t])=>`<option value="${v}" ${(ls.get('bg-diff')||'med')===v?'selected':''}>${t}</option>`).join('')}</select>`:''}
-        <div class="tb-grid"><button class="tbtn" id="l-copy">Sao chép lời mời</button><button class="tbtn pri" id="l-start">Bắt đầu ván</button><button class="tbtn full" id="l-leave">Rời phòng</button></div>`);
+        <div class="tb-grid"><button class="tbtn" id="l-copy">Sao chép lời mời</button><button class="tbtn pri" id="l-start">Bắt đầu ván</button><button class="tbtn full" id="l-leave">Rời phòng</button></div>${inviteBlock}${chatBlock}</div>`); lobbyBind(cv,cf);
       $('#l-copy').onclick=()=>{ const t=`Vào chơi "${CFG.title}" với mình nhé! Bấm link, nhập tên là vào: ${inviteLink()} (mã phòng ${CODE})`; try{ navigator.clipboard.writeText(t).then(()=>toast('Đã sao chép lời mời'),()=>toast('Mã phòng: '+CODE)); }catch(e){ toast('Mã phòng: '+CODE); } };
       $('#l-start').onclick=hostStart; $('#l-leave').onclick=askLeave;
     } else {
-      box(`<h2>Phòng ${esc(CODE)}</h2>${hostPeer()?`<p class="sub">Đã vào phòng của <b>${esc(clean(hostPeer().presence.name))}</b>. Chờ chủ phòng bắt đầu…</p><div class="spin"></div>`:'<p class="warn" style="text-align:center">Chưa thấy chủ phòng. Kiểm tra lại mã phòng hoặc chờ chủ phòng mở lại.</p>'}
-        <label>Người trong phòng</label><div class="tb-people">${ppl}</div><div class="tb-grid"><button class="tbtn full" id="l-leave">Rời phòng</button></div>`);
-      $('#l-leave').onclick=askLeave;
+      box(`<div class="tb-lobby"></div><h2>Phòng ${esc(CODE)}</h2>${hostPeer()?`<p class="sub">Đã vào phòng của <b>${esc(clean(hostPeer().presence.name))}</b>. Chờ chủ phòng bắt đầu…</p><div class="spin"></div>`:'<p class="warn" style="text-align:center">Chưa thấy chủ phòng. Kiểm tra lại mã phòng hoặc chờ chủ phòng mở lại.</p>'}
+        <label>Người trong phòng</label><div class="tb-people2">${ppl}</div>${inviteBlock}${chatBlock}<div class="tb-grid"><button class="tbtn full" id="l-leave">Rời phòng</button></div>`);
+      $('#tb-box').firstElementChild&&$('#tb-box').classList.add('lob'); lobbyBind(cv,cf); $('#l-leave').onclick=askLeave;
     }
   }
+  function lobbyBind(cv,cf){ const P=window.PBG, b=$('#tb-box');
+    b.querySelectorAll('[data-padd]').forEach(x=>x.onclick=()=>{ P&&P.addFriend(x.dataset.padd,{name:x.dataset.pn,av:x.dataset.pa}); x.disabled=true; x.textContent='Đã gửi'; });
+    b.querySelectorAll('[data-pacc]').forEach(x=>x.onclick=()=>{ P&&P.acceptFriend(x.dataset.pacc); x.disabled=true; });
+    b.querySelectorAll('[data-pprof]').forEach(x=>x.onclick=()=>P&&P.profile(x.dataset.pprof,{name:x.dataset.pn,av:x.dataset.pa}));
+    b.querySelectorAll('[data-plogin]').forEach(x=>x.onclick=()=>P&&P.login());
+    const inv=$('#l-inv'); if(inv){ if(P&&P.renderInvite) P.renderInvite(inv); else inv.innerHTML='<div class="mute">Đang tải…</div>'; }
+    renderChat(); const f=$('#l-chatf'); if(f){ const i=f.querySelector('input'); if(cv) i.value=cv; if(cf) i.focus({preventScroll:true}); f.onsubmit=e=>{ e.preventDefault(); const v=i.value; i.value=''; if(!chatSend(v)) i.value=v; else { const n=$('#l-chatf input'); if(n){ n.value=''; n.focus({preventScroll:true}); } } }; }
+    b.querySelectorAll('.tb-lchat .qk button').forEach(x=>x.onclick=()=>chatSend(x.dataset.q)); }
   function hostStart(){ if($('#l-diff')) ls.set('bg-diff',$('#l-diff').value);
     const gs=guests().slice(0, CFG.maxPlayers-1);
     const seats=[{name:myName(),pid:PID,peer:MYPEER}, ...gs.map(g=>({name:clean(g.presence.name), peer:g.peer, pid:String(g.presence.pid||'').slice(0,20)}))];
@@ -217,7 +266,7 @@ const Table = (()=>{
     if (S.seats&&S.seats[0]&&S.seats[0].name&&S.log&&Array.isArray(S.log)) S.log.unshift('🎲 Bốc thăm thứ tự: '+S.seats.map(p=>p.name).join(' → ')+'. '+S.seats[S.turn>=0?S.turn:0].name+' đi trước.');
     document.body.classList.add('ingame'); setTop(); commit(); CFG.onStart && CFG.onStart();
   }
-  function commit(){ S.v=(S.v||0)+1; if (MODE==='host'){ ROOM.presence({role:'host', name:myName(), pid:PID, lobby:false, st:S, now:Date.now()}).catch(()=>{}); announce(); } draw(); }
+  function commit(){ S.v=(S.v||0)+1; if (MODE==='host'){ ROOM.presence(Object.assign({role:'host', name:myName(), pid:PID, lobby:false, st:S, now:Date.now()},acct())).catch(()=>{}); announce(); } draw(); }
   function draw(){ if(!S) return; document.body.classList.add('ingame'); setTop(); CFG.render(S, ME, API); try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S,ME}); }catch(e){} }
   function act(a){
     SFX.init(); if (!S) return false;
@@ -266,7 +315,7 @@ const Table = (()=>{
     PEERS.forEach(pe=>{ const arr=pe.presence&&pe.presence.chat; if(!Array.isArray(arr)) return; arr.slice(-3).forEach(m=>{ if(!m||typeof m.x!=='string') return; const k=pe.peer+':'+m.i; if(chatSeen.has(k)) return; chatSeen.add(k);
       chatList.push({me:pe.sameTab, name:clean(pe.presence.name), x:String(m.x).slice(0,80), t:+m.i||Date.now()}); if(!pe.sameTab && chatPrimed){ fresh++; if(!$('#tb-chat').classList.contains('show')) unread++; toast(`<b>${esc(clean(pe.presence.name))}:</b> ${esc(String(m.x).slice(0,80))}`); } }); });
     chatPrimed=true; if(fresh) SFX.chatPing(); chatList.sort((a,b)=>a.t-b.t); chatList=chatList.slice(-60); renderChat(); }
-  function renderChat(){ const ls=$('#tb-chatls'); if(!ls) return; ls.innerHTML=chatList.map(m=>`<div class="cm ${m.me?'me':''}"><b>${esc(m.me?'Bạn':m.name)}</b>${esc(m.x)}</div>`).join('')||'<div style="color:#8b889c;text-align:center;margin:auto">Chưa có tin nhắn</div>'; ls.scrollTop=ls.scrollHeight;
+  function renderChat(){ const l2=$('#l-chatls'); if(l2){ l2.innerHTML=chatList.map(m=>`<div class="cm ${m.me?'me':''}"><b>${esc(m.me?'Bạn':m.name)}</b>${esc(m.x)}</div>`).join('')||'<div class="mute" style="text-align:center;margin:auto">Chưa có tin nhắn — chào mọi người đi!</div>'; l2.scrollTop=l2.scrollHeight; } const ls=$('#tb-chatls'); if(!ls) return; ls.innerHTML=chatList.map(m=>`<div class="cm ${m.me?'me':''}"><b>${esc(m.me?'Bạn':m.name)}</b>${esc(m.x)}</div>`).join('')||'<div style="color:#8b889c;text-align:center;margin:auto">Chưa có tin nhắn</div>'; ls.scrollTop=ls.scrollHeight;
     const u=$('#tb-unread'); u.style.display=unread?'':'none'; u.textContent=unread; }
   function setTop(){ const on=MODE!=='local'; $('#tb-chatbtn').style.display=on?'':'none'; $('#tb-leave').style.display=on?'':'none'; $('#tb-code').innerHTML=on&&CODE?`Phòng <b>${esc(CODE)}</b>`:''; if(!on) $('#tb-chat').classList.remove('show'); }
 

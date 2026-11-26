@@ -76,6 +76,13 @@
   .pbg-hi.w{border-left-color:#f5c518;background:linear-gradient(90deg,rgba(245,197,24,.15),rgba(0,0,0,.2))}
   .pbg-hi .r1{display:flex;justify-content:space-between;gap:6px}.pbg-hi .r1 b{color:#ffe08a}.pbg-hi .res{font-weight:bold;white-space:nowrap}
   .pbg-hi.l .res{color:#fca5a5}.pbg-hi .r2,.pbg-hi .r3{font-size:12.5px;opacity:.85;margin-top:2px}
+
+  .pl-n[data-prof]:not([data-prof=""]){cursor:pointer}.pl-n[data-prof]:not([data-prof=""]):hover{text-decoration:underline;color:#ffe08a}
+  .pbg-prof{color:#3a2410}.pbg-prof .hd{display:flex;align-items:center;gap:12px;margin-bottom:8px}.pbg-prof .hd .pbg-av{width:62px;height:62px;font-size:34px;border-width:3px}
+  .pbg-prof h3{text-align:left!important;margin:0!important}.pbg-prof .st{font-size:13.5px}
+  .pbg-prof .pbg-st div{background:rgba(94,23,48,.08);border-color:rgba(184,134,43,.5)}.pbg-prof .pbg-st b{color:#5e1730}.pbg-prof .pbg-st span{color:#3a2410}
+  .pbg-prof .pbg-h{color:#5e1730}.pbg-prof .pbg-hi{background:rgba(94,23,48,.08);color:#3a2410}.pbg-prof .pbg-hi .r1 b{color:#5e1730}
+  .tb-inv .hrow{color:#f6ead0}.tb-inv .pbg-h2{color:#ffe08a}
   .pbg-av.xs{width:24px;height:24px;font-size:13px;border-width:1px}
   .pbg-chat{display:flex;flex-direction:column;gap:6px}
   .pbg-msgs{max-height:320px;min-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:4px 2px}
@@ -144,14 +151,14 @@
     let body='';
     if(TAB==='on'){ const L=Object.values(P.online).sort((a,b)=>a.since-b.since);
       body=`<div class="pbg-sub">${nOn} người đang online</div>`+(L.length?L.map(o=>{ const me=o.id===P.myId, fr=P.friends[o.uid];
-        return `<div class="pbg-row">${avHTML(o.av,'sm')}<div class="i"><div class="n"><span class="pbg-dot"></span>${esc(o.name)}${me?' (bạn)':''}${o.guest?' <small>· khách</small>':''}</div><div class="s">Online ${ago(Date.now()-o.since)}${o.game?' · đang ở '+esc(o.game):' · ở sảnh'}</div></div>
+        return `<div class="pbg-row">${avHTML(o.av,'sm')}<div class="i"><div class="n pl-n" data-prof="${esc(o.uid||'')}" data-n="${esc(o.name)}" data-a="${esc(o.av||'')}"><span class="pbg-dot"></span>${esc(o.name)}${me?' (bạn)':''}${o.guest?' <small>· khách</small>':''}</div><div class="s">Online ${ago(Date.now()-o.since)}${o.game?' · đang ở '+esc(o.game):' · ở sảnh'}</div></div>
           ${me||!P.user?'':o.guest?`<button class="pbg-b" data-nudge="${esc(o.id)}" title="Khách chưa đăng nhập">Mời kết bạn</button>`:fr&&fr.status==='friend'?inviteBtn(o):fr&&fr.status==='outgoing'?'<button class="pbg-b" disabled>Đã gửi</button>':fr&&fr.status==='incoming'?`<button class="pbg-b g" data-acc="${esc(o.uid)}">Đồng ý</button>`:`<button class="pbg-b" data-add="${esc(o.uid)}">Kết bạn</button>`}</div>`; }).join(''):'<div class="pbg-empty">Chưa có ai online.</div>'); }
     else if(TAB==='fr'){ const F=Object.entries(P.friends);
       const inc=F.filter(([,f])=>f.status==='incoming'), fr=F.filter(([,f])=>f.status==='friend'), out=F.filter(([,f])=>f.status==='outgoing');
       const onl=uid=>Object.values(P.online).find(o=>o.uid===uid);
       body=`<div class="pbg-h">Tìm bạn theo tên</div><div style="display:flex;gap:6px"><input class="pbg-in" data-q placeholder="Nhập tên người chơi…"><button class="pbg-b" data-find>Tìm</button></div><div data-res></div>`
        +(inc.length?`<div class="pbg-h">Lời mời kết bạn (${inc.length})</div>`+inc.map(([id,f])=>`<div class="pbg-row">${avHTML(f.av,'sm')}<div class="i"><div class="n">${esc(f.name)}</div></div><button class="pbg-b g" data-acc="${esc(id)}">Đồng ý</button><button class="pbg-b" data-rm="${esc(id)}">Từ chối</button></div>`).join(''):'')
-       +sugHTML()+`<div class="pbg-h">Bạn bè (${fr.length})</div>`+(fr.length?fr.sort((a,b)=>!!onl(b[0])-!!onl(a[0])).map(([id,f])=>{ const o=onl(id); return `<div class="pbg-row">${avHTML(f.av,'sm')}<div class="i"><div class="n"><span class="pbg-dot ${o?'':'off'}"></span>${esc(f.name)}</div><div class="s">${o?'Online '+ago(Date.now()-o.since)+(o.game?' · '+esc(o.game):''):'Đang offline'}</div></div>${o?inviteBtn(o):''}<button class="pbg-b" data-rm="${esc(id)}" title="Xóa bạn">✕</button></div>`; }).join(''):'<div class="pbg-empty">Chưa có bạn nào. Vào tab Online bấm "Kết bạn", hoặc tìm theo tên ở trên.</div>')
+       +sugHTML()+`<div class="pbg-h">Bạn bè (${fr.length})</div>`+(fr.length?fr.sort((a,b)=>!!onl(b[0])-!!onl(a[0])).map(([id,f])=>{ const o=onl(id); return `<div class="pbg-row">${avHTML(f.av,'sm')}<div class="i"><div class="n pl-n" data-prof="${esc(id)}" data-n="${esc(f.name)}" data-a="${esc(f.av||'')}"><span class="pbg-dot ${o?'':'off'}"></span>${esc(f.name)}</div><div class="s">${o?'Online '+ago(Date.now()-o.since)+(o.game?' · '+esc(o.game):''):'Đang offline'}</div></div>${o?inviteBtn(o):''}<button class="pbg-b" data-rm="${esc(id)}" title="Xóa bạn">✕</button></div>`; }).join(''):'<div class="pbg-empty">Chưa có bạn nào. Vào tab Online bấm "Kết bạn", hoặc tìm theo tên ở trên.</div>')
        +(out.length?`<div class="pbg-h">Đã gửi lời mời</div>`+out.map(([id,f])=>`<div class="pbg-row">${avHTML(f.av,'sm')}<div class="i"><div class="n">${esc(f.name)}</div><div class="s">Đang chờ đồng ý</div></div><button class="pbg-b" data-rm="${esc(id)}">Hủy</button></div>`).join(''):''); }
     else if(TAB==='me'){ const s=pr.stats||{}, g=s.games||0, w=s.wins||0, by=pr.byGame||{};
       body=`<div class="pbg-h">Hồ sơ</div><input class="pbg-in" data-nm maxlength="18" value="${esc(pr.name||'')}" placeholder="Tên hiển thị"><div class="pbg-avs">${AV.map(a=>`<button data-av="${a}" class="${pr.avatar===a?'on':''}">${a}</button>`).join('')}${P.user&&P.user.photoURL?`<button data-av="${esc(P.user.photoURL)}" class="${pr.avatar===P.user.photoURL?'on':''}" style="padding:0;overflow:hidden"><img src="${esc(P.user.photoURL)}" style="width:28px;height:28px;border-radius:50%"></button>`:''}</div><button class="pbg-b g" data-save>Lưu hồ sơ</button>
@@ -168,6 +175,8 @@
     d.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{ TAB=b.dataset.t; drawDr(); });
     d.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addFriend(b.dataset.add));
     d.querySelectorAll('[data-nudge]').forEach(b=>b.onclick=()=>{ const o=P.online[b.dataset.nudge]; if(o) nudgeGuest(o); b.disabled=true; b.textContent='Đã mời'; });
+    d.querySelectorAll('[data-prof]').forEach(b=>{ if(b.dataset.prof) b.onclick=()=>profile(b.dataset.prof,{name:b.dataset.n,av:b.dataset.a}); });
+    d.querySelectorAll('.pbg-row .n').forEach((n,i)=>{});
     d.querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{ ls.set('pbg-hide-'+b.dataset.hide,'1'); drawDr(); hubSide(); });
     d.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>acceptFriend(b.dataset.acc));
     d.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>removeFriend(b.dataset.rm));
@@ -254,6 +263,35 @@
   function applyNudges(){ if(!P.user) return; let L=[]; try{ L=JSON.parse(ls.get('pbg-nudge')||'[]'); }catch(e){} if(!L.length) return; ls.set('pbg-nudge','[]');
     L.forEach(n=>{ if(n.fuid&&n.fuid!==P.user.uid&&!P.friends[n.fuid]){ const me=myCard(), at=Date.now(); Promise.all([uref(n.fuid).collection('friends').doc(P.user.uid).set({status:'incoming',name:me.name,av:me.av,at}),uref(P.user.uid).collection('friends').doc(n.fuid).set({status:'outgoing',name:n.name||'Người chơi',av:n.av||'👤',at})]).then(()=>{ send(n.fuid,{t:'freq'}); toast('📨 Đã gửi lời mời kết bạn tới '+esc(n.name)); }).catch(()=>{}); } }); }
 
+
+  /* ---------- API cho phòng chờ: quan hệ, kết bạn, hồ sơ, mời ---------- */
+  P.rel=uid=>{ const f=P.friends[uid]; return f?f.status:null; };
+  P.addFriend=(uid,info)=>{ if(info&&!Object.values(P.online).some(o=>o.uid===uid)&&!seenAll()[uid]) ls.set('pbg-sn:'+uid,JSON.stringify({uid,name:info.name,av:info.av,last:Date.now(),first:Date.now()})); addFriend(uid); };
+  P.acceptFriend=uid=>acceptFriend(uid);
+  P.renderInvite=function(box){ if(!P.user){ box.innerHTML='<div class="mute" style="padding:6px 2px">Đăng nhập để mời bạn bè. <button class="tbtn sm" data-il>Đăng nhập</button></div>'; box.querySelector('[data-il]').onclick=()=>openLogin(); return; }
+    const L=Object.values(P.online).filter(o=>o.id!==P.myId&&!(P.room&&o.game&&o.game.includes(P.room.code))); const fr=L.filter(o=>o.uid&&P.rel(o.uid)==='friend'), ot=L.filter(o=>!(o.uid&&P.rel(o.uid)==='friend'));
+    const row=(o,isF)=>`<div class="hrow">${avHTML(o.av,'xs')}<b class="pl-n" data-prof="${esc(o.uid||'')}" data-n="${esc(o.name)}" data-a="${esc(o.av||'')}"><span class="pbg-dot"></span>${esc(o.name)}${o.guest?' <small>· khách</small>':''}</b><small>${o.game?esc(o.game):'ở sảnh'}</small><button class="tbtn sm pri" data-iv="${esc(o.id)}">Mời chơi</button>${!isF&&P.user?(o.guest?`<button class="tbtn sm" data-ng="${esc(o.id)}">Mời kết bạn</button>`:P.rel(o.uid)==='outgoing'?'':`<button class="tbtn sm" data-ia="${esc(o.uid)}">+ Kết bạn</button>`):''}</div>`;
+    box.innerHTML=(fr.length?`<div class="pbg-h2">Bạn bè đang online</div>`+fr.map(o=>row(o,true)).join(''):`<div class="mute" style="padding:6px 2px">Chưa có bạn bè nào đang online.</div>`)+(ot.length?`<div class="pbg-h2">Người khác đang online</div>`+ot.slice(0,20).map(o=>row(o,false)).join(''):'');
+    box.querySelectorAll('[data-iv]').forEach(b=>b.onclick=()=>{ invite(b.dataset.iv); b.disabled=true; b.textContent='Đã mời'; });
+    box.querySelectorAll('[data-ia]').forEach(b=>b.onclick=()=>{ addFriend(b.dataset.ia); b.disabled=true; b.textContent='Đã gửi'; });
+    box.querySelectorAll('[data-ng]').forEach(b=>b.onclick=()=>{ const o=P.online[b.dataset.ng]; if(o) nudgeGuest(o); b.disabled=true; b.textContent='Đã mời'; });
+    box.querySelectorAll('[data-prof]').forEach(b=>{ if(b.dataset.prof) b.onclick=()=>profile(b.dataset.prof,{name:b.dataset.n,av:b.dataset.a}); }); };
+  /* ---------- trang cá nhân ---------- */
+  function profile(uid,info){ if(!uid) return; const b=$('#pbg-login .box'); const fr=P.rel(uid), on=liveUid(uid), o=Object.values(P.online).find(x=>x.uid===uid);
+    const draw=v=>{ v=v||{}; const st=v.stats||{}, g=st.games||0, w=st.wins||0, H=(v.history||[]).slice(0,8), by=v.byGame||{};
+      b.innerHTML=`<div class="pbg-prof"><div class="hd">${avHTML(v.avatar||(info&&info.av),'')}<div><h3>${esc(v.name||(info&&info.name)||'Người chơi')}</h3><div class="st"><span class="pbg-dot ${on?'':'off'}"></span>${on?'Đang online'+(o&&o.game?' · '+esc(o.game):''):'Offline'+(v.lastSeen?' · '+ago(Date.now()-v.lastSeen)+' trước':'')}</div></div></div>
+        <div class="pbg-st"><div><b>${g}</b><span>Ván đã chơi</span></div><div><b>${w}</b><span>Ván thắng</span></div><div><b>${g?Math.round(w*100/g):0}%</b><span>Tỉ lệ thắng</span></div><div><b>${Math.floor((st.minutes||0)/60)}g ${(st.minutes||0)%60}p</b><span>Thời gian chơi</span></div><div><b>${v.createdAt?new Date(v.createdAt).toLocaleDateString('vi-VN'):'—'}</b><span>Ngày tham gia</span></div><div><b>${Object.keys(by).length}</b><span>Game đã chơi</span></div></div>
+        ${H.length?`<div class="pbg-h">Ván gần đây</div>`+H.map(h=>`<div class="pbg-hi ${h.win?'w':'l'}"><div class="r1"><b>${esc(h.title)}</b><span class="res">${h.win?'🏆 Thắng':'Thua'}</span></div><div class="r2">${new Date(h.t).toLocaleDateString('vi-VN')} · ${h.mins} phút${h.pts!=null?' · '+h.pts+' điểm':''}</div></div>`).join(''):''}
+        <div class="row2">${!P.user?`<button class="pbg-b g" data-l>Đăng nhập để kết bạn</button>`:uid===P.user.uid?'':fr==='friend'?'<button class="pbg-b" disabled>👥 Đã là bạn bè</button>':fr==='outgoing'?'<button class="pbg-b" disabled>Đã gửi lời mời</button>':fr==='incoming'?'<button class="pbg-b g" data-acc>Đồng ý kết bạn</button>':'<button class="pbg-b g" data-add>+ Kết bạn</button>'}${P.room&&o&&o.id!==P.myId?'<button class="pbg-b y" data-inv>Mời vào phòng</button>':''}</div>
+        <button class="skip">Đóng</button></div>`;
+      const q=x=>b.querySelector(x); q('.skip').onclick=closeLogin; if(q('[data-l]')) q('[data-l]').onclick=()=>openLogin();
+      if(q('[data-add]')) q('[data-add]').onclick=()=>{ P.addFriend(uid,{name:v.name||(info&&info.name),av:v.avatar||(info&&info.av)}); setTimeout(()=>profile(uid,info),400); };
+      if(q('[data-acc]')) q('[data-acc]').onclick=()=>{ acceptFriend(uid); setTimeout(()=>profile(uid,info),400); };
+      if(q('[data-inv]')) q('[data-inv]').onclick=()=>{ invite(o.id); q('[data-inv]').disabled=true; }; };
+    draw({name:info&&info.name,avatar:info&&info.av}); $('#pbg-login').classList.add('open');
+    if(P.user&&P.db) uref(uid).get().then(d=>{ if(d.exists&&$('#pbg-login').classList.contains('open')) draw(d.data()); }).catch(()=>{}); }
+  P.profile=profile;
+
   /* ---------- lịch sử ván chơi (lưu máy + tài khoản) ---------- */
   function getHist(){ let L=[]; try{ L=JSON.parse(ls.get('pbg-hist')||'[]'); }catch(e){} const C=(P.prof&&P.prof.history)||[]; const m={}; L.concat(C).forEach(h=>m[h.t]=h); return Object.values(m).sort((a,b)=>b.t-a.t).slice(0,40); }
   function addHistory(h){ let L=[]; try{ L=JSON.parse(ls.get('pbg-hist')||'[]'); }catch(e){} L.unshift(h); ls.set('pbg-hist',JSON.stringify(L.slice(0,40)));
@@ -271,7 +309,7 @@
     const S=seenAll(), k=Object.keys(S); if(k.length>60) k.sort((a,b)=>S[a].last-S[b].last).slice(0,k.length-60).forEach(x=>{ try{ localStorage.removeItem('pbg-sn:'+x); }catch(e){} }); }
   function suggests(){ const S=seenAll(); (P.recent||[]).forEach(r=>{ if(!S[r.uid]||S[r.uid].last<r.last) S[r.uid]={uid:r.uid,name:r.name,av:r.av,last:r.last}; }); return Object.values(S).filter(x=>!(P.user&&x.uid===P.user.uid)&&!P.friends[x.uid]&&!(ls.get('pbg-hide-'+x.uid))).sort((a,b)=>b.last-a.last).slice(0,15); }
   function sugHTML(){ const L=suggests(); if(!P.user) return ''; if(!L.length) return ''; const on=liveUid;
-    return `<div class="pbg-h2 pbg-h">✨ Gợi ý kết bạn</div>`+L.map(x=>`<div class="hrow pbg-row">${avHTML(x.av,'xs')}<b><span class="pbg-dot ${on(x.uid)?'':'off'}"></span>${esc(x.name)}</b><small>${on(x.uid)?'đang online':(Date.now()-x.last<60000?'vừa gặp':'gặp '+ago(Date.now()-x.last)+' trước')}</small><button class="pbg-b" data-add="${esc(x.uid)}" data-n="${esc(x.name)}" data-a="${esc(x.av||'')}">+ Kết bạn</button><button class="pbg-b" data-hide="${esc(x.uid)}" title="Ẩn gợi ý">✕</button></div>`).join(''); }
+    return `<div class="pbg-h2 pbg-h">✨ Gợi ý kết bạn</div>`+L.map(x=>`<div class="hrow pbg-row">${avHTML(x.av,'xs')}<b class="pl-n" data-prof="${esc(x.uid)}" data-n="${esc(x.name)}" data-a="${esc(x.av||'')}"><span class="pbg-dot ${on(x.uid)?'':'off'}"></span>${esc(x.name)}</b><small>${on(x.uid)?'đang online':(Date.now()-x.last<60000?'vừa gặp':'gặp '+ago(Date.now()-x.last)+' trước')}</small><button class="pbg-b" data-add="${esc(x.uid)}" data-n="${esc(x.name)}" data-a="${esc(x.av||'')}">+ Kết bạn</button><button class="pbg-b" data-hide="${esc(x.uid)}" title="Ẩn gợi ý">✕</button></div>`).join(''); }
 
   /* ---------- trò chuyện chung (MQTT: tin trực tiếp + 1 tin giữ lại chứa 40 tin gần nhất) ---------- */
   P.chat=[]; P.unread=0; const seenC=new Set();
@@ -299,17 +337,19 @@
     const cc=document.getElementById('pbg-cc'); if(cc) cc.textContent=P.chat.length;
     const F=Object.entries(P.friends), fr=F.filter(([,f])=>f.status==='friend'), inc=F.filter(([,f])=>f.status==='incoming'); const onl=uid=>Object.values(P.online).find(o=>o.uid===uid)||((P.recent||[]).find(r=>r.uid===uid&&Date.now()-r.last<200000));
     const others=Object.values(P.online).filter(o=>o.id!==P.myId).sort((a,b)=>a.since-b.since);
-    fp.innerHTML=`<div class="ph"><h3>👥 Bạn bè & Online</h3><span class="cnt">${Object.keys(P.online).length}</span></div>
+    (P.recent||[]).filter(r=>Date.now()-r.last<200000&&!others.some(o=>o.uid===r.uid)).forEach(r=>others.push({id:'r_'+r.uid,uid:r.uid,name:r.name,av:r.av,since:r.last,game:r.game,guest:false}));
+    fp.innerHTML=`<div class="ph"><h3>👥 Bạn bè & Online</h3><span class="cnt">${others.length+1}</span></div>
       ${!P.user?`<div class="pbg-empty" style="color:inherit">Đăng nhập để kết bạn, mời bạn vào phòng và lưu thành tích.</div><button class="pbg-b g" data-hlogin style="width:100%;padding:9px">👤 Đăng nhập / Tạo tài khoản</button>`:''}
       ${inc.length?`<div class="pbg-h2">Lời mời kết bạn</div>`+inc.map(([id,f])=>`<div class="hrow">${avHTML(f.av,'xs')}<b>${esc(f.name)}</b><button class="pbg-b g" data-acc="${esc(id)}">Đồng ý</button></div>`).join(''):''}
-      ${P.user?`<div class="pbg-h2">Bạn bè (${fr.length})</div>`+(fr.length?fr.map(([id,f])=>{ const o=onl(id); return `<div class="hrow">${avHTML(f.av,'xs')}<b><span class="pbg-dot ${o?'':'off'}"></span>${esc(f.name)}</b><small>${o?(o.game?esc(o.game):'ở sảnh'):'offline'}</small></div>`; }).join(''):'<div class="pbg-empty" style="color:inherit">Chưa có bạn — bấm "Kết bạn" ở người đang online bên dưới.</div>'):''}
-      ${sugHTML()}<div class="pbg-h2">Đang online (${others.length+1})</div>${others.length?others.slice(0,30).map(o=>{ const f=o.uid&&P.friends[o.uid]; return `<div class="hrow">${avHTML(o.av,'xs')}<b><span class="pbg-dot"></span>${esc(o.name)}${o.guest?' <small>· khách</small>':''}</b><small>${ago(Date.now()-o.since)}${o.game?' · '+esc(o.game):''}</small>${P.user&&o.guest?`<button class="pbg-b" data-nudge="${esc(o.id)}">Mời kết bạn</button>`:''}${P.user&&!o.guest?(f&&f.status==='friend'?'':f&&f.status==='outgoing'?'<button class="pbg-b" disabled>Đã gửi</button>':f&&f.status==='incoming'?`<button class="pbg-b g" data-acc="${esc(o.uid)}">Đồng ý</button>`:`<button class="pbg-b" data-add="${esc(o.uid)}">+ Kết bạn</button>`):''}</div>`; }).join(''):'<div class="pbg-empty" style="color:inherit">Chỉ có bạn đang online.</div>'}
+      ${P.user?`<div class="pbg-h2">Bạn bè (${fr.length})</div>`+(fr.length?fr.map(([id,f])=>{ const o=onl(id); return `<div class="hrow">${avHTML(f.av,'xs')}<b class="pl-n" data-prof="${esc(id)}" data-n="${esc(f.name)}" data-a="${esc(f.av||'')}"><span class="pbg-dot ${o?'':'off'}"></span>${esc(f.name)}</b><small>${o?(o.game?esc(o.game):'ở sảnh'):'offline'}</small></div>`; }).join(''):'<div class="pbg-empty" style="color:inherit">Chưa có bạn — bấm "Kết bạn" ở người đang online bên dưới.</div>'):''}
+      ${sugHTML()}<div class="pbg-h2">Đang online (${others.length+1})</div>${others.length?others.slice(0,30).map(o=>{ const f=o.uid&&P.friends[o.uid]; return `<div class="hrow">${avHTML(o.av,'xs')}<b class="pl-n" data-prof="${esc(o.uid||'')}" data-n="${esc(o.name)}" data-a="${esc(o.av||'')}"><span class="pbg-dot"></span>${esc(o.name)}${o.guest?' <small>· khách</small>':''}</b><small>${ago(Date.now()-o.since)}${o.game?' · '+esc(o.game):''}</small>${!P.user?`<button class="pbg-b" data-hlogin>+ Kết bạn</button>`:''}${P.user&&o.guest?`<button class="pbg-b" data-nudge="${esc(o.id)}">Mời kết bạn</button>`:''}${P.user&&!o.guest?(f&&f.status==='friend'?'':f&&f.status==='outgoing'?'<button class="pbg-b" disabled>Đã gửi</button>':f&&f.status==='incoming'?`<button class="pbg-b g" data-acc="${esc(o.uid)}">Đồng ý</button>`:`<button class="pbg-b" data-add="${esc(o.uid)}">+ Kết bạn</button>`):''}</div>`; }).join(''):'<div class="pbg-empty" style="color:inherit">Chỉ có bạn đang online.</div>'}
       ${P.user?`<button class="pbg-b" data-hfr style="width:100%;margin-top:8px;padding:8px">🔍 Tìm bạn theo tên · Xem tất cả</button>`:''}`;
     fp.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addFriend(b.dataset.add));
     fp.querySelectorAll('[data-nudge]').forEach(b=>b.onclick=()=>{ const o=P.online[b.dataset.nudge]; if(o) nudgeGuest(o); b.disabled=true; b.textContent='Đã mời'; });
+    fp.querySelectorAll('[data-prof]').forEach(b=>{ if(b.dataset.prof) b.onclick=()=>profile(b.dataset.prof,{name:b.dataset.n,av:b.dataset.a}); });
     fp.querySelectorAll('[data-hide]').forEach(b=>b.onclick=()=>{ ls.set('pbg-hide-'+b.dataset.hide,'1'); hubSide(); drawDr(); });
     fp.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>acceptFriend(b.dataset.acc));
-    const hl=fp.querySelector('[data-hlogin]'); if(hl) hl.onclick=()=>openLogin();
+    fp.querySelectorAll('[data-hlogin]').forEach(hl=>hl.onclick=()=>openLogin());
     const hf=fp.querySelector('[data-hfr]'); if(hf) hf.onclick=()=>openDr('fr');
     const nav=document.querySelector('header .nav'); if(nav&&!document.getElementById('pbg-nav')){ const w=document.createElement('span'); w.id='pbg-nav'; w.innerHTML=`<a href="#" data-n="fr">👥 Bạn bè</a><a href="#" data-n="chat">💬 Trò chuyện<em class="nb"></em></a><a href="#" data-n="app" data-pbg-app class="appb">📲 Tải app</a><a href="#" data-n="me" class="acc">👤 <span>Đăng nhập</span></a>`; nav.appendChild(w);
       appBtns(); w.querySelectorAll('a').forEach(a=>a.onclick=e=>{ e.preventDefault(); const k=a.dataset.n; if(k==='app'){ installApp(); return; } if(!P.user&&k!=='chat'){ openLogin(); return; } if(innerWidth<1100||k==='me'){ openDr(k==='me'?'me':k); } else { const t=document.getElementById(k==='chat'?'pbg-hub-chat':'pbg-hub-fr'); t&&t.scrollIntoView({behavior:'smooth',block:'center'}); } }); }
@@ -341,7 +381,7 @@
   function appBtns(){ const hide=standalone(); document.querySelectorAll('[data-pbg-app]').forEach(e=>e.style.display=hide?'none':''); }
 
   /* ---------- nút nổi ---------- */
-  function fab(){ try{ hubSide(); }catch(e){} const f=$('#pbg-fab'); if(!f) return; const pr=P.prof; f.querySelector('.av').innerHTML=pr?(/^https?:/.test(pr.avatar||'')?`<img src="${esc(pr.avatar)}">`:esc(pr.avatar||'👤')):'👤';
+  let lastRel=''; function fab(){ try{ const k=JSON.stringify(Object.entries(P.friends).map(([a,b])=>a+b.status))+(P.user?P.user.uid:''); if(k!==lastRel){ lastRel=k; window.dispatchEvent(new Event('pbg-rel')); } }catch(e){} try{ hubSide(); }catch(e){} try{ const inv=document.getElementById('l-inv'); if(inv&&!inv.contains(document.activeElement)) P.renderInvite(inv); }catch(e){} const f=$('#pbg-fab'); if(!f) return; const pr=P.prof; f.querySelector('.av').innerHTML=pr?(/^https?:/.test(pr.avatar||'')?`<img src="${esc(pr.avatar)}">`:esc(pr.avatar||'👤')):'👤';
     f.querySelector('.nm').textContent=P.user?(pr&&pr.name||'…'):'Đăng nhập'; f.querySelector('.on').textContent=Object.keys(P.online).length;
     const n=incoming().length+(P.unread||0), bd=f.querySelector('.bd'); bd.textContent=n; bd.style.display=n?'inline-flex':'none'; }
 
