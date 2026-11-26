@@ -69,7 +69,7 @@ const KHUI=(()=>{
     root.querySelector('.side').innerHTML=h;
     if(isNew){ lastEv=ev.n;
       if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7) api.toast('Ra 7! Kẻ cướp xuất hiện');
-        if(ev.got){ let k=0; S.hex.forEach((hx,hi)=>{ if(hx.num!==sum||hi===S.robber) return; KH.HEX[hi].v.forEach(v=>{ const o=S.vo[v]; if(!o) return; const from=svgPt(X(KH.HEX[hi].x),X(KH.HEX[hi].y)), to=rectOf(`.pl[data-p="${o.p}"]`); for(let c=0;c<(o.city?2:1);c++) fly(from,to,A.resCard(hx.res),42,59,300+(k++)*120); }); });
+        if(ev.got){ let k=0; S.hex.forEach((hx,hi)=>{ if(hx.num!==sum||hi===S.robber) return; KH.HEX[hi].v.forEach(v=>{ const o=S.vo[v]; if(!o) return; const from=svgPt(X(KH.HEX[hi].x),X(KH.HEX[hi].y)), to=rectOf(`.pl[data-p="${o.p}"]`); for(let c=0;c<(o.city?2:1);c++) fly(from,to,A.resCard(hx.res),66,50,300+(k++)*120); }); });
           if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),900); } }
       else if(ev.k==='town'||ev.k==='city'||ev.k==='road'){ SFX.clack(2); if(ev.seat===ME&&ev.k!=='road') SFX.reward(); }
       else if(ev.k==='steal'){ SFX.flip(); fly(pre.vic,rectOf(`.pl[data-p="${ev.seat}"]`),`<div class="khback"></div>`,42,59,350); if(ev.vic===ME) api.toast(api.esc(S.seats[ev.seat].name)+' lấy của bạn 1 '+KH_RES[ev.r]); else if(ev.seat===ME) api.toast('Bạn lấy được 1 '+KH_RES[ev.r],true); }

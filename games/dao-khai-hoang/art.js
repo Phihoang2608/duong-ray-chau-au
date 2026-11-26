@@ -136,20 +136,19 @@ const KHART=(()=>{
     c=c||'#fbfaf6'; return `<svg viewBox="-16 -16 34 34" class="die"><rect x="-12" y="-11" width="26" height="26" rx="6" fill="#00000055"/><rect x="-13" y="-13" width="26" height="26" rx="6" fill="${shade(c,-.25)}"/><rect x="-13" y="-14" width="25" height="25" rx="6" fill="${c}"/><path d="M-11,-8 Q-11,-12 -7,-12 L7,-12" stroke="#fff" stroke-width="2" fill="none" opacity=".9"/><rect x="-13" y="-14" width="25" height="25" rx="6" fill="none" stroke="#00000030"/>
       ${P.map(([a,b])=>`<circle cx="${a*6.5-.5}" cy="${b*6.5-1.5}" r="2.6" fill="${n===1?'#c0262d':'#1d1b22'}"/><circle cx="${a*6.5-1.1}" cy="${b*6.5-2.2}" r=".8" fill="#fff" opacity=".5"/>`).join('')}</svg>`; }
   // ---------- lá bài tài nguyên ----------
-  const RC=['#2f7d32','#c2562b','#7cb342','#e0a91c','#6b7682'], RN=['Gỗ','Gạch','Cừu','Lúa','Quặng'];
+  const RC=['#2f7d32','#c2562b','#7cb342','#e0a91c','#6b7682'], RN=['Gỗ','Gạch','Cừu','Lúa','Đá'];
   const ccache={};
-  function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, R0=rng(r*71+3); let a='';
-    const sky=`<rect x="0" y="0" width="70" height="70" fill="url(#khCs${r})"/>`;
-    if(r===0){ a=sky+`<path d="M0 44 Q35 36 70 44 V70 H0Z" fill="#3f7f2a"/>`; for(let k=0;k<6;k++) a+=pine(6+k*12,46,.55,R0);
-      [[20,62],[35,62],[50,62],[27.5,52],[42.5,52],[35,42]].forEach(([x,y])=>{ a+=`<circle cx="${x}" cy="${y}" r="7.6" fill="#5a3416"/><circle cx="${x}" cy="${y}" r="6.2" fill="#e6c08a"/><circle cx="${x}" cy="${y}" r="4.2" fill="none" stroke="#b88a52" stroke-width=".7"/><circle cx="${x}" cy="${y}" r="2.2" fill="none" stroke="#b88a52" stroke-width=".7"/><circle cx="${x}" cy="${y}" r=".8" fill="#8a5a2a"/>`; }); }
-    if(r===1){ a=sky+`<path d="M0 40 Q20 30 40 38 T70 36 V70 H0Z" fill="#b8562b"/><path d="M0 48 Q30 42 70 50 V70 H0Z" fill="#9a4520"/>`+bricks(30,60,1.5)+bricks(14,66,.9); }
-    if(r===2){ a=sky+`<circle cx="56" cy="14" r="6" fill="#fff6c0"/><path d="M0 40 Q35 30 70 40 V70 H0Z" fill="#8bc34a"/><path d="M0 52 Q35 46 70 54 V70 H0Z" fill="#6ea83a"/>`+sheep(36,52,2.2,0)+sheep(12,40,.9,1); }
-    if(r===3){ a=sky+`<circle cx="54" cy="16" r="7" fill="#fff2b0"/><path d="M0 46 Q35 40 70 46 V70 H0Z" fill="#e9be3c"/>`; for(let k=0;k<13;k++){ const ang=(k-6)*.09, x2=35+Math.sin(ang)*30, y2=62-Math.cos(ang)*40; a+=`<line x1="${f(35+Math.sin(ang)*4)}" y1="64" x2="${f(x2)}" y2="${f(y2+8)}" stroke="#b68b12" stroke-width="1.3"/><ellipse cx="${f(x2)}" cy="${f(y2+3)}" rx="2.4" ry="5.6" fill="#f7d65a" stroke="#a87c10" stroke-width=".6" transform="rotate(${f(ang*57)} ${f(x2)} ${f(y2+3)})"/>`; } a+=`<rect x="29" y="50" width="12" height="4" rx="1" fill="#8a3a14"/>`; }
-    if(r===4){ a=sky+peak(18,48,20,34,R0,true)+peak(50,48,24,40,R0,true)+`<path d="M0 48 H70 V70 H0Z" fill="#5d646d"/>`;
-      [[20,64,1.6],[40,62,1.9],[30,56,1.4],[52,66,1.3]].forEach(([x,y,s])=>{ a+=`<polygon points="${f(x-6*s)},${f(y)} ${f(x-4*s)},${f(y-5*s)} ${f(x+1*s)},${f(y-6.5*s)} ${f(x+6*s)},${f(y-1*s)} ${f(x+5*s)},${f(y+1*s)}" fill="#9aa3ad"/><polygon points="${f(x+1*s)},${f(y-6.5*s)} ${f(x+6*s)},${f(y-1*s)} ${f(x+5*s)},${f(y+1*s)} ${f(x)},${f(y)}" fill="#4b545e"/><polygon points="${f(x-2*s)},${f(y-3*s)} ${f(x)},${f(y-4.5*s)} ${f(x+1.5*s)},${f(y-2*s)} ${f(x-.5*s)},${f(y-1*s)}" fill="#cfe8ff"/>`; }); }
-    const s=`<svg viewBox="0 0 70 98" class="rcard"><defs><clipPath id="${id}"><rect x="5" y="5" width="60" height="64" rx="4"/></clipPath><linearGradient id="khCs${r}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc4ec"/><stop offset="1" stop-color="#e6f5fb"/></linearGradient><linearGradient id="khCf${r}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${shade(RC[r],.35)}"/><stop offset=".5" stop-color="${RC[r]}"/><stop offset="1" stop-color="${shade(RC[r],-.45)}"/></linearGradient></defs>
-      <rect x="0" y="0" width="70" height="98" rx="7" fill="url(#khCf${r})"/><rect x="2.5" y="2.5" width="65" height="93" rx="5.5" fill="#fbf4e2"/><g clip-path="url(#${id})">${((window.KH_IMGS||{}).res||[]).includes(r)?`<image href="assets/res-${r}.webp" x="5" y="5" width="60" height="64" preserveAspectRatio="xMidYMid slice"/>`:`<g transform="translate(5,5) scale(.857,.914)">${a}</g>`}</g><rect x="5" y="5" width="60" height="64" rx="4" fill="none" stroke="${shade(RC[r],-.4)}" stroke-width="1.2"/>
-      <path d="M8 74 H62 L58 82 L62 90 H8 L12 82Z" fill="url(#khCf${r})"/><text x="35" y="86" class="rn">${RN[r]}</text></svg>`;
+  function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, nm=RN[r].toUpperCase();
+    const s=`<svg viewBox="0 0 100 76" class="rcard"><defs>
+      <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset=".45" stop-color="#a8642f"/><stop offset="1" stop-color="#7d4520"/></linearGradient></defs>
+      <image href="assets/res-${r}.webp" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
+      <g class="plank" transform="scale(1,.88)"><path d="M13 3.5 L16 1.5 H84 L87 3.5 L89 5.5 V17.5 L87 19.5 L84 21.5 H16 L13 19.5 L11 17.5 V5.5Z" fill="#1b0f06" transform="translate(0,1.2)" opacity=".55"/>
+      <path d="M13 3 L16 1 H84 L87 3 L89 5 V17 L87 19 L84 21 H16 L13 19 L11 17 V5Z" fill="url(#${id}w)" stroke="#1b0f06" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M15 5 H55 M60 4.6 H84 M16 11 H40 M47 10.6 H70 M74 11 H86 M15 17.6 H48 M56 17.4 H84" stroke="#6b3a17" stroke-width=".7" stroke-linecap="round" fill="none" opacity=".7"/>
+      <path d="M15 3.4 H84" stroke="#e8b27a" stroke-width=".9" stroke-linecap="round" opacity=".8"/>
+      <circle cx="17" cy="11" r="2.1" fill="#4b4752" stroke="#1b0f06" stroke-width=".8"/><path d="M15.7 12.2 L18.3 9.8" stroke="#1b0f06" stroke-width=".7"/>
+      <circle cx="83" cy="11" r="2.1" fill="#4b4752" stroke="#1b0f06" stroke-width=".8"/><path d="M81.7 12.2 L84.3 9.8" stroke="#1b0f06" stroke-width=".7"/>
+      <text x="50" y="${nm.length>4?15.6:16.4}" class="rn" style="font-size:${nm.length>4?12.5:14.5}px">${nm}</text></g></svg>`;
     return ccache['r'+r]=s; }
   const DV={knight:['Hiệp sĩ','#7c2d12'],road:['Làm đường','#1e3a8a'],plenty:['Được mùa','#166534'],mono:['Độc quyền','#6b21a8'],vp:['Điểm thưởng','#a16207']};
   function devCard(k){ if(ccache[k]) return ccache[k]; const [nm,c]=DV[k]; let a='';

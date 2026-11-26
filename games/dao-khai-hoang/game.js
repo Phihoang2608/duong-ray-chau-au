@@ -1,6 +1,6 @@
 /* ===================== ĐẢO KHAI HOANG ===================== */
-// tài nguyên: 0 Gỗ, 1 Gạch, 2 Cừu, 3 Lúa, 4 Quặng ; 5 = sa mạc
-const KH_RES=['Gỗ','Gạch','Cừu','Lúa','Quặng'], KH_WIN=10;
+// tài nguyên: 0 Gỗ, 1 Gạch, 2 Cừu, 3 Lúa, 4 Đá ; 5 = sa mạc
+const KH_RES=['Gỗ','Gạch','Cừu','Lúa','Đá'], KH_WIN=10;
 const KH_COST={road:[1,1,0,0,0], town:[1,1,1,1,0], city:[0,0,0,2,3], dev:[0,0,1,1,1]};
 const KH_DEVN={knight:'Hiệp sĩ', vp:'Điểm thưởng', road:'Làm đường', plenty:'Được mùa', mono:'Độc quyền'};
 const KH = (()=>{
