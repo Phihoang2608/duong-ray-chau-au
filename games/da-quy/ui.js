@@ -143,8 +143,10 @@ ${ticks}${rn}
       S.board[lv].forEach((id,i)=>{ h+= id==null?'<div class="dqc empty"></div>':cardEl(id,`data-lv="${lv}" data-i="${i}"`,(newIds.includes(id)?'deal ':'')+(pick&&pick.lv===lv&&pick.i===i?'pk ':'')+(P&&DQ.payPlan(P,DQ.CARDS[id])?'can':'')); });
       h+=`</div>`; });
     const gemTok=c=>`<div class="tok ${sel.includes(c)?'on':''} ${c===5?'gold':''}" data-tok="${c}" title="${DQ_COL[c]}">${A.floatGem(c,S.bank[c])}<span>${S.bank[c]}</span><em class="gn">${GN[c]}</em>${sel.filter(x=>x===c).length>1?'<i>×2</i>':''}</div>`;
+    const selDots=sel.length?`<div class="sel-dots">${sel.map(c=>A.gemSVG(c,18,c)).join('')}<button type="button" class="sel-clr" data-a="clrsel" title="Bỏ chọn">✕</button></div>`:'';
     h+=`</div><div class="bank"><div class="bt">Ngân khố</div><div class="gems">${[0,1,2,3,4].map(gemTok).join('')}</div>
-      <button class="tbtn pri" data-a="take" ${my&&S.step==='main'&&validTake(S)?'':'disabled'}><span class="gtx">Lấy đá</span></button>
+      ${selDots}
+      <button class="tbtn pri" data-a="take" ${my&&S.step==='main'&&validTake(S)?'':'disabled'}><span class="gtx">Lấy đá${sel.length?' ('+sel.length+')':''}</span></button>
       <small>3 màu khác nhau, hoặc 2 viên cùng màu (còn từ 4).</small>
       <div class="goldbox"><div class="bt">Vàng</div>${gemTok(5)}<small>Nhận khi giữ chỗ thẻ</small></div></div>`;
     let act='';
@@ -209,9 +211,12 @@ ${ticks}${rn}
     if(e.target.closest('[data-hist]')){ showHist(); return; } const tl=e.target.closest('[data-tool]'); if(tl){ const k=tl.dataset.tool; if(k==='chat'){ const cb=document.getElementById('tb-chatbtn'); if(cb) cb.click(); } else if(k==='fx'){ cycleFx(); } else if(k==='app'){ window.PBG&&PBG.install(); } else if(k==='acc'){ if(window.PBG) (PBG.user?PBG.open():PBG.login()); } else if(k==='fs') toggleFS(); else if(k==='snd'){ const sb=document.getElementById('tb-sound'); sb&&sb.click(); tl.textContent=SFX.on===false?'🔇':'🔊'; } else if(k==='rules'){ const rb=document.getElementById('tb-rules'); rb&&rb.click(); } else if(k==='zin') setZ(ZM*1.2); else if(k==='zout') setZ(ZM/1.2); return; } const rt=e.target.closest('[data-ret]'); if(rt){ api.act({t:'ret',c:+rt.dataset.ret}); return; }
     const cd=e.target.closest('[data-lv],[data-res],[data-deck]'); if(cd){ const d=cd.dataset;
       const np = d.deck?{deck:+d.deck}:d.res!=null?{res:+d.res}:{lv:+d.lv,i:+d.i};
-      if (pick && JSON.stringify(pick)===JSON.stringify(np) && my && !np.deck){ const cid=np.res!=null?S.P[ME].res[np.res]:S.board[np.lv][np.i]; if(DQ.payPlan(S.P[ME],DQ.CARDS[cid])){ api.act(np.res!=null?{t:'buy',res:np.res}:{t:'buy',lv:np.lv,i:np.i}); pick=null; return; } }
-      pick=np; sel=[]; SFX.pop(); render(S,ME,api); return; }
+      const isTouch = matchMedia('(pointer:coarse)').matches;
+      if (!isTouch && pick && JSON.stringify(pick)===JSON.stringify(np) && my && !np.deck){ const cid=np.res!=null?S.P[ME].res[np.res]:S.board[np.lv][np.i]; if(DQ.payPlan(S.P[ME],DQ.CARDS[cid])){ api.act(np.res!=null?{t:'buy',res:np.res}:{t:'buy',lv:np.lv,i:np.i}); pick=null; return; } }
+      pick = (pick && JSON.stringify(pick)===JSON.stringify(np)) ? null : np;
+      sel=[]; SFX.pop(); render(S,ME,api); return; }
     const b=e.target.closest('[data-a]'); if(!b||b.disabled) return; SFX.pop(); const a=b.dataset.a;
+    if (a==='clrsel'){ sel=[]; render(S,ME,api); return; }
     if (a==='cancel'){ pick=null; render(S,ME,api); return; }
     if (a==='again'){ api.rematch(); return; }
     if (a==='take'){ api.act({t:'take',g:sel.slice()}); sel=[]; return; }

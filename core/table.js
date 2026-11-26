@@ -144,18 +144,29 @@ const Table = (()=>{
   /* ---------- Menu ---------- */
   function lastRoom(){ try{ const v=JSON.parse(ls.get(CFG.prefix+'-last')||'null'); if(v && Date.now()-v.t<6*3600e3) return v; }catch(e){} return null; }
   function saveLast(role){ ls.set(CFG.prefix+'-last', JSON.stringify({code:CODE, role, t:Date.now()})); }
-  function myName(){ return clean(ls.get('bg-name'))||''; }
+  function myName(){
+    const P=window.PBG;
+    const accName=P&&P.user&&P.prof&&P.prof.name ? clean(P.prof.name) : '';
+    if (accName){ ls.set('bg-name',accName); return accName; }
+    return clean(ls.get('bg-name'))||'';
+  }
   function menu(){
     MODE='local'; S=null; document.body.classList.remove('online'); setTop();
     const lr=lastRoom(); const bots=CFG.botOptions||[1,2,3];
     box(`<h2>${esc(CFG.title)}</h2><p class="sub">${esc(CFG.tagline||'')}</p>
-      <label>Tên của bạn</label><input id="m-name" maxlength="16" value="${esc(myName())}" placeholder="Nhập tên">
+      <label>Tên của bạn</label><input id="m-name" maxlength="16" value="${esc(myName())}" placeholder="Nhập tên hoặc để trống tự đặt">
       <label>Số máy chơi cùng (khi chơi với máy)</label><select id="m-bots">${bots.map(n=>`<option value="${n}" ${n===(CFG.defaultBots||bots[Math.min(1,bots.length-1)])?'selected':''}>${n} máy</option>`).join('')}</select>${CFG.difficulty?`<label>Độ khó của máy</label><select id="m-diff">${[['easy','Dễ — chơi bừa, không để ý quý tộc'],['med','Trung bình — như người mới chơi'],['hard','Khó — máy chơi giỏi']].map(([v,t])=>`<option value="${v}" ${(ls.get('bg-diff')||'med')===v?'selected':''}>${t}</option>`).join('')}</select>`:''}
-      <div class="tb-grid"><button class="tbtn pri full" id="m-local">Chơi với máy</button>
-        <div class="tb-or">Chơi cùng bạn bè</div>
-        <button class="tbtn" id="m-create">Tạo phòng</button><button class="tbtn" id="m-join">Vào phòng bằng mã</button>
-        ${lr?`<button class="tbtn pri full" id="m-resume">Vào lại phòng ${esc(lr.code)}</button>`:''}</div>`);
-    const nm=()=>{ const v=clean($('#m-name').value); if(!v){ toast('Hãy nhập tên của bạn'); $('#m-name').focus(); return null; } ls.set('bg-name',v); return v; };
+      <div class="tb-grid"><button class="tbtn pri full" id="m-local">▶ Chơi ngay với máy</button>
+        <div class="tb-or">Chơi online cùng bạn bè</div>
+        <button class="tbtn" id="m-create">🌐 Tạo phòng</button><button class="tbtn" id="m-join">🔑 Vào phòng bằng mã</button>
+        ${lr?`<button class="tbtn pri full" id="m-resume">↩ Vào lại phòng ${esc(lr.code)}</button>`:''}</div>`);
+    const nm=()=>{
+      let v=clean($('#m-name').value) || myName();
+      if(!v) v='Khách'+Math.floor(100+Math.random()*900);
+      $('#m-name').value=v;
+      ls.set('bg-name',v);
+      return v;
+    };
     $('#m-local').onclick=()=>{ if(!nm()) return; if($('#m-diff')) ls.set('bg-diff',$('#m-diff').value); SFX.init(); const n=+$('#m-bots').value; startGame([{name:myName(),pid:PID}].concat(Array.from({length:n},(_,i)=>({name:(CFG.botNames||['Máy An','Máy Bình','Máy Chi','Máy Dũng','Máy Én'])[i],bot:true}))), 'local'); };
     $('#m-create').onclick=()=>{ if(nm()) createRoom(); };
     $('#m-join').onclick=()=>{ if(nm()) askJoin(''); };
