@@ -617,6 +617,30 @@ body.landphone .quick button{font-size:12px;padding:1px 6px}
 #leaveBtn{display:none}
 body.online #leaveBtn{display:inline-block}
 body.landphone #leaveBtn{font-size:0!important}body.landphone #leaveBtn::before{content:"🚪";font-size:13px}
+
+/* ===== thẻ toa ngang & vé ảnh ===== */
+.card{aspect-ratio:3/2!important;border-radius:6px}
+.card img.cardimg,.flycard img.cardimg,.mini img.cardimg{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit;-webkit-user-drag:none;user-select:none}
+.flycard img.cardimg{border-radius:6px}
+.mini{width:30px}.mini img.cardimg{border-radius:3px}
+.vticket.imgt{display:block!important;min-height:0!important;padding:0!important;background:none!important;border:none!important;aspect-ratio:600/392;border-radius:12px;
+  box-shadow:0 3px 8px rgba(0,0,0,.25),0 0 0 3px var(--hue)!important;overflow:visible}
+.vticket.imgt img{display:block;width:100%;height:100%;object-fit:contain;border-radius:12px}
+.vticket.imgt:hover{box-shadow:0 8px 16px rgba(0,0,0,.3),0 0 0 4px var(--hue)!important}
+.vticket.imgt.ok img{filter:saturate(.55) brightness(.92)}
+.vticket.imgt .vt-done{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);background:#15803d;color:#fff;font:bold 14px "Times New Roman",serif;padding:4px 12px;border-radius:8px;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.35);white-space:nowrap;inset:auto;width:auto;height:auto}
+.vticket.imgt .vt-longtag{position:absolute;left:8px;bottom:6px;background:#b45309;color:#fff;font:bold 11px "Times New Roman",serif;padding:1px 7px;border-radius:7px;border:1px solid #fde68a}
+
+body.landphone #tkPanel #tickets{grid-template-columns:1fr 1fr!important}
+body.landphone .vticket.imgt{border-radius:8px}body.landphone .vticket.imgt img{border-radius:8px}
+body.landphone .vticket.imgt .vt-longtag{font-size:9px;padding:0 4px;left:4px;bottom:3px}
+body.landphone .vticket.imgt .vt-done{font-size:10px;padding:2px 6px}
+
+#hand{grid-template-columns:repeat(5,1fr)!important;gap:8px 6px!important;padding-top:7px}
+.hcard .lab,.hcard small{font-size:11px}
+body.landphone #hand{grid-template-columns:repeat(5,1fr)!important;gap:5px 4px!important}
+body.landphone .hcard.zero{display:none}
+.hcard .cnt{z-index:2}
 </style>
 </head>
 <body>
@@ -1401,6 +1425,17 @@ function decorNA(){
   return s;
 }
 
+/* ===== Ảnh thẻ toa & vé tàu (railart) ===== */
+const RA_BASE = '../../railart/';
+const RA_REG = /bac-my/.test(location.pathname) ? 'na' : 'eu';
+const RA_CARDS = ['red','orange','yellow','green','blue','purple','black','white','loco','back'];
+const _cardSVG0 = cardSVG;
+cardSVG = function(c){
+  if (RA_CARDS.includes(c)) return `<img class="cardsvg cardimg" src="${RA_BASE}cards/${c}.webp" alt="" draggable="false" decoding="async">`;
+  return _cardSVG0(c);
+};
+(function(){ try{ RA_CARDS.forEach(c=>{ const i=new Image(); i.src=RA_BASE+'cards/'+c+'.webp'; }); }catch(e){} })();
+
 
 
 /* ===================== GIAO DIỆN ===================== */
@@ -1641,6 +1676,9 @@ function miniMapSVG(t, hue){
 }
 function ticketHTML(t, ok, hue, extra){
   hue = hue || (t.long ? '#b45309' : '#8b2e16');
+  if (typeof RA_BASE!=='undefined') return `<div class="vticket imgt ${ok?'ok':''} ${t.long?'long':''} ${extra||''}" data-id="${t.id}" data-a="${t.a}" data-b="${t.b}" data-hue="${hue}" style="--hue:${hue}" title="${esc(CITIES[t.a].name)} → ${esc(CITIES[t.b].name)} · ${t.pts} điểm">
+    <img src="${RA_BASE}tickets/${RA_REG}/${t.id}.webp" alt="${esc(CITIES[t.a].name)} – ${esc(CITIES[t.b].name)} ${t.pts} điểm" draggable="false" decoding="async">
+    ${t.long?'<span class="vt-longtag">★ Đường dài</span>':''}${ok?'<div class="vt-done">✔ ĐÃ HOÀN THÀNH</div>':''}</div>`;
   return `<div class="vticket ${ok?'ok':''} ${t.long?'long':''} ${extra||''}" data-id="${t.id}" data-a="${t.a}" data-b="${t.b}" data-hue="${hue}" style="--hue:${hue}">
     <div class="vt-stub">${miniMapSVG(t, hue)}</div>
     <div class="vt-main">
