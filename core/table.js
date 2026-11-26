@@ -133,9 +133,10 @@ const Table = (()=>{
     $('#tb-modal').classList.add('show');
   }
   function closeModal(){ $('#tb-modal').classList.remove('show'); }
-  window.addEventListener('pbg-rel',()=>{ if(ROOM&&document.querySelector('#tb-box .tb-lobby')) lobby(); });
+  const inLobby=()=>ROOM&&!document.body.classList.contains('ingame')&&(MODE==='host'?LOBBY:!S)&&document.querySelector('#tb-box .tb-lobby');
+  window.addEventListener('pbg-rel',()=>{ if(inLobby()) lobby(); });
   function acct(){ const P=window.PBG; return P&&P.user?{uid:P.user.uid, av:(P.prof&&P.prof.avatar)||null}:{uid:null,av:null}; }
-  let lastAcct=''; setInterval(()=>{ const a=acct(), k=a.uid+'|'+a.av; if(k!==lastAcct){ lastAcct=k; if(ROOM) ROOM.presence(a).catch(()=>{}); if(ROOM&&document.querySelector('#tb-box .tb-lobby')) lobby(); } },1500);
+  let lastAcct=''; setInterval(()=>{ const a=acct(), k=a.uid+'|'+a.av; if(k!==lastAcct){ lastAcct=k; if(ROOM) ROOM.presence(a).catch(()=>{}); if(inLobby()) lobby(); } },1500);
   function avHTML(av,name,i){ return av&&/^https?:/.test(av)?`<span class="av im"><img src="${esc(av)}" alt=""></span>`:av?`<span class="av em">${esc(av)}</span>`:avatar(name,i); }
   function box(html){ document.body.classList.remove('ingame'); $('#tb-box').innerHTML=html; }
   function avatar(name,i){ return `<span class="av" style="background:${COLORS[i%COLORS.length]}">${esc((name||'?').charAt(0).toUpperCase())}</span>`; }
@@ -160,11 +161,11 @@ const Table = (()=>{
     $('#m-join').onclick=()=>{ if(nm()) askJoin(''); };
     if (lr) $('#m-resume').onclick=()=>{ if(!nm()) return; lr.role==='host' ? createRoom(lr.code) : joinRoom(lr.code); };
   }
-  function askJoin(pre){
-    box(`<h2>Vào phòng</h2><p class="sub">Nhập tên và mã phòng bạn bè gửi</p><label>Tên của bạn</label><input id="j-name" maxlength="16" value="${esc(myName())}">
+  function askJoin(pre, watch=false){
+    box(`<h2>${watch?'Xem phòng':'Vào phòng'}</h2><p class="sub">${watch?'Nhập tên hiển thị và mã phòng muốn theo dõi':'Nhập tên và mã phòng bạn bè gửi'}</p><label>Tên của bạn</label><input id="j-name" maxlength="16" value="${esc(myName())}">
       <label>Mã phòng</label><input id="j-code" maxlength="6" value="${esc(pre)}" style="letter-spacing:.3em;text-transform:uppercase;font-size:20px">
-      <div class="tb-grid"><button class="tbtn pri" id="j-go">Vào phòng</button><button class="tbtn" id="j-back">Quay lại</button></div>`);
-    const go=()=>{ const n=clean($('#j-name').value); if(!n){ toast('Hãy nhập tên'); return; } ls.set('bg-name',n); joinRoom($('#j-code').value); };
+      <div class="tb-grid"><button class="tbtn pri" id="j-go">${watch?'Vào xem':'Vào phòng'}</button><button class="tbtn" id="j-back">Quay lại</button></div>`);
+    const go=()=>{ const n=clean($('#j-name').value); if(!n){ toast('Hãy nhập tên'); return; } ls.set('bg-name',n); joinRoom($('#j-code').value, watch); };
     $('#j-go').onclick=go; $('#j-back').onclick=menu; $$('#tb-box input').forEach(i=>i.onkeydown=e=>{ if(e.key==='Enter') go(); });
     setTimeout(()=>{ (pre?$('#j-name'):$('#j-code')).focus(); },50);
   }
@@ -187,20 +188,20 @@ const Table = (()=>{
     r.presence(Object.assign({role:'host', name:myName(), pid:PID, lobby:true},acct())).catch(()=>{});
     lobby();
   }
-  async function joinRoom(code){
+  async function joinRoom(code, watch=false){
     code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,''); if(code.length<4){ toast('Mã phòng gồm 4 ký tự'); return; }
     box(`<h2>Đang vào phòng ${esc(code)}…</h2><div class="spin"></div>`);
-    const A=await api(); if(!A) return fail('Không tải được phần kết nối.', ()=>joinRoom(code));
-    let r; try{ r=await A.join(CFG.prefix+'-'+code.toLowerCase(),{host:false}); }catch(e){ return fail('Không vào được phòng '+esc(code)+'. Kiểm tra lại mã và mạng.', ()=>joinRoom(code)); }
-    leaveQuiet(); ROOM=r; CODE=code; MODE='client'; S=null; ME=-1; seq=0; resetChat(); saveLast('guest'); document.body.classList.add('online');
+    const A=await api(); if(!A) return fail('Không tải được phần kết nối.', ()=>joinRoom(code, watch));
+    let r; try{ r=await A.join(CFG.prefix+'-'+code.toLowerCase(),{host:false}); }catch(e){ return fail('Không vào được phòng '+esc(code)+'. Kiểm tra lại mã và mạng.', ()=>joinRoom(code, watch)); }
+    leaveQuiet(); ROOM=r; CODE=code; MODE=watch?'watcher':'client'; S=null; ME=-1; seq=0; resetChat(); if(!watch) saveLast('guest'); document.body.classList.add('online');
     r.onPeers(ch=>{ if(ROOM!==r) return; PEERS=ch.peers; const me=PEERS.find(p=>p.sameTab); if(me) MYPEER=me.peer; onClientPeers(); });
-    r.presence(Object.assign({role:'guest', name:myName(), pid:PID, act:null},acct())).catch(()=>{});
-    lobby(); setTimeout(()=>{ if(MODE==='client' && !hostPeer() && !S) lobby(); },5000);
+    r.presence(Object.assign({role:watch?'viewer':'guest', name:myName(), pid:PID, act:null},acct())).catch(()=>{});
+    if(!S) lobby(); setTimeout(()=>{ if((MODE==='client'||MODE==='watcher') && !hostPeer() && !S) lobby(); },5000);
   }
   function leaveQuiet(){ try{ ROOM && ROOM.leave(); }catch(e){} ROOM=null; PEERS=[]; annKey=''; }
   function askLeave(){
-    modal('Rời phòng?', MODE==='host'?'Bạn là <b>chủ phòng</b>. Khi bạn rời, ván tạm dừng cho tới khi bạn bấm <b>Vào lại phòng</b> ở menu.':'Ghế của bạn vẫn được giữ; vắng quá 15 giây máy sẽ đánh thay. Bấm <b>Vào lại phòng</b> ở menu để quay lại.',
-      [{t:'Xác nhận rời phòng',pri:1,f:()=>{ if(MODE==='host' && S && !LOBBY) savedS=S; saveLast(MODE==='host'?'host':'guest'); leaveQuiet(); MODE='local'; S=null; menu(); }},{t:'Ở lại'}]);
+    modal('Rời phòng?', MODE==='host'?'Bạn là <b>chủ phòng</b>. Khi bạn rời, ván tạm dừng cho tới khi bạn bấm <b>Vào lại phòng</b> ở menu.':MODE==='watcher'?'Bạn đang xem với tư cách khán giả, rời phòng sẽ không ảnh hưởng đến người chơi.':'Ghế của bạn vẫn được giữ; vắng quá 15 giây máy sẽ đánh thay. Bấm <b>Vào lại phòng</b> ở menu để quay lại.',
+      [{t:'Xác nhận rời phòng',pri:1,f:()=>{ if(MODE==='host' && S && !LOBBY) savedS=S; if(MODE!=='watcher') saveLast(MODE==='host'?'host':'guest'); leaveQuiet(); MODE='local'; S=null; menu(); }},{t:'Ở lại'}]);
   }
   function fresh(peer){ const p=peer&&PEERS.find(q=>q.peer===peer); return !!p && (p.sameTab || Date.now()-p.updatedAt<25000); }
   function hostPeer(){ return PEERS.find(p=>!p.sameTab && p.presence && p.presence.role==='host'); }
@@ -270,6 +271,7 @@ const Table = (()=>{
   function draw(){ if(!S) return; document.body.classList.add('ingame'); setTop(); CFG.render(S, ME, API); try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S,ME}); }catch(e){} }
   function act(a){
     SFX.init(); if (!S) return false;
+    if (MODE==='watcher'){ toast('Bạn đang ở chế độ xem, không thể thực hiện lượt chơi'); return false; }
     if (MODE==='client'){ if (waiting) return false; seq++; waiting=true; ROOM.presence({act:Object.assign({},a,{n:seq})}).catch(()=>{ waiting=false; }); setTimeout(()=>{ waiting=false; },4000); return true; }
     const ok=CFG.apply(S, ME, a, now()); if (ok) commit(); else SFX.error(); return ok;
   }
@@ -296,7 +298,7 @@ const Table = (()=>{
   }
   /* Máy đánh thay, hết giờ, nhịp game */
   setInterval(()=>{
-    if (!S || MODE==='client') { if(S) CFG.render && CFG.tickView && CFG.tickView(S,ME,API); return; }
+    if (!S || MODE==='client' || MODE==='watcher') { if(S) CFG.render && CFG.tickView && CFG.tickView(S,ME,API); return; }
     let ch=false; const t=now();
     if (CFG.tick && CFG.tick(S,t)) ch=true;
     const who=CFG.whoActs(S)||[];
@@ -317,9 +319,9 @@ const Table = (()=>{
     chatPrimed=true; if(fresh) SFX.chatPing(); chatList.sort((a,b)=>a.t-b.t); chatList=chatList.slice(-60); renderChat(); }
   function renderChat(){ const l2=$('#l-chatls'); if(l2){ l2.innerHTML=chatList.map(m=>`<div class="cm ${m.me?'me':''}"><b>${esc(m.me?'Bạn':m.name)}</b>${esc(m.x)}</div>`).join('')||'<div class="mute" style="text-align:center;margin:auto">Chưa có tin nhắn — chào mọi người đi!</div>'; l2.scrollTop=l2.scrollHeight; } const ls=$('#tb-chatls'); if(!ls) return; ls.innerHTML=chatList.map(m=>`<div class="cm ${m.me?'me':''}"><b>${esc(m.me?'Bạn':m.name)}</b>${esc(m.x)}</div>`).join('')||'<div style="color:#8b889c;text-align:center;margin:auto">Chưa có tin nhắn</div>'; ls.scrollTop=ls.scrollHeight;
     const u=$('#tb-unread'); u.style.display=unread?'':'none'; u.textContent=unread; }
-  function setTop(){ const on=MODE!=='local'; $('#tb-chatbtn').style.display=on?'':'none'; $('#tb-leave').style.display=on?'':'none'; $('#tb-code').innerHTML=on&&CODE?`Phòng <b>${esc(CODE)}</b>`:''; if(!on) $('#tb-chat').classList.remove('show'); }
+  function setTop(){ const on=MODE!=='local'; $('#tb-chatbtn').style.display=on?'':'none'; $('#tb-leave').style.display=on?'':'none'; $('#tb-code').innerHTML=on&&CODE?`Phòng <b>${esc(CODE)}</b>${MODE==='watcher'?' · Đang xem':''}`:''; if(!on) $('#tb-chat').classList.remove('show'); }
 
-  const API={ act, now, toast, modal, esc, avatar, me:()=>ME, mode:()=>MODE, isMine:seat=>seat===ME, menu, rematch:()=>{ if(MODE==='client') return toast('Chờ chủ phòng bắt đầu ván mới'); S=CFG.newGame(S.seats, now(), S); commit(); } };
-  function init(cfg){ CFG=cfg; shell(); if(!window.PBG&&!document.getElementById('pbg-js')){ const a=document.createElement('script'); a.id='pbg-js'; a.src='../../core/account.js'; document.head.appendChild(a); } const m=(location.hash||'').match(/^#p-([a-z0-9]{4,6})$/i); if(m){ menu(); askJoin(m[1].toUpperCase()); } else menu(); }
+  const API={ act, now, toast, modal, esc, avatar, me:()=>ME, mode:()=>MODE, isMine:seat=>seat===ME, menu, rematch:()=>{ if(MODE==='watcher') return toast('Khán giả không thể yêu cầu chơi lại'); if(MODE==='client') return toast('Chờ chủ phòng bắt đầu ván mới'); S=CFG.newGame(S.seats, now(), S); commit(); } };
+  function init(cfg){ CFG=cfg; shell(); if(!window.PBG&&!document.getElementById('pbg-js')){ const a=document.createElement('script'); a.id='pbg-js'; a.src='../../core/account.js'; document.head.appendChild(a); } const h=location.hash||''; const w=h.match(/^#s-([a-z0-9]{4,6})$/i), m=h.match(/^#p-([a-z0-9]{4,6})$/i); if(w){ menu(); askJoin(w[1].toUpperCase(),true); } else if(m){ menu(); askJoin(m[1].toUpperCase()); } else menu(); }
   return { init, API };
 })();

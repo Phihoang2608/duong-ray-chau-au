@@ -305,7 +305,7 @@ section.block#games{padding-top:22px}
   <aside class="side" id="rooms">
     <div class="pane glass">
       <div class="ph"><h3>Phòng đang mở</h3><span class="cnt" id="cRooms">0</span></div>
-      <div class="ptabs"><button class="on" data-f="open">Đang chờ</button><button data-f="play">Đang chơi</button><button data-f="all">Tất cả</button></div>
+      <div class="ptabs"><button class="on" data-f="all">Tất cả</button><button data-f="open">Đang chờ</button><button data-f="play">Đang chơi</button></div>
       <div id="roomList" class="rlist"></div>
     </div>
     <div class="pane glass">
@@ -455,7 +455,7 @@ const TOPIC='duongraychauau/v3hub/rooms/'; const OTOPIC='duongraychauau/v3hub/on
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=s=>String(s||'').replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁠-⁯]/g,'').trim().slice(0,16);
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),2600); }
-function gameUrl(id, code){ return 'games/'+id+'/index.html'+(code?'#p-'+code:''); }
+function gameUrl(id, code, watch=false){ return 'games/'+id+'/index.html'+(code?(watch?'#s-':'#p-')+code:''); }
 
 /* Tên dùng chung cho mọi game */
 const nameEl=$('#name');
@@ -479,7 +479,7 @@ document.addEventListener('click',e=>{ const a=e.target.closest('[data-go]'); if
 
 /* Phòng đang mở — nghe trực tiếp từ máy chủ */
 const ROOMS={}; const seenRooms=new Set();
-let FILTER='open'; const ONLINE={}; const MYID='h'+Math.random().toString(36).slice(2,10);
+let FILTER='all'; const ONLINE={}; const MYID='h'+Math.random().toString(36).slice(2,10);
 const AVC=['#ff5f8f','#8a5cf6','#3fa9f5','#22b38a','#ff9f43','#e84393','#5f6fff'];
 function avColor(s){ let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))>>>0; return AVC[h%AVC.length]; }
 function render(){
@@ -490,10 +490,10 @@ function render(){
   document.querySelector('.layout').classList.toggle('hasrooms', open.length>0);
   const shown=list.filter(r=>FILTER==='all'||(FILTER==='open'?r.open:!r.open));
   if (!shown.length){
-    $('#roomList').innerHTML=`<div class="rempty">${FILTER==='play'?'Chưa có ván nào đang diễn ra.':'Chưa có phòng nào đang chờ người.'}<br><a class="rj" href="${gameUrl(GAMES[0].id)}" data-go="${GAMES[0].id}">Tạo phòng mới</a></div>`;
+    $('#roomList').innerHTML=`<div class="rempty">${FILTER==='play'?'Chưa có ván nào đang diễn ra.':FILTER==='open'?'Chưa có phòng nào đang chờ người.':'Chưa có phòng nào đang hoạt động.'}<br><a class="rj" href="${gameUrl(GAMES[0].id)}" data-go="${GAMES[0].id}">Tạo phòng mới</a></div>`;
   } else $('#roomList').innerHTML=shown.map(r=>{ const g=GAMES.find(x=>x.id===r.g)||GAMES[0]; const n=+r.n||0, mx=+r.max||5; const isNew=!seenRooms.has(r.code); seenRooms.add(r.code);
       const names=(Array.isArray(r.names)?r.names:[r.host]).map(clean).filter(Boolean);
-      const btn = r.open ? (n<mx?`<a class="rj" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Vào</a>`:`<span class="rj full">Đầy</span>`) : `<a class="rj watch" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Xem</a>`;
+      const btn = r.open && n<mx ? `<a class="rj" href="${gameUrl(r.g,r.code)}" data-go="${esc(r.g)}">Vào</a>` : `<a class="rj watch" href="${gameUrl(r.g,r.code,true)}" data-go="${esc(r.g)}">Xem</a>`;
       return `<div class="rc ${isNew?'new':''}"><div class="rt">${THUMBS[g.id]?THUMBS[g.id]():''}</div>
         <div class="ri"><div class="l1"><span class="code">${esc(r.code)}</span><span class="gname">${esc(g.title)}</span></div>
           <div class="who">${r.open?'Chờ':'Đang chơi'} · ${esc(names.join(', '))}</div>
@@ -508,7 +508,7 @@ function render(){
   $('#cOnline').textContent=people.length; $('#sPlayers').textContent=people.length;
   $('#onlineList').innerHTML = people.length ? people.map(p=>`<div class="op"><span class="av" style="background:${avColor(p.name)}">${esc(p.name.charAt(0).toUpperCase())}</span>
       <div><div class="nm">${esc(p.name)}${p.me?'<span class="me">(bạn)</span>':''}</div><div class="wh">${esc(p.where)}</div></div>
-      ${p.room&&p.room.open?`<a href="${gameUrl(p.room.g,p.room.code)}" data-go="${esc(p.room.g)}">Vào cùng</a>`:''}</div>`).join('')
+      ${p.room&&p.room.open?`<a href="${gameUrl(p.room.g,p.room.code)}" data-go="${esc(p.room.g)}">Vào cùng</a>`:p.room?`<a href="${gameUrl(p.room.g,p.room.code,true)}" data-go="${esc(p.room.g)}">Xem</a>`:''}</div>`).join('')
     : '<div class="rempty">Nhập tên ở dải trên để mọi người thấy bạn đang online.</div>';
 }
 document.querySelectorAll('.ptabs button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.ptabs button').forEach(x=>x.classList.toggle('on',x===b)); FILTER=b.dataset.f; render(); });
