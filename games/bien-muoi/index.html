@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08283f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Biển Muối">
+<link rel="manifest" href="../../manifest.json">
+<link rel="apple-touch-icon" href="../../pwa/apple-icon.png">
+<link rel="stylesheet" href="style.css">
+<title>Biển Muối &amp; Thuyền Giấy | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js"></script>
+<script src="game.js"></script>
+<script src="art.js"></script>
+<script src="ui.js"></script>
+<script>
+Table.init({ id:'bien-muoi', prefix:'bm', title:'Biển Muối & Thuyền Giấy', tagline:'Gom bài, đánh cặp, hô DỪNG đúng lúc',
+  minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:700, difficulty:true,
+  newGame:BM.newGame, apply:BM.apply, tick:BM.tick, whoActs:BM.whoActs, botAction:BM.botAction, timeoutAction:BM.timeoutAction,
+  render:BMUI.render, tickView:BMUI.tickView,
+  rules:`<p><b>Mục tiêu:</b> gom bài để có nhiều điểm trong mỗi ván, rồi cộng dồn qua nhiều ván. Ai đạt <b>điểm đích</b> trước thì thắng: <b>2 người 40 điểm, 3 người 35 điểm, 4 người 30 điểm</b> (bằng điểm thì ai ghi nhiều hơn ở ván cuối thắng). Có đủ <b>4 nàng tiên cá</b> là thắng ngay cả trận.</p>
+  <p><b>Bộ bài 58 lá</b>, mỗi lá có một màu:</p>
+  <p>• <b>Lá cặp đôi</b>: Cua (9), Thuyền (8), Cá (7), Cá mập (5) và Người bơi (5). Mỗi cặp giống nhau (hoặc Cá mập + Người bơi) cho <b>1 điểm</b>, dù đã đánh ra hay còn trên tay.</p>
+  <p>• <b>Lá sưu tầm</b>: Vỏ sò (6): 0 / 2 / 4 / 6 / 8 / 10 điểm khi có 1…6 lá. Bạch tuộc (5): 0 / 3 / 6 / 9 / 12 điểm khi có 1…5 lá. Chim cánh cụt (3): 1 / 3 / 5 điểm. Thủy thủ (2): 0 / 5 điểm.</p>
+  <p>• <b>Lá nhân điểm</b>: Hải đăng +1 điểm mỗi lá Thuyền; Đàn cá +1 mỗi lá Cá; Đàn chim cánh cụt +2 mỗi lá Chim cánh cụt; Thuyền trưởng +3 mỗi lá Thủy thủ. Lá nhân điểm không tính là lá cùng loại.</p>
+  <p>• <b>Nàng tiên cá</b> (4): mỗi nàng cho điểm bằng số lá của màu bạn có nhiều nhất; nàng thứ hai tính màu nhiều thứ hai, và mỗi màu chỉ tính cho một nàng.</p>
+  <p><b>Mỗi lượt</b>, chọn 1 trong 2 cách lấy bài:</p>
+  <p>• <b>Rút 2 lá</b> từ chồng bài, giữ 1 lá, bỏ lá kia (ngửa) lên một trong hai chồng bỏ.</p>
+  <p>• <b>Lấy lá trên cùng</b> của một chồng bỏ (không được xem các lá bên dưới).</p>
+  <p>Sau đó bạn có thể <b>đánh các cặp</b> ra trước mặt để dùng hiệu ứng:</p>
+  <p>• <b>2 Cua</b>: xem một chồng bỏ và lấy 1 lá bất kỳ.</p>
+  <p>• <b>2 Thuyền</b>: được đi thêm một lượt.</p>
+  <p>• <b>2 Cá</b>: rút lá trên cùng chồng bài.</p>
+  <p>• <b>Cá mập + Người bơi</b>: rút ngẫu nhiên 1 lá trên tay một đối thủ (không rút được người đã lật bài).</p>
+  <p><b>Kết thúc ván:</b> cuối lượt, nếu các lá của bạn (trên tay và trên bàn) có từ <b>7 điểm</b> trở lên, bạn được hô:</p>
+  <p>• <b>DỪNG</b>: ván kết thúc ngay, ai cũng ghi điểm các lá mình có (không có thưởng màu).</p>
+  <p>• <b>CƠ HỘI CUỐI</b>: bạn đặt cược mình đang hơn cả bàn. Mỗi người khác đi thêm đúng 1 lượt (không được hô dừng), rồi so điểm lá. Nếu bạn cao nhất hoặc bằng cao nhất, bạn ghi <b>điểm lá + thưởng màu</b> (số lá của màu bạn có nhiều nhất) còn người khác chỉ nhận <b>thưởng màu</b>. Nếu bạn thua, bạn chỉ nhận thưởng màu còn người khác ghi điểm lá.</p>
+  <p>Nếu chồng bài hết ở cuối một lượt, ván kết thúc ngay và không ai được điểm.</p>
+  <p>Máy có 3 độ khó: <b>Dễ</b> (chơi bừa), <b>Trung bình</b> (như người mới), <b>Khó</b> (chơi giỏi). Mỗi lượt có <b>1 phút</b>, hết giờ máy sẽ đi thay.</p>
+  <p><small>Mẹo: bấm vào một lá để xem lớn và xem luật tính điểm của lá đó. Nút ✨ đổi mức hiệu ứng (Đầy đủ / Nhẹ / Tắt) nếu máy bị giật.</small></p>` });
+</script>
+</body>
+</html>
