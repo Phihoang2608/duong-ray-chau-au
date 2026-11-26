@@ -128,7 +128,7 @@ const KHART=(()=>{
     // ô đất (đế 3D + hình)
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#4a3018"/><polygon points="${hexPts(cx+2,cy+9,R)}" fill="#000" opacity=".22" filter="url(#khSoft)"/>`; });
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R, hd=S.hex[i];
-      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`<image href="assets/hex-${hd.res}.webp" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
+      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res===4?`<image href="assets/hex-4.webp" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
       s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#25140a" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-3.5)}" fill="none" stroke="url(#khBevel)" stroke-width="2.4"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f6ead0" stroke-width="2.2"/>`;
       if(hd.num) s+=token(cx,cy+8,hd.num); });
     return s; }
