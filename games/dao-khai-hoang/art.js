@@ -128,7 +128,7 @@ const KHART=(()=>{
     // ô đất (đế 3D + hình)
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#4a3018"/><polygon points="${hexPts(cx+2,cy+9,R)}" fill="#000" opacity=".22" filter="url(#khSoft)"/>`; });
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R, hd=S.hex[i];
-      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res===4?`<image href="assets/hex-4.webp" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
+      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res===4?`<image href="assets/hex-4.webp?v=20261127a" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127a" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
       s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#25140a" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-3.5)}" fill="none" stroke="url(#khBevel)" stroke-width="2.4"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f6ead0" stroke-width="2.2"/>`;
       if(hd.num) s+=token(cx,cy+8,hd.num); });
     return s; }
@@ -143,7 +143,7 @@ const KHART=(()=>{
   function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, nm=RN[r].toUpperCase();
     const s=`<svg viewBox="0 0 100 76" class="rcard"><defs>
       <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset=".45" stop-color="#a8642f"/><stop offset="1" stop-color="#7d4520"/></linearGradient></defs>
-      <image href="assets/res-${r}.webp" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
+      <image href="assets/res-${r}.webp?v=20261127a" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
       <g class="plank" transform="scale(1,.88)"><path d="M13 3.5 L16 1.5 H84 L87 3.5 L89 5.5 V17.5 L87 19.5 L84 21.5 H16 L13 19.5 L11 17.5 V5.5Z" fill="#1b0f06" transform="translate(0,1.2)" opacity=".55"/>
       <path d="M13 3 L16 1 H84 L87 3 L89 5 V17 L87 19 L84 21 H16 L13 19 L11 17 V5Z" fill="url(#${id}w)" stroke="#1b0f06" stroke-width="1.6" stroke-linejoin="round"/>
       <path d="M15 5 H55 M60 4.6 H84 M16 11 H40 M47 10.6 H70 M74 11 H86 M15 17.6 H48 M56 17.4 H84" stroke="#6b3a17" stroke-width=".7" stroke-linecap="round" fill="none" opacity=".7"/>
