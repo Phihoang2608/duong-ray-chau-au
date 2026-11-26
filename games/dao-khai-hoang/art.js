@@ -128,15 +128,16 @@ const KHART=(()=>{
     // ô đất (đế 3D + hình)
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#4a3018"/><polygon points="${hexPts(cx+2,cy+9,R)}" fill="#000" opacity=".22" filter="url(#khSoft)"/>`; });
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R, hd=S.hex[i];
-      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res===4?`<image href="assets/hex-4.webp?v=20261127b" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127b" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
+      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=4?`<image href="assets/hex-${hd.res}.webp?v=20261127c" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127c" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
       s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#25140a" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-3.5)}" fill="none" stroke="url(#khBevel)" stroke-width="2.4"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f6ead0" stroke-width="2.2"/>`;
       });
-    // núi tràn viền (sprite 3D đè lên ô)
-    H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.res!==4) return; const cx=hx.x*R, cy=hx.y*R, sx=1.8*R/914, sy=2.08*R/876, k=1.26;
-      const bx=cx-.9*R+(114+371)*sx, by=cy-1.04*R+(37+700)*sy;
-      const w=743*sx*k, h=764*sy*k, x=bx-(114+371-114)*0+(-371*sx*k)+0, y=by-(700*sy*k);
-      const u=`assets/hex-4-top.webp?v=20261127b`;
-      s+=`<image href="${u}" x="${f(x+2)}" y="${f(y+9)}" width="${f(w)}" height="${f(h)}" preserveAspectRatio="none" style="filter:brightness(0)" opacity=".28"/><image href="${u}" x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" preserveAspectRatio="none"/>`; });
+    // vật thể tràn viền (sprite đè lên ô): [x0,y0,w,h] trong toạ độ ảnh cắt 914x876
+    const SPR={0:[53,-56,820,287],1:[297,-9,463,182],2:[242,-50,698,294],3:[48,-36,877,280]};
+    H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.res>4) return; const cx=hx.x*R, cy=hx.y*R, sx=1.8*R/914, sy=2.08*R/876;
+      const u=`assets/hex-${hd.res}-top.webp?v=20261127c`;
+      if(hd.res===4){ const k=1.26, bx=cx-.9*R+(114+371)*sx, by=cy-1.04*R+(37+700)*sy, w=743*sx*k, h=764*sy*k, x=bx-371*sx*k, y=by-700*sy*k;
+        s+=`<image href="${u}" x="${f(x+2)}" y="${f(y+9)}" width="${f(w)}" height="${f(h)}" preserveAspectRatio="none" style="filter:brightness(0)" opacity=".28"/><image href="${u}" x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" preserveAspectRatio="none"/>`; }
+      else { const q=SPR[hd.res]; s+=`<image href="${u}" x="${f(cx-.9*R+q[0]*sx)}" y="${f(cy-1.04*R+q[1]*sy)}" width="${f(q[2]*sx)}" height="${f(q[3]*sy)}" preserveAspectRatio="none"/>`; } });
     H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.num) s+=token(hx.x*R,hx.y*R+8,hd.num); });
     return s; }
   function island(k){ k=k||1; const p=[]; const R2=R*4.85*k; for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i); p.push(f(R2*Math.cos(a))+','+f(R2*Math.sin(a))); } return p.join(' '); }
@@ -150,7 +151,7 @@ const KHART=(()=>{
   function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, nm=RN[r].toUpperCase();
     const s=`<svg viewBox="0 0 100 76" class="rcard"><defs>
       <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset=".45" stop-color="#a8642f"/><stop offset="1" stop-color="#7d4520"/></linearGradient></defs>
-      <image href="assets/res-${r}.webp?v=20261127b" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
+      <image href="assets/res-${r}.webp?v=20261127c" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
       <g class="plank" transform="scale(1,.88)"><path d="M13 3.5 L16 1.5 H84 L87 3.5 L89 5.5 V17.5 L87 19.5 L84 21.5 H16 L13 19.5 L11 17.5 V5.5Z" fill="#1b0f06" transform="translate(0,1.2)" opacity=".55"/>
       <path d="M13 3 L16 1 H84 L87 3 L89 5 V17 L87 19 L84 21 H16 L13 19 L11 17 V5Z" fill="url(#${id}w)" stroke="#1b0f06" stroke-width="1.6" stroke-linejoin="round"/>
       <path d="M15 5 H55 M60 4.6 H84 M16 11 H40 M47 10.6 H70 M74 11 H86 M15 17.6 H48 M56 17.4 H84" stroke="#6b3a17" stroke-width=".7" stroke-linecap="round" fill="none" opacity=".7"/>
