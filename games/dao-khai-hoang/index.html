@@ -14,7 +14,7 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js?v=20261127fix"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261128e"></script>
+<script src="game.js?v=20261128f"></script>
 <script src="assets/imgs.js?v=2026112823y"></script>
 <script>
 document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('khhid',document.hidden));
@@ -26,7 +26,7 @@ window.KH_FX=(function(){const d=document.documentElement;
  apply(); return {mode,apply,toggle};})();
 </script>
 <script src="art.js?v=2026112823y"></script>
-<script src="ui.js?v=20261128e"></script>
+<script src="ui.js?v=20261128f"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -1013,6 +1013,13 @@ body:not(.ingame) #tb-box{margin-top:24px!important}body:not(.ingame) #tb-box::b
 @keyframes pgl{50%{stroke:#fff3a0;fill:rgba(255,213,74,.45)}}
 @keyframes pgw{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.35);opacity:0}}
 html.khlite #khd .pgh{display:none}
+@media (orientation:landscape) and (max-height:640px){#kh .dg .tbtn.sm{min-height:26px;min-width:44px;font-size:11.5px!important;padding:3px 8px!important}}
+/* máy yếu (chế độ Nhẹ): tắt hiệu ứng tốn GPU */
+html.khlite #kdsc,html.khlite #ktrd,html.khlite #kdst{backdrop-filter:none!important}
+html.khlite #khd .pgr{filter:none;animation:none;stroke-width:6}
+html.khlite #kvic .vrib span,html.khlite #kvicb,html.khlite #kvic .vh{animation:none!important}
+html.khlite #kvic .vpn,html.khlite #krev .rpn,html.khlite #kdsc .xdp,html.khlite #ktrd .xdp{animation-duration:.18s}
+html.khlite #krev .xsv{box-shadow:none}
 /* === Thanh nút xây (điện thoại dọc) === */
 .xbb{display:none}
 @media (max-width:900px) and (orientation:portrait){
