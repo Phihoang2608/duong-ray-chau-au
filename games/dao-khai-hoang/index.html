@@ -13,8 +13,8 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=2026112822a"></script>
-<script src="assets/imgs.js?v=2026112822a"></script>
+<script src="game.js?v=2026112822b"></script>
+<script src="assets/imgs.js?v=2026112822b"></script>
 <script>
 window.KH_FX=(function(){const d=document.documentElement;
  function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
@@ -24,8 +24,8 @@ window.KH_FX=(function(){const d=document.documentElement;
  function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
  apply(); return {mode,apply,toggle};})();
 </script>
-<script src="art.js?v=2026112822a"></script>
-<script src="ui.js?v=2026112822a"></script>
+<script src="art.js?v=2026112822b"></script>
+<script src="ui.js?v=2026112822b"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -87,7 +87,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .dcard .rn{stroke-width:2px!important}.rcard .rn{font:800 14px "KhFont","Baloo 2","Arial Black",sans-serif;fill:#fff;text-anchor:middle;stroke:#1b0f06;stroke-width:3.2px;paint-order:stroke;stroke-linejoin:round}
 .ctab{padding:10px 12px 8px}.cth{text-align:center;font-weight:bold;font-size:16px;color:#ffd76a;border-bottom:2px solid rgba(40,18,4,.6);box-shadow:0 1px 0 rgba(255,215,150,.25);padding-bottom:6px;margin-bottom:6px;letter-spacing:.4px}
 .ctr{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:2px 8px;padding:6px 0;border-bottom:1px solid rgba(40,18,4,.45)}.ctr:last-child{border:none}
-.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112822a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
+.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112822b) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
 .ctx{display:flex;flex-direction:column;font-size:15px;line-height:1.15}.ctx small{font-size:12px;color:#f0dcb0}.cco{display:flex;gap:3px;flex-wrap:wrap}.cco .cr{display:flex;background:rgba(40,18,4,.45);border-radius:7px;padding:1px 3px}
 #kh,#kh *{font-family:"KhFont","Baloo 2","Arial Black",sans-serif}#kh button,#kh select,#kh input{font-family:inherit}
 #kh .cth,#kh .dice::before,#kh .chs .hd::before,#kh .ctx b,#kh .pl .ph b,#kh .kst,#kh .tbtn{letter-spacing:.3px}
@@ -319,24 +319,26 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 @media (orientation:landscape) and (max-height:640px){.hov .hand.box{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;gap:5px}
  .hov .rstack{box-sizing:border-box;width:54px!important;height:44px!important;border:2px solid #2e1809;border-radius:10px;background:linear-gradient(165deg,#a8753c,#7d4f24 45%,#6a4019);box-shadow:inset 0 0 0 1px #cf9f5f,0 3px 6px rgba(0,0,0,.5)}
  .hov .rstack .rc{left:calc(50% - 20px + var(--k)*1.5px)!important;top:calc(50% - 16px - var(--k)*1.5px)!important;width:40px!important;height:31px!important}.hov .rstack b{right:-6px!important;bottom:-6px!important;font-size:11px}}
+.kri3 img.kvp{width:78px;height:auto;max-height:112px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
+.krd .kcd{display:block;width:100px}.krd .kcd svg{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55))}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
   newGame:KH.newGame, apply:KH.apply, tick:KH.tick, whoActs:KH.whoActs, botAction:KH.botAction, timeoutAction:KH.timeoutAction,
   render:KHUI.render, tickView:KHUI.tickView,
-  rules:(()=>{ const I=(r,c)=>`<img class="kri" src="assets/ic-${r}.webp?v=2026112822a" alt="" title="${KH_RES[r]}">`+(c?`<b class="krn">${c}</b>`:''), N=['Gỗ','Gạch','Cừu','Lúa','Đá'], coin=`<img class="kri vc" src="assets/vp-coin.webp?v=2026112822a" alt="">`, V='?v=2026112822a',
+  rules:(()=>{ const I=(r,c)=>`<img class="kri" src="assets/ic-${r}.webp?v=2026112822b" alt="" title="${KH_RES[r]}">`+(c?`<b class="krn">${c}</b>`:''), N=['Gỗ','Gạch','Cừu','Lúa','Đá'], coin=`<img class="kri vc" src="assets/vp-coin.webp?v=2026112822b" alt="">`, V='?v=2026112822b',
   cost=(c)=>c.map((x,r)=>x?`<span class="krc">${Array(x).fill(I(r)).join('')}</span>`:'').join(''),
   sec=(t,b)=>`<section class="krs"><h3><span>${t}</span></h3>${b}</section>`;
   return `<div class="khr"><div class="krh">Luật chơi · Đảo Khai Hoang</div>`
   +sec('Mục tiêu',`<p>Ai đạt <b>${KH_WIN} điểm chiến thắng</b> ${coin} trước là thắng. Ván kết thúc ngay khi bạn đạt đủ điểm trong lượt của mình.</p>
-    <div class="krg"><div class="kri3"><img src="assets/house-neutral.webp${V}" alt=""><b>+1</b><span>Nhà</span></div><div class="kri3"><img src="assets/city-neutral.webp${V}" alt=""><b>+2</b><span>Thành phố</span></div><div class="kri3"><img src="assets/award-road.webp${V}" alt=""><b>+2</b><span>Đường dài nhất<br><small>từ 5 đoạn trở lên</small></span></div><div class="kri3"><img src="assets/award-army.webp${V}" alt=""><b>+2</b><span>Quân mạnh nhất<br><small>từ 3 hiệp sĩ</small></span></div><div class="kri3"><img src="assets/dev-vp.webp${V}" alt=""><b>+1</b><span>Thẻ điểm thưởng<br><small>giữ kín đến khi thắng</small></span></div></div>`)
+    <div class="krg"><div class="kri3"><img src="assets/house-neutral.webp${V}" alt=""><b>+1</b><span>Nhà</span></div><div class="kri3"><img src="assets/city-neutral.webp${V}" alt=""><b>+2</b><span>Thành phố</span></div><div class="kri3"><img src="assets/award-road.webp${V}" alt=""><b>+2</b><span>Đường dài nhất<br><small>từ 5 đoạn trở lên</small></span></div><div class="kri3"><img src="assets/award-army.webp${V}" alt=""><b>+2</b><span>Quân mạnh nhất<br><small>từ 3 hiệp sĩ</small></span></div><div class="kri3"><img class="kvp" src="assets/dev-vp.webp${V}" alt=""><b>+1</b><span>Thẻ điểm thưởng<br><small>giữ kín đến khi thắng</small></span></div></div>`)
   +sec('Tài nguyên từ đâu ra',`<div class="krg r5">${[0,1,2,3,4].map(r=>`<div class="kri3">${I(r)}<span>${N[r]}<br><small>${['Rừng','Mỏ gạch','Đồng cỏ','Ruộng lúa','Núi đá'][r]}</small></span></div>`).join('')}</div><p>Sa mạc không sinh ra gì và là nơi kẻ cướp đứng lúc đầu. Mỗi ô đất có một con số (chấm bên dưới càng nhiều thì càng hay ra).</p>`)
   +sec('Xếp nhà ban đầu',`<p>Mỗi người đặt <b>1 nhà + 1 đường</b> theo thứ tự, rồi đi <b>ngược lại</b> đặt thêm 1 nhà + 1 đường. Nhà thứ hai nhận ngay tài nguyên từ các ô quanh nó. Hai nhà không được đặt sát nhau (phải cách ít nhất 1 đoạn đường).</p>`)
   +sec('Một lượt chơi',`<ol class="krl"><li><b>Đổ xúc xắc.</b> Ô nào mang đúng số tổng sẽ toả sóng; mỗi nhà kề ô đó nhận 1 tài nguyên, thành phố nhận 2.</li><li><b>Xây dựng, mua thẻ và đổi hàng</b> theo ý bạn, thứ tự tuỳ chọn.</li><li><b>Kết thúc lượt</b> khi xong. Có thể bấm <b>↩ Hoàn tác</b> để lùi nước vừa đi (xây, nâng cấp, đổi cảng) nếu chưa làm việc khác.</li></ol>`)
   +sec('Bảng chi phí',`<div class="krt"><div><b>Đường</b><small>nối từ nhà hoặc đường của bạn</small>${cost(KH_COST.road)}</div><div><b>Nhà</b><small>+1 điểm · nối với đường của bạn</small>${cost(KH_COST.town)}</div><div><b>Thành phố</b><small>+2 điểm · nâng cấp từ nhà</small>${cost(KH_COST.city)}</div><div><b>Thẻ phát triển</b><small>rút 1 thẻ ngẫu nhiên</small>${cost(KH_COST.dev)}</div></div><p>Giới hạn: <b>15 đường · 5 nhà · 4 thành phố</b>. Nâng cấp thành phố thì nhà cũ được trả lại để xây chỗ khác.</p>`)
   +sec('Ra 7 và kẻ cướp',`<p>Đổ ra <b>7</b> thì không ai nhận tài nguyên. Ai đang giữ <b>hơn 7 lá</b> mất đi một nửa. Sau đó người đổ dời <b>kẻ cướp</b> sang ô khác: ô đó ngừng sản xuất, và bạn lấy ngẫu nhiên 1 lá của một người có nhà cạnh ô đó.</p>`)
   +sec('Đổi hàng',`<div class="krg"><div class="kri3"><b>4 : 1</b><span>Với ngân hàng<br><small>4 lá cùng loại lấy 1 lá bất kỳ</small></span></div><div class="kri3"><b>3 : 1</b><span>Cảng chung<br><small>có nhà ở cảng thì đổi 3 lá</small></span></div><div class="kri3">${I(2)}<b>2 : 1</b><span>Cảng riêng<br><small>2 lá đúng loại ghi trên cảng</small></span></div></div><p>Bấm <b>Đổi cảng</b> để đổi với ngân hàng. Bấm <b>Chợ</b> để gửi yêu cầu đổi với người chơi khác: chọn lá đưa, lá nhận rồi gửi; người nhận bấm Đồng ý hoặc Từ chối (lời mời hết hạn sau 30 giây).</p>`)
-  +sec('Thẻ phát triển',`<div class="krd">${[['knight','Hiệp sĩ','14 thẻ · dời kẻ cướp, góp vào Quân mạnh nhất'],['road','Làm đường','2 thẻ · xây 2 đường miễn phí'],['plenty','Được mùa','2 thẻ · nhận ngay 2 tài nguyên tuỳ chọn'],['mono','Độc quyền','2 thẻ · gom hết 1 loại tài nguyên của mọi người'],['vp','Điểm thưởng','5 thẻ · +1 điểm, không cần dùng']].map(([k,n,d])=>`<div><img src="assets/card-${k}-full.webp${V}" alt=""><b>${n}</b><small>${d}</small></div>`).join('')}</div><p>Mỗi lượt dùng tối đa <b>1 thẻ</b> (trừ Điểm thưởng) và không được dùng thẻ vừa mua trong lượt đó.</p>`)
+  +sec('Thẻ phát triển',`<div class="krd">${[['knight','Hiệp sĩ','14 thẻ · dời kẻ cướp, góp vào Quân mạnh nhất'],['road','Làm đường','2 thẻ · xây 2 đường miễn phí'],['plenty','Được mùa','2 thẻ · nhận ngay 2 tài nguyên tuỳ chọn'],['mono','Độc quyền','2 thẻ · gom hết 1 loại tài nguyên của mọi người'],['vp','Điểm thưởng','5 thẻ · +1 điểm, không cần dùng']].map(([k,n,d])=>`<div><span class="kcd">${KHART.devCard(k,true)}</span><b>${n}</b><small>${d}</small></div>`).join('')}</div><p>Mỗi lượt dùng tối đa <b>1 thẻ</b> (trừ Điểm thưởng) và không được dùng thẻ vừa mua trong lượt đó.</p>`)
   +sec('Giải thưởng +2 điểm',`<p><b>Đường dài nhất:</b> chuỗi đường liên tục từ 5 đoạn trở lên; ai dài hơn sẽ cướp giải. <b>Quân mạnh nhất:</b> ai đã dùng từ 3 hiệp sĩ và nhiều hơn người khác.</p>`)
   +sec('Mẹo nhỏ',`<p>Đặt nhà ở nơi có nhiều loại tài nguyên và số có nhiều chấm (6, 8, 5, 9). Chiếm cảng hợp với tài nguyên mình hay có. Giữ không quá 7 lá khi chưa chắc ra 7 để khỏi mất bài.</p>`)
   +`</div>`; })() });
