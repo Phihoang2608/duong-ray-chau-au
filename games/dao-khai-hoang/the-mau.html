@@ -1,0 +1,20 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mẫu thẻ phát triển</title>
+<style>
+@font-face{font-family:"KhFont";font-weight:800;src:url(assets/fonts/baloo-2-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"KhFont";font-weight:800;src:url(assets/fonts/baloo-2-vietnamese-800-normal.woff2) format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+1EA0-1EF9,U+20AB}
+body{margin:0;min-height:100vh;background:#6b4423 repeating-linear-gradient(180deg,#7a4e28 0 90px,#5c391b 90px 93px);font-family:KhFont,sans-serif;color:#fff3d6;text-align:center}
+h1{margin:0;padding:22px 10px 6px;font-size:28px;-webkit-text-stroke:1px #3a2008}
+p{margin:0 0 14px}
+.row{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;padding:14px}
+.c{width:190px}.c svg{width:190px;height:auto;filter:drop-shadow(0 6px 6px rgba(0,0,0,.45))}
+.rn{font-family:KhFont,sans-serif;font-weight:800;text-anchor:middle;fill:#fff;paint-order:stroke;stroke:#2e1809;stroke-width:2.4px}
+</style></head><body>
+<h1>Mẫu thẻ phát triển</h1><p>Phong cách 3D hoạt hình, đồng bộ với nhà, đường, thuyền</p>
+<div class="row" id="r"></div>
+<script src="art.js"></script>
+<script>
+const R=document.getElementById('r');
+['knight','road','plenty','mono','vp'].forEach(k=>{R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devCard(k)+'</div>');});
+R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devBack()+'</div>');
+</script></body></html>
