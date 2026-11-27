@@ -31,7 +31,7 @@ const KHUI=(()=>{
   function offerBox(S,ME,api){ const o=S.offer; if(!o) return ''; const nm=api.esc(S.seats[o.from].name);
     if (ME===o.from) return `<div class="box ofr"><div class="cth">Lời mời của bạn</div><div class="orow"><small>Bạn đưa</small>${resRow(o.give)}</div><div class="orow"><small>Bạn nhận</small>${resRow(o.get)}</div><div class="chint">${o.to>=0?'Chờ '+api.esc(S.seats[o.to].name)+' trả lời…':'Chờ mọi người trả lời…'}</div><button class="tbtn wide" data-a="cancel">Huỷ lời mời</button></div>`;
     const mine=ME>=0&&(o.to<0||o.to===ME)&&!o.no.includes(ME);
-    if (!mine) return `<div class="box ofr"><div class="cth">${nm} đang đề nghị đổi</div><div class="orow"><small>Đưa</small>${resRow(o.give)}</div><div class="orow"><small>Lấy</small>${resRow(o.get)}</div></div>`;
+    if (!mine) return `<div class="box ofr"><div class="cth">${nm} đang yêu cầu đổi</div><div class="orow"><small>Đưa</small>${resRow(o.give)}</div><div class="orow"><small>Lấy</small>${resRow(o.get)}</div></div>`;
     const P=S.P[ME], can=o.get.every((x,i)=>P.res[i]>=x);
     return `<div class="box ofr hot"><div class="cth">${nm} muốn đổi với bạn</div><div class="orow"><small>Bạn nhận</small>${resRow(o.give)}</div><div class="orow"><small>Bạn đưa</small>${resRow(o.get)}</div>${can?'':'<div class="chint">Bạn không đủ lá để đổi</div>'}<div class="obt"><button class="tbtn pri" data-a="yes" ${can?'':'disabled'}>Đồng ý</button><button class="tbtn" data-a="no">Từ chối</button></div></div>`; }
   function render(S,ME,api){
@@ -57,12 +57,12 @@ const KHUI=(()=>{
     let L=h, HV=''; h='';
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,90-Math.floor((t-S.turnAt)/1000)):null;
       return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
-        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261128e">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261128e">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261128e" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
-        ${i!==ME&&ME>=0?`<button class="tbtn sm pto" data-a="offerto" data-p="${i}" ${main&&P&&P.res[og]>=oq&&og!==ow?'':'disabled'} title="Gửi: đưa ${oq} ${KH_RES[og]}, lấy ${on} ${KH_RES[ow]}">Đề nghị đổi</button>`:''}
+        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261128f">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261128f">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261128f" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
+        ${i!==ME&&ME>=0?`<button class="tbtn sm pto" data-a="offerto" data-p="${i}" ${main&&P&&P.res[og]>=oq&&og!==ow?'':'disabled'} title="Gửi: đưa ${oq} ${KH_RES[og]}, lấy ${on} ${KH_RES[ow]}">Yêu cầu đổi</button>`:''}
         <div class="ps"><span>Tài nguyên: <b class="rn2">${KH.tot(Q.res)}</b></span><span>Thẻ PT: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span></div>
         ${S.longest===i||S.largest===i?`<div class="aw">${S.longest===i?'<em>Đường dài nhất +2</em>':''}${S.largest===i?'<em>Quân mạnh nhất +2</em>':''}</div>`:''}</div>`; }).join('')}</div>`;
     const S1=h; h='';
-    { const V='?v=20261128e';
+    { const V='?v=20261128f';
       const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="21" height="19">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
       const row=(ic,t,pt,c,att,dis,on)=>`<button class="ctr cbtn ${on?'on':''}" ${att} ${dis?'disabled':''}><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></button>`;
       const okR=main&&P&&(KH.canPay(P,KH_COST.road)||S.free)&&P.roads>0, okT=main&&P&&KH.canPay(P,KH_COST.town)&&P.towns>0, okC=main&&P&&KH.canPay(P,KH_COST.city)&&P.cities>0, okD=main&&P&&KH.canPay(P,KH_COST.dev)&&S.dev.length>0;
@@ -87,9 +87,9 @@ const KHUI=(()=>{
         const opt=(n,sel)=>KH_RES.map((x,r)=>`<option value="${r}" ${r===sel?'selected':''}>${x}</option>`).join(''), qty=(sel)=>[1,2,3,4].map(q=>`<option value="${q}" ${q===sel?'selected':''}>${q}</option>`).join('');
         const others=S.seats.map((x,i)=>i).filter(i=>i!==ME), okO=main&&P.res[og]>=oq&&og!==ow;
         const popH=pop==='bank'?`<div class="box pop"><div class="cth">Đổi với cảng · ngân hàng</div><div class="plb">Đưa (số lá cần có)</div><div class="rrow">${gb}</div><div class="plb">Lấy</div><div class="rrow">${wb}</div><button class="tbtn pri wide" data-a="trade" ${okT?'':'disabled'}>Đổi ${rt[tg]} ${KH_RES[tg]} lấy 1 ${KH_RES[tw]}</button></div>`
-          :pop==='offer'?`<div class="box pop ptr"><div class="cth">Đề nghị đổi với người chơi</div><div class="prow"><span>Đưa</span><select data-s="oq">${qty(oq)}</select><select data-s="og">${opt(0,og)}</select></div><div class="prow"><span>Lấy</span><select data-s="on">${qty(on)}</select><select data-s="ow">${opt(0,ow)}</select></div>
+          :pop==='offer'?`<div class="box pop ptr"><div class="cth">Yêu cầu đổi với người chơi</div><div class="prow"><span>Đưa</span><select data-s="oq">${qty(oq)}</select><select data-s="og">${opt(0,og)}</select></div><div class="prow"><span>Lấy</span><select data-s="on">${qty(on)}</select><select data-s="ow">${opt(0,ow)}</select></div>
           <div class="prow"><span>Cho</span><select data-s="ot"><option value="-1" ${ot<0?'selected':''}>Tất cả</option>${others.map(i=>`<option value="${i}" ${ot===i?'selected':''}>${api.esc(S.seats[i].name)}</option>`).join('')}</select></div><button class="tbtn pri wide" data-a="offer" ${okO?'':'disabled'}>Gửi lời mời</button></div>`:'';
-        HV+=`<div class="tbar">${popH}<button class="bt ${anyB?'ring':''} ${pop==='bank'?'on':''}" data-a="pop" data-k="bank" title="Đổi với cảng / ngân hàng"><img src="assets/boat.webp?v=20261128e" alt=""><small>Đổi cảng</small></button><button class="tbtn bo ${pop==='offer'?'on':''}" data-a="pop" data-k="offer">Đề nghị đổi</button></div>`; }
+        HV+=`<div class="tbar">${popH}<button class="bt ${anyB?'ring':''} ${pop==='bank'?'on':''}" data-a="pop" data-k="bank" title="Đổi với cảng / ngân hàng"><img src="assets/boat.webp?v=20261128f" alt=""><small>Đổi cảng</small></button><button class="tbtn bo ${pop==='offer'?'on':''}" data-a="pop" data-k="offer">Yêu cầu đổi</button></div>`; }
       L+=`<div class="box"><button class="tbtn pri wide" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>${S.phase==='over'&&api.mode()!=='client'?'<button class="tbtn gold wide" data-a="again">Chơi ván mới</button>':''}</div>`; }
     h+=`<div class="xlog">${S.log.slice(0,6).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
     root.querySelector('.hov').innerHTML=HV; root.querySelector('.lft').innerHTML=L; root.querySelector('.s1').innerHTML=S1; root.querySelector('.s2').innerHTML=h;
