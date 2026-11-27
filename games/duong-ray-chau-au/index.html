@@ -879,6 +879,27 @@ body.landphone .modal.dock .tpick .vticket.imgt img{width:100%!important;height:
 body.landphone.picking #pbg-fab{display:none!important}
 body.landphone.picking .mkpanel #status{display:none!important}
 body.landphone.picking .mkpanel h3{display:none!important}
+
+/* chọn vé ngay trong khung Vé của bạn */
+#tkPick:empty{display:none}
+body.picking #tkPanel #tkToggle,body.picking #tkPanel #tickets{display:none!important}
+#tkPick .mbox{all:unset;display:block}
+#tkPick h2{font:bold 17px "Times New Roman",serif;color:#6b1630;margin:0 0 6px}
+#tkPick .mbody>p{display:none}
+#tkPick .tpicks{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;max-width:none!important;margin:0!important}
+#tkPick .tpick{padding:3px!important;gap:4px!important;border-radius:10px;min-width:0}
+#tkPick .tpick .vticket.imgt{max-width:none!important;width:100%!important;min-width:0}
+#tkPick .tpk{font-size:12px;padding:1px 8px;gap:4px}
+#tkPick .tpc{width:12px;height:12px;border-width:2px}
+#tkPick .tpick.sel .tpc::after{left:3px;top:0;width:3px;height:7px;border-width:0 2px 2px 0}
+#tkPick .vt-longtag{font-size:0!important;padding:0 3px!important}#tkPick .vt-longtag::before{content:"★";font-size:9px}
+#tkPick .mbtns{margin-top:6px;display:flex;justify-content:flex-end}
+#tkPick .mbtns button{font:bold 14px "Times New Roman",serif;padding:6px 14px;border-radius:9px}
+body.landphone #tkPick h2{font-size:11px;margin-bottom:2px}
+body.landphone #tkPick .tpicks{gap:3px!important}
+body.landphone #tkPick .tpk{font-size:9px;padding:0 4px}
+body.landphone #tkPick .tpc{width:9px;height:9px;border-width:1.5px}
+body.landphone #tkPick .mbtns{margin-top:3px}body.landphone #tkPick .mbtns button{font-size:11px;padding:3px 8px}
 </style>
 </head>
 <body>
@@ -910,7 +931,7 @@ body.landphone.picking .mkpanel h3{display:none!important}
       <div id="status"></div>
     </div>
 
-    <div class="panel" id="tkPanel"><button id="tkToggle" type="button">Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div></div>
+    <div class="panel" id="tkPanel"><button id="tkToggle" type="button">Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div><div id="tkPick"></div></div>
     <div class="panel" id="chatPanel"><h3>Trò chuyện</h3><div class="chatBox"></div></div>
     <div class="panel"><h3>Nhật ký</h3><div id="log"></div></div>
   </aside>
@@ -2071,17 +2092,20 @@ function checkTickets(){
 /* ----- Hộp thoại ----- */
 function showModal(title, bodyHTML, buttons, opts){
   opts=opts||{};
-  const m=$('#modal'); m.className = 'modal show' + (opts.center?' center':'') + (opts.dock?' dock':''); document.body.classList.toggle('picking', !!opts.dock);
+  const tp=$('#tkPick'); if(tp){ tp.innerHTML=''; }
+  const inl = opts.dock && tp;
+  if (inl){ $('#modal').className='modal hidden'; $('#modal').innerHTML=''; }
+  const m=inl ? tp : $('#modal'); if(!inl) m.className = 'modal show' + (opts.center?' center':'');
+  document.body.classList.toggle('picking', !!inl);
   m.innerHTML = `<div class="mbox"><h2>${title}</h2><div class="mbody">${bodyHTML}</div><div class="mbtns"></div></div>`;
   const bw=m.querySelector('.mbtns');
   buttons.forEach(b=>{ const el=document.createElement('button'); el.innerHTML=b.label; el.className=b.cls||''; if(b.disabled) el.disabled=true; el.onclick=()=>{ SFX.init(); b.onClick(el); }; bw.appendChild(el); b.el=el; });
   UIS.modalKey = opts.key || 'user';
   m.style.top='';
-  if (opts.dock){ const mk=document.querySelector('.mkpanel'); if(mk && (innerWidth>900 || document.body.classList.contains('landphone'))){ const place=()=>{ if(!m.classList.contains('dock')) return; const b=mk.getBoundingClientRect().bottom; m.style.setProperty('top', Math.round(b+6)+'px','important'); }; place(); requestAnimationFrame(place); } }
   return m;
 }
 function hideModal(a,b,c){ document.body.classList.remove('picking'); return hideModal_(a,b,c); }
-function hideModal_(keepKey){ const m=$('#modal'); if(!m) return; m.className='modal hidden'; m.innerHTML=''; if(!keepKey) UIS.modalKey=null; }
+function hideModal_(keepKey){ const tp=$('#tkPick'); if(tp) tp.innerHTML=''; const m=$('#modal'); if(!m) return; m.className='modal hidden'; m.innerHTML=''; if(!keepKey) UIS.modalKey=null; }
 function ensureModal(){
   let want=null;
   if (ME>=0){
