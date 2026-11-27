@@ -323,7 +323,7 @@ const Table = (()=>{
 
   /* ---------- Trò chuyện ---------- */
   function resetChat(){ chatMine=[]; chatSeen=new Set(); chatList=[]; chatPrimed=false; unread=0; renderChat(); }
-  function chatSend(t){ t=String(t||'').replace(/[\u0000-\u001f]/g,'').trim().slice(0,80); if(!t||!ROOM) return false; chatMine.push({i:Date.now(),x:t}); chatMine=chatMine.slice(-3); ROOM.presence({chat:chatMine}).catch(()=>{}); return true; }
+  function chatSend(t){ t=String(t||'').replace(/[\u0000-\u001f]/g,'').trim().slice(0,80); if(!t) return false; if(!ROOM){ chatList.push({me:true,name:'Bạn',x:t,t:Date.now()}); chatList=chatList.slice(-60); renderChat(); return true; } chatMine.push({i:Date.now(),x:t}); chatMine=chatMine.slice(-3); ROOM.presence({chat:chatMine}).catch(()=>{}); return true; }
   function chatIngest(){ let fresh=0;
     PEERS.forEach(pe=>{ const arr=pe.presence&&pe.presence.chat; if(!Array.isArray(arr)) return; arr.slice(-3).forEach(m=>{ if(!m||typeof m.x!=='string') return; const k=pe.peer+':'+m.i; if(chatSeen.has(k)) return; chatSeen.add(k);
       chatList.push({me:pe.sameTab, name:clean(pe.presence.name), x:String(m.x).slice(0,80), t:+m.i||Date.now()}); if(!pe.sameTab && chatPrimed){ fresh++; if(!$('#tb-chat').classList.contains('show')) unread++; toast(`<b>${esc(clean(pe.presence.name))}:</b> ${esc(String(m.x).slice(0,80))}`); } }); });
