@@ -64,8 +64,13 @@ const KH = (()=>{
     got.forEach((g,i)=>g.forEach((x,r)=>S.P[i].res[r]+=x)); return got; }
   function stealFrom(S,thief,victim){ const P=S.P[victim]; const pool=[]; P.res.forEach((x,r)=>{ for(let k=0;k<x;k++) pool.push(r); }); if(!pool.length) return -1; const r=pool[Math.floor(Math.random()*pool.length)]; P.res[r]--; S.P[thief].res[r]++; return r; }
   function victims(S,hexI,me){ return [...new Set(HEX[hexI].v.map(v=>S.vo[v]).filter(o=>o&&o.p!==me).map(o=>o.p))].filter(p=>tot(S.P[p].res)>0); }
-  function autoDiscard(S){ S.P.forEach((P,i)=>{ const c=tot(P.res); if(c>7){ let k=Math.floor(c/2); const lost=[0,0,0,0,0]; while(k-->0){ let m=0; for(let r=1;r<5;r++) if(P.res[r]>P.res[m]) m=r; P.res[m]--; lost[m]++; }
-      S.log.unshift(S.seats[i].name+' có hơn 7 lá, mất '+lost.map((x,r)=>x?x+' '+KH_RES[r]:'').filter(Boolean).join(', ')+'.'); } }); }
+  function autoLost(P,n){ const r2=P.res.slice(), lost=[0,0,0,0,0]; while(n-->0){ let m=0; for(let r=1;r<5;r++) if(r2[r]>r2[m]) m=r; if(r2[m]<=0) break; r2[m]--; lost[m]++; } return lost; }
+  function startDiscard(S,t){ const d={}; S.P.forEach((P,i)=>{ const c=tot(P.res); if(c>7) d[i]=Math.floor(c/2); }); return d; }
+  function discardAct(S,seat,a,t){ if(S.step!=='discard'||!S.disc||S.disc[seat]==null) return false; const P=S.P[seat], n=S.disc[seat], v=a.res;
+    if(!Array.isArray(v)||v.length!==5||!v.every((x,r)=>Number.isInteger(x)&&x>=0&&x<=P.res[r])||v.reduce((s,x)=>s+x,0)!==n) return false;
+    v.forEach((x,r)=>{ P.res[r]-=x; }); delete S.disc[seat];
+    S.log.unshift(S.seats[seat].name+' bỏ '+n+' lá: '+v.map((x,r)=>x?x+' '+KH_RES[r]:'').filter(Boolean).join(', ')+'.'); ev(S,{k:'discard',seat,res:v,n});
+    if(!Object.keys(S.disc).length){ S.disc=null; S.step='robber'; S.log.unshift(S.seats[S.turn].name+' dời kẻ cướp.'); } S.turnAt=t; return true; }
   // ---------- đổi với người chơi ----------
   function vecOK(v){ return Array.isArray(v)&&v.length===5&&v.every(x=>Number.isInteger(x)&&x>=0&&x<=9)&&v.reduce((s,x)=>s+x,0)>0; }
   function fmtV(v){ return v.map((c,r)=>c?c+' '+KH_RES[r]:'').filter(Boolean).join(' + '); }
@@ -80,6 +85,8 @@ const KH = (()=>{
   function apply0(S,seat,a,t){
     if (!a||S.phase==='over') return false;
     if (a.t==='answer') return answer(S,seat,!!a.ok,t);
+    if (a.t==='discard') return discardAct(S,seat,a,t);
+    if (S.step==='discard') return false;
     if (seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
     if (S.offer){ if(a.t==='cancel'){ S.log.unshift(name+' huỷ yêu cầu đổi.'); S.offer=null; S.turnAt=t; return true; } return false; }
     if (a.t==='offer'){ if(S.phase!=='play'||S.step!=='main') return false; const g=a.give, w=a.get; if(!vecOK(g)||!vecOK(w)) return false;
@@ -101,7 +108,7 @@ const KH = (()=>{
       const vs=victims(S,a.h,seat); let msg=name+' dời kẻ cướp'; if(vs.length){ const vic=a.v!=null&&vs.includes(a.v)?a.v:vs[Math.floor(Math.random()*vs.length)]; const r=stealFrom(S,seat,vic); msg+=' và lấy 1 lá của '+S.seats[vic].name; ev(S,{k:'steal',seat,vic,r}); } else ev(S,{k:'robber',seat});
       S.log.unshift(msg+'.'); S.step=S.rolled?'main':'roll'; S.turnAt=t; return true; }
     if (a.t==='roll'){ if(S.step!=='roll') return false; const d=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)], s=d[0]+d[1]; S.dice=d; S.rolled=true;
-      if (s===7){ autoDiscard(S); S.step='robber'; S.log.unshift(name+' đổ ra 7 — dời kẻ cướp!'); ev(S,{k:'roll',seat,d}); }
+      if (s===7){ const dd=startDiscard(S,t), ks=Object.keys(dd).map(Number); if(ks.length){ S.disc=dd; S.step='discard'; S.log.unshift(name+' đổ ra 7 — '+ks.map(i=>S.seats[i].name+' (bỏ '+dd[i]+')').join(', ')+' có hơn 7 lá phải bỏ một nửa.'); } else { S.step='robber'; S.log.unshift(name+' đổ ra 7 — dời kẻ cướp!'); } ev(S,{k:'roll',seat,d,disc:ks.length?dd:null}); }
       else { const got=produce(S,s); S.step='main'; const g=got.map((x,i)=>tot(x)?S.seats[i].name+' +'+x.map((c,r)=>c?c+' '+KH_RES[r]:'').filter(Boolean).join(', '):'').filter(Boolean); S.log.unshift(name+' đổ '+s+'. '+(g.length?g.join(' · '):'Không ai nhận được gì.')); ev(S,{k:'roll',seat,d,got}); }
       S.turnAt=t; return true; }
     if (a.t==='knight'){ if(S.devPlayed||(S.step!=='roll'&&S.step!=='main')) return false; const i=P.dev.indexOf('knight'); if(i<0) return false; P.dev.splice(i,1); P.knights++; S.devPlayed=true; S.step='robber'; updateAwards(S); S.log.unshift(name+' dùng Hiệp sĩ.'); ev(S,{k:'dev',seat,d:'knight'}); if(checkWin(S,t)) return true; S.turnAt=t; return true; }
@@ -127,7 +134,7 @@ const KH = (()=>{
     if (ok&&a&&a.t!=='undo'){ if(keep&&S.phase!=='over'){ UND={seat,snap:keep}; S.undo=seat; } else { UND=null; S.undo=-1; } }
     return ok; }
   function tick(S,t){ if(S&&S.offer&&t-S.offer.at>30000){ S.log.unshift('Yêu cầu đổi của '+S.seats[S.offer.from].name+' đã hết hạn.'); S.offer=null; S.turnAt=t; return true; } return false; }
-  function whoActs(S){ if(S.phase==='over') return []; if(S.offer){ const p=pending(S); if(p.length) return p; } return [S.turn]; }
+  function whoActs(S){ if(S.phase==='over') return []; if(S.step==='discard'&&S.disc){ const w=Object.keys(S.disc).map(Number); if(w.length) return w; } if(S.offer){ const p=pending(S); if(p.length) return p; } return [S.turn]; }
   // ---------- bot ----------
   function vScore(S,v,p){ let s=0; const seen=new Set(); V[v].hex.forEach(hi=>{ const h=S.hex[hi]; if(h.res<5){ s+=PIPS[h.num]*(h.res===4||h.res===3?1.15:1)*(hi===S.robber?.3:1); seen.add(h.res); } }); s+=seen.size*0.8;
     PORT_E.forEach((e,i)=>{ if(E[e].a===v||E[e].b===v) s+=S.ports[i]<0?1:1.5; }); if(p!=null){ const P=S.P[p]; seen.forEach(r=>{ if(!ownsRes(S,p,r)) s+=1.2; }); } return s; }
@@ -138,6 +145,7 @@ const KH = (()=>{
   function tradeFor(S,p,cost){ const P=S.P[p], r=rates(S,p), nd=need(S,p,cost); const want=nd.findIndex(x=>x>0); if(want<0) return null; if(tot(nd)>2) return null;
     for(let g=0;g<5;g++){ if(P.res[g]-cost[g]>=r[g]) return {t:'trade',give:g,get:want}; } return null; }
   function botAction(S,seat,t){
+    if (S.step==='discard'&&S.disc&&S.disc[seat]!=null){ if(t-S.turnAt<900) return null; return {t:'discard',res:autoLost(S.P[seat],S.disc[seat])}; }
     if (t-S.turnAt<650) return null; const P=S.P[seat];
     if (S.offer&&S.offer.from!==seat){ const o=S.offer; if(!pending(S).includes(seat)) return null; const hasT=S.vo.some(x=>x&&x.p===seat&&!x.city), keep=(P.cities>0&&hasT)?KH_COST.city:KH_COST.town;
       const gain=o.give.reduce((s,x)=>s+x,0), lose=o.get.reduce((s,x)=>s+x,0); let ok=o.get.every((x,i)=>P.res[i]>=x)&&gain>=lose&&o.get.every((x,i)=>!x||P.res[i]-x>=keep[i])&&vp(S,o.from,true)<KH_WIN-2&&Math.random()<.85;
@@ -166,7 +174,7 @@ const KH = (()=>{
     if (!S._off && S.seats.some((s,i)=>i!==seat&&!s.bot)){ const nd=need(S,seat,goal), want=nd.findIndex(x=>x>0); if(want>=0&&tot(nd)<=2){ let sr=-1,sv=0; for(let r=0;r<5;r++){ const sp=P.res[r]-goal[r]; if(r!==want&&sp>sv){ sv=sp; sr=r; } } if(sr>=0){ S._off=1; const gv=[0,0,0,0,0], wv=[0,0,0,0,0]; gv[sr]=1; wv[want]=1; return {t:'offer',give:gv,get:wv,to:-1}; } } }
     if (P.roads>0 && canPay(P,KH_COST.road) && tot(P.res)>=5){ const r=bestRoadTo(S,seat); if(r) return {t:'road',e:r.e}; }
     S._tr=0; return {t:'end'}; }
-  function timeoutAction(S,seat,t){ if(S.offer) return seat===S.offer.from?{t:'cancel'}:{t:'answer',ok:false}; if(S.phase==='play'&&S.step==='main') return {t:'end'}; return botAction(S,seat,Infinity); }
-  return {HEX,V,E,PORT_E,PIPS,newGame,apply,tick,whoActs,botAction,timeoutAction,townOK,roadOK,rates,vp,canPay,tot,victims};
+  function timeoutAction(S,seat,t){ if(S.step==='discard'&&S.disc&&S.disc[seat]!=null) return {t:'discard',res:autoLost(S.P[seat],S.disc[seat])}; if(S.offer) return seat===S.offer.from?{t:'cancel'}:{t:'answer',ok:false}; if(S.phase==='play'&&S.step==='main') return {t:'end'}; return botAction(S,seat,Infinity); }
+  return {autoLost,HEX,V,E,PORT_E,PIPS,newGame,apply,tick,whoActs,botAction,timeoutAction,townOK,roadOK,rates,vp,canPay,tot,victims};
 })();
 if (typeof module!=='undefined') module.exports=KH;
