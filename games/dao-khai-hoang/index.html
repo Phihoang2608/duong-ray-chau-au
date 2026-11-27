@@ -13,8 +13,8 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=2026112820a"></script>
-<script src="assets/imgs.js?v=2026112820a"></script>
+<script src="game.js?v=2026112821a"></script>
+<script src="assets/imgs.js?v=2026112821a"></script>
 <script>
 window.KH_FX=(function(){const d=document.documentElement;
  function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
@@ -24,8 +24,8 @@ window.KH_FX=(function(){const d=document.documentElement;
  function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
  apply(); return {mode,apply,toggle};})();
 </script>
-<script src="art.js?v=2026112820a"></script>
-<script src="ui.js?v=2026112820a"></script>
+<script src="art.js?v=2026112821a"></script>
+<script src="ui.js?v=2026112821a"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -87,7 +87,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .dcard .rn{stroke-width:2px!important}.rcard .rn{font:800 14px "KhFont","Baloo 2","Arial Black",sans-serif;fill:#fff;text-anchor:middle;stroke:#1b0f06;stroke-width:3.2px;paint-order:stroke;stroke-linejoin:round}
 .ctab{padding:10px 12px 8px}.cth{text-align:center;font-weight:bold;font-size:16px;color:#ffd76a;border-bottom:2px solid rgba(40,18,4,.6);box-shadow:0 1px 0 rgba(255,215,150,.25);padding-bottom:6px;margin-bottom:6px;letter-spacing:.4px}
 .ctr{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:2px 8px;padding:6px 0;border-bottom:1px solid rgba(40,18,4,.45)}.ctr:last-child{border:none}
-.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112820a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
+.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112821a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
 .ctx{display:flex;flex-direction:column;font-size:15px;line-height:1.15}.ctx small{font-size:12px;color:#f0dcb0}.cco{display:flex;gap:3px;flex-wrap:wrap}.cco .cr{display:flex;background:rgba(40,18,4,.45);border-radius:7px;padding:1px 3px}
 #kh,#kh *{font-family:"KhFont","Baloo 2","Arial Black",sans-serif}#kh button,#kh select,#kh input{font-family:inherit}
 #kh .cth,#kh .dice::before,#kh .chs .hd::before,#kh .ctx b,#kh .pl .ph b,#kh .kst,#kh .tbtn{letter-spacing:.3px}
@@ -308,12 +308,23 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 @media (orientation:portrait) and (max-width:700px){.lft,.lft>*,.ctab{min-width:0;max-width:100%}.ctab{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}.ctab .cth,.ctab .chint{grid-column:1/-1}.ctab .ctr{min-width:0;overflow:hidden}.ctab .cco,.ctab .cost{flex-wrap:wrap;min-width:0}}
 @media (orientation:landscape) and (max-height:640px){.hov .tbar .kend{font-size:11px;padding:7px 2px;white-space:nowrap}}
 @media (orientation:portrait) and (max-width:700px){.lft>.awp{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px;min-width:0}.lft>.awp .cth{grid-column:1/-1;writing-mode:horizontal-tb!important;width:auto!important;border-right:none;transform:none!important}.lft>.awp .arow{min-width:0;border:none;gap:6px}.lft>.awp .medal,.lft>.awp .slot{width:56px;height:56px}.lft>.awp .atx{min-width:0;font-size:13px}.lft>.awp .atx small{display:none}}
+.rdim{fill:#120800;opacity:.4;pointer-events:none}.rdim.fresh{animation:rdim 1.1s ease-out both}@keyframes rdim{0%{opacity:0}60%{opacity:0}100%{opacity:.4}}
+.rjump{animation:rjump 1s cubic-bezier(.3,.1,.3,1) both}
+@keyframes rjump{0%{transform:translate(var(--dx),var(--dy)) scale(1)}45%{transform:translate(calc(var(--dx)*.5),calc(var(--dy)*.5 - 80px)) scale(1.2)}80%{transform:translate(0,0) scale(.95,1.08)}90%{transform:translate(0,0) scale(1.06,.92)}100%{transform:none}}
+.kbadge.neg b{color:#ffb4b4;-webkit-text-stroke:5px #5a0f0f}
+@media (min-width:901px){.hov .hand.box{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;gap:9px;backdrop-filter:none}
+ .hov .rstack{box-sizing:border-box;width:68px!important;height:58px!important;border:3px solid #2e1809;border-radius:13px;background:repeating-linear-gradient(180deg,transparent 0 22px,rgba(30,14,2,.4) 22px 24px),linear-gradient(165deg,#a8753c,#7d4f24 45%,#6a4019);box-shadow:inset 0 0 0 2px #cf9f5f,0 4px 8px rgba(0,0,0,.5)}
+ .hov .rstack .rc{left:calc(50% - 26px + var(--k)*2px)!important;top:calc(50% - 21px - var(--k)*2px)!important;width:52px!important;height:40px!important}
+ .hov .rstack b{right:-7px!important;bottom:-7px!important}.hov .rstack.none{opacity:.5}}
+@media (orientation:landscape) and (max-height:640px){.hov .hand.box{background:none!important;border:none!important;box-shadow:none!important;padding:0!important;gap:5px}
+ .hov .rstack{box-sizing:border-box;width:54px!important;height:44px!important;border:2px solid #2e1809;border-radius:10px;background:linear-gradient(165deg,#a8753c,#7d4f24 45%,#6a4019);box-shadow:inset 0 0 0 1px #cf9f5f,0 3px 6px rgba(0,0,0,.5)}
+ .hov .rstack .rc{left:calc(50% - 20px + var(--k)*1.5px)!important;top:calc(50% - 16px - var(--k)*1.5px)!important;width:40px!important;height:31px!important}.hov .rstack b{right:-6px!important;bottom:-6px!important;font-size:11px}}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
   newGame:KH.newGame, apply:KH.apply, tick:KH.tick, whoActs:KH.whoActs, botAction:KH.botAction, timeoutAction:KH.timeoutAction,
   render:KHUI.render, tickView:KHUI.tickView,
-  rules:(()=>{ const I=(r,c)=>`<img class="kri" src="assets/ic-${r}.webp?v=2026112820a" alt="" title="${KH_RES[r]}">`+(c?`<b class="krn">${c}</b>`:''), N=['Gỗ','Gạch','Cừu','Lúa','Đá'], coin=`<img class="kri vc" src="assets/vp-coin.webp?v=2026112820a" alt="">`, V='?v=2026112820a',
+  rules:(()=>{ const I=(r,c)=>`<img class="kri" src="assets/ic-${r}.webp?v=2026112821a" alt="" title="${KH_RES[r]}">`+(c?`<b class="krn">${c}</b>`:''), N=['Gỗ','Gạch','Cừu','Lúa','Đá'], coin=`<img class="kri vc" src="assets/vp-coin.webp?v=2026112821a" alt="">`, V='?v=2026112821a',
   cost=(c)=>c.map((x,r)=>x?`<span class="krc">${Array(x).fill(I(r)).join('')}</span>`:'').join(''),
   sec=(t,b)=>`<section class="krs"><h3><span>${t}</span></h3>${b}</section>`;
   return `<div class="khr"><div class="krh">Luật chơi · Đảo Khai Hoang</div>`
