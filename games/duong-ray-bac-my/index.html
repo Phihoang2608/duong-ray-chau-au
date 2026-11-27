@@ -1062,7 +1062,7 @@ const K=27, LON0=-126, LAT0=53, COSF=0.8;
 const CITIES = CITY_DATA.map(([name,lon,lat,dx=0,dy=-14,anchor='middle'],i)=>({
   id:i, name, x:Math.round((lon-LON0)*COSF*K)+30, y:Math.round((LAT0-lat)*K)+30, dx, dy, anchor }));
 const CIDX = Object.fromEntries(CITIES.map(c=>[c.name,c.id]));
-const MAP_W = 1330, MAP_H = 1000;
+let MAP_W = 1330, MAP_H = 1000;
 
 // d = đường đôi, t = đường hầm, fN = phà cần N đầu máy
 const ROUTE_DATA = [
@@ -1644,6 +1644,19 @@ function cloudsSVG(){
   return c(0,180,1.2,20,150)+c(0,520,1.6,90,190)+c(0,860,1.1,140,170)+c(0,330,.9,60,130);
 }
 const COUNTRY_TINTS=['#f1e4c3','#ead9b1','#f2dcbf','#e5e1bb','#eed4b6','#e2e5c6','#f0e0b8','#e9d6c0'];
+let SX=1;
+function SXT(str){ if(SX===1) return str; return str.replace(/translate\((-?[\d.]+),/g,(m,x)=>`translate(${(+x*SX).toFixed(1)},`).replace(/rotate\((-?[\d.]+) (-?[\d.]+) /g,(m,a,x)=>`rotate(${a} ${(+x*SX).toFixed(1)} `).replace(/<text x="(-?[\d.]+)"/g,(m,x)=>`<text x="${(+x*SX).toFixed(1)}"`); }
+/* Kéo giãn bản đồ theo chiều ngang cho vừa khung (chỉ đổi cách vẽ, không đổi luật) */
+function applyMapStretch(){
+  const sc=document.getElementById('mapScroll'); if(!sc) return false; const w=sc.clientWidth, h=sc.clientHeight; if(!w||!h) return false;
+  if (applyMapStretch.W0==null){ applyMapStretch.W0=MAP_W; CITIES.forEach(c=>{ c.x0=c.x; }); }
+  const W0=applyMapStretch.W0;
+  let k=Math.max(1, Math.min(1.75, (w/h)/(W0/MAP_H))); if (k<1.04) k=1; k=+k.toFixed(3);
+  if (Math.abs(k-SX)<0.01) return false;
+  SX=k; CITIES.forEach(c=>{ c.x=+(c.x0*SX).toFixed(1); }); MAP_W=Math.round(W0*SX);
+  const m=document.getElementById('map'); if(m) m.setAttribute('viewBox',`0 0 ${MAP_W} ${MAP_H}`);
+  return true;
+}
 function bgSVG(){
   let s=`<defs>
     <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a7cfe0"/><stop offset="1" stop-color="#7fb0c8"/></linearGradient>
@@ -1656,24 +1669,26 @@ function bgSVG(){
   </defs>
   <rect width="${MAP_W}" height="${MAP_H}" fill="url(#sea)"/><rect width="${MAP_W}" height="${MAP_H}" fill="url(#waves)"/>`;
   // bờ biển sáng
+  s+=`<g transform="scale(${SX},1)">`;
   s+=`<g fill="none" stroke="#d6ecf2" stroke-width="9" stroke-linejoin="round" opacity=".9">${GEO.map(c=>`<path d="${c.d}"/>`).join('')}</g>`;
   s+=`<g fill="none" stroke="#bfdde8" stroke-width="16" stroke-linejoin="round" opacity=".35">${GEO.map(c=>`<path d="${c.d}"/>`).join('')}</g>`;
   s+=`<g stroke="#a88b5c" stroke-width="1" stroke-linejoin="round">${GEO.map((c,i)=>`<path d="${c.d}" fill="${COUNTRY_TINTS[(+c.id||i*7)%COUNTRY_TINTS.length]}"/>`).join('')}</g>`;
   s+=`<g fill="none" stroke="#9c8158" stroke-width="1" stroke-dasharray="3 3" opacity=".7">${GEO.map(c=>`<path d="${c.d}"/>`).join('')}</g>`;
+  s+='</g>';
   // lưới kinh vĩ
   if (MAP_ID==='na') s+=decorNA(); else {
-  for (let lon=-10; lon<=40; lon+=10){ const x=(lon-LON0)*COSF*K+30; s+=`<line x1="${x}" y1="0" x2="${x}" y2="${MAP_H}" class="grid"/>`; }
+  for (let lon=-10; lon<=40; lon+=10){ const x=((lon-LON0)*COSF*K+30)*SX; s+=`<line x1="${x}" y1="0" x2="${x}" y2="${MAP_H}" class="grid"/>`; }
   for (let lat=40; lat<=60; lat+=5){ const y=(LAT0-lat)*K+30; s+=`<line x1="0" y1="${y}" x2="${MAP_W}" y2="${y}" class="grid"/>`; }
-  s+=mountainsSVG([[470,640,1],[500,625,1.2],[535,640,1.1],[575,628,1.3],[610,640,1],[648,628,.9],[300,800,.9],[330,792,1.1],[360,800,.9],[872,598,.9],[895,580,1],[925,592,.9],[955,620,.8],[965,660,.8],[830,790,.8],[870,800,.9],[540,60,.9],[565,40,1],[600,50,.8],[250,860,.7]]);
-  s+=treesSVG([[1150,380],[1170,395],[1190,378],[1210,400],[1130,410],[1230,380],[1180,430],[1000,140],[1020,155],[880,170],[700,250],[720,265],[590,540],[1150,600],[1170,585]]);
-  s+=shipSVG(150,690,1.1,0)+shipSVG(380,250,.9,1.2)+shipSVG(805,215,.8,.6)+shipSVG(600,920,.9,2)+shipSVG(1185,770,.9,1.5)+shipSVG(430,980,.8,.3);
-  s+=`<g class="sealabel"><text x="120" y="770" transform="rotate(-70 120 770)">Đ Ạ I  T Â Y  D Ư Ơ N G</text><text x="400" y="300">Biển Bắc</text><text x="825" y="262">Biển Baltic</text>
-     <text x="250" y="990">Đ Ị A  T R U N G  H Ả I</text><text x="1180" y="725">Biển Đen</text><text x="690" y="780" transform="rotate(40 690 780)">Biển Adriatic</text></g>`;
-  s+=compassSVG(85,200);
+  s+=SXT(mountainsSVG([[470,640,1],[500,625,1.2],[535,640,1.1],[575,628,1.3],[610,640,1],[648,628,.9],[300,800,.9],[330,792,1.1],[360,800,.9],[872,598,.9],[895,580,1],[925,592,.9],[955,620,.8],[965,660,.8],[830,790,.8],[870,800,.9],[540,60,.9],[565,40,1],[600,50,.8],[250,860,.7]]));
+  s+=SXT(treesSVG([[1150,380],[1170,395],[1190,378],[1210,400],[1130,410],[1230,380],[1180,430],[1000,140],[1020,155],[880,170],[700,250],[720,265],[590,540],[1150,600],[1170,585]]));
+  s+=SXT(shipSVG(150,690,1.1,0)+shipSVG(380,250,.9,1.2)+shipSVG(805,215,.8,.6)+shipSVG(600,920,.9,2)+shipSVG(1185,770,.9,1.5)+shipSVG(430,980,.8,.3));
+  s+=SXT(`<g class="sealabel"><text x="120" y="770" transform="rotate(-70 120 770)">Đ Ạ I  T Â Y  D Ư Ơ N G</text><text x="400" y="300">Biển Bắc</text><text x="825" y="262">Biển Baltic</text>
+     <text x="250" y="990">Đ Ị A  T R U N G  H Ả I</text><text x="1180" y="725">Biển Đen</text><text x="690" y="780" transform="rotate(40 690 780)">Biển Adriatic</text></g>`);
+  s+=SXT(compassSVG(85,200));
   s+=`<g transform="translate(195,52)" class="cartouche"><path d="M-150,-26 L150,-26 L165,0 L150,26 L-150,26 L-165,0Z" fill="#f7ecd2" stroke="${INK}" stroke-width="2"/><path d="M-144,-20 L144,-20 L157,0 L144,20 L-144,20 L-157,0Z" fill="none" stroke="${INK}" stroke-width=".8"/>
      <text y="8" text-anchor="middle">ĐƯỜNG RAY CHÂU ÂU</text></g>`;
   Object.keys(LANDMARKS).forEach(n=>{ s+=landmarkSVG(n); });
-  s+=pointsTableSVG(1128,872);
+  s+=SXT(pointsTableSVG(1128,872));
   }
   s+=`<rect width="${MAP_W}" height="${MAP_H}" fill="url(#vignette)" pointer-events="none"/>`;
   return s;
@@ -1696,18 +1711,18 @@ function pointsTableSVG(x,y){
 
 function decorNA(){
   let s='';
-  for (let lon=-120; lon<=-70; lon+=10){ const x=(lon-LON0)*COSF*K+30; s+=`<line x1="${x}" y1="0" x2="${x}" y2="${MAP_H}" class="grid"/>`; }
+  for (let lon=-120; lon<=-70; lon+=10){ const x=((lon-LON0)*COSF*K+30)*SX; s+=`<line x1="${x}" y1="0" x2="${x}" y2="${MAP_H}" class="grid"/>`; }
   for (let lat=25; lat<=50; lat+=5){ const y=(LAT0-lat)*K+30; s+=`<line x1="0" y1="${y}" x2="${MAP_W}" y2="${y}" class="grid"/>`; }
-  s+=mountainsSVG([[300,240,1.1],[330,280,1.2],[360,250,1],[300,330,1],[340,350,1.2],[380,320,1],[400,380,1.1],[360,410,1],[420,440,.9],[250,180,1],[220,330,.9],[180,400,.9],[440,500,.8],[1010,500,.8],[1040,470,.9],[1070,440,.8],[230,250,.9]]);
-  s+=treesSVG([[700,170],[730,185],[760,165],[850,160],[880,175],[910,190],[1000,250],[1030,235],[1120,230],[1150,250],[1180,215],[920,520],[950,540],[880,560],[150,120],[180,140],[205,110]]);
-  s+=shipSVG(60,500,1.1,0)+shipSVG(110,820,1,1.3)+shipSVG(1260,520,1,.6)+shipSVG(1230,780,.9,1.8)+shipSVG(780,830,.9,1)+shipSVG(1010,880,.8,.4);
-  s+=`<g class="sealabel"><text x="60" y="700" transform="rotate(-75 60 700)">T H Á I  B Ì N H  D Ư Ơ N G</text><text x="1265" y="700" transform="rotate(-75 1265 700)">Đ Ạ I  T Â Y  D Ư Ơ N G</text>
-     <text x="760" y="895">Vịnh Mexico</text><text x="900" y="215">Hồ Lớn</text><text x="1130" y="960">Biển Caribe</text></g>`;
-  s+=compassSVG(150,650);
+  s+=SXT(mountainsSVG([[300,240,1.1],[330,280,1.2],[360,250,1],[300,330,1],[340,350,1.2],[380,320,1],[400,380,1.1],[360,410,1],[420,440,.9],[250,180,1],[220,330,.9],[180,400,.9],[440,500,.8],[1010,500,.8],[1040,470,.9],[1070,440,.8],[230,250,.9]]));
+  s+=SXT(treesSVG([[700,170],[730,185],[760,165],[850,160],[880,175],[910,190],[1000,250],[1030,235],[1120,230],[1150,250],[1180,215],[920,520],[950,540],[880,560],[150,120],[180,140],[205,110]]));
+  s+=SXT(shipSVG(60,500,1.1,0)+shipSVG(110,820,1,1.3)+shipSVG(1260,520,1,.6)+shipSVG(1230,780,.9,1.8)+shipSVG(780,830,.9,1)+shipSVG(1010,880,.8,.4));
+  s+=SXT(`<g class="sealabel"><text x="60" y="700" transform="rotate(-75 60 700)">T H Á I  B Ì N H  D Ư Ơ N G</text><text x="1265" y="700" transform="rotate(-75 1265 700)">Đ Ạ I  T Â Y  D Ư Ơ N G</text>
+     <text x="760" y="895">Vịnh Mexico</text><text x="900" y="215">Hồ Lớn</text><text x="1130" y="960">Biển Caribe</text></g>`);
+  s+=SXT(compassSVG(150,650));
   s+=`<g transform="translate(570,52)" class="cartouche"><path d="M-150,-26 L150,-26 L165,0 L150,26 L-150,26 L-165,0Z" fill="#f7ecd2" stroke="${INK}" stroke-width="2"/><path d="M-144,-20 L144,-20 L157,0 L144,20 L-144,20 L-157,0Z" fill="none" stroke="${INK}" stroke-width=".8"/>
      <text y="8" text-anchor="middle">ĐƯỜNG RAY BẮC MỸ</text></g>`;
   Object.keys(LANDMARKS).forEach(n=>{ s+=landmarkSVG(n); });
-  s+=pointsTableSVG(30,790);
+  s+=SXT(pointsTableSVG(30,790));
   return s;
 }
 
@@ -1900,6 +1915,7 @@ UIS.fitMode='all';
 function fitZoom(){
   fitLayout();
   const sc=$('#mapScroll'); if(!sc) return; const w=sc.clientWidth, h=sc.clientHeight; if(!w||!h) return;
+  if (applyMapStretch()){ BG_DONE=false; if (G) renderMap(); else { $('#bg').innerHTML=bgSVG(); BG_DONE=true; } }
   const z = UIS.fitMode==='all' ? Math.floor(Math.min(100, h*(MAP_W/MAP_H)/w*100)) : 100;
   setZoom(z, null, true);
 }
