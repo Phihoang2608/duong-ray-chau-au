@@ -483,6 +483,38 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .kfx{left:auto!important;right:22px!important;top:22px!important;bottom:auto!important}
  #kh .kfs{left:auto!important;right:22px!important;top:56px!important;bottom:auto!important}
 }
+
+/* ===== ĐIỆN THOẠI NẰM NGANG: bản đồ làm trung tâm, xúc xắc nằm trên bản đồ ===== */
+@media (orientation:landscape) and (max-height:640px){
+ #kh .khwrap{grid-template-columns:clamp(96px,14.5%,134px) minmax(0,1fr) clamp(188px,27%,256px)!important;gap:3px}
+ #kh .kbwrap{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:minmax(0,1fr);gap:3px;align-items:stretch}
+ #kh .kbwrap>.frame{grid-area:1/1;height:100%}
+ #kh .kbwrap>.hov{display:contents!important}
+ #kh .hov .dtop{display:flex!important;position:absolute;left:8px;top:8px;z-index:6;pointer-events:none;flex-direction:column;gap:4px;align-items:flex-start}
+ #kh .hov .dtop>*{pointer-events:auto}
+ #kh .hov .dtop .dice{display:flex!important;flex-wrap:nowrap!important;flex-direction:row!important;align-items:center;gap:4px!important;padding:3px 7px!important;margin:0;background:rgba(30,18,8,.84);border:1.5px solid #c9a24e;border-radius:14px;box-shadow:none;width:auto}
+ #kh .hov .dtop .die{width:30px;height:30px}#kh .hov .dtop .dice b{font-size:18px!important;width:auto!important;min-width:20px}
+ #kh .hov .dtop .dice span{font-size:12px;white-space:nowrap}
+ #kh .hov .dtop .dice .tbtn{width:auto!important;font-size:12px;padding:5px 8px;white-space:nowrap}
+ #kh .hov .dtop .box{margin:0;padding:3px 6px;font-size:11px;background:rgba(30,18,8,.9)}
+ #kh .lft>.dup{display:none!important}
+ #kh .hov .hand.box{grid-area:1/2;align-self:start;width:56px!important;padding:4px 2px!important;margin:0!important;gap:2px!important}
+ #kh .hov .hand .rstack{height:44px!important;width:100%!important}
+ #kh .hov .hand .rstack .rc{left:calc(50% - 25px + var(--k)*1.2px)!important;top:calc(50% - 17px - var(--k)*1.2px)!important;width:36px!important;height:28px!important}
+ #kh .hov .hand .rstack b{left:calc(50% + 3px)!important;top:calc(50% + 2px)!important;min-width:20px!important;height:20px!important;font-size:12px!important;line-height:15px!important;border-width:2px!important}
+ #kh .hov .tbar{grid-area:1/3;align-self:start;position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;width:54px!important;gap:3px!important}
+ #kh .hov .tbar .bt{width:52px;height:48px}#kh .hov .tbar .bt img{width:25px;height:30px}#kh .hov .tbar .bt small{font-size:9px}
+ #kh .hov .tbar .kend,#kh .hov .tbar .kundo{font-size:10px;padding:5px 1px}
+ #kh .hov .tbar .pop{position:absolute!important;left:auto!important;right:calc(100% + 64px)!important;top:0!important;bottom:auto!important;width:190px!important;z-index:9}
+ #kh .kst{left:8px!important;top:auto!important;bottom:8px!important;transform:none!important;max-width:120px!important;white-space:normal!important;text-align:left!important;font-size:10.5px!important;line-height:1.2!important;border-radius:10px!important;padding:3px 8px!important}
+ #kh .kfs{left:auto!important;right:124px!important;bottom:auto!important;top:32px!important;font-size:10px!important;padding:2px 7px!important}
+ #kh .kfx{left:auto!important;right:124px!important;bottom:auto!important;top:8px!important;font-size:10px!important;padding:2px 7px!important}
+ #kh .lft .box.dv .cth{white-space:normal!important;font-size:10.5px!important;line-height:1.15}
+ #kh .side .pl{padding:2px 6px!important;row-gap:0!important}
+ #kh .hov .pop .tbtn.wide{white-space:normal!important;font-size:12px!important;line-height:1.15;padding:5px 4px!important}
+ #kh .hov .tbar .pop{width:200px!important;max-width:none!important}
+ #kh .side .chs .tb-chat .ls{font-size:12.5px}
+}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
