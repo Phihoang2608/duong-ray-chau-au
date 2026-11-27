@@ -25,7 +25,7 @@ const KH = (()=>{
       const hot=hex.map((h,i)=>h.num===6||h.num===8?i:-1).filter(i=>i>=0);
       const bad=hot.some(i=>hot.some(j=>j!==i && HEX[i].v.filter(v=>HEX[j].v.includes(v)).length>=2));
       if(!bad) return hex; } }
-  function newGame(seats,t){
+  function newGame(seats,t){ UND=null;
     const n=seats.length, hex=makeBoard();
     const ports=shuffle([-1,-1,-1,-1,0,1,2,3,4]); // -1 = 3:1
     const dev=shuffle([].concat(Array(14).fill('knight'),Array(5).fill('vp'),Array(2).fill('road'),Array(2).fill('plenty'),Array(2).fill('mono')));
@@ -77,7 +77,7 @@ const KH = (()=>{
       o.give.forEach((x,i)=>{ P.res[i]-=x; Q.res[i]+=x; }); o.get.forEach((x,i)=>{ Q.res[i]-=x; P.res[i]+=x; });
       S.log.unshift(S.seats[o.from].name+' đổi với '+S.seats[seat].name+': '+fmtV(o.give)+' ⇄ '+fmtV(o.get)+'.'); S.offer=null; S.turnAt=t; ev(S,{k:'trade',seat:o.from}); return true; }
     o.no.push(seat); if(!pending(S).length){ S.log.unshift('Không ai đồng ý đổi với '+S.seats[o.from].name+'.'); S.offer=null; S.turnAt=t; } return true; }
-  function apply(S,seat,a,t){
+  function apply0(S,seat,a,t){
     if (!a||S.phase==='over') return false;
     if (a.t==='answer') return answer(S,seat,!!a.ok,t);
     if (seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
@@ -117,6 +117,15 @@ const KH = (()=>{
     if (a.t==='roaddev'){ if(S.devPlayed) return false; const i=P.dev.indexOf('road'); if(i<0) return false; P.dev.splice(i,1); S.devPlayed=true; S.free=Math.min(2,P.roads); S.log.unshift(name+' dùng Làm đường: xây 2 đường miễn phí.'); ev(S,{k:'dev',seat,d:'road'}); return true; }
     if (a.t==='end'){ P.dev.push(...P.newDev); P.newDev=[]; S._off=0; S.free=0; S.devPlayed=false; S.rolled=false; S.dice=S.dice; const n=S.seats.length; S.turn=(seat+1)%n; if(S.turn===0) S.round++; S.step='roll'; S.turnAt=t; ev(S,{k:'end',seat}); return true; }
     return false; }
+  // ----- hoàn tác (chỉ máy chủ giữ ảnh chụp; S.undo = ghế được hoàn tác) -----
+  let UND=null; const UNDOABLE=['town','road','city','trade'];
+  function apply(S,seat,a,t){
+    if (a&&a.t==='undo'){ if(!UND||UND.seat!==seat||S.phase==='over'||S.offer) return false; const sn=JSON.parse(JSON.stringify(UND.snap)), n=(S.evN||0)+1; UND=null;
+      Object.keys(S).forEach(k=>{ delete S[k]; }); Object.assign(S,sn); S.undo=-1; S.evN=n; S.ev={n,k:'undo',seat}; S.log.unshift(S.seats[seat].name+' hoàn tác nước vừa đi.'); S.turnAt=t; return true; }
+    const keep=a&&UNDOABLE.includes(a.t)&&seat===S.turn&&!S.offer&&S.phase!=='over'?JSON.parse(JSON.stringify(Object.assign({},S,{undo:-1}))):null;
+    const ok=apply0(S,seat,a,t);
+    if (ok&&a&&a.t!=='undo'){ if(keep&&S.phase!=='over'){ UND={seat,snap:keep}; S.undo=seat; } else { UND=null; S.undo=-1; } }
+    return ok; }
   function tick(S,t){ if(S&&S.offer&&t-S.offer.at>30000){ S.log.unshift('Yêu cầu đổi của '+S.seats[S.offer.from].name+' đã hết hạn.'); S.offer=null; S.turnAt=t; return true; } return false; }
   function whoActs(S){ if(S.phase==='over') return []; if(S.offer){ const p=pending(S); if(p.length) return p; } return [S.turn]; }
   // ---------- bot ----------
