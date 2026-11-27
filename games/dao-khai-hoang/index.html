@@ -593,6 +593,24 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .side .chs .tb-chat .qk button{font-size:8.5px!important;padding:1px 6px!important}
  #kh .side .chs .tb-chat input{font-size:12px!important;padding:4px 8px!important}
 }
+
+/* ===== điện thoại: thanh lệnh to đậm chữ trắng nét; giải thưởng chỉ còn biểu tượng, xuống dưới bảng chi phí ===== */
+@media (max-width:900px),(orientation:landscape) and (max-height:640px){
+ #kh .lft>.awp{order:20!important;display:flex!important;justify-content:center;align-items:center;gap:16px;padding:3px 6px!important;grid-template-columns:none!important}
+ #kh .lft>.awp .cth,#kh .lft>.awp .atx{display:none!important}
+ #kh .lft>.awp .arow{display:flex!important;padding:0!important;border:none!important;width:auto!important}
+ #kh .lft>.awp .medal,#kh .lft>.awp .slot{width:34px!important;height:34px!important;flex:none}
+ #kh .cmdb,#kh .kst{color:#fff!important;font-weight:800!important;-webkit-text-stroke:3px #3a210c!important;paint-order:stroke fill;text-shadow:none!important;letter-spacing:.3px}
+ #kh .cmdb b,#kh .kst b{color:#fff!important}
+}
+@media (orientation:landscape) and (max-height:640px){#kh .cmdb{height:56px!important;font-size:13px!important;line-height:1.15!important}}
+@media (max-width:700px) and (orientation:portrait){#kh .kst{font-size:15px!important;padding:5px 14px!important;max-width:96%!important}}
+
+@media (orientation:landscape) and (max-height:640px) and (max-width:760px){
+ #kh .cmdb{height:50px!important;font-size:12.5px!important}
+ #kh .lft .box.dv .cth{font-size:0!important}#kh .lft .box.dv .cth::before{content:"Thẻ phát triển";font-size:10px;-webkit-text-stroke:2px #3a210c}
+ #kh .lft>.awp{padding:1px 4px!important}#kh .lft>.awp .medal,#kh .lft>.awp .slot{width:30px!important;height:30px!important}
+}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
