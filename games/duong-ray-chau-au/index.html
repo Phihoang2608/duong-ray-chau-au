@@ -518,7 +518,7 @@ body.landphone .tm.me{font-size:14px}
 body.landphone .hbtns{order:3;gap:3px}
 body.landphone .hbtns button{padding:2px 6px;font-size:13px}
 body.landphone #rulesBtn,body.landphone #menuBtn{font-size:0!important}
-body.landphone #rulesBtn::before{content:"📖";font-size:13px}
+body.landphone #rulesBtn::before{content:"";font-size:13px}
 body.landphone #menuBtn::before{content:"☰";font-size:14px}
 body.landphone main{padding:3px!important;gap:4px!important}
 body.landphone #mapWrap{position:sticky!important;top:calc(var(--hh,36px) + 2px)!important;height:var(--mh)!important;min-height:0!important;padding:2px!important;border-radius:8px;border-width:1px}
@@ -616,7 +616,7 @@ body.landphone .quick button{font-size:12px;padding:1px 6px}
 .seatpick small{color:#6b5435}.seatpick .on{color:#15803d}.seatpick .off{color:#b91c1c}
 #leaveBtn{display:none}
 body.online #leaveBtn{display:inline-block}
-body.landphone #leaveBtn{font-size:0!important}body.landphone #leaveBtn::before{content:"🚪";font-size:13px}
+body.landphone #leaveBtn{font-size:0!important}body.landphone #leaveBtn::before{content:"";font-size:13px}
 
 /* ===== thẻ toa ngang & vé ảnh ===== */
 .card{aspect-ratio:3/2!important;border-radius:6px}
@@ -806,40 +806,68 @@ body.landphone .hcar .hn{font-size:13px!important}
 
 .hcar .wbox .wsym{width:17px!important;height:17px!important}
 body.landphone .hcar .wbox .wsym{width:10px!important;height:10px!important}
+.cartouche{display:none!important}
+.ico{width:18px;height:18px;vertical-align:-3px;display:inline-block}
+#rulesBtn .ico,#leaveBtn .ico{margin-right:3px}
+.legbtn b{font:bold 16px "Times New Roman",serif}
+
+/* chọn vé: mặc định tối, chọn thì sáng + viền xanh */
+.tpick{opacity:1!important;filter:none!important;display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px;border-radius:14px;border:3px solid transparent;transition:all .2s;background:rgba(0,0,0,.04)}
+.tpick .vticket.imgt img{filter:brightness(.45) saturate(.5);transition:filter .2s}
+.tpick .vticket.imgt{box-shadow:0 3px 8px rgba(0,0,0,.25)!important}
+.tpick:hover .vticket.imgt img{filter:brightness(.7) saturate(.8)}
+.tpick.sel{border-color:#22c55e;background:rgba(34,197,94,.10);box-shadow:0 0 0 3px rgba(34,197,94,.25),0 0 18px rgba(34,197,94,.45)}
+.tpick.sel .vticket.imgt img{filter:none}
+.tpk{display:flex;align-items:center;gap:7px;font:bold 15px "Times New Roman",serif;color:#6b1630;padding:3px 12px;border-radius:999px;background:#fbf1d8;border:1.5px solid #d6a83e}
+.tpc{width:18px;height:18px;border-radius:50%;border:2.5px solid #8a6a2a;background:#fff;position:relative;flex:none}
+.tpick.sel .tpk{background:#16a34a;border-color:#bbf7d0;color:#fff}
+.tpick.sel .tpc{border-color:#fff;background:#fff}
+.tpick.sel .tpc::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid #16a34a;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.tpick .tcheck{display:none!important}
+body.landphone .tpk{font-size:11px;padding:1px 8px;gap:4px}
+body.landphone .tpc{width:13px;height:13px;border-width:2px}
+body.landphone .tpick.sel .tpc::after{left:3px;top:0;width:3px;height:7px;border-width:0 2px 2px 0}
+/* soi vé: sóng lan ở 2 thành phố, tuyến nên đi phát sáng xanh */
+.wave{transform-box:fill-box;transform-origin:center;animation:wave 1.4s ease-out 3 both}
+@keyframes wave{0%{transform:scale(1);opacity:.95}100%{transform:scale(4.2);opacity:0}}
+.wcore{transform-box:fill-box;transform-origin:center;animation:wcore 1.4s ease-in-out infinite}
+@keyframes wcore{50%{transform:scale(1.35);opacity:.6}}
+.pglow{stroke-linecap:butt;filter:drop-shadow(0 0 6px #22c55e);animation:pglow 1.6s ease-in-out infinite}
+@keyframes pglow{50%{stroke-opacity:.5}}
 </style>
 </head>
 <body>
 <header>
-  <h1>🚂 Đường Ray Châu Âu</h1>
+  <h1>Đường Ray Châu Âu</h1>
   <div id="players"></div>
-  <div class="hbtns"><button id="chatBtn" title="Trò chuyện">💬<span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="musicBtn" title="Tắt nhạc nền">🎵</button><button id="soundBtn" title="Bật/tắt âm thanh">🔊</button><button id="rulesBtn">📖 Luật</button><button id="leaveBtn" title="Rời phòng online">🚪 Rời phòng</button><button id="menuBtn">☰ Menu</button></div>
+  <div class="hbtns"><button id="chatBtn" title="Trò chuyện"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="musicBtn" title="Tắt nhạc nền"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg></button><button id="soundBtn" title="Bật/tắt âm thanh"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button id="rulesBtn"><svg class="ico" viewBox="0 0 24 24"><path d="M3 5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0zM21 5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Luật</button><button id="leaveBtn" title="Rời phòng online"><svg class="ico" viewBox="0 0 24 24"><path d="M14 4H6v16h8M10 12h11M18 8l3 4-3 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Rời phòng</button><button id="menuBtn">☰ Menu</button></div>
   <div id="ticker"><div id="turnPill" style="display:none"><span class="tdot"></span><span id="turnName"></span></div><div id="tmsg"></div></div>
 </header>
 <main>
   <section id="mapWrap">
-    <div id="mapTools"><button id="legendBtn" class="legbtn" title="Chú thích bản đồ">❓</button><button id="zoomOut" class="zb" title="Thu nhỏ">−</button><input type="range" id="zoom" min="40" max="400" value="100"><button id="zoomIn" class="zb" title="Phóng to">+</button><b id="zoomVal">100%</b><button id="zoomFit" class="legbtn" title="Vừa khung: thấy toàn bộ bản đồ">↺</button><button id="bigBtn" class="legbtn" title="Bản đồ lớn">⛶</button></div>
+    <div id="mapTools"><button id="legendBtn" class="legbtn" title="Chú thích bản đồ"><b>?</b></button><button id="zoomOut" class="zb" title="Thu nhỏ">−</button><input type="range" id="zoom" min="40" max="400" value="100"><button id="zoomIn" class="zb" title="Phóng to">+</button><b id="zoomVal">100%</b><button id="zoomFit" class="legbtn" title="Vừa khung: thấy toàn bộ bản đồ">↺</button><button id="bigBtn" class="legbtn" title="Bản đồ lớn">⛶</button></div>
     <button id="undoBtn" title="Đi lại nước vừa rồi (Ctrl+Z)">↩ Đi lại</button> <div id="clock" class="hidden" title="Mỗi lượt có 60 giây"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" class="cbg"/><circle cx="32" cy="32" r="27" class="carc" transform="rotate(-90 32 32)"/></svg><div class="cnum">60</div><div class="cwho"></div></div> 
     <div id="mapScroll"><svg id="map" viewBox="0 0 1330 1075" xmlns="http://www.w3.org/2000/svg"><g id="bg"></g><g id="dyn"></g><g id="fxl"></g><g id="clouds" pointer-events="none"></g></svg></div>
-    <div id="handBar"><div class="hbtitle">🚂 Đoàn tàu<br>của bạn</div><div id="hand" class="htrain"></div></div>
+    <div id="handBar"><div class="hbtitle">Đoàn tàu<br>của bạn</div><div id="hand" class="htrain"></div></div>
   </section>
   <aside>
     
     
     <div class="panel mkpanel">
-      <h3>🃏 Lấy bài toa tàu</h3>
+      <h3>Lấy bài toa tàu</h3>
       <div class="mkbar">
         <button id="deckBtn" class="deckslot" title="Rút 1 lá úp từ chồng bài"><span class="deckart"><span class="card" style="display:block"></span></span><span class="dlab">Rút úp</span><small id="deckCount"></small></button>
         <div id="market"></div>
         <button id="ticketBtn" class="deck tkdeck" title="Rút vé tàu"><span class="tkart"><img src="../../railart/ticket-back.webp" alt=""></span><span class="dlab">Rút vé</span><small id="ticketCount"></small></button>
-        <button id="stationBtn" class="deck stslot"><span class="stico">🏠</span><span class="dlab">Xây ga</span></button>
+        <button id="stationBtn" class="deck stslot"><span class="stico"></span><span class="dlab">Xây ga</span></button>
       </div>
       <button id="passBtn" style="display:none">Bỏ lượt</button>
       <div id="status"></div>
     </div>
 
-    <div class="panel" id="tkPanel"><button id="tkToggle" type="button">🎫 Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div></div>
-    <div class="panel" id="chatPanel"><h3>💬 Trò chuyện</h3><div class="chatBox"></div></div>
-    <div class="panel"><h3>📜 Nhật ký</h3><div id="log"></div></div>
+    <div class="panel" id="tkPanel"><button id="tkToggle" type="button">Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div></div>
+    <div class="panel" id="chatPanel"><h3>Trò chuyện</h3><div class="chatBox"></div></div>
+    <div class="panel"><h3>Nhật ký</h3><div id="log"></div></div>
   </aside>
 </main>
 
@@ -862,7 +890,7 @@ body.landphone .hcar .wbox .wsym{width:10px!important;height:10px!important}
     <g class="mtrain"><g transform="translate(0,664) scale(2.3)">__TRAIN__</g></g>
   </svg>
   <div class="mpanel">
-    <div style="font-size:46px">🚂</div>
+    <div style="font-size:46px"></div>
     <h1>Đường Ray Châu Âu</h1>
     <p class="sub">Xây mạng đường sắt khắp châu Âu, hoàn thành vé hành trình và trở thành ông trùm đường sắt!</p>
     <label for="pname">Tên của bạn</label>
@@ -870,23 +898,23 @@ body.landphone .hcar .wbox .wsym{width:10px!important;height:10px!important}
     <label for="nbots">Số đối thủ máy (khi chơi với máy)</label>
     <select id="nbots"><option value="1">1 bot (2 người chơi)</option><option value="2" selected>2 bot (3 người chơi)</option><option value="3">3 bot (4 người chơi)</option><option value="4">4 bot (5 người chơi)</option></select>
     <div class="mgrid">
-      <button id="startBtn" class="primary big">🎮 Chơi với máy</button>
+      <button id="startBtn" class="primary big">Chơi với máy</button>
       <div class="sep" style="grid-column:1/-1">Chơi cùng bạn bè online</div>
-      <button id="createBtn">🌐 Tạo phòng</button>
-      <button id="joinBtn">🔑 Vào phòng bằng mã</button>
+      <button id="createBtn">Tạo phòng</button>
+      <button id="joinBtn">Vào phòng bằng mã</button>
       <button id="resumeBtn" class="primary" style="display:none;grid-column:1/-1"></button>
       <a id="hubBtn" href="../../index.html" style="display:none;grid-column:1/-1;text-align:center;padding:9px;border:1px solid #6b4f2a;border-radius:10px;color:#2b2116;text-decoration:none;background:#fffaf0">Về sảnh chính — chọn game khác</a>
-      <button id="rulesBtn2">📖 Luật chơi</button>
-      <button id="soundBtn2">🔊 Âm thanh: bật</button>
+      <button id="rulesBtn2">Luật chơi</button>
+      <button id="soundBtn2">Âm thanh: bật</button>
     </div>
   </div>
 </div>
-<div id="lobby" class="hidden"><div class="lbox"><div class="lmain"></div><div class="lchat"><h3>💬 Trò chuyện trong phòng</h3><div class="chatBox"></div></div></div></div>
+<div id="lobby" class="hidden"><div class="lbox"><div class="lmain"></div><div class="lchat"><h3>Trò chuyện trong phòng</h3><div class="chatBox"></div></div></div></div>
 <div id="modal" class="modal hidden"></div>
 <div id="toast"></div>
 <div id="tip"></div>
 <canvas id="fxcanvas"></canvas>
-<div id="rotateHint"><div class="rbox"><div class="phone"><div class="scr">🚂</div></div><h2>Xoay ngang điện thoại để chơi</h2><p>Bản đồ to và dễ bấm hơn khi màn hình nằm ngang.</p><button id="rotateOk">Vẫn chơi màn hình dọc</button></div></div>
+<div id="rotateHint"><div class="rbox"><div class="phone"><div class="scr"></div></div><h2>Xoay ngang điện thoại để chơi</h2><p>Bản đồ to và dễ bấm hơn khi màn hình nằm ngang.</p><button id="rotateOk">Vẫn chơi màn hình dọc</button></div></div>
 <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
 <script>window.STANDALONE=true;</script>
 <script src="../../core/room.js"></script>
@@ -1722,18 +1750,25 @@ const STAR='M0,-7.5 L2.2,-2.4 L7.6,-2.3 L3.4,1.3 L4.8,6.6 L0,3.6 L-4.8,6.6 L-3.4
 /* Hai thành phố của vé đang chọn phát sáng mạnh */
 function beaconSVG(){
   const f = UIS.hl || UIS.focus; if (!f) return '';
-  const A=CITIES[f.a], B=CITIES[f.b], hue=f.hue||'#e11d48';
-  const mx=(A.x+B.x)/2, my=(A.y+B.y)/2, dx=B.x-A.x, dy=B.y-A.y, d=Math.hypot(dx,dy); const cx=mx-dy/d*d*.18, cy=my+dx/d*d*.18;
-  let s=`<g class="beacons" pointer-events="none"><path d="M${A.x},${A.y} Q${cx.toFixed(0)},${cy.toFixed(0)} ${B.x},${B.y}" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".55"/>
-    <path d="M${A.x},${A.y} Q${cx.toFixed(0)},${cy.toFixed(0)} ${B.x},${B.y}" fill="none" stroke="${hue}" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" class="ants"/>`;
-  [A,B].forEach((C,k)=>{
-    s+=`<g transform="translate(${C.x},${C.y})"><circle r="70" fill="url(#beamg)" class="bglow"/>
-      <g class="brays">${Array.from({length:12},(_,i)=>`<rect x="-2" y="-58" width="4" height="22" rx="2" fill="${hue}" opacity=".75" transform="rotate(${i*30})"/>`).join('')}</g>
-      <circle r="24" fill="none" stroke="${hue}" stroke-width="5" class="bring"/><circle r="24" fill="none" stroke="#fff" stroke-width="3" class="bring b2"/>
-      <circle r="13" fill="#fff" stroke="${hue}" stroke-width="4"/><text y="5" text-anchor="middle" class="bnum">${k?'B':'A'}</text>
-      <text y="-34" text-anchor="middle" class="blabel" fill="${hue}">${esc(C.name)}</text></g>`;
+  const A=CITIES[f.a], B=CITIES[f.b];
+  let s='<g class="beacons" pointer-events="none">';
+  /* các tuyến nên đi: đường ngắn nhất (tuyến của mình = 0, bỏ tuyến người khác) */
+  pathRoutes(f.a,f.b).forEach(r=>{ const g=routeGeom(r), pad=11;
+    const x1=g.ax+g.ux*pad, y1=g.ay+g.uy*pad, x2=g.ax+g.ux*(g.d-pad), y2=g.ay+g.uy*(g.d-pad);
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#22c55e" stroke-width="26" stroke-opacity=".28" class="pglow"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#4ade80" stroke-width="20" stroke-opacity=".0" class="pglow2"/>`; });
+  [A,B].forEach(C=>{
+    s+=`<g transform="translate(${C.x},${C.y})">${[0,1,2].map(k=>`<circle r="16" fill="none" stroke="#22c55e" stroke-width="4" class="wave" style="animation-delay:${k*.45}s"/>`).join('')}
+      <circle r="15" fill="#22c55e" opacity=".35" class="wcore"/><circle r="9" fill="#fff" stroke="#16a34a" stroke-width="4"/></g>`;
   });
   return s+'</g>';
+}
+function pathRoutes(a,b){
+  const dist=CITIES.map(()=>Infinity), prev=CITIES.map(()=>null), done=new Set(); dist[a]=0;
+  const adj={}; ROUTES.forEach(r=>{ const o=G.owner[r.id]; if(o!=null && o!==ME) return; const w=o===ME?0:r.len;
+    (adj[r.a]=adj[r.a]||[]).push([r.b,w,r]); (adj[r.b]=adj[r.b]||[]).push([r.a,w,r]); });
+  for(;;){ let u=-1,best=Infinity; dist.forEach((d,i)=>{ if(!done.has(i)&&d<best){best=d;u=i;} }); if(u<0||u===b) break; done.add(u);
+    (adj[u]||[]).forEach(([v,w,r])=>{ if(dist[u]+w<dist[v]){ dist[v]=dist[u]+w; prev[v]=[u,r]; } }); }
+  const out=[]; let c=b; while(prev[c]){ out.push(prev[c][1]); c=prev[c][0]; } return out;
 }
 
 /* ----- Bảng bên ----- */
@@ -1778,11 +1813,11 @@ function renderScoreboard(){
   const sb=$('#sbBody'); if(!sb || !G) return;
   const lps=G.players.map(p=>longestPath(p.routes)); const maxLP=Math.max(0,...lps); const maxSc=Math.max(...G.players.map(p=>p.score));
   let rows=G.players.map((p,i)=>{ const done = i===ME ? p.tickets.filter(id=>ticketDone(p,id)).length+'/'+p.tickets.length : p.tickets.length;
-    return `<tr class="${G.cur===i&&G.phase==='play'?'now':''}"><td class="sbn"><span class="dot" style="background:${p.color}"></span>${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.score===maxSc&&maxSc>0?' 👑':''}</td>
-      <td><b>${p.score}</b></td><td>${done}</td><td>${lps[i]}${lps[i]===maxLP&&maxLP>0?' 🏅':''}</td><td>${p.stations}</td><td>${p.trains}</td></tr>`; }).join('');
+    return `<tr class="${G.cur===i&&G.phase==='play'?'now':''}"><td class="sbn"><span class="dot" style="background:${p.color}"></span>${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.score===maxSc&&maxSc>0?' ':''}</td>
+      <td><b>${p.score}</b></td><td>${done}</td><td>${lps[i]}${lps[i]===maxLP&&maxLP>0?' ':''}</td><td>${p.stations}</td><td>${p.trains}</td></tr>`; }).join('');
   let est='';
   if (ME>=0 && G.players[ME] && G.phase!=='idle'){ const me=G.players[ME]; const ev=ticketEval(me, me.routes); const lp=lps[ME]===maxLP&&maxLP>0?10:0; const tot=me.score+ev.score+me.stations*4+lp;
-    est=`<div class="sbest">🧮 Nếu kết thúc ngay, bạn được khoảng <b>${tot}</b> điểm <small>(tuyến ${me.score} · vé ${ev.score>=0?'+':''}${ev.score} · ga +${me.stations*4}${lp?' · dài nhất +10':''})</small></div>`; }
+    est=`<div class="sbest">Nếu kết thúc ngay, bạn được khoảng <b>${tot}</b> điểm <small>(tuyến ${me.score} · vé ${ev.score>=0?'+':''}${ev.score} · ga +${me.stations*4}${lp?' · dài nhất +10':''})</small></div>`; }
   sb.innerHTML=`<table class="sbt"><tr><th>Người chơi</th><th>Điểm</th><th title="Vé của bạn: xong/tổng">Vé</th><th>Dài nhất</th><th>Ga</th><th>Toa</th></tr>${rows}</table>${est}
 `;
 }
@@ -1803,7 +1838,7 @@ function renderSide(){
   const me=G.players[ME];
   if (me){
     $('#stationBtn').disabled = !my || G.drawn>0 || me.stations<=0 || !stationOptions(ME).length;
-    $('#stationBtn').innerHTML = UIS.stationMode ? '<span class="stico">✖</span><span class="dlab">Huỷ</span>' : `<span class="stico">🏠</span><span class="dlab">Xây ga</span><small>tốn ${Math.min(3,stationCost(me))} lá</small>`;
+    $('#stationBtn').innerHTML = UIS.stationMode ? '<span class="stico">✖</span><span class="dlab">Huỷ</span>' : `<span class="stico"></span><span class="dlab">Xây ga</span><small>tốn ${Math.min(3,stationCost(me))} lá</small>`;
     const hasMove = canDrawMore() || G.ticketDeck.length || ROUTES.some(r=>claimOptions(ME,r).length) || stationOptions(ME).length;
     $('#passBtn').style.display = (my && G.drawn===0 && !hasMove) ? '' : 'none';
   } else { $('#stationBtn').disabled=true; $('#passBtn').style.display='none'; }
@@ -1811,18 +1846,18 @@ function renderSide(){
   if (ub){ ub.classList.toggle('show', !!mu); if (mu) ub.innerHTML=`↩ Đi lại <small>(còn ${mu.l} lần)</small>`; }
   // trạng thái
   let st='';
-  if (ME<0) st='👀 Đang xem';
-  else if (G.phase==='end') st='🏁 Hết ván';
-  else if (G.phase==='pick') st=G.initial[ME]?'🎫 Chọn vé':'⏳ Chờ chọn vé…';
-  else if (UIS.waiting) st='⏳ Đang gửi…';
-  else if (G.pending && G.pending.pi===ME) st='🎫 Chọn vé';
-  else if (G.tunnel && G.tunnel.pi===ME) st='⛰️ Đường hầm: trả thêm bài?';
+  if (ME<0) st='Đang xem';
+  else if (G.phase==='end') st='Hết ván';
+  else if (G.phase==='pick') st=G.initial[ME]?'Chọn vé':'Chờ chọn vé…';
+  else if (UIS.waiting) st='Đang gửi…';
+  else if (G.pending && G.pending.pi===ME) st='Chọn vé';
+  else if (G.tunnel && G.tunnel.pi===ME) st='Đường hầm: trả thêm bài?';
   else if (isMyTurn()){
-    if (UIS.stationMode) st='🏠 Chọn thành phố để xây ga';
-    else if (G.drawn===1) st='🃏 Rút thêm 1 lá';
+    if (UIS.stationMode) st='Chọn thành phố để xây ga';
+    else if (G.drawn===1) st='Rút thêm 1 lá';
     else st='<b>Lượt bạn</b> · rút bài / chiếm tuyến / rút vé / xây ga';
   } else st=`<span class="think">${esc(cur().name)} đang suy nghĩ<span class="dots"><i>.</i><i>.</i><i>.</i></span></span>`;
-  if (G.finalTurns!=null && G.phase==='play') st=`<b class="final">🔥 Vòng cuối · còn ${G.finalTurns}</b> `+st;
+  if (G.finalTurns!=null && G.phase==='play') st=`<b class="final">Vòng cuối · còn ${G.finalTurns}</b> `+st;
   $('#status').innerHTML=st;
   $('#status').classList.toggle('myturn', isMyTurn());
   // tay bài
@@ -1934,7 +1969,7 @@ setInterval(()=>{ if(!G || !document.getElementById('turnPill')) return; updateT
   if (sec>=TURN_LIMIT && NET.mode!=='client' && UIS.timedKey!==UIS.turnKey){
     UIS.timedKey=UIS.turnKey;
     if (G.phase==='play' && !cur().isBot){ actTimeout(G.cur); afterChange(); }
-    else if (G.phase==='pick'){ Object.keys(G.initial).forEach(pi=>botInitialPick(+pi)); log('⏰ Hết giờ chọn vé — máy tự chọn giúp.','warn'); afterChange(); }
+    else if (G.phase==='pick'){ Object.keys(G.initial).forEach(pi=>botInitialPick(+pi)); log('Hết giờ chọn vé — máy tự chọn giúp.','warn'); afterChange(); }
   }
 }, 1000);
 
@@ -1957,21 +1992,21 @@ function playFx(f){
       FX.fly(from, to, cardSVG(c)); SFX.draw(); if (f.p===ME && c!=='back') toast('Bạn rút được: '+cname(c)); break; }
     case 'cl': {
       const r=ROUTES[f.r]; const col=G.players[f.p].color; UIS.claimAt[f.r]=performance.now(); renderMap();
-      trainRun(r, col); SFX.clack(r.len); Ticker.push(`🚃 ${esc(who(f.p))} chiếm tuyến <b>${esc(rname(r))}</b> (+${POINTS[r.len]} điểm)`, 'claim'); if (r.len>=3) setTimeout(()=>SFX.whistle(), 350);
+      trainRun(r, col); SFX.clack(r.len); Ticker.push(`${esc(who(f.p))} chiếm tuyến <b>${esc(rname(r))}</b> (+${POINTS[r.len]} điểm)`, 'claim'); if (r.len>=3) setTimeout(()=>SFX.whistle(), 350);
       const g=routeGeom(r); const mx=g.ax+g.ux*g.d/2, my=g.ay+g.uy*g.d/2;
       setTimeout(()=>{ floatText(mx, my-14, '+'+POINTS[r.len], col); if (r.len>=4 || f.p===ME){ const p=FX.svgPoint(mx,my); if(p) FX.confetti(p.x,p.y, r.len>=4?60:25, [col,'#ffd36b','#fff']); } }, TRAIN_RUN_MS-200);
       break; }
     case 'tun': SFX.rumble(); FX.shake($('#mapWrap'));
-      if (f.p!==ME) FX.banner('⛰️ Đường hầm!', `${esc(G.players[f.p].name)} lật ra ${f.rv.map(i=>cname(CARDS[i])).join(', ')} → cần thêm ${f.x} lá`, 'small', 2000);
+      if (f.p!==ME) FX.banner('Đường hầm!', `${esc(G.players[f.p].name)} lật ra ${f.rv.map(i=>cname(CARDS[i])).join(', ')} → cần thêm ${f.x} lá`, 'small', 2000);
       break;
-    case 'st': { const C=CITIES[f.c]; SFX.ding(); Ticker.push(`🏠 ${esc(who(f.p))} xây nhà ga ở <b>${esc(C.name)}</b>`, 'claim'); ringPulse(C.x,C.y,G.players[f.p].color); const p=FX.svgPoint(C.x,C.y); if(p) FX.confetti(p.x,p.y,30,[G.players[f.p].color,'#fff','#ffd36b']); break; }
-    case 'tk': SFX.paper(); Ticker.push(`🎫 ${esc(who(f.p))} rút vé hành trình`, 'info'); break;
-    case 'timeout': Ticker.push(`⏰ ${esc(who(f.p))} hết 60 giây — tự động chuyển lượt!`, 'final'); SFX.error(); break;
-    case 'turn': if (G.phase==='play'){ if (f.p===ME){ SFX.hiss(); Ticker.push('🚂 Đến lượt của BẠN! Rút bài, chiếm tuyến, rút vé hoặc xây ga.', 'me'); } else Ticker.push(`⏳ Đến lượt của ${esc(G.players[f.p].name)}`, 'info'); } break;
-    case 'final': SFX.horn(); FX.banner('🔥 VÒNG CUỐI!', 'Mỗi người được đi thêm đúng 1 lượt', 'final', 2300); break;
-    case 'end': SFX.fanfare(); FX.rain(5); Ticker.push('🏁 Kết thúc ván! Xem bảng điểm nhé.', 'win'); break;
+    case 'st': { const C=CITIES[f.c]; SFX.ding(); Ticker.push(`${esc(who(f.p))} xây nhà ga ở <b>${esc(C.name)}</b>`, 'claim'); ringPulse(C.x,C.y,G.players[f.p].color); const p=FX.svgPoint(C.x,C.y); if(p) FX.confetti(p.x,p.y,30,[G.players[f.p].color,'#fff','#ffd36b']); break; }
+    case 'tk': SFX.paper(); Ticker.push(`${esc(who(f.p))} rút vé hành trình`, 'info'); break;
+    case 'timeout': Ticker.push(`${esc(who(f.p))} hết 60 giây — tự động chuyển lượt!`, 'final'); SFX.error(); break;
+    case 'turn': if (G.phase==='play'){ if (f.p===ME){ SFX.hiss(); Ticker.push('Đến lượt của BẠN! Rút bài, chiếm tuyến, rút vé hoặc xây ga.', 'me'); } else Ticker.push(`Đến lượt của ${esc(G.players[f.p].name)}`, 'info'); } break;
+    case 'final': SFX.horn(); FX.banner('VÒNG CUỐI!', 'Mỗi người được đi thêm đúng 1 lượt', 'final', 2300); break;
+    case 'end': SFX.fanfare(); FX.rain(5); Ticker.push('Kết thúc ván! Xem bảng điểm nhé.', 'win'); break;
     case 'undo': SFX.flip(); Ticker.push(`↩ ${esc(who(f.p))} đi lại nước vừa rồi`, 'info'); UIS.claimAt={}; break;
-    case 'back': Ticker.push(`🔌 ${esc(who(f.p))} đã vào lại phòng`, 'info'); break;
+    case 'back': Ticker.push(`${esc(who(f.p))} đã vào lại phòng`, 'info'); break;
     case 'reshuf': SFX.flip(); toast('3 lá Đầu máy lộ ra — lật lại 5 lá mới!'); break;
   }
 }
@@ -1980,7 +2015,7 @@ function checkTickets(){
   const done=new Set(me.tickets.filter(id=>ticketDone(me,id)));
   if (UIS.myDone){
     done.forEach(id=>{ if(!UIS.myDone.has(id)){ const t=TK[id];
-      setTimeout(()=>{ SFX.chime(); FX.banner('🎉 Hoàn thành vé!', `${esc(tname(t))} · +${t.pts} điểm`, 'win', 2200);
+      setTimeout(()=>{ SFX.chime(); FX.banner('Hoàn thành vé!', `${esc(tname(t))} · +${t.pts} điểm`, 'win', 2200);
         [t.a,t.b].forEach((c,k)=>{ const p=FX.svgPoint(CITIES[c].x,CITIES[c].y); if(p) setTimeout(()=>{ FX.firework(p.x,p.y,me.color); FX.confetti(p.x,p.y,40); }, k*350); }); }, TRAIN_RUN_MS); } });
   }
   UIS.myDone=done;
@@ -2010,21 +2045,21 @@ function ensureModal(){
   if (want===UIS.modalKey) return;
   if (want===null){ if (auto(UIS.modalKey)) hideModal(); return; }
   if (want==='init') showTicketPicker(G.initial[ME], 2, 'init');
-  else if (want==='waitinit') showModal('⏳ Đang chờ…','<p>Đang chờ những người khác chọn vé hành trình…</p>',[],{key:'waitinit'});
+  else if (want==='waitinit') showModal('Đang chờ…','<p>Đang chờ những người khác chọn vé hành trình…</p>',[],{key:'waitinit'});
   else if (want.startsWith('pend')) showTicketPicker(G.pending.tickets, 1, want);
   else showTunnelModal(want);
 }
 function showTicketPicker(ids, min, key){
-  const sel=new Set(ids.map((t,i)=>i));
+  const sel=new Set();
   const body = `<p>Giữ ít nhất <b>${min}</b> vé. Chạm vào vé để chọn/bỏ và xem vị trí trên bản đồ. Vé hoàn thành được <b>cộng</b> điểm, vé không hoàn thành bị <b>trừ</b> điểm.</p>
-    <div class="tpicks">${ids.map((id,i)=>`<div class="tpick sel" data-i="${i}">${ticketHTML(TK[id], false, TK_HUES[(i+3)%TK_HUES.length])}<div class="tcheck">✔</div></div>`).join('')}</div>`;
+    <div class="tpicks">${ids.map((id,i)=>`<div class="tpick" data-i="${i}">${ticketHTML(TK[id], false, TK_HUES[(i+3)%TK_HUES.length])}<div class="tpk"><span class="tpc"></span><span class="tpt">Chọn</span></div></div>`).join('')}</div>`;
   const btn={label:'Giữ các vé đã chọn', cls:'primary', onClick:()=>{ hideModal(true); UIS.hl=null; SFX.paper(); doAction(key==='init'?{t:'init', idx:[...sel]}:{t:'keep', idx:[...sel]}); render(); }};
-  const m=showModal('🎫 Chọn vé hành trình', body, [btn], {key});
+  const m=showModal('Chọn vé hành trình', body, [btn], {key});
   m.querySelectorAll('.tpick').forEach(el=>{ const i=+el.dataset.i, t=TK[ids[i]];
     const hue=TK_HUES[(i+3)%TK_HUES.length];
-    el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); el.classList.toggle('sel', sel.has(i)); btn.el.disabled = sel.size<min; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
+    el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); el.classList.toggle('sel', sel.has(i)); el.querySelector('.tpt').textContent=sel.has(i)?'Đã chọn':'Chọn'; btn.el.disabled = sel.size<min; btn.el.textContent=sel.size<min?`Chọn ít nhất ${min} vé (${sel.size}/${min})`:`Giữ ${sel.size} vé đã chọn`; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
     el.onmouseenter=()=>{ UIS.hl={a:t.a,b:t.b,hue}; renderMap(); }; });
-  UIS.hl={a:TK[ids[0]].a,b:TK[ids[0]].b,hue:TK_HUES[3]}; renderMap();
+  btn.el.disabled=true; btn.el.textContent=`Chọn ít nhất ${min} vé (0/${min})`; UIS.hl=null; renderMap();
 }
 function miniRouteSVG(r, ownerColor){
   const n=r.len, w=26, gap=4, W=n*(w+gap)+gap; let s=`<svg class="minir" viewBox="0 0 ${W} 22" width="${W}" height="22">`;
@@ -2036,11 +2071,11 @@ function miniRouteSVG(r, ownerColor){
 }
 const HELP = {
   color:(r)=>r.color==='gray'
-    ? `🎨 <b>Tuyến xám</b>: trả <b>${r.len}</b> lá <u>cùng một màu bất kỳ</u> (ví dụ ${r.len} lá Đỏ, hoặc ${r.len} lá Xanh). Lá Đầu máy (cầu vồng) thay được mọi màu.`
-    : `🎨 <b>Tuyến màu ${cname(r.color)}</b>: trả <b>${r.len}</b> lá màu ${cname(r.color)}. Lá Đầu máy (cầu vồng) thay được cho bất kỳ lá nào.`,
-  tunnel:`⛰️ <b>Đường hầm</b> (viền nét đứt): sau khi trả bài, lật 3 lá trên chồng bài úp. Lá nào <u>trùng màu bạn dùng</u> (hoặc là Đầu máy) thì bạn phải <b>trả thêm 1 lá</b>. Nếu không đủ hoặc không muốn trả, bạn lấy lại bài và mất lượt.`,
-  ferry:(r)=>`⛴️ <b>Phà</b> (chấm cầu vồng): mỗi chấm cần 1 lá Đầu máy. Tuyến này có <b>${r.ferry}</b> chấm → bắt buộc có ít nhất <b>${r.ferry} lá Đầu máy</b>, các ô còn lại trả bằng bài cùng màu.`,
-  double:`🛤️ <b>Đường đôi</b> (2 làn song song): ván <b>2–3 người</b> chỉ dùng được <b>1 làn</b> (ai chiếm trước thì làn kia bị khoá); ván <b>4–5 người</b> thì mỗi làn 1 người, nhưng 1 người không được chiếm cả 2 làn.`
+    ? `<b>Tuyến xám</b>: trả <b>${r.len}</b> lá <u>cùng một màu bất kỳ</u> (ví dụ ${r.len} lá Đỏ, hoặc ${r.len} lá Xanh). Lá Đầu máy (cầu vồng) thay được mọi màu.`
+    : `<b>Tuyến màu ${cname(r.color)}</b>: trả <b>${r.len}</b> lá màu ${cname(r.color)}. Lá Đầu máy (cầu vồng) thay được cho bất kỳ lá nào.`,
+  tunnel:`<b>Đường hầm</b> (viền nét đứt): sau khi trả bài, lật 3 lá trên chồng bài úp. Lá nào <u>trùng màu bạn dùng</u> (hoặc là Đầu máy) thì bạn phải <b>trả thêm 1 lá</b>. Nếu không đủ hoặc không muốn trả, bạn lấy lại bài và mất lượt.`,
+  ferry:(r)=>`<b>Phà</b> (chấm cầu vồng): mỗi chấm cần 1 lá Đầu máy. Tuyến này có <b>${r.ferry}</b> chấm → bắt buộc có ít nhất <b>${r.ferry} lá Đầu máy</b>, các ô còn lại trả bằng bài cùng màu.`,
+  double:`<b>Đường đôi</b> (2 làn song song): ván <b>2–3 người</b> chỉ dùng được <b>1 làn</b> (ai chiếm trước thì làn kia bị khoá); ván <b>4–5 người</b> thì mỗi làn 1 người, nhưng 1 người không được chiếm cả 2 làn.`
 };
 function showRouteInfo(r){
   const owner=G.owner[r.id]; const me=ME>=0?G.players[ME]:null;
@@ -2049,38 +2084,38 @@ function showRouteInfo(r){
   if (r.ferry) help+=`<div class="help fer">${HELP.ferry(r)}</div>`;
   if (r.pair!=null){ const po=G.owner[r.pair]; help+=`<div class="help dbl">${HELP.double}${po!=null?`<br><i>Làn bên cạnh đã thuộc về ${esc(G.players[po].name)}.</i>`:''}</div>`; }
   let status='', buttons=[];
-  if (owner!=null) status=`🚂 Tuyến này đã thuộc về <b style="color:${G.players[owner].color}">${esc(G.players[owner].name)}</b>.`;
-  else if (!me) status='👀 Bạn đang xem ván này.';
-  else if (!isMyTurn()) status='⏳ Chưa đến lượt bạn — đến lượt thì bấm lại vào tuyến này để chiếm.';
-  else if (G.drawn>0) status='🃏 Bạn đang rút bài — phải rút nốt lá thứ 2, lượt sau mới chiếm được.';
+  if (owner!=null) status=`Tuyến này đã thuộc về <b style="color:${G.players[owner].color}">${esc(G.players[owner].name)}</b>.`;
+  else if (!me) status='Bạn đang xem ván này.';
+  else if (!isMyTurn()) status='Chưa đến lượt bạn — đến lượt thì bấm lại vào tuyến này để chiếm.';
+  else if (G.drawn>0) status='Bạn đang rút bài — phải rút nốt lá thứ 2, lượt sau mới chiếm được.';
   else if (!routeAvailable(ME,r)){
-    status = me.trains<r.len ? `🚫 Bạn chỉ còn ${me.trains} toa, không đủ ${r.len} toa.` : (r.pair!=null && G.owner[r.pair]===ME ? '🚫 Bạn đã chiếm làn kia của đường đôi này.' : '🚫 Ván 2–3 người chỉ được dùng 1 làn của đường đôi, làn kia đã có người chiếm.');
+    status = me.trains<r.len ? `Bạn chỉ còn ${me.trains} toa, không đủ ${r.len} toa.` : (r.pair!=null && G.owner[r.pair]===ME ? 'Bạn đã chiếm làn kia của đường đôi này.' : 'Ván 2–3 người chỉ được dùng 1 làn của đường đôi, làn kia đã có người chiếm.');
   } else {
     const opts=claimOptions(ME,r);
     if (!opts.length){
       const have = r.color==='gray' ? `nhiều nhất ${Math.max(...COLORS.map(c=>me.hand[c]))} lá cùng màu` : `${me.hand[r.color]} lá ${cname(r.color)}`;
-      status=`🃏 Bạn chưa đủ bài: cần ${r.len} lá ${r.color==='gray'?'cùng màu':cname(r.color)}${r.ferry?` (trong đó ít nhất ${r.ferry} Đầu máy)`:''}. Bạn đang có ${have} và ${me.hand.loco} Đầu máy. Hãy rút thêm bài!`;
+      status=`Bạn chưa đủ bài: cần ${r.len} lá ${r.color==='gray'?'cùng màu':cname(r.color)}${r.ferry?` (trong đó ít nhất ${r.ferry} Đầu máy)`:''}. Bạn đang có ${have} và ${me.hand.loco} Đầu máy. Hãy rút thêm bài!`;
     } else {
-      status='✅ Bạn đủ bài! Chọn cách trả để chiếm tuyến:';
+      status='Bạn đủ bài! Chọn cách trả để chiếm tuyến:';
       buttons=opts.map(o=>({label:payHTML(o), cls:'primary pay', onClick:()=>{ hideModal(); doAction({t:'claim', r:r.id, o}); }}));
     }
   }
   const body=`<div class="rinfo"><div class="rpts">+${POINTS[r.len]}</div><div><b>${esc(rname(r))}</b><br>${miniRouteSVG(r, owner!=null?G.players[owner].color:null)}<br><small>${r.len} toa · được ${POINTS[r.len]} điểm</small></div></div>
-    <h4 class="hh">📘 Chú thích cho người mới</h4>${help}<div class="rstatus">${status}</div>`;
-  showModal(r.tunnel?'⛰️ Đường hầm':r.ferry?'⛴️ Tuyến phà':r.pair!=null?'🛤️ Đường đôi':'🚃 Tuyến đường sắt', body, [...buttons, {label:buttons.length?'Huỷ':'Đóng', onClick:()=>hideModal()}]);
+    <h4 class="hh">Chú thích cho người mới</h4>${help}<div class="rstatus">${status}</div>`;
+  showModal(r.tunnel?'Đường hầm':r.ferry?'Tuyến phà':r.pair!=null?'Đường đôi':'Tuyến đường sắt', body, [...buttons, {label:buttons.length?'Huỷ':'Đóng', onClick:()=>hideModal()}]);
 }
 function showLegend(){
   const ex=(r,o)=>miniRouteSVG(r,o);
   const R=(len,color,extra)=>Object.assign({len,color,tunnel:false,ferry:0},extra||{});
-  showModal('❓ Chú thích bản đồ', `<div class="legend">
+  showModal('Chú thích bản đồ', `<div class="legend">
     <div class="lgi">${ex(R(3,'red'))}<div>${HELP.color(R(3,'red'))}</div></div>
     <div class="lgi">${ex(R(2,'gray'))}<div>${HELP.color(R(2,'gray'))}</div></div>
     <div class="lgi">${ex(R(3,'blue',{tunnel:true}))}<div>${HELP.tunnel}</div></div>
     <div class="lgi">${ex(R(3,'gray',{ferry:1}))}<div>${HELP.ferry(R(3,'gray',{ferry:1}))}</div></div>
     <div class="lgi"><div>${ex(R(2,'green'))}<br>${ex(R(2,'yellow'))}</div><div>${HELP.double}</div></div>
-    <div class="lgi">${ex(R(3,'red'),'#1d4ed8')}<div>🚂 <b>Tuyến đã có chủ</b>: hiện hình toa tàu màu của người chơi đã chiếm.</div></div>
-    <div class="lgi"><svg width="60" height="30" viewBox="0 0 60 30"><rect x="4" y="9" width="52" height="12" rx="3" fill="#d8392b" stroke="#ffcc00" stroke-width="3"/></svg><div>✨ <b>Viền vàng nhấp nháy</b>: tuyến bạn đang đủ bài để chiếm ngay.</div></div>
-    <div class="lgi"><svg width="60" height="34" viewBox="0 0 60 34"><path d="M21,13 L30,4 L39,13 L39,26 L21,26Z" fill="#c1121f" stroke="#111" stroke-width="1.5"/></svg><div>🏠 <b>Nhà ga</b>: cuối ván cho mượn 1 tuyến của đối thủ nối vào thành phố đó.</div></div>
+    <div class="lgi">${ex(R(3,'red'),'#1d4ed8')}<div><b>Tuyến đã có chủ</b>: hiện hình toa tàu màu của người chơi đã chiếm.</div></div>
+    <div class="lgi"><svg width="60" height="30" viewBox="0 0 60 30"><rect x="4" y="9" width="52" height="12" rx="3" fill="#d8392b" stroke="#ffcc00" stroke-width="3"/></svg><div><b>Viền vàng nhấp nháy</b>: tuyến bạn đang đủ bài để chiếm ngay.</div></div>
+    <div class="lgi"><svg width="60" height="34" viewBox="0 0 60 34"><path d="M21,13 L30,4 L39,13 L39,26 L21,26Z" fill="#c1121f" stroke="#111" stroke-width="1.5"/></svg><div><b>Nhà ga</b>: cuối ván cho mượn 1 tuyến của đối thủ nối vào thành phố đó.</div></div>
     <p class="hint">Mẹo: bấm vào bất kỳ tuyến nào trên bản đồ để xem chú thích riêng của tuyến đó.</p></div>`,
     [{label:'Đã hiểu', cls:'primary', onClick:()=>hideModal()}], {center:true});
 }
@@ -2090,33 +2125,33 @@ function showTunnelModal(key){
   const body=`<p>Lật 3 lá từ chồng bài:</p><div class="rev">${t.rev.map((c,i)=>`<div class="flip" style="animation-delay:${i*.25}s">${cardHTML(c, (c==='loco'||(t.opt.color!=='loco'&&c===t.opt.color))?'match':'')}</div>`).join('')}</div>
     <p>Có <b>${t.extra}</b> lá trùng màu ${t.opt.color==='loco'?'(Đầu máy)':cname(t.opt.color)+' hoặc Đầu máy'} → phải trả thêm <b>${t.extra}</b> lá để đi qua đường hầm.</p>
     ${opts.length?'':'<p class="warn">Bạn không đủ bài để trả thêm.</p>'}`;
-  showModal('⛰️ Đường hầm!', body, [...opts.map(o=>({label:'Trả thêm '+payHTML(o), cls:'primary pay', onClick:()=>{ hideModal(true); doAction({t:'tunnel', o}); }})),
+  showModal('Đường hầm!', body, [...opts.map(o=>({label:'Trả thêm '+payHTML(o), cls:'primary pay', onClick:()=>{ hideModal(true); doAction({t:'tunnel', o}); }})),
     {label:'Bỏ, lấy lại bài (mất lượt)', onClick:()=>{ hideModal(true); doAction({t:'tunnel', o:null}); }}], {key});
 }
 function showStationModal(city){
   const opts=stationOptions(ME);
-  showModal('🏠 Xây nhà ga', `<p>Xây ga ở <b>${esc(CITIES[city].name)}</b>. Cuối ván, ga cho phép bạn mượn 1 tuyến của đối thủ nối vào thành phố này để hoàn thành vé. Mỗi ga không xây được <b>+4 điểm</b>.</p>`,
+  showModal('Xây nhà ga', `<p>Xây ga ở <b>${esc(CITIES[city].name)}</b>. Cuối ván, ga cho phép bạn mượn 1 tuyến của đối thủ nối vào thành phố này để hoàn thành vé. Mỗi ga không xây được <b>+4 điểm</b>.</p>`,
     [...opts.map(o=>({label:payHTML(o), cls:'primary pay', onClick:()=>{ hideModal(); UIS.stationMode=false; doAction({t:'station', c:city, o}); }})), {label:'Huỷ', onClick:()=>hideModal()}]);
 }
 function showEndModal(){
   const res=G.results; if(!res) return;
   const podium = res.slice(0,3).map((r,i)=>({r,i})); const order=[1,0,2].filter(i=>podium[i]);
-  const pod = `<div class="podium">${order.map(i=>{ const {r}=podium[i]; const col=G.players[r.pi].color; return `<div class="pod p${i+1}" style="--pc:${col}"><div class="pava">${chipLoco(col)}</div><div class="pn">${esc(r.name)}${r.pi===ME?' (bạn)':''}</div><div class="pblock"><span class="medal">${['🥇','🥈','🥉'][i]}</span><b class="count" data-to="${r.total}">0</b></div></div>`; }).join('')}</div>`;
+  const pod = `<div class="podium">${order.map(i=>{ const {r}=podium[i]; const col=G.players[r.pi].color; return `<div class="pod p${i+1}" style="--pc:${col}"><div class="pava">${chipLoco(col)}</div><div class="pn">${esc(r.name)}${r.pi===ME?' (bạn)':''}</div><div class="pblock"><span class="medal">${['1','2','3'][i]}</span><b class="count" data-to="${r.total}">0</b></div></div>`; }).join('')}</div>`;
   const rows=res.map((r,i)=>`<tr class="${i===0?'win':''}"><td><span class="dot" style="background:${G.players[r.pi].color}"></span>${esc(r.name)}</td><td>${r.routePts}</td><td>${r.ticketPts>=0?'+':''}${r.ticketPts}<br><small>${r.done.length} xong / ${r.fail.length} hỏng</small></td><td>${r.stationPts}</td><td>${r.lpBonus?'+10':'0'}<br><small>dài ${r.lp}</small></td><td><b>${r.total}</b></td></tr>`).join('');
   const me=res.find(r=>r.pi===ME);
   let detail='';
   if (me){
-    detail = `<div class="mytk">${me.done.map(id=>`<span class="okt">✅ ${esc(tname(TK[id]))} +${TK[id].pts}</span>`).join('')}${me.fail.map(id=>`<span class="badt">❌ ${esc(tname(TK[id]))} −${TK[id].pts}</span>`).join('')}</div>`;
+    detail = `<div class="mytk">${me.done.map(id=>`<span class="okt">${esc(tname(TK[id]))} +${TK[id].pts}</span>`).join('')}${me.fail.map(id=>`<span class="badt">${esc(tname(TK[id]))} −${TK[id].pts}</span>`).join('')}</div>`;
     if (me.borrowed.length) detail+=`<p>Nhà ga đã mượn: ${me.borrowed.map(id=>esc(rname(ROUTES[id]))).join(', ')}</p>`;
   }
   const win = me && res[0].pi===ME;
-  const m=showModal(win?'🏆 Bạn thắng rồi!':`🏁 ${esc(res[0].name)} thắng!`, pod+`<table class="res"><tr><th>Người chơi</th><th>Tuyến</th><th>Vé</th><th>Ga</th><th>Dài nhất</th><th>Tổng</th></tr>${rows}</table>${detail}`,
+  const m=showModal(win?'Bạn thắng rồi!':`${esc(res[0].name)} thắng!`, pod+`<table class="res"><tr><th>Người chơi</th><th>Tuyến</th><th>Vé</th><th>Ga</th><th>Dài nhất</th><th>Tổng</th></tr>${rows}</table>${detail}`,
     [{label:NET.mode==='client'?'Chờ ván mới':'Chơi ván mới', cls:'primary', onClick:()=>{ hideModal(); if (NET.mode==='host'){ hostBackToLobby(); } else if (NET.mode==='client'){ showLobby(); } else { goMenu(); } }}, {label:'Xem bản đồ', onClick:()=>hideModal()}], {center:true, key:'endm'});
   m.querySelectorAll('.count').forEach(el=>{ const to=+el.dataset.to; const t0=performance.now(); const f=now=>{ const k=Math.min(1,(now-t0)/1600); el.textContent=Math.round(to*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(f); }; requestAnimationFrame(f); });
   if (win){ FX.rain(4); setTimeout(()=>SFX.fanfare(), 300); }
 }
 function showRules(){
-  showModal('📖 Luật chơi', `<div class="rules">
+  showModal('Luật chơi', `<div class="rules">
   <p><b>Mục tiêu:</b> ghi nhiều điểm nhất bằng cách chiếm các tuyến đường sắt giữa các thành phố châu Âu và hoàn thành vé hành trình.</p>
   <p><b>Mỗi lượt chọn 1 trong 4 việc:</b></p>
   <p>1. <b>Rút 2 lá bài toa tàu</b> — từ 5 lá đang lộ hoặc chồng úp. Lấy lá Đầu máy (cầu vồng) đang lộ thì chỉ được lấy 1 lá đó. Đầu máy thay được mọi màu.</p>
@@ -2157,17 +2192,17 @@ function genCode(){ const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let s=''; for(let
 function onRoomError(e){ toast('Mất kết nối phòng online ('+(e&&e.code||'lỗi')+').'); }
 function roomUnavailable(err, code){
   if (STANDALONE){
-    showLobbyView(code ? `<h2>🔑 Không vào được phòng ${esc(code)}</h2><p class="warn">Không tìm thấy phòng này.</p><p>Kiểm tra lại mã phòng, và nhớ là chủ phòng phải đang mở trang game (không được tắt tab). Nếu vẫn lỗi, kiểm tra kết nối mạng rồi bấm Thử lại.</p>`
-      : `<h2>🌐 Chưa tạo được phòng</h2><p class="warn">Không kết nối được máy chủ phòng chơi.</p><p>Kiểm tra mạng Internet rồi thử lại.</p>`,
+    showLobbyView(code ? `<h2>Không vào được phòng ${esc(code)}</h2><p class="warn">Không tìm thấy phòng này.</p><p>Kiểm tra lại mã phòng, và nhớ là chủ phòng phải đang mở trang game (không được tắt tab). Nếu vẫn lỗi, kiểm tra kết nối mạng rồi bấm Thử lại.</p>`
+      : `<h2>Chưa tạo được phòng</h2><p class="warn">Không kết nối được máy chủ phòng chơi.</p><p>Kiểm tra mạng Internet rồi thử lại.</p>`,
       [{label:'Thử lại', cls:'primary', onClick:()=> code ? joinRoom(code) : createRoom()},{label:'Quay lại', onClick:goMenu}]);
     return;
   }
-  showLobbyView(`<h2>🌐 Chơi online</h2><p class="warn">Chưa kết nối được phòng online ở đây.</p>
+  showLobbyView(`<h2>Chơi online</h2><p class="warn">Chưa kết nối được phòng online ở đây.</p>
    <p>Chế độ online chỉ chạy khi mở trang game trên <b>claude.ai</b> và đã đăng nhập. Bạn bè của bạn cũng cần tài khoản claude.ai và được bạn chia sẻ trang này (nút <b>Share/Chia sẻ</b> trên trang).</p>`,
    [{label:'Quay lại', onClick:goMenu}]);
 }
 async function createRoom(fixedCode){
-  SFX.init(); const name=myName(); showLobbyView(fixedCode?'<h2>🌐 Đang mở lại phòng '+esc(fixedCode)+'…</h2><div class="spinner"></div>':'<h2>🌐 Đang tạo phòng…</h2><div class="spinner"></div>',[]);
+  SFX.init(); const name=myName(); showLobbyView(fixedCode?'<h2>Đang mở lại phòng '+esc(fixedCode)+'…</h2><div class="spinner"></div>':'<h2>Đang tạo phòng…</h2><div class="spinner"></div>',[]);
   const api=await getRoomApi(); if(!api) return roomUnavailable();
   const code=(typeof fixedCode==='string'&&fixedCode)||genCode(); let r;
   try { r=await api.join('dr-'+code.toLowerCase(), {host:true}); } catch(e){ return roomUnavailable(e); }
@@ -2186,7 +2221,7 @@ async function createRoom(fixedCode){
 async function joinRoom(code){
   SFX.init(); code=String(code||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
   if (code.length<4){ toast('Mã phòng gồm 4 ký tự.'); return; }
-  const name=myName(); showLobbyView('<h2>🔑 Đang vào phòng '+esc(code)+'…</h2><div class="spinner"></div>',[]);
+  const name=myName(); showLobbyView('<h2>Đang vào phòng '+esc(code)+'…</h2><div class="spinner"></div>',[]);
   const api=await getRoomApi(); if(!api) return roomUnavailable();
   let r; try { r=await api.join('dr-'+code.toLowerCase(), {host:false}); } catch(e){ return roomUnavailable(e, code); }
   Object.assign(NET,{mode:'client', room:r, code, name, seq:0, peers:[], lastV:null, inGame:false, lobby:true}); chatReset();
@@ -2266,7 +2301,7 @@ function maybeAskSeat(){
   if (UIS.modalKey==='seat') return;
   const seats=G.players.map((p,i)=>({p,i})).filter(o=>!o.p.isBot && o.i!==0);
   if (!seats.length) return;
-  showModal('🪑 Bạn là người chơi nào?', `<p>Ván đang chơi dở. Chọn đúng ghế của bạn để vào chơi tiếp:</p><div class="seatpick">${seats.map(o=>`<button data-s="${o.i}" style="--pc:${o.p.color}">${chipLoco(o.p.color)}<b>${esc(o.p.name)}</b> <small>${o.p.score} điểm · ${NET.isPresent(o.p.peer)?'<span class=on>đang online</span>':'<span class=off>đang vắng</span>'}</small></button>`).join('')}</div><p class="hint">Hoặc cứ để đó để xem mọi người chơi.</p>`,
+  showModal('Bạn là người chơi nào?', `<p>Ván đang chơi dở. Chọn đúng ghế của bạn để vào chơi tiếp:</p><div class="seatpick">${seats.map(o=>`<button data-s="${o.i}" style="--pc:${o.p.color}">${chipLoco(o.p.color)}<b>${esc(o.p.name)}</b> <small>${o.p.score} điểm · ${NET.isPresent(o.p.peer)?'<span class=on>đang online</span>':'<span class=off>đang vắng</span>'}</small></button>`).join('')}</div><p class="hint">Hoặc cứ để đó để xem mọi người chơi.</p>`,
     [{label:'Chỉ xem thôi', onClick:()=>{ hideModal(); UIS.modalKey='seat-no'; }}], {center:true, key:'seat'});
   $$('.seatpick button').forEach(b=>b.onclick=()=>{ SFX.init(); const s=+b.dataset.s; NET.room.presence({claim:s, act:null}).catch(()=>{}); toast('Đang xin vào ghế '+G.players[s].name+'…'); hideModal(true); });
 }
@@ -2292,7 +2327,7 @@ function chatIngest(){
     arr.slice(-3).forEach(m=>{ if(!m || typeof m.x!=='string' || typeof m.i!=='number') return; const k=pe.peer+':'+m.i; if (CHAT.seen.has(k)) return; CHAT.seen.add(k);
       const msg={k, peer:pe.peer, me:pe.sameTab, name:cleanName(pe.presence.name), x:cleanText(m.x), t:Math.min(Date.now(), +m.t||Date.now())};
       if (!msg.x) return; CHAT.list.push(msg);
-      if (!pe.sameTab && CHAT.primed){ fresh++; CHAT.unread++; Ticker.push(`💬 <b>${esc(msg.name)}</b>: ${esc(msg.x)}`, 'chat'); } }); });
+      if (!pe.sameTab && CHAT.primed){ fresh++; CHAT.unread++; Ticker.push(`<b>${esc(msg.name)}</b>: ${esc(msg.x)}`, 'chat'); } }); });
   CHAT.primed=true;
   if (fresh) SFX.chatPing();
   CHAT.list.sort((a,b)=>a.t-b.t); CHAT.list=CHAT.list.slice(-80); renderChat();
@@ -2300,7 +2335,7 @@ function chatIngest(){
 function renderChat(){
   const html = CHAT.list.length ? CHAT.list.map(m=>{ const d=new Date(m.t); const tm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
       return `<div class="cm ${m.me?'me':''}"><span class="cmn" style="color:${chatColor(m.peer)}">${esc(m.me?'Bạn':m.name)}</span><span class="cmx">${esc(m.x)}</span><time>${tm}</time></div>`; }).join('')
-    : '<div class="cmempty">Chưa có tin nhắn. Chào mọi người một câu nhé! 👋</div>';
+    : '<div class="cmempty">Chưa có tin nhắn. Chào mọi người một câu nhé! </div>';
   $$('.chatList').forEach(el=>{ const atBottom = el.scrollHeight-el.scrollTop-el.clientHeight<40; el.innerHTML=html; if(atBottom || true) el.scrollTop=el.scrollHeight; });
   const b=$('#chatBtn'); if(b){ b.querySelector('.badge').textContent=CHAT.unread||''; b.classList.toggle('has', CHAT.unread>0); }
 }
@@ -2325,25 +2360,25 @@ function lobbyPeople(){
 function showLobby(){
   if (NET.mode==='local') return;
   const people=lobbyPeople();
-  const ppl = people.map((p,i)=>`<div class="lp" style="--pc:${PLAYER_COLORS[i%5].hex}">${chipLoco(PLAYER_COLORS[i%5].hex)}<span>${esc(p.name)}${p.host?' 👑':''}${p.me?' <i>(bạn)</i>':''}</span></div>`).join('');
+  const ppl = people.map((p,i)=>`<div class="lp" style="--pc:${PLAYER_COLORS[i%5].hex}">${chipLoco(PLAYER_COLORS[i%5].hex)}<span>${esc(p.name)}${p.host?' ':''}${p.me?' <i>(bạn)</i>':''}</span></div>`).join('');
   const invite = STANDALONE ? `<div class="invite"><div class="code">${esc(NET.code)}</div><div class="ilab">Mã phòng</div></div>
-    <ol class="steps"><li>Bấm <b>📋 Sao chép lời mời</b> rồi gửi qua Zalo / Messenger cho bạn bè.</li><li>Bạn bè bấm vào link, <b>nhập tên</b> là vào phòng ngay — không cần đăng nhập.</li><li>Đủ người thì bấm <b>Bắt đầu ván</b>. Bạn nhớ <b>đừng tắt trang</b> vì bạn là chủ phòng.</li></ol>
+    <ol class="steps"><li>Bấm <b>Sao chép lời mời</b> rồi gửi qua Zalo / Messenger cho bạn bè.</li><li>Bạn bè bấm vào link, <b>nhập tên</b> là vào phòng ngay — không cần đăng nhập.</li><li>Đủ người thì bấm <b>Bắt đầu ván</b>. Bạn nhớ <b>đừng tắt trang</b> vì bạn là chủ phòng.</li></ol>
     <div class="ilink">${esc(inviteLink())}</div>` : `<div class="invite"><div class="code">${esc(NET.code)}</div><div class="ilab">Mã phòng</div></div>
     <ol class="steps"><li>Bấm <b>Share / Chia sẻ</b> ở góc trên trang game trên claude.ai và thêm bạn bè (họ cần tài khoản claude.ai).</li>
     <li>Gửi cho bạn bè link trang game và mã phòng <b>${esc(NET.code)}</b>.</li><li>Bạn bè mở trang → bấm <b>“Vào phòng bằng mã”</b> → nhập mã.</li></ol>`;
   if (NET.mode==='host'){
-    showLobbyView(`<h2>🌐 Phòng chơi online</h2>${invite}<h3>Người trong phòng (${people.length}/5)</h3><div class="lpeople">${ppl}</div>
+    showLobbyView(`<h2>Phòng chơi online</h2>${invite}<h3>Người trong phòng (${people.length}/5)</h3><div class="lpeople">${ppl}</div>
       <label>Thêm bot cho đủ người: <select id="lobbyBots">${[0,1,2,3,4].map(n=>`<option value="${n}" ${n===(people.length>1?0:1)?'selected':''}>${n} bot</option>`).join('')}</select></label>`,
-      [{label:'📋 Sao chép lời mời', onClick:copyInvite},{label:'🚀 Bắt đầu ván', cls:'primary', onClick:hostStart},{label:'🚪 Rời phòng', onClick:askLeave}]);
+      [{label:'Sao chép lời mời', onClick:copyInvite},{label:'Bắt đầu ván', cls:'primary', onClick:hostStart},{label:'Rời phòng', onClick:askLeave}]);
   } else {
     const h=hostPeer();
-    showLobbyView(`<h2>🌐 Phòng ${esc(NET.code)}</h2>${h?`<p>Đã vào phòng của <b>${esc(cleanName(h.presence.name))}</b>. Chờ chủ phòng bắt đầu ván…</p><div class="spinner"></div>`:'<p class="warn">Chưa thấy chủ phòng. Kiểm tra lại mã phòng, hoặc chờ chủ phòng mở lại.</p>'}
-      <h3>Người trong phòng</h3><div class="lpeople">${ppl}</div>`, [{label:'🚪 Rời phòng', onClick:askLeave}]);
+    showLobbyView(`<h2>Phòng ${esc(NET.code)}</h2>${h?`<p>Đã vào phòng của <b>${esc(cleanName(h.presence.name))}</b>. Chờ chủ phòng bắt đầu ván…</p><div class="spinner"></div>`:'<p class="warn">Chưa thấy chủ phòng. Kiểm tra lại mã phòng, hoặc chờ chủ phòng mở lại.</p>'}
+      <h3>Người trong phòng</h3><div class="lpeople">${ppl}</div>`, [{label:'Rời phòng', onClick:askLeave}]);
   }
 }
 function copyInvite(){
-  const txt = STANDALONE ? `🚂 Vào chơi "Đường Ray Châu Âu" với mình nhé! Bấm link, nhập tên là vào phòng: ${inviteLink()}  (mã phòng: ${NET.code})`
-    : `🚂 Vào chơi "Đường Ray Châu Âu" với mình nhé! Mở trang game mình gửi, bấm "Vào phòng bằng mã" rồi nhập mã: ${NET.code}`;
+  const txt = STANDALONE ? `Vào chơi "Đường Ray Châu Âu" với mình nhé! Bấm link, nhập tên là vào phòng: ${inviteLink()}  (mã phòng: ${NET.code})`
+    : `Vào chơi "Đường Ray Châu Âu" với mình nhé! Mở trang game mình gửi, bấm "Vào phòng bằng mã" rồi nhập mã: ${NET.code}`;
   try { navigator.clipboard.writeText(txt).then(()=>toast('Đã sao chép lời mời!'), ()=>toast('Mã phòng: '+NET.code)); } catch(e){ toast('Mã phòng: '+NET.code); }
 }
 
@@ -2359,8 +2394,8 @@ function resumeRoom(){
 function askLeave(){
   const host=NET.mode==='host';
   const inLobby=!NET.inGame;
-  showModal('🚪 Bạn chắc chắn muốn rời phòng?', `<p>${inLobby?(host?'Bạn là <b>chủ phòng</b>. Khi bạn rời, mọi người trong phòng phải chờ bạn mở lại phòng.':'Bạn sẽ ra khỏi phòng chờ.'):host?'Bạn là <b>chủ phòng</b>. Khi bạn rời đi, ván chơi của mọi người sẽ <b>tạm dừng</b> cho tới khi bạn bấm <b>“Vào lại phòng”</b> ở menu.':'Ghế của bạn vẫn được giữ. Khi vắng quá 15 giây, máy sẽ đi thay lượt cho bạn.'}</p><p>Muốn quay lại: ở menu bấm <b>↩ Vào lại phòng ${esc(NET.code)}</b>.</p>`,
-    [{label:'✅ Xác nhận rời phòng', cls:'primary', onClick:()=>{ hideModal(); const c=NET.code; saveLastRoom(c, host?'host':'guest'); leaveRoom(); goMenu(); toast('Đã rời phòng '+c+'. Bấm “↩ Vào lại phòng” để quay lại.'); }},
+  showModal('Bạn chắc chắn muốn rời phòng?', `<p>${inLobby?(host?'Bạn là <b>chủ phòng</b>. Khi bạn rời, mọi người trong phòng phải chờ bạn mở lại phòng.':'Bạn sẽ ra khỏi phòng chờ.'):host?'Bạn là <b>chủ phòng</b>. Khi bạn rời đi, ván chơi của mọi người sẽ <b>tạm dừng</b> cho tới khi bạn bấm <b>“Vào lại phòng”</b> ở menu.':'Ghế của bạn vẫn được giữ. Khi vắng quá 15 giây, máy sẽ đi thay lượt cho bạn.'}</p><p>Muốn quay lại: ở menu bấm <b>↩ Vào lại phòng ${esc(NET.code)}</b>.</p>`,
+    [{label:'Xác nhận rời phòng', cls:'primary', onClick:()=>{ hideModal(); const c=NET.code; saveLastRoom(c, host?'host':'guest'); leaveRoom(); goMenu(); toast('Đã rời phòng '+c+'. Bấm “↩ Vào lại phòng” để quay lại.'); }},
      {label:'↩ Quay lại phòng', onClick:()=>hideModal()}], {center:true, key:'leave'});
 }
 function goMenu(){ refreshResume(); MUSIC.stop(); clearTimeout(UIS.botT); hideModal(); $('#lobby').classList.add('hidden'); $('#menu').classList.remove('hidden'); }
@@ -2369,10 +2404,10 @@ function startLocal(){
   resetUI(); newGame(seats); ME=0; hideLobby(); UIS.lastFx=0; afterChange();
 }
 function askJoin(prefill){
-  showLobbyView(`<h2>🔑 Vào phòng${prefill?' '+esc(prefill):' bằng mã'}</h2>
+  showLobbyView(`<h2>Vào phòng${prefill?' '+esc(prefill):' bằng mã'}</h2>
     <label for="joinName">Tên của bạn</label><input id="joinName" maxlength="16" value="${esc((lastRoom()&&lastRoom().name) || (prefill && $('#pname').value==='Phi' ? '' : $('#pname').value))}" placeholder="Nhập tên để mọi người biết bạn là ai" autocomplete="off">
     <label for="joinCode">Mã phòng</label><input id="joinCode" maxlength="6" value="${esc(prefill||'')}" placeholder="VD: K7QX" autocomplete="off">`,
-    [{label:'🚂 Vào phòng', cls:'primary', onClick:doJoin},{label:'Quay lại', onClick:goMenu}]);
+    [{label:'Vào phòng', cls:'primary', onClick:doJoin},{label:'Quay lại', onClick:goMenu}]);
   function doJoin(){ const n=cleanName($('#joinName').value); if (!$('#joinName').value.trim()){ toast('Nhập tên của bạn trước nhé!'); $('#joinName').focus(); return; } $('#pname').value=n; joinRoom($('#joinCode').value); }
   setTimeout(()=>{ const a=$('#joinName'), b=$('#joinCode'); if(a){ (prefill?a:b).focus(); a.onkeydown=e=>{ if(e.key==='Enter') doJoin(); }; } if(b) b.onkeydown=e=>{ if(e.key==='Enter') doJoin(); }; },50);
   return;
@@ -2385,7 +2420,7 @@ function bind(){
   $('#map').addEventListener('mousemove', e=>{
     const rg=e.target.closest('.route'); if(!rg || !G){ tip.style.display='none'; return; }
     const r=ROUTES[+rg.dataset.id]; const o=G.owner[r.id];
-    tip.innerHTML=`<b>${esc(rname(r))}</b><br>${r.len} toa · ${r.color==='gray'?'Xám':cname(r.color)} · +${POINTS[r.len]} điểm${r.tunnel?'<br>⛰️ Đường hầm':''}${r.ferry?`<br>⛴️ Phà (${r.ferry} Đầu máy)`:''}${o!=null?`<br>🚂 Của ${esc(G.players[o].name)}`:''}`;
+    tip.innerHTML=`<b>${esc(rname(r))}</b><br>${r.len} toa · ${r.color==='gray'?'Xám':cname(r.color)} · +${POINTS[r.len]} điểm${r.tunnel?'<br>Đường hầm':''}${r.ferry?`<br>Phà (${r.ferry} Đầu máy)`:''}${o!=null?`<br>Của ${esc(G.players[o].name)}`:''}`;
     tip.style.display='block'; tip.style.left=Math.min(innerWidth-200,e.clientX+14)+'px'; tip.style.top=(e.clientY+14)+'px';
   });
   $('#map').addEventListener('mouseleave', ()=>tip.style.display='none');
@@ -2419,20 +2454,20 @@ function bind(){
   $('#rulesBtn').onclick=showRules; $('#rulesBtn2').onclick=showRules;
   $('#menuBtn').onclick=()=>{ if (NET.mode==='local') return goMenu();
     showModal('☰ Về menu?', `<p>Bạn vẫn ở trong phòng <b>${esc(NET.code)}</b> (không bị rời phòng). Ở menu bấm <b>↩ Quay lại phòng</b> để chơi tiếp.</p>`,
-      [{label:'✅ Về menu', cls:'primary', onClick:()=>{ hideModal(); goMenu(); }},{label:'↩ Quay lại phòng', onClick:()=>hideModal()}], {center:true}); };
+      [{label:'Về menu', cls:'primary', onClick:()=>{ hideModal(); goMenu(); }},{label:'↩ Quay lại phòng', onClick:()=>hideModal()}], {center:true}); };
   $('#leaveBtn').onclick=askLeave;
   $('#musicBtn').onclick=()=>{ SFX.init(); MUSIC.on=!MUSIC.on; $('#musicBtn').classList.toggle('off', !MUSIC.on); $('#musicBtn').title=MUSIC.on?'Tắt nhạc nền':'Bật nhạc nền'; render(); };
-  $('#soundBtn').onclick=()=>{ SFX.init(); SFX.on=!SFX.on; if(!SFX.on) MUSIC.stop(); else if(G) render(); $('#soundBtn').textContent=SFX.on?'🔊':'🔇'; $('#soundBtn2').textContent=SFX.on?'🔊 Âm thanh: bật':'🔇 Âm thanh: tắt'; };
+  $('#soundBtn').onclick=()=>{ SFX.init(); SFX.on=!SFX.on; if(!SFX.on) MUSIC.stop(); else if(G) render(); $('#soundBtn').innerHTML=SFX.on?'<svg class="ico" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>':'<svg class="ico" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'; $('#soundBtn2').textContent=SFX.on?'Âm thanh: bật':'Âm thanh: tắt'; };
   $('#soundBtn2').onclick=()=>$('#soundBtn').onclick();
   $('#tickets').addEventListener('mouseover', e=>{ const t=e.target.closest('.vticket'); if(!t) return; const h={a:+t.dataset.a,b:+t.dataset.b,hue:t.dataset.hue}; if(UIS.hl && UIS.hl.a===h.a && UIS.hl.b===h.b) return; UIS.hl=h; renderMap(); });
   $('#tickets').addEventListener('click', e=>{ const t=e.target.closest('.vticket'); if(!t) return; SFX.init();
     if (UIS.focus && UIS.focus.id===t.dataset.id){ UIS.focus=null; SFX.flip(); }
-    else { UIS.focus={id:t.dataset.id, a:+t.dataset.a, b:+t.dataset.b, hue:t.dataset.hue}; SFX.chimeSoft(); Ticker.push(`📍 <b>${esc(CITIES[+t.dataset.a].name)}</b> và <b>${esc(CITIES[+t.dataset.b].name)}</b> đang phát sáng trên bản đồ — bấm lại vé để tắt`, 'claim'); scrollMapTo(+t.dataset.a,+t.dataset.b); }
+    else { UIS.focus={id:t.dataset.id, a:+t.dataset.a, b:+t.dataset.b, hue:t.dataset.hue}; SFX.chimeSoft(); Ticker.push(`<b>${esc(CITIES[+t.dataset.a].name)}</b> và <b>${esc(CITIES[+t.dataset.b].name)}</b> đang phát sáng trên bản đồ — bấm lại vé để tắt`, 'claim'); scrollMapTo(+t.dataset.a,+t.dataset.b); }
     UIS.hl=null; UIS.tkHTML=null; renderSide(); renderMap(); });
   $('#tickets').addEventListener('mouseleave', ()=>{ UIS.hl=null; renderMap(); });
   $('#zoom').oninput=e=>setZoom(+e.target.value);
   $('#zoomIn').onclick=()=>setZoom(UIS.zoom+25); $('#zoomOut').onclick=()=>setZoom(UIS.zoom-25); $('#zoomFit').onclick=()=>{ if (UIS.autoFit) UIS.fitMode = UIS.fitMode==='w' ? 'all' : 'w'; UIS.autoFit=true; fitZoom(); $('#zoomFit').title = UIS.fitMode==='w' ? 'Đang: rộng hết khung — bấm để thấy trọn bản đồ' : 'Đang: thấy trọn bản đồ — bấm để rộng hết khung'; toast(UIS.fitMode==='w'?'Bản đồ rộng hết khung (kéo lên xuống để xem)':'Thu nhỏ để thấy trọn bản đồ'); };
-  $('#bigBtn').onclick=()=>{ document.body.classList.toggle('bigmap'); const on=document.body.classList.contains('bigmap'); $('#bigBtn').textContent=on?'🗗':'⛶'; $('#bigBtn').title=on?'Thu bản đồ':'Bản đồ lớn'; try{ localStorage.setItem('dr-big', on?'1':'0'); }catch(e){} requestAnimationFrame(()=>{ if (UIS.autoFit) fitZoom(); else fitLayout(); }); };
+  $('#bigBtn').onclick=()=>{ document.body.classList.toggle('bigmap'); const on=document.body.classList.contains('bigmap'); $('#bigBtn').textContent=on?'':'⛶'; $('#bigBtn').title=on?'Thu bản đồ':'Bản đồ lớn'; try{ localStorage.setItem('dr-big', on?'1':'0'); }catch(e){} requestAnimationFrame(()=>{ if (UIS.autoFit) fitZoom(); else fitLayout(); }); };
   $('#mapScroll').addEventListener('wheel', e=>{ if(!e.ctrlKey && !e.metaKey) return; e.preventDefault(); setZoom(UIS.zoom + (e.deltaY<0?15:-15), e); }, {passive:false});
   // Chụm 2 ngón để phóng to/thu nhỏ bản đồ trên điện thoại
   const ms=$('#mapScroll'); let pz=null;
