@@ -966,6 +966,8 @@ body.landphone #tkPick h2::before,body.landphone #tkPick h2::after{border-width:
 body.landphone #tkPick .tpk{font-size:9px!important;padding:0 4px!important}
 body.landphone #tkPick .tpc{width:9px!important;height:9px!important}
 body.landphone #tkPick .mbtns button{font-size:11px!important;padding:3px 8px!important}
+
+.wagonfly{position:fixed;z-index:9500;pointer-events:none;transform-origin:0 0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));will-change:transform}
 </style>
 </head>
 <body>
@@ -2130,15 +2132,43 @@ function processFx(){
   UIS.lastFx=list[list.length-1].n;
   list.forEach((f,i)=>setTimeout(()=>playFx(f), i*160));
 }
+/* Toa tàu (đã xoá nền) bay mượt từ chỗ lấy bài về đúng vị trí toa đó trong đoàn tàu của bạn */
+function wagonFly(fromRect, c, fromDeck){
+  if (!fromRect) return;
+  requestAnimationFrame(()=>{
+    const car=document.querySelector(`#hand .hcar[data-c="${c}"]`); const tgt=car && car.querySelector('.wimg'); if(!tgt) return;
+    const tr=tgt.getBoundingClientRect(); if(!tr.width) return;
+    const img=document.createElement('img'); img.src=`${RA_BASE}wagons/${c}.png`; img.className='wagonfly';
+    const fw=Math.min(fromRect.width*0.9, 150), fh=fw*tr.height/tr.width;
+    const sx=fromRect.left+fromRect.width/2-fw/2, sy=fromRect.top+fromRect.height/2-fh/2;
+    Object.assign(img.style,{left:sx+'px',top:sy+'px',width:fw+'px',height:fh+'px'});
+    document.body.appendChild(img);
+    const wb=car.querySelector('.wbox'); if(wb) wb.style.visibility='hidden';
+    const ex=tr.left-sx, ey=tr.top-sy, sc=tr.width/fw;
+    const mx=ex*0.5, my=Math.min(ey*0.5, ey*0.5-80);
+    const dur=fromDeck?850:750;
+    const a=img.animate([
+      {transform:'translate(0,0) scale(1) rotate(0deg)', opacity:fromDeck?0:1, offset:0},
+      {transform:`translate(0,-10px) scale(1.08) rotate(${fromDeck?-6:-3}deg)`, opacity:1, offset:.15},
+      {transform:`translate(${mx}px,${my}px) scale(${(1+sc)/2+.05}) rotate(2deg)`, offset:.6},
+      {transform:`translate(${ex}px,${ey}px) scale(${sc}) rotate(0deg)`, opacity:1, offset:1}
+    ],{duration:dur, easing:'cubic-bezier(.45,.05,.25,1)', fill:'forwards'});
+    a.onfinish=()=>{ img.remove(); if(wb){ wb.style.visibility=''; car.classList.remove('bump'); void car.offsetWidth; car.classList.add('bump'); } };
+    setTimeout(()=>{ if(img.isConnected){ img.remove(); if(wb) wb.style.visibility=''; } }, dur+400);
+  });
+}
 function playFx(f){
   if (!G) return;
   switch(f.k){
     case 'dm': {
-      const slot=document.querySelector(`#market .mslot[data-i="${f.i}"]`); const to = f.p===ME ? $('#hand').getBoundingClientRect() : chipRect(f.p);
+      const slot=document.querySelector(`#market .mslot[data-i="${f.i}"]`);
+      if (f.p===ME && typeof RA_BASE!=='undefined'){ wagonFly(slot && slot.getBoundingClientRect(), CARDS[f.c]); SFX.draw(); break; }
+      const to = f.p===ME ? $('#hand').getBoundingClientRect() : chipRect(f.p);
       FX.fly(slot && slot.getBoundingClientRect(), to, cardSVG(CARDS[f.c])); SFX.draw(); break; }
     case 'dd': {
       const from=$('#deckBtn .deckart').getBoundingClientRect(); const to = f.p===ME ? $('#hand').getBoundingClientRect() : chipRect(f.p);
       const c = f.p===ME && UIS.gain.length ? UIS.gain.shift() : 'back';
+      if (f.p===ME && c!=='back' && typeof RA_BASE!=='undefined'){ wagonFly(from, c, true); SFX.draw(); toast('Bạn rút được: '+cname(c)); break; }
       FX.fly(from, to, cardSVG(c)); SFX.draw(); if (f.p===ME && c!=='back') toast('Bạn rút được: '+cname(c)); break; }
     case 'cl': {
       const r=ROUTES[f.r]; const col=G.players[f.p].color; UIS.claimAt[f.r]=performance.now(); renderMap();
