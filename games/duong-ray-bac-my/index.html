@@ -859,6 +859,7 @@ body.bigmap aside{position:static!important;height:auto!important;overflow:visib
 body.landphone .modal.dock{left:auto!important;max-height:none!important;width:37vw!important}
 body.landphone .modal.dock .mbox h2{font-size:14px!important}
 body.landphone .modal.dock .tpick{padding:3px;gap:3px;border-width:2px}
+#bigBtn{display:none!important}
 </style>
 </head>
 <body>
@@ -2520,8 +2521,8 @@ function confirmLeave(){ return true; }
 document.addEventListener('DOMContentLoaded', ()=>{
   document.body.insertAdjacentHTML('afterbegin', globalDefsSVG());
   FX.setup(); bind();
-  let z=0, big=false; try{ const sz=+localStorage.getItem('na-zoom3'); if(sz) z=sz; big=localStorage.getItem('dr-big')==='1'; }catch(e){}
-  if (big) $('#bigBtn').onclick();
+  let z=0, big=false; try{ const sz=+localStorage.getItem('na-zoom3'); if(sz) z=sz; localStorage.removeItem('dr-big'); }catch(e){}
+  document.body.classList.remove('bigmap');
   fixStickyTop(); if (z) setZoom(z); else { UIS.autoFit=true; requestAnimationFrame(fitZoom); }
   // nền: ván xem thử phía sau menu
   newGame([{name:'Bạn'},{name:BOT_NAMES[0],bot:true},{name:BOT_NAMES[1],bot:true}]); G.phase='idle'; G.initial={}; renderPlayers(); renderMap(); renderSide();
