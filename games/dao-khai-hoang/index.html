@@ -14,7 +14,7 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js?v=20261127fix"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261127fix"></script>
+<script src="game.js?v=20261128a"></script>
 <script src="assets/imgs.js?v=2026112823y"></script>
 <script>
 document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('khhid',document.hidden));
@@ -26,7 +26,7 @@ window.KH_FX=(function(){const d=document.documentElement;
  apply(); return {mode,apply,toggle};})();
 </script>
 <script src="art.js?v=2026112823y"></script>
-<script src="ui.js?v=20261127c"></script>
+<script src="ui.js?v=20261128a"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -760,6 +760,27 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kdsc .xstep .xpm{flex:1 1 0;height:36px;font-size:24px;width:auto!important}
  #kdsc .xstep .xpm[data-a=dminus]{order:1}#kdsc .xstep .xdv{order:2;flex:0 0 34px;height:36px;font-size:21px;border:none;border-left:2px solid #1e0e03;border-right:2px solid #1e0e03}#kdsc .xstep .xpm[data-a=dplus]{order:3}
 }
+/* thống kê xúc xắc */
+.dfc[data-a=dstat]{cursor:pointer;display:contents}
+#kdst{position:fixed;inset:0;z-index:390;display:flex;align-items:center;justify-content:center;background:rgba(10,5,0,.5);padding:8px;animation:xdfade .2s both;cursor:pointer}
+#kdst .xst{position:relative;width:min(94vw,520px);padding:14px 16px 12px;border-radius:18px;color:#fff3d6;font-family:"KhFont","Baloo 2","Arial Black",sans-serif;background:repeating-linear-gradient(90deg,rgba(0,0,0,.06) 0 3px,transparent 3px 40px),linear-gradient(180deg,#9b6634,#7a4a20 45%,#5c3414);border:4px solid #2e1809;box-shadow:inset 0 0 0 3px #d9a85c,inset 0 0 0 6px #4a2a0c,0 16px 40px rgba(0,0,0,.7);animation:xdpop .35s cubic-bezier(.2,1.5,.4,1) both}
+#kdst .xnl{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c0,#b8862f 60%,#5a3a10)}
+#kdst .n1{left:10px;top:10px}#kdst .n2{right:10px;top:10px}#kdst .n3{left:10px;bottom:10px}#kdst .n4{right:10px;bottom:10px}
+#kdst .xstt{text-align:center;font-size:24px;color:#ffe066;-webkit-text-stroke:4px #4a1a05;paint-order:stroke fill}
+#kdst .xsts{text-align:center;font-size:15px;margin:2px 0 8px}#kdst .xsts b{color:#ffd54a}
+#kdst .xsg{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:4px;align-items:end;height:170px;padding:8px 6px 4px;border-radius:12px;background:rgba(30,14,3,.55);border:2px solid #d9a85c}
+#kdst .xsc{display:flex;flex-direction:column;align-items:center;height:100%;gap:2px}
+#kdst .xsn{font-style:normal;font-size:12px;color:#ffe9b8;line-height:14px}
+#kdst .xsb{position:relative;flex:1;width:100%}
+#kdst .xse{position:absolute;left:0;right:0;bottom:0;border:2px dashed rgba(255,230,160,.75);border-bottom:none;border-radius:4px 4px 0 0}
+#kdst .xsv{position:absolute;left:18%;right:18%;bottom:0;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#ffe066,#e0962a);box-shadow:0 0 6px rgba(255,213,74,.6)}
+#kdst .s7 .xsv{background:linear-gradient(180deg,#ff8a70,#c2361f)}
+#kdst .xsc b{font-size:15px;color:#fff}
+#kdst .xslg{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px}
+#kdst .xslg i{display:inline-block;width:14px;height:10px;margin-right:5px;vertical-align:middle;border-radius:2px}
+#kdst .lv{background:linear-gradient(180deg,#ffe066,#e0962a)}#kdst .le{border:2px dashed rgba(255,230,160,.85)}
+#kdst .xsh{text-align:center;font-size:11px;opacity:.7;margin-top:4px}
+@media (max-height:520px){#kdst .xsg{height:130px}#kdst .xstt{font-size:20px}#kdst .xst{padding:8px 14px}}
 /* === Thanh nút xây (điện thoại dọc) === */
 .xbb{display:none}
 @media (max-width:900px) and (orientation:portrait){

@@ -136,7 +136,7 @@ const KHUI=(()=>{
     else if (S.step==='roll') st=my?'Đến lượt bạn: <b>đổ xúc xắc</b>':'Chờ '+api.esc(S.seats[S.turn].name)+' đổ xúc xắc';
     else st=my?(S.free?`Xây ${S.free} đường miễn phí`:mode==='road'?'Chọn cạnh để xây đường':mode==='town'?'Chọn chỗ xây nhà':mode==='city'?'Chọn nhà để nâng thành phố':''):api.esc(S.seats[S.turn].name)+' đang xây dựng';
     const cmdTxt=(Date.now()<sayUntil&&sayTxt)?sayTxt:st; setH(root.querySelector('.kst'),cmdTxt);
-    let h=`<div class="dice ${isNew&&ev.k==='roll'?'rolling':''}">${S.dice?A.die(S.dice[0])+A.die(S.dice[1],'#fdecc8')+`<b>${S.dice[0]+S.dice[1]}</b>`:'<span>Chưa đổ</span>'}<button class="tbtn pri" data-a="roll" ${my&&S.phase==='play'&&S.step==='roll'?'':'disabled'}>Đổ xúc xắc</button></div>`;
+    let h=`<div class="dice ${isNew&&ev.k==='roll'?'rolling':''}"><span class="dfc" data-a="dstat" title="Bấm để xem thống kê xúc xắc">${S.dice?A.die(S.dice[0])+A.die(S.dice[1],'#fdecc8')+`<b>${S.dice[0]+S.dice[1]}</b>`:'<span>Chưa đổ</span>'}</span><button class="tbtn pri" data-a="roll" ${my&&S.phase==='play'&&S.step==='roll'?'':'disabled'}>Đổ xúc xắc</button></div>`;
     if (robH!=null){ const vs=KH.victims(S,robH,ME); h+=`<div class="box">Lấy 1 lá của: ${vs.map(v=>`<button class="tbtn" data-vic="${v}">${api.esc(S.seats[v].name)}</button>`).join(' ')}</div>`; }
     const h2=h; let L=h.replace('<div class="dice ','<div class="dup dice ').replace('<div class="box">Lấy','<div class="dup box">Lấy'), HV=`<div class="dtop">${h2}</div>`, dvH=''; const L0=L.length; h='';
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,60-Math.floor((t-S.turnAt)/1000)):null;
@@ -197,7 +197,7 @@ const KHUI=(()=>{
       const tl=S.log.slice(0,12).filter(l=>/muốn đổi|đổi với|lời mời|yêu cầu đổi|Không ai đồng ý|đủ lá để đổi/.test(l)).slice(0,S.offer?2:3).reverse();
       setH(cf,tl.map(l=>`<div class="tl">${api.esc(l)}</div>`).join('')+(S.offer&&!hotH?ofH:'')); }
     const dscH0=dNeed?`<div class="box ofr hot dscp"><div class="cth">Ra 7! Bạn phải bỏ ${dNeed} lá</div><div class="chint">Bạn có ${KH.tot(P.res)} lá, phải bỏ một nửa (làm tròn xuống). Bấm vào tài nguyên có vòng đỏ để chọn lá bỏ.</div><div class="orow"><small>Đã chọn ${dSel}/${dNeed}</small>${dSel?resRow(dsc):'<span class="chint">chưa chọn</span>'}</div><div class="obt"><button class="tbtn" data-a="dclr">Làm lại</button><button class="tbtn" data-a="dauto">Tự chọn</button></div><button class="tbtn pri wide" data-a="ddo" ${dSel===dNeed?'':'disabled'}>Bỏ ${dNeed} lá</button></div>`:'';
-    dscModal(S,ME,api,dNeed,P); setH(root.querySelector('.ofn'),((hotH||ofH)?`<div class="ofnh">${hotH||ofH}</div>`:''));
+    dscModal(S,ME,api,dNeed,P); statModal(S); setH(root.querySelector('.ofn'),((hotH||ofH)?`<div class="ofnh">${hotH||ofH}</div>`:''));
     if(isNew){ lastEv=ev.n;
       if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7){ banner('<img src="assets/robber.webp?v=2026112823y" alt=""><span>RA SỐ 7!</span>','seven',1750); const ks=ev.disc?Object.keys(ev.disc):[]; say(ks.length?'Ra 7! '+ks.map(i=>'<b>'+api.esc(S.seats[i].name)+'</b>').join(', ')+' có hơn 7 lá, phải bỏ một nửa':'Ra 7! <b>Kẻ cướp</b> xuất hiện'); if(ev.disc&&ev.disc[ME]!=null) SFX.ding&&SFX.ding(); }
         if(ev.got){ prodFX(S,sum); if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),3900); } }
@@ -220,7 +220,13 @@ const KHUI=(()=>{
     const C=KH_COST, V='?v=2026112823y';
     const it=[['road','Đường',main&&(KH.canPay(P,C.road)||S.free>0)&&P.roads>0,'road-neutral.webp','rd'],['town','Nhà',main&&KH.canPay(P,C.town)&&P.towns>0,'house-neutral.webp',''],['city','Thành phố',main&&KH.canPay(P,C.city)&&P.cities>0,'city-neutral.webp',''],['dev','Thẻ PT',main&&KH.canPay(P,C.dev)&&S.dev.length>0,'card-back.webp','cd']];
     return `<div class="xbb">${it.map(([k,t,ok,img,c])=>`<button type="button" class="xbbt ${ok?'can':''} ${mode===k?'on':''}" ${k==='dev'?'data-a="buydev"':`data-m="${k}"`} ${ok?'':'disabled'}><img class="${c}" src="assets/${img}${V}" alt=""><b>${mode===k?'Chọn chỗ':t}</b></button>`).join('')}</div>`; }
-  let dmod=null;
+  let dmod=null, dstat=false, smod=null;
+  function statModal(S){ if(!dstat){ if(smod){ smod.remove(); smod=null; } return; }
+    if(!smod){ smod=document.createElement('div'); smod.id='kdst'; document.body.appendChild(smod); smod.addEventListener('click',e=>{ dstat=false; statModal(S); }); }
+    const h=Array.isArray(S.dh)?S.dh:Array(13).fill(0), tot=h.reduce((a,b)=>a+b,0), W=[0,0,1,2,3,4,5,6,5,4,3,2,1], mx=Math.max(1,...h.slice(2).map((x,i)=>Math.max(x,tot*W[i+2]/36)));
+    const cols=[2,3,4,5,6,7,8,9,10,11,12].map(n=>{ const ex=tot*W[n]/36; return `<div class="xsc ${n===7?'s7':''}"><i class="xsn">${h[n]}</i><div class="xsb"><span class="xse" style="height:${Math.round(ex/mx*100)}%"></span><span class="xsv" style="height:${Math.round(h[n]/mx*100)}%"></span></div><b>${n}</b></div>`; }).join('');
+    setH(smod,`<div class="xdp xst"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="xstt">Thống kê xúc xắc</div><div class="xsts">Ván này đã đổ <b>${tot}</b> lần</div><div class="xsg">${cols}</div><div class="xslg"><span><i class="lv"></i>Số lần đã ra</span><span><i class="le"></i>Mức trung bình theo xác suất</span></div><div class="xsh">Chạm bất kỳ đâu để đóng</div></div>`); }
+
   function dscModal(S,ME,api,need,P){ if(!need||!P){ if(dmod){ dmod.remove(); dmod=null; } return; }
     if(!dmod){ dmod=document.createElement('div'); dmod.id='kdsc'; document.body.appendChild(dmod); dmod.addEventListener('click',onClick); }
     const sel=dsc.reduce((a,b)=>a+b,0), V='?v=2026112823y';
@@ -246,7 +252,8 @@ const KHUI=(()=>{
     if (d.m){ mode = mode===d.m?null:d.m; rr(); return; }
     if (d.dev){ if(d.dev==='knight') api.act({t:'knight'}); else if(d.dev==='road') api.act({t:'roaddev'}); else { dsel=d.dev; DP=[]; rr(); } return; }
     if (d.pr!=null){ const r=+d.pr; if(dsel==='mono'){ api.act({t:'mono',r}); dsel=null; } else { DP.push(r); if(DP.length===2){ api.act({t:'plenty',r1:DP[0],r2:DP[1]}); dsel=null; } else say('Đã chọn '+KH_RES[r]+', chọn thêm 1 lá'); } return; }
-    const a=d.a; if(a==='dplus'||a==='dminus'){ const Pm=ME>=0?S.P[ME]:null, nd=S.disc&&S.disc[ME]; if(!Pm||!nd) return; const r=+d.r, sel=dsc.reduce((x,y)=>x+y,0); if(a==='dplus'){ if(sel>=nd){ say('Đã chọn đủ '+nd+' lá — bấm nút Bỏ lá'); return; } if(dsc[r]>=Pm.res[r]) return; dsc[r]++; } else { if(dsc[r]<=0) return; dsc[r]--; } rr(); return; }
+    const a=d.a; if(a==='dstat'){ dstat=!dstat; rr(); return; }
+    if(a==='dplus'||a==='dminus'){ const Pm=ME>=0?S.P[ME]:null, nd=S.disc&&S.disc[ME]; if(!Pm||!nd) return; const r=+d.r, sel=dsc.reduce((x,y)=>x+y,0); if(a==='dplus'){ if(sel>=nd){ say('Đã chọn đủ '+nd+' lá — bấm nút Bỏ lá'); return; } if(dsc[r]>=Pm.res[r]) return; dsc[r]++; } else { if(dsc[r]<=0) return; dsc[r]--; } rr(); return; }
     if(a==='dpick'){ const Pm=ME>=0?S.P[ME]:null, nd=S.disc&&S.disc[ME]; if(!Pm||!nd) return; const r=+d.r, sel=dsc.reduce((x,y)=>x+y,0); if(sel>=nd){ say('Đã chọn đủ '+nd+' lá — bấm Bỏ lá để xác nhận'); return; } if(dsc[r]>=Pm.res[r]) return; dsc[r]++; rr(); return; }
     if(a==='dclr'){ dsc=[0,0,0,0,0]; rr(); return; }
     if(a==='dauto'){ const Pm=S.P[ME], nd=S.disc&&S.disc[ME]; if(Pm&&nd){ dsc=KH.autoLost(Pm,nd); rr(); } return; }

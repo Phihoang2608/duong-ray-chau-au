@@ -107,7 +107,7 @@ const KH = (()=>{
     if (S.step==='robber'){ if(a.t!=='robber'||!(a.h>=0&&a.h<19)||a.h===S.robber) return false; S.robber=a.h;
       const vs=victims(S,a.h,seat); let msg=name+' dời kẻ cướp'; if(vs.length){ const vic=a.v!=null&&vs.includes(a.v)?a.v:vs[Math.floor(Math.random()*vs.length)]; const r=stealFrom(S,seat,vic); msg+=' và lấy 1 lá của '+S.seats[vic].name; ev(S,{k:'steal',seat,vic,r}); } else ev(S,{k:'robber',seat});
       S.log.unshift(msg+'.'); S.step=S.rolled?'main':'roll'; S.turnAt=t; return true; }
-    if (a.t==='roll'){ if(S.step!=='roll') return false; if(!Array.isArray(S.dk)||S.dk.length<7) S.dk=shuffle([...Array(36).keys()]); const x=S.dk.pop(), d=[1+Math.floor(x/6),1+x%6], s=d[0]+d[1]; S.dice=d; S.rolled=true;
+    if (a.t==='roll'){ if(S.step!=='roll') return false; if(!Array.isArray(S.dk)||S.dk.length<7) S.dk=shuffle([...Array(36).keys()]); const x=S.dk.pop(), d=[1+Math.floor(x/6),1+x%6], s=d[0]+d[1]; if(!Array.isArray(S.dh)) S.dh=Array(13).fill(0); S.dh[s]++; S.dice=d; S.rolled=true;
       if (s===7){ const dd=startDiscard(S,t), ks=Object.keys(dd).map(Number); if(ks.length){ S.disc=dd; S.step='discard'; S.log.unshift(name+' đổ ra 7 — '+ks.map(i=>S.seats[i].name+' (bỏ '+dd[i]+')').join(', ')+' có hơn 7 lá phải bỏ một nửa.'); } else { S.step='robber'; S.log.unshift(name+' đổ ra 7 — dời kẻ cướp!'); } ev(S,{k:'roll',seat,d,disc:ks.length?dd:null}); }
       else { const got=produce(S,s); S.step='main'; const g=got.map((x,i)=>tot(x)?S.seats[i].name+' +'+x.map((c,r)=>c?c+' '+KH_RES[r]:'').filter(Boolean).join(', '):'').filter(Boolean); S.log.unshift(name+' đổ '+s+'. '+(g.length?g.join(' · '):'Không ai nhận được gì.')); ev(S,{k:'roll',seat,d,got}); }
       S.turnAt=t; return true; }
@@ -162,7 +162,7 @@ const KH = (()=>{
     if (!S.devPlayed){
       if (P.dev.includes('knight') && (robbed || P.knights>=2 && S.largest!==seat)) return {t:'knight'};
       if (P.dev.includes('plenty')){ const nd=need(S,seat,P.cities>0&&S.vo.some(o=>o&&o.p===seat&&!o.city)?KH_COST.city:KH_COST.town); const rs=[]; nd.forEach((x,r)=>{ for(let k=0;k<x;k++) rs.push(r); }); if(rs.length) return {t:'plenty',r1:rs[0],r2:rs[1]!=null?rs[1]:rs[0]}; }
-      if (P.dev.includes('mono')){ let br=-1,bn=2; for(let r=0;r<5;r++){ const n=S.P.reduce((s,Q,k)=>k===seat?s:s+Q.res[r],0); if(n>bn){bn=n;br=r;} } if(br>=0) return {t:'mono',r:br}; }
+      if (P.dev.includes('mono')){ let br=-1,bn=3; for(let r=0;r<5;r++){ const n=S.P.reduce((s,Q,k)=>k===seat?s:s+Q.res[r],0); if(n>bn){bn=n;br=r;} } if(br>=0) return {t:'mono',r:br}; }
       if (P.dev.includes('road') && P.roads>=2 && bestRoadTo(S,seat)) return {t:'roaddev'}; }
     if (P.cities>0 && canPay(P,KH_COST.city)){ let b=-1,bs=-1; S.vo.forEach((o,v)=>{ if(o&&o.p===seat&&!o.city){ const s=vScore(S,v); if(s>bs){bs=s;b=v;} } }); if(b>=0) return {t:'city',v:b}; }
     const spots=V.map((_,v)=>v).filter(v=>townOK(S,seat,v));
