@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"><meta http-equiv="Pragma" content="no-cache">
 <meta charset="utf-8">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#4a2d15">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -486,7 +487,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 
 /* ===== ĐIỆN THOẠI NẰM NGANG: bản đồ làm trung tâm, xúc xắc nằm trên bản đồ ===== */
 @media (orientation:landscape) and (max-height:640px){
- #kh .khwrap{grid-template-columns:clamp(96px,14.5%,134px) minmax(0,1fr) clamp(188px,27%,256px)!important;gap:3px}
+ #kh .khwrap{grid-template-columns:clamp(96px,14.5%,134px) minmax(0,1fr) clamp(196px,28.5%,272px)!important;gap:3px}
  #kh .kbwrap{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;grid-template-rows:minmax(0,1fr);gap:3px;align-items:stretch}
  #kh .kbwrap>.frame{grid-area:1/1;height:100%}
  #kh .kbwrap>.hov{display:contents!important}
@@ -513,7 +514,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .side .pl{padding:2px 6px!important;row-gap:0!important}
  #kh .hov .pop .tbtn.wide{white-space:normal!important;font-size:12px!important;line-height:1.15;padding:5px 4px!important}
  #kh .hov .tbar .pop{width:200px!important;max-width:none!important}
- #kh .side .chs .tb-chat .ls{font-size:12.5px}
+ #kh .side .chs .tb-chat .ls{font-size:13px}#kh .side .chs .tb-chat .qk button{font-size:12px}#kh #tb-chatf input{font-size:14px;padding:5px 8px}#kh #tb-chatf .tbtn{font-size:13px;padding:4px 10px}
 }
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
