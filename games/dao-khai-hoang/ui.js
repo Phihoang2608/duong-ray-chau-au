@@ -26,8 +26,10 @@ const KHUI=(()=>{
     const x0=from.left+from.width/2-w/2, y0=from.top+from.height/2-h/2, x1=to.left+to.width/2-w/2, y1=to.top+to.height/2-h/2;
     Object.assign(el.style,{left:x0+'px',top:y0+'px',width:w+'px',height:h+'px'}); document.body.appendChild(el);
     el.animate([{transform:'translate(0,0) scale(.3) rotate(-20deg)',opacity:0},{transform:'translate(0,-30px) scale(1.15) rotate(0)',opacity:1,offset:.25},{transform:`translate(${x1-x0}px,${y1-y0}px) scale(.55) rotate(10deg)`,opacity:.3}],{duration:1100,delay:delay||0,easing:'cubic-bezier(.4,.1,.3,1)',fill:'both'}).onfinish=()=>el.remove(); }
+  let root0chat=null, root0=null;
   function render(S,ME,api){
-    if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div></div><div class="side"></div></div></div>`;
+    if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div></div><div class="side"><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
+      { const ch=document.getElementById('tb-chat'); if(ch){ root0chat=ch; root0=document.querySelector('#kh .chs'); root0.appendChild(ch); ch.classList.add('show'); } }
       root=$('#kh'); root.addEventListener('click',onClick); root.addEventListener('change',onChange); }
     const sig=S.hex.map(h=>h.res+'.'+h.num).join()+S.ports.join();
     if (sig!==boardSig){ boardSig=sig; root.querySelector('#khs').innerHTML=A.board(S,VB); }
@@ -45,14 +47,16 @@ const KHUI=(()=>{
     root.querySelector('.kst').innerHTML=st;
     let h=`<div class="dice ${isNew&&ev.k==='roll'?'rolling':''}">${S.dice?A.die(S.dice[0])+A.die(S.dice[1],'#fdecc8')+`<b>${S.dice[0]+S.dice[1]}</b>`:'<span>Chưa đổ</span>'}<button class="tbtn pri" data-a="roll" ${my&&S.phase==='play'&&S.step==='roll'?'':'disabled'}>Đổ xúc xắc</button></div>`;
     if (robH!=null){ const vs=KH.victims(S,robH,ME); h+=`<div class="box">Lấy 1 lá của: ${vs.map(v=>`<button class="tbtn" data-vic="${v}">${api.esc(S.seats[v].name)}</button>`).join(' ')}</div>`; }
+    let L=h; h='';
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,90-Math.floor((t-S.turnAt)/1000)):null;
       return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
         <div class="ps"><span>Lá: ${KH.tot(Q.res)}</span><span>Thẻ: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span><span>Đường: ${Q.lr}</span></div>
         ${S.longest===i||S.largest===i?`<div class="aw">${S.longest===i?'<em>Đường dài nhất +2</em>':''}${S.largest===i?'<em>Quân mạnh nhất +2</em>':''}</div>`:''}</div>`; }).join('')}</div>`;
-    { const V='?v=20261127q';
-      const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="16" height="15">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
+    const S1=h; h='';
+    { const V='?v=20261127r';
+      const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="21" height="19">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
       const row=(ic,t,pt,c)=>`<div class="ctr"><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></div>`;
-      h+=`<div class="box ctab"><div class="cth">Bảng chi phí xây dựng</div>${row(`<img src="assets/road-neutral.webp${V}" class="ci rd">`,'Đường','',KH_COST.road)}${row(`<img src="assets/house-neutral.webp${V}" class="ci">`,'Nhà','+1 điểm',KH_COST.town)}${row(`<img src="assets/city-neutral.webp${V}" class="ci">`,'Thành phố','+2 điểm · nâng từ nhà',KH_COST.city)}${row('<span class="ci dc"></span>','Thẻ phát triển','',KH_COST.dev)}</div>`; }
+      L+=`<div class="box ctab"><div class="cth">Bảng chi phí xây dựng</div>${row(`<img src="assets/road-neutral.webp${V}" class="ci rd">`,'Đường','',KH_COST.road)}${row(`<img src="assets/house-neutral.webp${V}" class="ci">`,'Nhà','+1 điểm',KH_COST.town)}${row(`<img src="assets/city-neutral.webp${V}" class="ci">`,'Thành phố','+2 điểm · nâng từ nhà',KH_COST.city)}${row('<span class="ci dc"></span>','Thẻ phát triển','',KH_COST.dev)}</div>`; }
     if (P){
       h+=`<div class="box hand">${P.res.map((x,r)=>`<div class="rstack ${x?'':'none'}" title="${KH_RES[r]}">${[...Array(Math.max(1,Math.min(x,4)))].map((_,k)=>`<div class="rc" style="--k:${k}">${A.resCard(r)}</div>`).join('')}<b>${x}</b></div>`).join('')}</div>`;
       const cost=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="15" height="14">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
@@ -70,7 +74,8 @@ const KHUI=(()=>{
         <button class="tbtn" data-a="trade" ${main&&P.res[tg]>=rt[tg]&&tg!==tw?'':'disabled'}>Đổi</button></div>`;
       h+=`<div class="box"><button class="tbtn pri wide" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>${S.phase==='over'&&api.mode()!=='client'?'<button class="tbtn gold wide" data-a="again">Chơi ván mới</button>':''}</div>`; }
     h+=`<div class="xlog">${S.log.slice(0,6).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
-    root.querySelector('.side').innerHTML=h;
+    root.querySelector('.lft').innerHTML=L; root.querySelector('.s1').innerHTML=S1; root.querySelector('.s2').innerHTML=h;
+    { const cb=document.getElementById('tb-chatbtn'); if(root0) root0.style.display=(cb&&cb.style.display==='none')?'none':''; }
     if(isNew){ lastEv=ev.n;
       if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7) api.toast('Ra 7! Kẻ cướp xuất hiện');
         if(ev.got){ let k=0; S.hex.forEach((hx,hi)=>{ if(hx.num!==sum||hi===S.robber) return; KH.HEX[hi].v.forEach(v=>{ const o=S.vo[v]; if(!o) return; const from=svgPt(X(KH.HEX[hi].x),X(KH.HEX[hi].y)), to=rectOf(`.pl[data-p="${o.p}"]`); for(let c=0;c<(o.city?2:1);c++) fly(from,to,A.resCard(hx.res),66,50,300+(k++)*120); }); });
