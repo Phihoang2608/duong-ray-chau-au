@@ -13,8 +13,8 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=2026112801a"></script>
-<script src="assets/imgs.js?v=2026112801a"></script>
+<script src="game.js?v=2026112804a"></script>
+<script src="assets/imgs.js?v=2026112804a"></script>
 <script>
 window.KH_FX=(function(){const d=document.documentElement;
  function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
@@ -24,8 +24,8 @@ window.KH_FX=(function(){const d=document.documentElement;
  function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
  apply(); return {mode,apply,toggle};})();
 </script>
-<script src="art.js?v=2026112801a"></script>
-<script src="ui.js?v=2026112801a"></script>
+<script src="art.js?v=2026112804a"></script>
+<script src="ui.js?v=2026112804a"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -87,7 +87,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .dcard .rn{stroke-width:2px!important}.rcard .rn{font:800 14px "KhFont","Baloo 2","Arial Black",sans-serif;fill:#fff;text-anchor:middle;stroke:#1b0f06;stroke-width:3.2px;paint-order:stroke;stroke-linejoin:round}
 .ctab{padding:10px 12px 8px}.cth{text-align:center;font-weight:bold;font-size:16px;color:#ffd76a;border-bottom:2px solid rgba(40,18,4,.6);box-shadow:0 1px 0 rgba(255,215,150,.25);padding-bottom:6px;margin-bottom:6px;letter-spacing:.4px}
 .ctr{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:2px 8px;padding:6px 0;border-bottom:1px solid rgba(40,18,4,.45)}.ctr:last-child{border:none}
-.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112801a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
+.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112804a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
 .ctx{display:flex;flex-direction:column;font-size:15px;line-height:1.15}.ctx small{font-size:12px;color:#f0dcb0}.cco{display:flex;gap:3px;flex-wrap:wrap}.cco .cr{display:flex;background:rgba(40,18,4,.45);border-radius:7px;padding:1px 3px}
 #kh,#kh *{font-family:"KhFont","Baloo 2","Arial Black",sans-serif}#kh button,#kh select,#kh input{font-family:inherit}
 #kh .cth,#kh .dice::before,#kh .chs .hd::before,#kh .ctx b,#kh .pl .ph b,#kh .kst,#kh .tbtn{letter-spacing:.3px}
@@ -116,6 +116,11 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .pop{position:absolute;right:0;bottom:0;top:auto;width:272px;z-index:6;display:flex;flex-direction:column;gap:6px}.pop .plb{font-size:13px;color:#f0dcb0}.rrow{display:flex;gap:5px}
 .rbtn{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:0;padding:3px 0 2px;border-radius:9px;border:2px solid #4a2b10;background:linear-gradient(180deg,#f9e9c2,#dcb878);cursor:pointer;color:#3a210c;font:inherit;text-shadow:none}.rbtn b{font-size:13px;line-height:1}
 .ri{width:22px;height:22px;vertical-align:middle;object-fit:contain;margin:-3px 1px}.dpick .tbtn .ri{margin:-4px 0}.ptr .rrow{margin:2px 0 4px}
+.bt{width:98px;height:98px}.bt img{width:54px;height:64px}.bt small{font-size:14px}.bt.bm .mk{width:58px;height:58px}.tbar{gap:10px}
+.kend{width:132px;font-size:16px;padding:10px 6px;margin-top:2px}
+.kend.rdy{animation:bring 1.6s ease-in-out infinite}
+@media (max-width:900px){.kend{width:auto;flex:1 1 100%}}
+@media (max-height:520px){.bt{width:60px;height:60px}.bt img{width:34px;height:40px}.bt small{font-size:10px}.bt.bm .mk{width:36px;height:36px}.kend{width:92px;font-size:12px;padding:6px 4px}.tbar{gap:5px}}
 .rbtn.glow{box-shadow:0 0 0 2px #fde047,0 0 10px rgba(253,224,71,.8)}.rbtn.sel{outline:3px solid #2563eb;outline-offset:0;background:linear-gradient(180deg,#fff6d0,#f1cf7c)}.rbtn:disabled{opacity:.4;cursor:default;box-shadow:none}
 @media (max-width:900px){.tbar{flex-direction:row;justify-content:center;flex-wrap:wrap}.pop{position:static;width:100%;order:3}}
 .cfeed{display:flex;flex-direction:column;gap:5px;margin-bottom:6px}.cfeed:empty{display:none}
@@ -189,7 +194,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  body.khfs .tb-top{display:none}body.khfs.ingame #tb-game{height:100vh;height:100dvh}
  .hov{right:8px;top:8px;bottom:8px}
  .hov .hand{gap:3px;padding:4px 3px}.hov .rstack{width:42px;height:34px}.hov .rstack .rc{width:38px;height:29px}.rstack b{font-size:11px;padding:0 5px}
- .bt{width:54px;height:54px}.bt img{width:30px;height:36px}.bt small{font-size:9px}
+ .bt{width:64px;height:64px}.bt img{width:36px;height:43px}.bt small{font-size:10.5px}.kend{width:96px;font-size:13px;padding:7px 4px}
  .box,.dice,.pl{padding:4px 7px;border-width:2px;border-radius:9px}
  .dice{gap:2px}.dice::before{display:none}.die{width:34px;height:34px}.dice b{font-size:20px}.dice .tbtn{font-size:13px;padding:5px 6px}
  .ctab{padding:3px 5px}.cth{font-size:12px;margin-bottom:2px;padding-bottom:1px}.ctab .ci{width:30px;height:24px}.ctab .ci.rd{height:14px}.ctab .ci.dcs{width:20px;height:28px}
@@ -238,7 +243,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  .hov .hand{flex-direction:row!important;justify-content:space-around;gap:2px;padding:4px 3px}
  .hov .rstack{width:50px;height:40px}.hov .rstack .rc{width:46px;height:34px}.rstack b{font-size:12px;padding:0 6px}
  .tbar{position:absolute!important;right:4px;bottom:calc(100% + 8px);flex-direction:row!important;gap:6px;margin:0!important;z-index:6}
- .tbar .bt{width:52px;height:52px}.bt img{width:28px;height:34px}.bt small{font-size:9px}
+ .tbar .bt{width:62px;height:62px}.bt img{width:34px;height:41px}.bt small{font-size:10.5px}.tbar .kend{flex:0 0 auto;width:auto;font-size:14px;padding:9px 12px}
  .pop{position:absolute!important;right:0;bottom:calc(100% + 66px);width:210px!important}
  .lft{display:grid!important;grid-template-columns:1fr 1.15fr;gap:5px;align-items:stretch;position:static}
  .lft>.dice{grid-column:1;grid-row:1}.lft>.box:last-child{grid-column:2;grid-row:1;display:flex;align-items:center}.lft>.box:last-child .tbtn{width:100%}
@@ -259,6 +264,12 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  .dcard{width:56px!important}.dcard svg{width:54px!important;height:76px!important}
  .xlog{display:none}
  #pbg-chip,.pbg-chip,#pbg-fab{display:none!important}
+}
+@media (min-width:901px){.hov .pop{right:calc(100% + 8px)}.bt{width:88px;height:88px}.bt img{width:48px;height:57px}}
+@media (orientation:landscape) and (max-height:640px){
+ .hov .tbar{position:absolute!important;right:calc(100% + 8px);bottom:0;flex-direction:row!important;align-items:flex-end;gap:6px;margin:0!important}
+ .hov .pop{right:calc(100% + 8px)!important;bottom:70px!important}
+ .hov .tbar .bt small{font-size:9px;white-space:nowrap}.hov .tbar .bt{width:58px;height:58px}.hov .tbar .bt img{width:32px;height:38px}.hov .tbar .kend{width:86px;font-size:12px;padding:8px 4px;align-self:center}
 }
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
