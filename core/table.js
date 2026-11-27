@@ -113,7 +113,7 @@ const Table = (()=>{
       <button class="tbtn" id="tb-sound">Âm thanh: bật</button><button class="tbtn" id="tb-rules">Luật chơi</button><button class="tbtn" id="tb-leave" style="display:none">Rời phòng</button></header>
     <div class="tb-wrap"><div id="tb-screen" class="tb-screen"><div class="tb-panel" id="tb-box"></div></div><div id="tb-game"></div></div>
     <div class="tb-chat" id="tb-chat"><div class="hd">Trò chuyện trong phòng <button class="tbtn" id="tb-chatx" style="padding:2px 8px">Đóng</button></div><div class="ls" id="tb-chatls"></div>
-      <div class="qk">${['Hay quá!','Nhanh lên!','GG','Haha','Đỉnh!','Tiếc quá'].map(q=>`<button data-q="${q}">${q}</button>`).join('')}</div>
+      <div class="qk">${(CFG.quick||['Hay quá!','Nhanh lên!','GG','Haha','Đỉnh!','Tiếc quá']).map(q=>`<button data-q="${q}">${q}</button>`).join('')}</div>
       <form id="tb-chatf" autocomplete="off"><input maxlength="80" placeholder="Nhắn cho cả phòng…"><button class="tbtn pri" type="submit">Gửi</button></form></div>
     <div class="tb-toast" id="tb-toast"></div><div class="tb-modal" id="tb-modal"><div class="tb-panel" id="tb-mbox"></div></div><canvas id="fxcanvas"></canvas><div id="tmsg"></div>`);
     try{ FX.setup(); }catch(e){}
