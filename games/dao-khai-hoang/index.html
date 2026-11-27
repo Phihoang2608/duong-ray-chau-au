@@ -583,6 +583,16 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 
 #kh .cmdb{width:100%;flex:0 0 auto}
 @media (orientation:landscape) and (max-height:640px){#kh .lft>.awp .atx,#kh .lft>.awp .arow{width:100%;max-width:100%;box-sizing:border-box}#kh .lft>.awp .hold{width:100%;text-align:center}#kh .lft>.awp .atx b{width:100%;text-align:center}}
+
+/* chữ khung trò chuyện rất nhỏ trên điện thoại */
+@media (max-width:900px),(orientation:landscape) and (max-height:640px){
+ #kh .side .chs .tb-chat .ls .cm,#kh .side .chs .tb-chat .ls .cm b{font-size:8px!important;line-height:1.2!important}
+ #kh .side .chs .tb-chat .ls .cm{padding:2px 7px!important;border-width:1.5px!important;border-radius:8px!important}
+ #kh .side .chs .tb-chat .ls{gap:2px!important;padding:3px 4px!important}
+ #kh .cfeed .tl{font-size:8px!important;padding:1px 5px!important}
+ #kh .side .chs .tb-chat .qk button{font-size:8.5px!important;padding:1px 6px!important}
+ #kh .side .chs .tb-chat input{font-size:12px!important;padding:4px 8px!important}
+}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
