@@ -289,15 +289,15 @@ const Table = (()=>{
   function onHostPeers(){
     chatIngest(); announce();
     if (LOBBY){ lobby(); return; }
-    if (!S) return; let ch=false;
+    if (!S) return; let ch=false, ack=false;
     guests().forEach(g=>{ first[g.peer]=first[g.peer]||Date.now(); });
     guests().forEach(g=>{ if (S.seats.some(p=>p.peer===g.peer)) return; const pr=g.presence;
       let i=S.seats.findIndex(p=>!p.bot && p.pid && p.pid===pr.pid && p.peer!==MYPEER && (!fresh(p.peer) || (first[g.peer]||0)>(first[p.peer]||0)));
       if (i<0) i=S.seats.findIndex(p=>!p.bot && p.peer!==MYPEER && !fresh(p.peer) && p.name===clean(pr.name));
       if (i>=0){ S.seats[i].peer=g.peer; lastAct[g.peer]=(pr.act&&pr.act.n)||0; toast(esc(S.seats[i].name)+' đã vào lại phòng'); ch=true; } });
     guests().forEach(g=>{ const a=g.presence.act; if(!a||typeof a.n!=='number'||a.n<=(lastAct[g.peer]||0)) return; lastAct[g.peer]=a.n;
-      const seat=S.seats.findIndex(p=>p.peer===g.peer); if(seat>=0 && CFG.apply(S, seat, a, now())) ch=true; });
-    if (ch) commit(); else draw();
+      const seat=S.seats.findIndex(p=>p.peer===g.peer); if(seat>=0){ if(CFG.apply(S, seat, a, now())) ch=true; else ack=true; } });
+    if (ch||ack) commit(); else draw();
   }
   function onClientPeers(){
     chatIngest(); const h=hostPeer();

@@ -81,7 +81,7 @@ const KH = (()=>{
     if (ok){ if(!o.get.every((x,i)=>Q.res[i]>=x)||!o.give.every((x,i)=>P.res[i]>=x)) return false;
       o.give.forEach((x,i)=>{ P.res[i]-=x; Q.res[i]+=x; }); o.get.forEach((x,i)=>{ Q.res[i]-=x; P.res[i]+=x; });
       S.log.unshift(S.seats[o.from].name+' đổi với '+S.seats[seat].name+': '+fmtV(o.give)+' ⇄ '+fmtV(o.get)+'.'); S.offer=null; S.turnAt=t; ev(S,{k:'trade',seat:o.from}); return true; }
-    o.no.push(seat); if(!pending(S).length){ S.log.unshift('Không ai đồng ý đổi với '+S.seats[o.from].name+'.'); S.offer=null; S.turnAt=t; } return true; }
+    o.no.push(seat); if(!pending(S).length){ S.log.unshift('Không ai đồng ý đổi với '+S.seats[o.from].name+'.'); ev(S,{k:'nodeal',seat:o.from}); S.offer=null; S.turnAt=t; } return true; }
   function apply0(S,seat,a,t){
     if (!a||S.phase==='over') return false;
     if (a.t==='answer') return answer(S,seat,!!a.ok,t);
@@ -107,7 +107,7 @@ const KH = (()=>{
     if (S.step==='robber'){ if(a.t!=='robber'||!(a.h>=0&&a.h<19)||a.h===S.robber) return false; S.robber=a.h;
       const vs=victims(S,a.h,seat); let msg=name+' dời kẻ cướp'; if(vs.length){ const vic=a.v!=null&&vs.includes(a.v)?a.v:vs[Math.floor(Math.random()*vs.length)]; const r=stealFrom(S,seat,vic); msg+=' và lấy 1 lá của '+S.seats[vic].name; ev(S,{k:'steal',seat,vic,r}); } else ev(S,{k:'robber',seat});
       S.log.unshift(msg+'.'); S.step=S.rolled?'main':'roll'; S.turnAt=t; return true; }
-    if (a.t==='roll'){ if(S.step!=='roll') return false; const d=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)], s=d[0]+d[1]; S.dice=d; S.rolled=true;
+    if (a.t==='roll'){ if(S.step!=='roll') return false; if(!Array.isArray(S.dk)||S.dk.length<7) S.dk=shuffle([...Array(36).keys()]); const x=S.dk.pop(), d=[1+Math.floor(x/6),1+x%6], s=d[0]+d[1]; S.dice=d; S.rolled=true;
       if (s===7){ const dd=startDiscard(S,t), ks=Object.keys(dd).map(Number); if(ks.length){ S.disc=dd; S.step='discard'; S.log.unshift(name+' đổ ra 7 — '+ks.map(i=>S.seats[i].name+' (bỏ '+dd[i]+')').join(', ')+' có hơn 7 lá phải bỏ một nửa.'); } else { S.step='robber'; S.log.unshift(name+' đổ ra 7 — dời kẻ cướp!'); } ev(S,{k:'roll',seat,d,disc:ks.length?dd:null}); }
       else { const got=produce(S,s); S.step='main'; const g=got.map((x,i)=>tot(x)?S.seats[i].name+' +'+x.map((c,r)=>c?c+' '+KH_RES[r]:'').filter(Boolean).join(', '):'').filter(Boolean); S.log.unshift(name+' đổ '+s+'. '+(g.length?g.join(' · '):'Không ai nhận được gì.')); ev(S,{k:'roll',seat,d,got}); }
       S.turnAt=t; return true; }

@@ -12,9 +12,9 @@
 <script src="../../core/room.js"></script>
 <script src="../../core/audio.js"></script>
 <script src="../../core/effects.js"></script>
-<script src="../../core/table.js"></script>
+<script src="../../core/table.js?v=20261127fix"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=2026112823y"></script>
+<script src="game.js?v=20261127fix"></script>
 <script src="assets/imgs.js?v=2026112823y"></script>
 <script>
 document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('khhid',document.hidden));
@@ -26,7 +26,7 @@ window.KH_FX=(function(){const d=document.documentElement;
  apply(); return {mode,apply,toggle};})();
 </script>
 <script src="art.js?v=2026112823y"></script>
-<script src="ui.js?v=2026112823y"></script>
+<script src="ui.js?v=20261127fix"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -50,6 +50,11 @@ const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:ra
 #khd .hot{fill:rgba(255,226,110,.28);stroke:#ffd54a;stroke-width:5;animation:hot 1.6s ease-out 2 both;pointer-events:none}#khd .hot.blocked{fill:rgba(0,0,0,.35);stroke:#ef4444}@keyframes hot{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
 #khd .pickh{fill:rgba(255,255,255,.02);stroke:#fff;stroke-width:3;stroke-dasharray:8 6;cursor:pointer;animation:ph 1.2s infinite}#khd .pickh:hover{fill:rgba(255,220,120,.3)}#khd .pickh.on{fill:rgba(239,68,68,.25);stroke:#ef4444}@keyframes ph{50%{stroke-opacity:.35}}
 #khd .spot{stroke:var(--pc);stroke-width:10;stroke-linecap:round;opacity:.45;cursor:pointer;animation:sp 1s infinite;}#khd .spot:hover{opacity:1}@keyframes sp{50%{opacity:.9}}
+#khd *{pointer-events:none}
+#khd [data-v],#khd [data-v] *,#khd [data-e],#khd [data-c],#khd [data-c] *,#khd [data-h],#khd [data-h] *{pointer-events:auto}
+#khd .vhit{fill:#000;fill-opacity:0;pointer-events:all;cursor:pointer}
+#khd .ehit{stroke:#000;stroke-opacity:0;stroke-width:28;stroke-linecap:butt;pointer-events:stroke;cursor:pointer}
+#khd [data-v]:hover .vspot{fill:#fde047}
 #khd .vspot{fill:#fff;stroke:var(--pc,#8a5cf6);stroke-width:4;cursor:pointer;animation:vs 1s infinite;}#khd .vspot:hover{fill:#fde047}#khd .vspot.ring{fill:rgba(255,255,255,.15);stroke:#fde047}@keyframes vs{50%{r:12}}
 #khd .newp{animation:np .6s cubic-bezier(.2,1.6,.4,1) both;transform-box:fill-box;transform-origin:center bottom}@keyframes np{0%{transform:scale(0) translateY(-30px);opacity:0}}
 #khd .dust{fill:#e9dcc0;animation:dust .8s ease-out both;transform-box:fill-box;transform-origin:center}@keyframes dust{0%{opacity:.9;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(2.2)}}
