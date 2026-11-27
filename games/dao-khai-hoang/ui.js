@@ -2,7 +2,7 @@
 const KHUI=(()=>{
   const PC=['#e11d48','#2563eb','#16a34a','#f8fafc'];
   const A=KHART, R=A.R;
-  let root=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='';
+  let root=null, pop=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='';
   const $=s=>document.querySelector(s);
   const VB={minX:-372,minY:-348,w:744,h:696};
   const X=v=>v*R;
@@ -57,12 +57,12 @@ const KHUI=(()=>{
     let L=offerBox(S,ME,api)+h, HV=''; h='';
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,90-Math.floor((t-S.turnAt)/1000)):null;
       return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
-        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261128c">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261128c">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261128c" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
+        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261128d">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261128d">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261128d" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
         ${i!==ME&&ME>=0?`<button class="tbtn sm pto" data-a="offerto" data-p="${i}" ${main&&P&&P.res[og]>=oq&&og!==ow?'':'disabled'} title="Gửi: đưa ${oq} ${KH_RES[og]}, lấy ${on} ${KH_RES[ow]}">Đề nghị đổi</button>`:''}
         <div class="ps"><span>Tài nguyên: <b class="rn2">${KH.tot(Q.res)}</b></span><span>Thẻ PT: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span></div>
         ${S.longest===i||S.largest===i?`<div class="aw">${S.longest===i?'<em>Đường dài nhất +2</em>':''}${S.largest===i?'<em>Quân mạnh nhất +2</em>':''}</div>`:''}</div>`; }).join('')}</div>`;
     const S1=h; h='';
-    { const V='?v=20261128c';
+    { const V='?v=20261128d';
       const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="21" height="19">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
       const row=(ic,t,pt,c,att,dis,on)=>`<button class="ctr cbtn ${on?'on':''}" ${att} ${dis?'disabled':''}><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></button>`;
       const okR=main&&P&&(KH.canPay(P,KH_COST.road)||S.free)&&P.roads>0, okT=main&&P&&KH.canPay(P,KH_COST.town)&&P.towns>0, okC=main&&P&&KH.canPay(P,KH_COST.city)&&P.cities>0, okD=main&&P&&KH.canPay(P,KH_COST.dev)&&S.dev.length>0;
@@ -78,13 +78,18 @@ const KHUI=(()=>{
       if (devs.length) h+=`<div class="box dv"><div class="dvl">${devs.map(k=>`<div class="dcard ${nv[k]&&!dv[k]?'new':''}">${A.devCard(k)}<b>×${(dv[k]||0)+(nv[k]||0)}</b>
         ${k==='vp'?'<small>+1 điểm ẩn</small>':dv[k]?`<button class="tbtn sm" data-dev="${k}" ${canDev&&(k==='knight'||S.step==='main')?'':'disabled'}>Dùng</button>`:'<small>mới mua</small>'}</div>`).join('')}</div>
         ${dsel?`<div class="dpick">${dsel==='mono'?'Gom loại:':'Nhận 2 lá:'} ${KH_RES.map((nm,r)=>`<button class="tbtn sm" data-pr="${r}">${nm}</button>`).join('')} <button class="tbtn sm" data-a="dcancel">Huỷ</button></div>`:''}</div>`;
-      const rt=KH.rates(S,ME);
-      h+=`<div class="box tr"><span>Đổi với ngân hàng:</span> đưa <select data-s="g">${KH_RES.map((nm,r)=>`<option value="${r}" ${r===tg?'selected':''}>${rt[r]} ${nm}</option>`).join('')}</select> lấy <select data-s="w">${KH_RES.map((nm,r)=>`<option value="${r}" ${r===tw?'selected':''}>1 ${nm}</option>`).join('')}</select>
-        <button class="tbtn" data-a="trade" ${main&&P.res[tg]>=rt[tg]&&tg!==tw?'':'disabled'}>Đổi</button></div>`;
-      { const opt=(n,sel)=>KH_RES.map((x,r)=>`<option value="${r}" ${r===sel?'selected':''}>${x}</option>`).join(''), qty=(sel)=>[1,2,3,4].map(q=>`<option value="${q}" ${q===sel?'selected':''}>${q}</option>`).join('');
-        const others=S.seats.map((x,i)=>i).filter(i=>i!==ME), okO=my&&S.phase==='play'&&S.step==='main'&&!S.offer&&P.res[og]>=oq&&og!==ow;
-        h+=`<div class="box tr ptr"><div class="cth">Đổi với người chơi</div><div class="prow"><span>Đưa</span><select data-s="oq">${qty(oq)}</select><select data-s="og">${opt(0,og)}</select></div><div class="prow"><span>Lấy</span><select data-s="on">${qty(on)}</select><select data-s="ow">${opt(0,ow)}</select></div>
-        <div class="prow"><span>Cho</span><select data-s="ot"><option value="-1" ${ot<0?'selected':''}>Tất cả</option>${others.map(i=>`<option value="${i}" ${ot===i?'selected':''}>${api.esc(S.seats[i].name)}</option>`).join('')}</select><button class="tbtn" data-a="offer" ${okO?'':'disabled'}>Gửi lời mời</button></div></div>`; }
+      { const rt=KH.rates(S,ME), elig=P.res.map((x,r)=>x>=rt[r]), anyB=main&&elig.some(Boolean);
+        if(pop==='bank'&&anyB&&!elig[tg]){ tg=elig.findIndex(Boolean); if(tw===tg) tw=(tg+1)%5; }
+        const mini=r=>`<svg viewBox="-9 -8 18 16" width="26" height="24">${A.resMini(r,0,0,.8)}</svg>`;
+        const gb=KH_RES.map((nm,r)=>`<button class="rbtn ${tg===r?'sel':''} ${elig[r]&&main?'glow':''}" data-a="bg" data-r="${r}" ${elig[r]&&main?'':'disabled'} title="${nm}">${mini(r)}<b>${rt[r]}</b></button>`).join('');
+        const wb=KH_RES.map((nm,r)=>`<button class="rbtn ${tw===r?'sel':''}" data-a="bw" data-r="${r}" ${r===tg?'disabled':''} title="${nm}">${mini(r)}<b>1</b></button>`).join('');
+        const okT=main&&elig[tg]&&tg!==tw;
+        const opt=(n,sel)=>KH_RES.map((x,r)=>`<option value="${r}" ${r===sel?'selected':''}>${x}</option>`).join(''), qty=(sel)=>[1,2,3,4].map(q=>`<option value="${q}" ${q===sel?'selected':''}>${q}</option>`).join('');
+        const others=S.seats.map((x,i)=>i).filter(i=>i!==ME), okO=main&&P.res[og]>=oq&&og!==ow;
+        const popH=pop==='bank'?`<div class="box pop"><div class="cth">Đổi với cảng · ngân hàng</div><div class="plb">Đưa (số lá cần có)</div><div class="rrow">${gb}</div><div class="plb">Lấy</div><div class="rrow">${wb}</div><button class="tbtn pri wide" data-a="trade" ${okT?'':'disabled'}>Đổi ${rt[tg]} ${KH_RES[tg]} lấy 1 ${KH_RES[tw]}</button></div>`
+          :pop==='offer'?`<div class="box pop ptr"><div class="cth">Đề nghị đổi với người chơi</div><div class="prow"><span>Đưa</span><select data-s="oq">${qty(oq)}</select><select data-s="og">${opt(0,og)}</select></div><div class="prow"><span>Lấy</span><select data-s="on">${qty(on)}</select><select data-s="ow">${opt(0,ow)}</select></div>
+          <div class="prow"><span>Cho</span><select data-s="ot"><option value="-1" ${ot<0?'selected':''}>Tất cả</option>${others.map(i=>`<option value="${i}" ${ot===i?'selected':''}>${api.esc(S.seats[i].name)}</option>`).join('')}</select></div><button class="tbtn pri wide" data-a="offer" ${okO?'':'disabled'}>Gửi lời mời</button></div>`:'';
+        HV+=`<div class="tbar">${popH}<button class="bt ${anyB?'ring':''} ${pop==='bank'?'on':''}" data-a="pop" data-k="bank" title="Đổi với cảng / ngân hàng"><img src="assets/boat.webp?v=20261128d" alt=""><small>Đổi cảng</small></button><button class="tbtn bo ${pop==='offer'?'on':''}" data-a="pop" data-k="offer">Đề nghị đổi</button></div>`; }
       L+=`<div class="box"><button class="tbtn pri wide" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>${S.phase==='over'&&api.mode()!=='client'?'<button class="tbtn gold wide" data-a="again">Chơi ván mới</button>':''}</div>`; }
     h+=`<div class="xlog">${S.log.slice(0,6).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
     root.querySelector('.hov').innerHTML=HV; root.querySelector('.lft').innerHTML=L; root.querySelector('.s1').innerHTML=S1; root.querySelector('.s2').innerHTML=h;
@@ -117,9 +122,12 @@ const KHUI=(()=>{
     if (d.dev){ if(d.dev==='knight') api.act({t:'knight'}); else if(d.dev==='road') api.act({t:'roaddev'}); else { dsel=d.dev; DP=[]; rr(); } return; }
     if (d.pr!=null){ const r=+d.pr; if(dsel==='mono'){ api.act({t:'mono',r}); dsel=null; } else { DP.push(r); if(DP.length===2){ api.act({t:'plenty',r1:DP[0],r2:DP[1]}); dsel=null; } else api.toast('Đã chọn '+KH_RES[r]+', chọn thêm 1 lá'); } return; }
     const a=d.a; if(a==='dcancel'){ dsel=null; rr(); return; } if(a==='again'){ api.rematch(); return; }
-    if (a==='trade'){ api.act({t:'trade',give:tg,get:tw}); return; }
+    if (a==='pop'){ pop=pop===d.k?null:d.k; rr(); return; }
+    if (a==='bg'){ tg=+d.r; if(tw===tg) tw=(tg+1)%5; rr(); return; }
+    if (a==='bw'){ tw=+d.r; rr(); return; }
+    if (a==='trade'){ api.act({t:'trade',give:tg,get:tw}); pop=null; return; }
     if (a==='offerto'){ const g=[0,0,0,0,0], w=[0,0,0,0,0]; g[og]=oq; w[ow]=on; ot=+d.p; api.act({t:'offer',give:g,get:w,to:ot}); return; }
-    if (a==='offer'){ const g=[0,0,0,0,0], w=[0,0,0,0,0]; g[og]=oq; w[ow]=on; api.act({t:'offer',give:g,get:w,to:ot}); return; }
+    if (a==='offer'){ const g=[0,0,0,0,0], w=[0,0,0,0,0]; g[og]=oq; w[ow]=on; api.act({t:'offer',give:g,get:w,to:ot}); pop=null; return; }
     if (a==='yes'||a==='no'){ api.act({t:'answer',ok:a==='yes'}); return; }
     if (a) api.act({t:a}); }
   return { render:(S,ME,api)=>{ window.__S=S; render(S,ME,api); }, tickView };
