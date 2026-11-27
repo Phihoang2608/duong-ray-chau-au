@@ -2,7 +2,8 @@
 const KHUI=(()=>{
   const PC=['#e11d48','#2563eb','#16a34a','#f8fafc'];
   const A=KHART, R=A.R;
-  let prevRob=-1, f1=v=>Math.round(v*10)/10, lastVp={}, lastArgs=null, root=null, prevAw={}, pop=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='';
+  let prevRob=-1, f1=v=>Math.round(v*10)/10, lastVp={}, lastArgs=null, root=null, prevAw={}, pop=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='', sayTxt='', sayUntil=0, sayTm=null, hotH='';
+  function say(m){ sayTxt=m; sayUntil=Date.now()+5200; setTimeout(()=>{ if(lastArgs) render(...lastArgs); },0); clearTimeout(sayTm); sayTm=setTimeout(()=>{ if(lastArgs) render(...lastArgs); },5300); }
   const $=s=>document.querySelector(s);
   const VB={minX:-372,minY:-348,w:744,h:696};
   const X=v=>v*R;
@@ -55,12 +56,12 @@ const KHUI=(()=>{
     el.animate([{transform:'translate(0,0) scale(.3) rotate(-20deg)',opacity:0},{transform:'translate(0,-30px) scale(1.15) rotate(0)',opacity:1,offset:.25},{transform:`translate(${x1-x0}px,${y1-y0}px) scale(.55) rotate(10deg)`,opacity:.3}],{duration:1100,delay:delay||0,easing:'cubic-bezier(.4,.1,.3,1)',fill:'both'}).onfinish=()=>el.remove(); }
   let root0chat=null, root0=null;
   function resRow(c){ return c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="22" height="20">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join(''); }
-  function offerBox(S,ME,api){ const o=S.offer; if(!o) return ''; const nm=api.esc(S.seats[o.from].name);
+  function offerBox(S,ME,api){ hotH=''; const o=S.offer; if(!o) return ''; const nm=api.esc(S.seats[o.from].name);
     if (ME===o.from) return `<div class="box ofr"><div class="cth">Yêu cầu của bạn</div><div class="orow"><small>Bạn đưa</small>${resRow(o.give)}</div><div class="orow"><small>Bạn nhận</small>${resRow(o.get)}</div><div class="chint">${o.to>=0?'Chờ '+api.esc(S.seats[o.to].name)+' trả lời…':'Chờ mọi người trả lời…'}</div><button class="tbtn wide" data-a="cancel">Huỷ yêu cầu</button></div>`;
     const mine=ME>=0&&(o.to<0||o.to===ME)&&!o.no.includes(ME);
     if (!mine) return `<div class="box ofr"><div class="cth">${nm} đang yêu cầu đổi</div><div class="orow"><small>Đưa</small>${resRow(o.give)}</div><div class="orow"><small>Lấy</small>${resRow(o.get)}</div></div>`;
     const P=S.P[ME], can=o.get.every((x,i)=>P.res[i]>=x);
-    return `<div class="box ofr hot"><div class="cth">${nm} muốn đổi với bạn</div><div class="orow"><small>Bạn nhận</small>${resRow(o.give)}</div><div class="orow"><small>Bạn đưa</small>${resRow(o.get)}</div>${can?'':'<div class="chint">Bạn không đủ lá để đổi</div>'}<div class="obt"><button class="tbtn pri" data-a="yes" ${can?'':'disabled'}>Đồng ý</button><button class="tbtn" data-a="no">Từ chối</button></div></div>`; }
+    hotH=`<div class="box ofr hot"><div class="cth">${nm} muốn đổi với bạn</div><div class="orow"><small>Bạn nhận</small>${resRow(o.give)}</div><div class="orow"><small>Bạn đưa</small>${resRow(o.get)}</div>${can?'':'<div class="chint">Bạn không đủ lá để đổi</div>'}<div class="obt"><button class="tbtn pri" data-a="yes" ${can?'':'disabled'}>Đồng ý</button><button class="tbtn" data-a="no">Từ chối</button></div></div>`; return ''; }
 
   /* Tự co bố cục ngang cho vừa trọn màn hình: thiết kế ở chiều cao ảo 380px rồi phóng/thu theo màn hình thật */
   function fit(){ if(!root) return; const el=root;
@@ -75,7 +76,7 @@ const KHUI=(()=>{
   document.addEventListener('fullscreenchange',()=>setTimeout(fit,100)); document.addEventListener('webkitfullscreenchange',()=>setTimeout(fit,100));
   function setH(el,h){ if(el.__h===h) return; el.__h=h; el.innerHTML=h; }
   function render(S,ME,api){
-    if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div><button class="kfx" type="button" title="Đổi chế độ hiệu ứng"></button><button class="kfs" type="button" title="Toàn màn hình">⛶ Toàn màn hình</button><div class="hov"></div></div><div class="side"><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
+    if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div><button class="kfx" type="button" title="Đổi chế độ hiệu ứng"></button><button class="kfs" type="button" title="Toàn màn hình">⛶ Toàn màn hình</button><div class="hov"></div></div><div class="side"><div class="ofn"></div><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
       { const ch=document.getElementById('tb-chat'); if(ch){ root0chat=ch; root0=document.querySelector('#kh .chs'); root0.appendChild(ch); ch.classList.add('show'); } }
       root=$('#kh'); { const fx=root.querySelector('.kfx'); const lab=()=>{ fx.textContent=window.KH_LITE?'🌙 Nhẹ':'✨ Đẹp'; }; lab(); fx.addEventListener('click',e=>{ e.stopPropagation(); const m=KH_FX.toggle(); lab(); boardSig=''; if(lastArgs) render(...lastArgs); if(lastArgs) lastArgs[2].toast(m==='lite'?'Chế độ nhẹ: ít hiệu ứng, mượt trên máy yếu':'Chế độ đẹp: đầy đủ hiệu ứng'); }); } { const fs=root.querySelector('.kfs'); const de=document.documentElement;
         const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
@@ -100,8 +101,8 @@ const KHUI=(()=>{
     else if (S.phase==='setup') st=my?(S.step==='town'?'Chọn chỗ đặt <b>nhà</b> (chấm sáng)':'Chọn cạnh đặt <b>đường</b> nối với nhà vừa đặt'):'Chờ '+api.esc(S.seats[S.turn].name)+' xếp nhà';
     else if (S.step==='robber') st=my?(robH!=null?'Chọn người để lấy 1 lá':'Bấm vào ô đất để dời <b>kẻ cướp</b>'):api.esc(S.seats[S.turn].name)+' đang dời kẻ cướp';
     else if (S.step==='roll') st=my?'Đến lượt bạn: <b>đổ xúc xắc</b>':'Chờ '+api.esc(S.seats[S.turn].name)+' đổ xúc xắc';
-    else st=my?(S.free?`Xây ${S.free} đường miễn phí`:mode==='road'?'Chọn cạnh để xây đường':mode==='town'?'Chọn chỗ xây nhà':mode==='city'?'Chọn nhà để nâng thành phố':'Xây dựng, đổi hàng hoặc kết thúc lượt'):api.esc(S.seats[S.turn].name)+' đang xây dựng';
-    setH(root.querySelector('.kst'),st);
+    else st=my?(S.free?`Xây ${S.free} đường miễn phí`:mode==='road'?'Chọn cạnh để xây đường':mode==='town'?'Chọn chỗ xây nhà':mode==='city'?'Chọn nhà để nâng thành phố':''):api.esc(S.seats[S.turn].name)+' đang xây dựng';
+    const cmdTxt=(Date.now()<sayUntil&&sayTxt)?sayTxt:st; setH(root.querySelector('.kst'),cmdTxt);
     let h=`<div class="dice ${isNew&&ev.k==='roll'?'rolling':''}">${S.dice?A.die(S.dice[0])+A.die(S.dice[1],'#fdecc8')+`<b>${S.dice[0]+S.dice[1]}</b>`:'<span>Chưa đổ</span>'}<button class="tbtn pri" data-a="roll" ${my&&S.phase==='play'&&S.step==='roll'?'':'disabled'}>Đổ xúc xắc</button></div>`;
     if (robH!=null){ const vs=KH.victims(S,robH,ME); h+=`<div class="box">Lấy 1 lá của: ${vs.map(v=>`<button class="tbtn" data-vic="${v}">${api.esc(S.seats[v].name)}</button>`).join(' ')}</div>`; }
     const h2=h; let L=h.replace('<div class="dice ','<div class="dup dice ').replace('<div class="box">Lấy','<div class="dup box">Lấy'), HV=`<div class="dtop">${h2}</div>`, dvH=''; const L0=L.length; h='';
@@ -127,7 +128,7 @@ const KHUI=(()=>{
       const canDev=my&&S.phase==='play'&&!S.devPlayed&&(S.step==='main'||S.step==='roll');
       const devs=Object.keys(KH_DEVN).filter(k=>dv[k]||nv[k]);
       const totD=devs.reduce((s,k)=>s+(dv[k]||0)+(nv[k]||0),0), fD=totD<=3?1:totD<=6?.86:totD<=10?.74:.6;
-      dvH=`<div class="box dv"><div class="cth">Thẻ phát triển của bạn${totD?` <span class="dtot">${totD}</span>`:''}</div>${devs.length?'':'<div class="dve">Chưa có thẻ nào. Bấm mục Thẻ phát triển ở bảng chi phí để mua.</div>'}<div class="dvl2" style="--f:${fD}">${devs.map(k=>{ const nd=dv[k]||0, nn=nv[k]||0, n=nd+nn;
+      dvH=`<div class="box dv"><div class="cth">Thẻ phát triển của bạn${totD?` <span class="dtot">${totD}</span>`:''}</div>${devs.length?'':'<div class="dve">Chưa có</div>'}<div class="dvl2" style="--f:${fD}">${devs.map(k=>{ const nd=dv[k]||0, nn=nv[k]||0, n=nd+nn;
         const cs=[...Array(n)].map((_,q)=>`<div class="dc ${q>=nd?'new':''}" style="--i:${q}">${A.devCard(k)}</div>`).join('');
         const bt=k==='vp'?'<small>+1 điểm ẩn mỗi thẻ</small>':nd?`<button class="tbtn sm" data-dev="${k}" ${canDev&&(k==='knight'||S.step==='main')?'':'disabled'}>Dùng${nn?` (${nd})`:''}</button>${nn?`<small>${nn} mới mua</small>`:''}`:'<small>mới mua</small>';
         return `<div class="dg" style="--n:${n}"><div class="dstk">${cs}<b class="dn">×${n}</b></div>${bt}</div>`; }).join('')}</div>
@@ -153,22 +154,24 @@ const KHUI=(()=>{
       if(S.phase==='over'&&api.mode()!=='client') L+=`<div class="box"><button class="tbtn gold wide" data-a="again">Chơi ván mới</button></div>`; }
     h+=`<div class="xlog">${S.log.slice(0,6).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
     const preM={lr:rectOf('.medal.lr'),la:rectOf('.medal.la')}; const awardEv=isNew&&ev.k==='award';
-    if(dvH) L=L.slice(0,L0)+dvH+L.slice(L0);
+    L=L.slice(0,L0)+`<div class="cmdb ${cmdTxt?'on':''}"><span>${cmdTxt||''}</span></div>`+(dvH||'')+L.slice(L0);
     setH(root.querySelector('.hov'),HV); setH(root.querySelector('.lft'),L); setH(root.querySelector('.s1'),S1); setH(root.querySelector('.s2'),h);
     if(hideMed&&Date.now()<hideMed.until){ const m=root.querySelector(`.pl[data-p="${hideMed.seat}"] .medal.${hideMed.c}`); if(m) m.style.visibility='hidden'; }
     { const keys={lr:S.longest,la:S.largest}; [['lr','road'],['la','army']].forEach(([c,k])=>{ if(!awardEv&&prevAw[c]!==undefined&&prevAw[c]!==keys[c]&&keys[c]!==undefined){ const to=rectOf('.medal.'+c); const el=root.querySelector('.medal.'+c); if(el&&to&&preM[c]){ el.style.visibility='hidden'; fly(preM[c],to,A.medal(k),48,48,0); setTimeout(()=>{ el.style.visibility=''; el.classList.add('land'); },1150); } else if(el) el.classList.add('land'); } prevAw[c]=keys[c]; }); }
+    const ofH=offerBox(S,ME,api);
     if(root0chat){ root0chat.classList.add('show'); let cf=root0chat.querySelector('.cfeed'); if(!cf){ cf=document.createElement('div'); cf.className='cfeed'; const hd=root0chat.querySelector('.hd'); if(hd) hd.after(cf); else root0chat.prepend(cf); }
       const tl=S.log.slice(0,12).filter(l=>/muốn đổi|đổi với|lời mời|yêu cầu đổi|Không ai đồng ý|đủ lá để đổi/.test(l)).slice(0,S.offer?2:3).reverse();
-      setH(cf,tl.map(l=>`<div class="tl">${api.esc(l)}</div>`).join('')+offerBox(S,ME,api)); }
+      setH(cf,tl.map(l=>`<div class="tl">${api.esc(l)}</div>`).join('')+(S.offer&&!hotH?ofH:'')); }
+    setH(root.querySelector('.ofn'),hotH?`<div class="ofnh">${hotH}</div>`:'');
     if(isNew){ lastEv=ev.n;
-      if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7) api.toast('Ra 7! Kẻ cướp xuất hiện');
+      if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7) say('Ra 7! <b>Kẻ cướp</b> xuất hiện');
         if(ev.got){ prodFX(S,sum); if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),3900); } }
       else if(ev.k==='award'){ congrats(S,ev,ME); }
-      else if(ev.k==='offer'){ if(ev.seat!==ME&&S.offer&&ME>=0&&(S.offer.to<0||S.offer.to===ME)) { SFX.ding&&SFX.ding(); api.toast(api.esc(S.seats[ev.seat].name)+' muốn đổi tài nguyên — xem ở khung Trò chuyện'); } }
+      else if(ev.k==='offer'){ if(ev.seat!==ME&&S.offer&&ME>=0&&(S.offer.to<0||S.offer.to===ME)) { SFX.ding&&SFX.ding(); say(api.esc(S.seats[ev.seat].name)+' muốn đổi tài nguyên — xem ở khung Trò chuyện'); } }
       else if(ev.k==='town'||ev.k==='city'||ev.k==='road'){ SFX.clack(2); if(ev.seat===ME&&ev.k!=='road') SFX.reward(); buildTag(S,ev); }
-      else if(ev.k==='steal'){ SFX.flip(); if(ev.r>=0){ popNum(rectOf(`.pl[data-p="${ev.vic}"]`),ev.r,'-1',true); popNum(rectOf(`.pl[data-p="${ev.seat}"]`),ev.r,'+1',false,500); } fly(pre.vic,rectOf(`.pl[data-p="${ev.seat}"]`),`<div class="khback"></div>`,42,59,350); if(ev.vic===ME) api.toast(api.esc(S.seats[ev.seat].name)+' lấy của bạn 1 '+KH_RES[ev.r]); else if(ev.seat===ME) api.toast('Bạn lấy được 1 '+KH_RES[ev.r],true); }
-      else if(ev.k==='buydev'){ SFX.flip(); if(ev.seat===ME){ api.toast('Bạn nhận thẻ: '+KH_DEVN[ev.d],true); fly(rectOf('[data-a="buydev"]'),rectOf('.dv')||rectOf('.hand'),A.devCard(ev.d),56,78,0); } }
-      else if(ev.k==='award'){ SFX.ding(); api.toast(api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành Đường dài nhất (+2)':' giành Đạo quân mạnh nhất (+2)'),ev.seat===ME); }
+      else if(ev.k==='steal'){ SFX.flip(); if(ev.r>=0){ popNum(rectOf(`.pl[data-p="${ev.vic}"]`),ev.r,'-1',true); popNum(rectOf(`.pl[data-p="${ev.seat}"]`),ev.r,'+1',false,500); } fly(pre.vic,rectOf(`.pl[data-p="${ev.seat}"]`),`<div class="khback"></div>`,42,59,350); if(ev.vic===ME) say(api.esc(S.seats[ev.seat].name)+' lấy của bạn 1 '+KH_RES[ev.r]); else if(ev.seat===ME) say('Bạn lấy được 1 '+KH_RES[ev.r],true); }
+      else if(ev.k==='buydev'){ SFX.flip(); if(ev.seat===ME){ say('Bạn nhận thẻ: '+KH_DEVN[ev.d],true); fly(rectOf('[data-a="buydev"]'),rectOf('.dv')||rectOf('.hand'),A.devCard(ev.d),56,78,0); } }
+      else if(ev.k==='award'){ SFX.ding(); say(api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành Đường dài nhất (+2)':' giành Đạo quân mạnh nhất (+2)'),ev.seat===ME); }
       else if(ev.k==='over'){ SFX.ding(); if(S.winner===ME){ SFX.reward(); FX.confetti(innerWidth/2,innerHeight*.4,140); } }
       else if(ev.k==='dev'||ev.k==='trade') SFX.pop();
       if(my && (S.step==='roll'||S.phase==='setup'&&S.step==='town') && ev.k!=='roll' && SFX.hiss) SFX.hiss(); }
@@ -182,14 +185,14 @@ const KHUI=(()=>{
     if (d.e!=null){ api.act({t:'road',e:+d.e}); if(!S.free) mode=null; return; }
     if (d.c!=null){ api.act({t:'city',v:+d.c}); mode=null; return; }
     if (d.vic!=null){ api.act({t:'robber',h:robH,v:+d.vic}); robH=null; return; }
-    if (d.h!=null){ if(!(S.turn===ME&&S.step==='robber')) return; const h=+d.h; if(h===S.robber){ api.toast('Hãy chọn ô khác ô hiện tại'); return; }
+    if (d.h!=null){ if(!(S.turn===ME&&S.step==='robber')) return; const h=+d.h; if(h===S.robber){ say('Hãy chọn ô khác ô hiện tại'); return; }
       const vs=KH.victims(S,h,ME); if(vs.length>1){ robH=h; rr(); } else api.act({t:'robber',h,v:vs[0]}); return; }
     SFX.pop();
     if (d.m){ mode = mode===d.m?null:d.m; rr(); return; }
     if (d.dev){ if(d.dev==='knight') api.act({t:'knight'}); else if(d.dev==='road') api.act({t:'roaddev'}); else { dsel=d.dev; DP=[]; rr(); } return; }
-    if (d.pr!=null){ const r=+d.pr; if(dsel==='mono'){ api.act({t:'mono',r}); dsel=null; } else { DP.push(r); if(DP.length===2){ api.act({t:'plenty',r1:DP[0],r2:DP[1]}); dsel=null; } else api.toast('Đã chọn '+KH_RES[r]+', chọn thêm 1 lá'); } return; }
+    if (d.pr!=null){ const r=+d.pr; if(dsel==='mono'){ api.act({t:'mono',r}); dsel=null; } else { DP.push(r); if(DP.length===2){ api.act({t:'plenty',r1:DP[0],r2:DP[1]}); dsel=null; } else say('Đã chọn '+KH_RES[r]+', chọn thêm 1 lá'); } return; }
     const a=d.a; if(a==='dcancel'){ dsel=null; rr(); return; } if(a==='again'){ api.rematch(); return; }
-    if (a==='res'){ const r=+d.r, Pm=ME>=0?S.P[ME]:null; if(!Pm||Pm.res[r]<1){ api.toast('Bạn chưa có '+KH_RES[r]+' để đổi'); return; } og=r; if(ow===og) ow=(og+1)%5; oq=Math.min(oq,Pm.res[r])||1; pop='offer'; rr(); return; }
+    if (a==='res'){ const r=+d.r, Pm=ME>=0?S.P[ME]:null; if(!Pm||Pm.res[r]<1){ say('Bạn chưa có '+KH_RES[r]+' để đổi'); return; } og=r; if(ow===og) ow=(og+1)%5; oq=Math.min(oq,Pm.res[r])||1; pop='offer'; rr(); return; }
     if (a==='pop'){ pop=pop===d.k?null:d.k; rr(); return; }
     if (a==='bg'){ tg=+d.r; if(tw===tg) tw=(tg+1)%5; rr(); return; }
     if (a==='bw'){ tw=+d.r; rr(); return; }

@@ -533,7 +533,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .lft>.awp .atx{display:flex;flex-direction:column;align-items:center;min-width:0;font-size:9px}#kh .lft>.awp .atx b{font-size:9.5px;line-height:1.1}#kh .lft>.awp .atx small{display:none}
  #kh .lft>.awp .hold{font-size:9px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  #kh .tb-chat .ls{font-size:9px!important}
- #kh .lft .dve{display:none!important}
+
  #kh .lft>*{flex-shrink:0!important}#kh .lft>.dup.dice{order:-3}#kh .lft>.awp{order:-2}
 }
 
@@ -546,6 +546,43 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .lft>.awp .medal,#kh .lft>.awp .slot{width:28px!important;height:28px!important}
  #kh .lft>.box.dv{padding:2px 4px!important}
 }
+
+@media (orientation:landscape) and (max-height:640px){
+ #kh .lft>.awp{overflow:hidden;min-width:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}#kh .lft>.awp .atx b{font-size:8.5px!important}#kh .lft>.awp .hold{font-size:8.5px!important}#kh .lft>.awp>.arow{min-width:0;overflow:hidden}
+ #kh .lft>.awp .atx b{white-space:normal!important;overflow-wrap:anywhere;max-width:100%;overflow:hidden}
+ #kh .lft>.awp .slot,#kh .lft>.awp .medal{overflow:hidden;flex:none}
+}
+
+/* ===== thanh lệnh (thông báo cố định, kiểu gỗ) ===== */
+.cmdb{display:flex;align-items:center;justify-content:center;text-align:center;box-sizing:border-box;height:44px;padding:3px 10px;border-radius:12px;border:3px solid #2e1809;background:linear-gradient(180deg,#8a5a2c,#5e3a18);box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 3px 8px rgba(0,0,0,.35);color:#ffe9b8;font-size:13px;line-height:1.2;overflow:hidden;-webkit-text-stroke:.4px #2a1608;text-shadow:0 1px 0 #2a1608}
+.cmdb b{color:#ffd54a}.cmdb.on{background:linear-gradient(180deg,#a8742f,#6e431a)}.cmdb:not(.on){opacity:.75}
+.kst:empty{display:none!important}
+.box.dv .dve{font-size:12px;text-align:center;padding:1px}
+@media (max-width:700px) and (orientation:portrait){#kh .cmdb{display:none}}
+@media (min-width:701px) and (max-width:900px) and (orientation:portrait){#kh .cmdb{display:none}}
+@media (min-width:901px),(orientation:landscape) and (max-height:640px){#kh .kst{display:none!important}}
+@media (orientation:landscape) and (max-height:640px){#kh .cmdb{height:30px;font-size:10.5px;padding:1px 5px;border-width:2px;border-radius:9px}#kh .lft .ctab>.cth{display:none!important}#kh .lft .box.dv .cth{margin:0!important}}
+/* thông báo có người muốn đổi: nằm bên trái khung trò chuyện */
+.ofn:empty{display:none}.side{position:relative}
+.ofnh{position:absolute;right:calc(100% + 8px);top:46px;width:230px;z-index:70;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
+.ofnh .box.ofr{margin:0;animation:ofin .35s cubic-bezier(.2,1.4,.4,1) both;box-shadow:0 0 0 3px #ffd54a,0 0 18px rgba(255,213,74,.7)}
+@keyframes ofin{from{transform:translateX(30px);opacity:0}}
+.ofnh .obt{display:flex;gap:6px}.ofnh .obt .tbtn{flex:1;padding:9px 4px;font-size:15px}
+@media (orientation:landscape) and (max-height:640px){.ofnh{width:200px;top:40px}.ofnh .obt .tbtn{padding:7px 3px;font-size:13px}}
+@media (max-width:900px) and (orientation:portrait){.ofnh{position:fixed;right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:12px;width:min(92vw,340px)}}
+
+@media (orientation:landscape) and (max-height:640px){
+ #kh .lft>.dup.dice{padding:2px 4px!important;gap:2px 4px!important}#kh .lft>.dup.dice .die{width:26px!important;height:26px!important}#kh .lft>.dup.dice b{font-size:18px!important}#kh .lft>.dup.dice .tbtn{padding:3px 4px!important;font-size:12px!important}
+ #kh .lft>.awp .medal,#kh .lft>.awp .slot{width:26px!important;height:26px!important}
+ #kh .lft>.awp .atx b,#kh .lft>.awp .hold{font-size:8px!important;line-height:1.05}
+ #kh .lft>.awp{padding:2px 3px!important;gap:2px!important}
+ #kh .lft{gap:3px!important}
+}
+
+@media (orientation:landscape) and (max-height:640px) and (max-width:760px){#kh .lft>.awp .hold{display:none!important}}
+
+#kh .cmdb{width:100%;flex:0 0 auto}
+@media (orientation:landscape) and (max-height:640px){#kh .lft>.awp .atx,#kh .lft>.awp .arow{width:100%;max-width:100%;box-sizing:border-box}#kh .lft>.awp .hold{width:100%;text-align:center}#kh .lft>.awp .atx b{width:100%;text-align:center}}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
