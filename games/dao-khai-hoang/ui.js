@@ -91,6 +91,7 @@ const KHUI=(()=>{
     if (sig!==boardSig){ boardSig=sig; root.querySelector('#khs').innerHTML=A.board(S,VB); }
     const t=api.now(), my=S.turn===ME&&S.phase!=='over', P=ME>=0?S.P[ME]:null, main=my&&S.phase==='play'&&S.step==='main'&&!S.offer;
     if (!main) mode=null; if (!(my&&S.step==='robber')) robH=null;
+    if (main&&P&&mode){ const C=KH_COST, okm={road:(KH.canPay(P,C.road)||S.free>0)&&P.roads>0, town:KH.canPay(P,C.town)&&P.towns>0, city:KH.canPay(P,C.city)&&P.cities>0}; if(okm[mode]===false) mode=null; }
     if (lastEv===null) lastEv=S.ev?S.ev.n:0; const ev=S.ev, isNew=ev&&ev.n!==lastEv;
     const pre={}; if(isNew&&ev.k==='steal') pre.vic=rectOf(`.pl[data-p="${ev.vic}"]`);
     setH(root.querySelector('#khd'),dynSVG(S,ME,isNew?ev:null));
@@ -113,9 +114,10 @@ const KHUI=(()=>{
     const S1=h; h='';
     { const V='?v=2026112823y';
       const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="21" height="19">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
-      const row=(ic,t,pt,c,att,dis,on)=>`<button class="ctr cbtn ${on?'on':''}" ${att} ${dis?'disabled':''}><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></button>`;
+      const cn=(c,lim)=>{ if(!P) return 0; return Math.min(lim,...c.map((x,r)=>x?Math.floor(P.res[r]/x):1e9)); };
+      const row=(ic,t,pt,c,att,dis,on,n)=>`<button class="ctr cbtn ${on?'on':''} ${dis?'':'can'}" ${att} ${dis?'disabled':''}><span class="cic">${ic}${!dis&&n>1?`<i class="cn">x${n}</i>`:''}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></button>`;
       const okR=main&&P&&(KH.canPay(P,KH_COST.road)||S.free)&&P.roads>0, okT=main&&P&&KH.canPay(P,KH_COST.town)&&P.towns>0, okC=main&&P&&KH.canPay(P,KH_COST.city)&&P.cities>0, okD=main&&P&&KH.canPay(P,KH_COST.dev)&&S.dev.length>0;
-      L+=`<div class="box ctab"><div class="cth">Bảng chi phí xây dựng</div>${row(`<img src="assets/road-neutral.webp${V}" class="ci rd">`,'Đường',S.free?`Còn ${S.free} đường miễn phí`:'',KH_COST.road,'data-m="road"',!okR,mode==='road')}${row(`<img src="assets/house-neutral.webp${V}" class="ci">`,'Nhà','+1 điểm',KH_COST.town,'data-m="town"',!okT,mode==='town')}${row(`<img src="assets/city-neutral.webp${V}" class="ci">`,'Thành phố','+2 điểm · nâng từ nhà',KH_COST.city,'data-m="city"',!okC,mode==='city')}${row(`<span class="ci dcs">${A.devBack()}</span>`,'Thẻ phát triển','',KH_COST.dev,'data-a="buydev"',!okD,false)}${my&&S.phase==='play'?'<div class="chint">Bấm vào mục để xây</div>':''}</div>`; }
+      L+=`<div class="box ctab"><div class="cth">Bảng chi phí xây dựng</div>${row(`<img src="assets/road-neutral.webp${V}" class="ci rd">`,'Đường',S.free?`Còn ${S.free} đường miễn phí`:'',KH_COST.road,'data-m="road"',!okR,mode==='road',S.free>0?S.free:cn(KH_COST.road,P?P.roads:0))}${row(`<img src="assets/house-neutral.webp${V}" class="ci">`,'Nhà','+1 điểm',KH_COST.town,'data-m="town"',!okT,mode==='town',cn(KH_COST.town,P?P.towns:0))}${row(`<img src="assets/city-neutral.webp${V}" class="ci">`,'Thành phố','+2 điểm · nâng từ nhà',KH_COST.city,'data-m="city"',!okC,mode==='city',cn(KH_COST.city,P?P.cities:0))}${row(`<span class="ci dcs">${A.devBack()}</span>`,'Thẻ phát triển','',KH_COST.dev,'data-a="buydev"',!okD,false,cn(KH_COST.dev,S.dev.length))}${my&&S.phase==='play'?'<div class="chint">Bấm vào mục để xây</div>':''}</div>`; }
     if (P){
       HV+=`<div class="box hand">${P.res.map((x,r)=>`<div class="rstack clk ${x?'':'none'}" data-a="res" data-r="${r}" title="${KH_RES[r]}: bấm để đổi với người chơi khác">${[...Array(Math.max(1,Math.min(x,4)))].map((_,k)=>`<div class="rc" style="--k:${k}">${A.resCard(r)}</div>`).join('')}<b>${x}</b></div>`).join('')}</div>`;
       const cost=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="15" height="14">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
