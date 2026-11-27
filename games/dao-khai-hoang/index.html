@@ -451,6 +451,38 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .box.dv .cth{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;min-width:0}
 .pop .rrow{flex-wrap:nowrap;min-width:0}.pop .rbtn{flex:1 1 0;min-width:0;box-sizing:border-box;padding-left:0;padding-right:0}.pop .rbtn svg{max-width:100%;height:auto}.pop select,.pop .prow{min-width:0;max-width:100%}
 @media (orientation:landscape) and (max-height:640px){.box.dv .cth{font-size:11px}.box.dv .dtot{font-size:10px;line-height:14px;min-width:16px;padding:0 4px}}
+
+.dtop{display:none}
+@media (max-width:700px) and (orientation:portrait){
+ #kh .kbwrap{display:grid!important;grid-template-columns:minmax(0,1fr);gap:6px;align-items:start}
+ #kh .kbwrap>.frame{grid-area:1/1;height:auto;min-width:0}
+ #kh #khs{aspect-ratio:.70!important;height:auto!important}
+ #kh .hov{display:contents!important}
+ #kh .hov .dtop{display:flex!important;grid-area:1/1;align-self:start;justify-self:start;z-index:5;margin:10px 0 0 10px;pointer-events:none;max-width:calc(100% - 118px)}
+ #kh .hov .dtop>*{pointer-events:auto}
+ #kh .hov .dtop .dice{display:flex!important;flex-wrap:nowrap;align-items:center;gap:5px;padding:4px 8px;margin:0;background:rgba(30,18,8,.82);border:1.5px solid #c9a24e;border-radius:16px;box-shadow:none}
+ #kh .hov .dtop .dice::before{display:none}
+ #kh .hov .dtop .die{width:36px;height:36px}
+ #kh .hov .dtop .dice b{font-size:20px;min-width:24px}
+ #kh .hov .dtop .dice span{font-size:13px;white-space:nowrap}
+ #kh .hov .dtop .dice .tbtn{font-size:13px;padding:6px 10px;white-space:nowrap;margin:0}
+ #kh .hov .dtop .box{margin:0;padding:4px 8px;font-size:12px;background:rgba(30,18,8,.88);border-radius:12px}
+ #kh .lft>.dup{display:none!important}
+ #kh .hov .tbar{grid-area:1/1;align-self:end;justify-self:center;position:static!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:5px!important;margin:0 0 6px!important;width:auto!important;z-index:5;pointer-events:none}
+ #kh .hov .tbar>*{pointer-events:auto}
+ #kh .hov .tbar .bt{width:54px;height:54px}
+ #kh .hov .tbar .bt img{width:30px;height:36px}#kh .hov .tbar .bt small{font-size:9.5px;-webkit-text-stroke:2px #123e5e}
+ #kh .hov .tbar .kend,#kh .hov .tbar .kundo{flex:0 0 auto!important;width:auto!important;font-size:12px;padding:8px 8px;white-space:nowrap}
+ #kh .hov .tbar{position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important}
+ #kh .hov .tbar .pop{position:absolute!important;left:50%!important;right:auto!important;top:auto!important;bottom:calc(100% + 8px)!important;transform:translateX(-50%);width:min(94vw,340px)!important;z-index:9;order:0;pointer-events:auto}
+ #kh .hov .hand.box{grid-area:2/1}
+ #kh .kst{position:relative!important;grid-area:1/1;align-self:end;justify-self:center;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;margin:0 0 66px!important;transform:none!important;max-width:92%!important;white-space:normal!important;text-align:center!important;font-size:11.5px!important;z-index:5;width:max-content}
+}
+
+@media (min-width:701px) and (max-width:900px) and (orientation:portrait){
+ #kh .kfx{left:auto!important;right:22px!important;top:22px!important;bottom:auto!important}
+ #kh .kfs{left:auto!important;right:22px!important;top:56px!important;bottom:auto!important}
+}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
