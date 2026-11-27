@@ -225,7 +225,7 @@ const KHUI=(()=>{
     if(!dmod){ dmod=document.createElement('div'); dmod.id='kdsc'; document.body.appendChild(dmod); dmod.addEventListener('click',onClick); }
     const sel=dsc.reduce((a,b)=>a+b,0), V='?v=2026112823y';
     const cols=KH_RES.map((nm,r)=>{ const has=P.res[r], n=dsc[r]; return `<div class="xdc ${n?'pick':''} ${has?'':'none'}"><div class="xdi"><img src="assets/ic-${r}.webp${V}" alt=""><i>${has}</i></div><b class="xdn">${nm}</b>
-      <button type="button" class="xpm" data-a="dplus" data-r="${r}" ${has>n&&sel<need?'':'disabled'} aria-label="Thêm ${nm}">+</button><div class="xdv">${n}</div><button type="button" class="xpm" data-a="dminus" data-r="${r}" ${n?'':'disabled'} aria-label="Bớt ${nm}">−</button></div>`; }).join('');
+      <div class="xstep"><button type="button" class="xpm" data-a="dplus" data-r="${r}" ${has>n&&sel<need?'':'disabled'} aria-label="Thêm ${nm}">+</button><div class="xdv">${n}</div><button type="button" class="xpm" data-a="dminus" data-r="${r}" ${n?'':'disabled'} aria-label="Bớt ${nm}">−</button></div></div>`; }).join('');
     setH(dmod,`<div class="xdp"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="xdt"><img src="assets/robber.webp${V}" alt="">RA SỐ 7!</div>
       <div class="xds">Bạn có <b>${KH.tot(P.res)}</b> lá — phải bỏ <b>${need}</b> lá</div>
       <div class="xdg">${cols}</div>
