@@ -611,6 +611,18 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .lft .box.dv .cth{font-size:0!important}#kh .lft .box.dv .cth::before{content:"Thẻ phát triển";font-size:10px;-webkit-text-stroke:2px #3a210c}
  #kh .lft>.awp{padding:1px 4px!important}#kh .lft>.awp .medal,#kh .lft>.awp .slot{width:30px!important;height:30px!important}
 }
+
+/* nút đóng bảng + chú thích khi chạm giữ */
+.pclose{position:absolute;top:4px;right:4px;z-index:6;width:28px;height:28px;padding:0;border-radius:50%;border:3px solid #2e1809;background:linear-gradient(180deg,#e0483f,#a8231c);color:#fff;font:800 19px/1 "KhFont","Baloo 2",Arial,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,.5)}
+.pop .cth{padding-right:30px;box-sizing:border-box}
+#khtip{position:fixed;display:none;z-index:99999;max-width:min(260px,86vw);padding:8px 12px;border-radius:12px;border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,0 8px 22px rgba(0,0,0,.55);background:linear-gradient(180deg,#8a5a2c,#5e3a18);color:#fff;font:700 13px/1.3 "KhFont","Baloo 2",Arial,sans-serif;-webkit-text-stroke:.3px #2a1608;text-shadow:0 1px 0 #2a1608;pointer-events:none}
+[data-tip]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+/* bỏ chấm đinh kim loại trên điện thoại */
+@media (max-width:900px),(orientation:landscape) and (max-height:640px){
+ #kh .box,#kh .dice,#kh .pl,#kh .tb-chat{background-image:var(--grain),repeating-linear-gradient(180deg,transparent 0 58px,rgba(30,14,2,.55) 58px 60px,rgba(255,215,150,.16) 60px 61px),linear-gradient(165deg,#a8753c 0%,#7d4f24 38%,#946032 62%,#6a4019 100%)!important}
+ #kh .hov .hand.box{background-image:repeating-linear-gradient(180deg,transparent 0 40px,rgba(30,14,2,.22) 40px 41px),linear-gradient(165deg,#b07f45,#8a5a2b 48%,#6e4420)!important}
+ .kcb{background-image:repeating-linear-gradient(180deg,transparent 0 56px,rgba(30,14,2,.3) 56px 58px,rgba(255,215,150,.12) 58px 59px),linear-gradient(165deg,#b98249,#8a5a2b 48%,#6e4420)!important}
+}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
