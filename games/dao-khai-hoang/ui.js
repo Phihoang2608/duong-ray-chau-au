@@ -30,6 +30,7 @@ const KHUI=(()=>{
     ['pointerup','pointercancel'].forEach(n=>document.addEventListener(n,e=>{ if(e.pointerType!=='mouse') hide(); }));
     document.addEventListener('scroll',hide,true); window.addEventListener('blur',hide);
     document.addEventListener('click',e=>{ if(pop&&!(e.target.closest&&e.target.closest('.pop,[data-k],[data-a="res"],[data-a="pop"]'))){ pop=null; if(lastArgs) render(...lastArgs); } },true); }
+  if(!window.__kbnTap){ window.__kbnTap=1; document.addEventListener('pointerdown',()=>{ document.querySelectorAll('.kbn,.kcong').forEach(e=>e.remove()); },true); }
   function banner(h,cls,ms){ document.querySelectorAll('.kbn').forEach(e=>e.remove()); const b=document.createElement('div'); b.className='kbn '+cls; b.innerHTML=h; document.body.appendChild(b); setTimeout(()=>b.remove(),ms||1300); }
   function say(m){ sayTxt=m; sayUntil=Date.now()+5200; setTimeout(()=>{ if(lastArgs) render(...lastArgs); },0); clearTimeout(sayTm); sayTm=setTimeout(()=>{ if(lastArgs) render(...lastArgs); },5300); }
   const $=s=>document.querySelector(s);
@@ -199,7 +200,7 @@ const KHUI=(()=>{
     if(isNew){ lastEv=ev.n;
       if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7){ banner('<img src="assets/robber.webp?v=2026112823y" alt=""><span>RA SỐ 7!</span>','seven',1750); const ks=ev.disc?Object.keys(ev.disc):[]; say(ks.length?'Ra 7! '+ks.map(i=>'<b>'+api.esc(S.seats[i].name)+'</b>').join(', ')+' có hơn 7 lá, phải bỏ một nửa':'Ra 7! <b>Kẻ cướp</b> xuất hiện'); if(ev.disc&&ev.disc[ME]!=null) SFX.ding&&SFX.ding(); }
         if(ev.got){ prodFX(S,sum); if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),3900); } }
-      else if(ev.k==='award'){ banner('<span>'+api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành ĐƯỜNG DÀI NHẤT!':' giành QUÂN MẠNH NHẤT!')+'</span>','award',2050); congrats(S,ev,ME); }
+      else if(ev.k==='award'){ banner('<span>'+api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành ĐƯỜNG DÀI NHẤT!':' giành QUÂN MẠNH NHẤT!')+'</span>','award',1450); setTimeout(()=>congrats(S,ev,ME),1250); }
       else if(ev.k==='offer'){ if(ev.seat!==ME&&S.offer&&ME>=0&&(S.offer.to<0||S.offer.to===ME)) { SFX.ding&&SFX.ding(); say(api.esc(S.seats[ev.seat].name)+' muốn đổi tài nguyên — xem ở khung Trò chuyện'); } }
       else if(ev.k==='town'||ev.k==='city'||ev.k==='road'){ SFX.clack(2); if(ev.seat===ME&&ev.k!=='road') SFX.reward(); buildTag(S,ev); }
       else if(ev.k==='discard'){ SFX.pop&&SFX.pop(); ev.res.forEach((x,r)=>{ if(x) popNum(rectOf(`.pl[data-p="${ev.seat}"]`),r,'-'+x,true,r*180); }); if(ev.seat!==ME) say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> đã bỏ '+ev.n+' lá'); }
