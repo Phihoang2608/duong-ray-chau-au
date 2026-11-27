@@ -900,6 +900,38 @@ body.landphone #tkPick .tpicks{gap:3px!important}
 body.landphone #tkPick .tpk{font-size:9px;padding:0 4px}
 body.landphone #tkPick .tpc{width:9px;height:9px;border-width:1.5px}
 body.landphone #tkPick .mbtns{margin-top:3px}body.landphone #tkPick .mbtns button{font-size:11px;padding:3px 8px}
+
+/* đoàn tàu gọn: ~1/2 chiều cao */
+#mapWrap{--hbh:62px}
+#handBar{padding:2px 8px!important;margin-top:4px!important;border-width:1.5px!important;border-radius:10px!important}
+#handBar .hbtitle{font-size:11px!important;padding-right:6px!important}
+.hcar .wimg{height:32px!important}
+.hcar .wbox .wsym{width:11px!important;height:11px!important}
+.hcar .hn{font-size:13px!important;margin-top:0!important}
+.hcar{margin-left:-3px}
+.htrain{overflow-x:visible!important;flex-wrap:nowrap}
+body.landphone #mapWrap{--hbh:36px}
+body.landphone #handBar{padding:1px 5px!important;margin-top:2px!important}
+body.landphone #handBar .hbtitle{font-size:8.5px!important;padding-right:4px!important}
+body.landphone .hcar .wimg{height:18px!important}
+body.landphone .hcar .wbox .wsym{width:7px!important;height:7px!important}
+body.landphone .hcar .hn{font-size:9px!important}
+/* khu lấy bài gọn */
+.mkpanel{padding:6px 8px!important}
+.mkpanel h3{font-size:14px!important;margin-bottom:4px!important}
+.mkbar{gap:5px!important;padding:5px!important}
+.mkbar .deckslot,.mkbar .tkdeck,.mkbar .stslot{font-size:11.5px!important;padding:2px!important;gap:1px!important}
+.mkbar small{font-size:10px!important}
+.mkbar .stico{font-size:16px!important}
+.mkbar .deckart{width:62%!important}.mkbar .tkart{width:62%!important}
+#status{padding:4px 8px!important;margin-top:5px!important;font-size:13px!important}
+#tkPanel{padding:6px 8px!important}
+body.landphone .mkpanel{padding:3px 5px!important}
+body.landphone .mkbar{gap:3px!important;padding:3px!important}
+body.landphone .mkbar .deckslot,body.landphone .mkbar .tkdeck,body.landphone .mkbar .stslot{font-size:8.5px!important;border-width:1px!important}
+body.landphone .mkbar small{font-size:7.5px!important}
+body.landphone .mkbar .stico{font-size:11px!important}
+body.landphone #status{font-size:10px!important;padding:2px 6px!important;margin-top:3px!important}
 </style>
 </head>
 <body>
@@ -1860,11 +1892,11 @@ function fitLayout(){
   const land=isLandPhone(); document.body.classList.toggle('landphone', land);
   if (!land && innerWidth<900){ main.style.gridTemplateColumns=''; R.removeProperty('--mh'); return; }
   const H=innerHeight-(UIS._hh||0)-(UIS._sh||0)-(land?8:14);
-  main.style.gridTemplateColumns = document.body.classList.contains('bigmap') ? '' : (land ? 'minmax(0,62fr) minmax(230px,38fr)' : 'minmax(0,2fr) minmax(320px,1fr)');
+  main.style.gridTemplateColumns = document.body.classList.contains('bigmap') ? '' : (land ? 'minmax(0,64fr) minmax(210px,36fr)' : 'minmax(0,5fr) minmax(300px,2fr)');
   R.setProperty('--mh', Math.max(land?220:380,H)+'px');
 }
 /* Vừa khung: 'w' = bản đồ rộng hết khung (mặc định), 'all' = thu nhỏ để thấy trọn bản đồ */
-UIS.fitMode='w';
+UIS.fitMode='all';
 function fitZoom(){
   fitLayout();
   const sc=$('#mapScroll'); if(!sc) return; const w=sc.clientWidth, h=sc.clientHeight; if(!w||!h) return;
@@ -2567,7 +2599,7 @@ function confirmLeave(){ return true; }
 document.addEventListener('DOMContentLoaded', ()=>{
   document.body.insertAdjacentHTML('afterbegin', globalDefsSVG());
   FX.setup(); bind();
-  let z=0, big=false; try{ const sz=+localStorage.getItem('na-zoom3'); if(sz) z=sz; localStorage.removeItem('dr-big'); }catch(e){}
+  let z=0, big=false; try{  localStorage.removeItem('dr-big'); }catch(e){}
   document.body.classList.remove('bigmap');
   fixStickyTop(); if (z) setZoom(z); else { UIS.autoFit=true; requestAnimationFrame(fitZoom); }
   // nền: ván xem thử phía sau menu
