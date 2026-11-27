@@ -118,7 +118,7 @@ const KHUI=(()=>{
       root.addEventListener('click',onClick); tipInit(); zoomInit(); fit(); setTimeout(fit,300); root.addEventListener('change',onChange); }
     lastArgs=[S,ME,api]; const sig=S.hex.map(h=>h.res+'.'+h.num).join()+S.ports.join()+(window.KH_LITE?'L':'F');
     if (sig!==boardSig){ boardSig=sig; root.querySelector('#khs').innerHTML=A.board(S,VB); }
-    if(!window.__khLT) window.__khLT={v:null}; { const nm=S.turn===ME&&S.phase!=='over'&&ME>=0; if(nm&&window.__khLT.v===false&&root){ banner('ĐẾN LƯỢT BẠN!','turn',1150); try{SFX.pop&&SFX.pop();}catch(e){} } window.__khLT.v=nm; }
+    if(!window.__khLT) window.__khLT={v:null}; { const nm=S.turn===ME&&S.phase!=='over'&&ME>=0; if(nm&&window.__khLT.v===false&&root){ banner('ĐẾN LƯỢT BẠN!','turn',1450); try{SFX.pop&&SFX.pop();}catch(e){} } window.__khLT.v=nm; }
     const t=api.now(), my=S.turn===ME&&S.phase!=='over', P=ME>=0?S.P[ME]:null, main=my&&S.phase==='play'&&S.step==='main'&&!S.offer;
     if (S.step!=='discard'||!S.disc||S.disc[ME]==null) dsc=[0,0,0,0,0];
     const dNeed=(S.step==='discard'&&S.disc&&S.disc[ME]!=null)?S.disc[ME]:0, dSel=dsc.reduce((a,b)=>a+b,0);
@@ -197,9 +197,9 @@ const KHUI=(()=>{
     const dscH=dNeed?`<div class="box ofr hot dscp"><div class="cth">Ra 7! Bạn phải bỏ ${dNeed} lá</div><div class="chint">Bạn có ${KH.tot(P.res)} lá, phải bỏ một nửa (làm tròn xuống). Bấm vào tài nguyên có vòng đỏ để chọn lá bỏ.</div><div class="orow"><small>Đã chọn ${dSel}/${dNeed}</small>${dSel?resRow(dsc):'<span class="chint">chưa chọn</span>'}</div><div class="obt"><button class="tbtn" data-a="dclr">Làm lại</button><button class="tbtn" data-a="dauto">Tự chọn</button></div><button class="tbtn pri wide" data-a="ddo" ${dSel===dNeed?'':'disabled'}>Bỏ ${dNeed} lá</button></div>`:'';
     setH(root.querySelector('.ofn'),dscH?`<div class="ofnh dsc">${dscH}</div>`:((hotH||ofH)?`<div class="ofnh">${hotH||ofH}</div>`:''));
     if(isNew){ lastEv=ev.n;
-      if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7){ banner('<img src="assets/robber.webp?v=2026112823y" alt=""><span>RA SỐ 7!</span>','seven',1500); const ks=ev.disc?Object.keys(ev.disc):[]; say(ks.length?'Ra 7! '+ks.map(i=>'<b>'+api.esc(S.seats[i].name)+'</b>').join(', ')+' có hơn 7 lá, phải bỏ một nửa':'Ra 7! <b>Kẻ cướp</b> xuất hiện'); if(ev.disc&&ev.disc[ME]!=null) SFX.ding&&SFX.ding(); }
+      if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7){ banner('<img src="assets/robber.webp?v=2026112823y" alt=""><span>RA SỐ 7!</span>','seven',1750); const ks=ev.disc?Object.keys(ev.disc):[]; say(ks.length?'Ra 7! '+ks.map(i=>'<b>'+api.esc(S.seats[i].name)+'</b>').join(', ')+' có hơn 7 lá, phải bỏ một nửa':'Ra 7! <b>Kẻ cướp</b> xuất hiện'); if(ev.disc&&ev.disc[ME]!=null) SFX.ding&&SFX.ding(); }
         if(ev.got){ prodFX(S,sum); if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),3900); } }
-      else if(ev.k==='award'){ banner('<span>'+api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành ĐƯỜNG DÀI NHẤT!':' giành QUÂN MẠNH NHẤT!')+'</span>','award',1900); congrats(S,ev,ME); }
+      else if(ev.k==='award'){ banner('<span>'+api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành ĐƯỜNG DÀI NHẤT!':' giành QUÂN MẠNH NHẤT!')+'</span>','award',2050); congrats(S,ev,ME); }
       else if(ev.k==='offer'){ if(ev.seat!==ME&&S.offer&&ME>=0&&(S.offer.to<0||S.offer.to===ME)) { SFX.ding&&SFX.ding(); say(api.esc(S.seats[ev.seat].name)+' muốn đổi tài nguyên — xem ở khung Trò chuyện'); } }
       else if(ev.k==='town'||ev.k==='city'||ev.k==='road'){ SFX.clack(2); if(ev.seat===ME&&ev.k!=='road') SFX.reward(); buildTag(S,ev); }
       else if(ev.k==='discard'){ SFX.pop&&SFX.pop(); ev.res.forEach((x,r)=>{ if(x) popNum(rectOf(`.pl[data-p="${ev.seat}"]`),r,'-'+x,true,r*180); }); if(ev.seat!==ME) say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> đã bỏ '+ev.n+' lá'); }
@@ -210,7 +210,7 @@ const KHUI=(()=>{
       else if(ev.k==='buydev'){ SFX.flip(); if(ev.seat===ME){ say('Bạn nhận thẻ: '+KH_DEVN[ev.d],true); fly(rectOf('[data-a="buydev"]'),rectOf('.dv')||rectOf('.hand'),A.devCard(ev.d),56,78,0); } }
       else if(ev.k==='award'){ SFX.ding(); say(api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành Đường dài nhất (+2)':' giành Đạo quân mạnh nhất (+2)'),ev.seat===ME); }
       else if(ev.k==='over'){ SFX.ding(); if(S.winner===ME){ SFX.reward(); FX.confetti(innerWidth/2,innerHeight*.4,140); } }
-      else if(ev.k==='dev'||ev.k==='trade'){ SFX.pop(); if(ev.k==='dev'){ banner('<div class="kdc">'+A.devCard(ev.d)+'<i class="sp s1">✦</i><i class="sp s2">✦</i><i class="sp s3">✧</i><i class="sp s4">✦</i></div>','devc',1900); say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> dùng thẻ '+KH_DEVN[ev.d]); try{SFX.chime&&SFX.chime();}catch(e){} } }
+      else if(ev.k==='dev'||ev.k==='trade'){ SFX.pop(); if(ev.k==='dev'){ banner('<div class="kdc">'+A.devCard(ev.d)+'<i class="sp s1">✦</i><i class="sp s2">✦</i><i class="sp s3">✧</i><i class="sp s4">✦</i></div>','devc',2050); say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> dùng thẻ '+KH_DEVN[ev.d]); try{SFX.chime&&SFX.chime();}catch(e){} } }
       if(my && (S.step==='roll'||S.phase==='setup'&&S.step==='town') && ev.k!=='roll' && SFX.hiss) SFX.hiss(); }
   }
   let lastTk=-1; function tickView(S,ME,api){ const el=root&&root.querySelector('.pl.turn .tmr'); if(!el) return; const l=Math.max(0,60-Math.floor((api.now()-S.turnAt)/1000)); el.textContent=l; const low=l<=10&&l>0; el.classList.toggle('low',low); const pl=el.closest('.pl'); if(pl) pl.classList.toggle('lowt',low); if(low&&l!==lastTk&&S.turn===ME&&S.phase!=='over'){ try{ SFX.tone(l<=3?1500:1100,.09,{type:'square',vol:.16}); }catch(e){} } lastTk=l; }
