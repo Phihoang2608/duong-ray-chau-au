@@ -81,11 +81,12 @@ const KH = (()=>{
     if (!a||S.phase==='over') return false;
     if (a.t==='answer') return answer(S,seat,!!a.ok,t);
     if (seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
-    if (S.offer){ if(a.t==='cancel'){ S.log.unshift(name+' huỷ lời mời đổi.'); S.offer=null; S.turnAt=t; return true; } return false; }
+    if (S.offer){ if(a.t==='cancel'){ S.log.unshift(name+' huỷ yêu cầu đổi.'); S.offer=null; S.turnAt=t; return true; } return false; }
     if (a.t==='offer'){ if(S.phase!=='play'||S.step!=='main') return false; const g=a.give, w=a.get; if(!vecOK(g)||!vecOK(w)) return false;
       for(let i=0;i<5;i++){ if((g[i]&&w[i])||P.res[i]<g[i]) return false; }
       const to=Number.isInteger(a.to)&&a.to>=0&&a.to<S.seats.length&&a.to!==seat?a.to:-1; const o={from:seat,give:g,get:w,to,no:[],at:t};
-      o.no=offerSeats(S,o).filter(i=>!w.every((x,r)=>S.P[i].res[r]>=x)); if(!pending(S.offer?S:{...S,offer:o}).length) return false;
+      o.no=offerSeats(S,o).filter(i=>!w.every((x,r)=>S.P[i].res[r]>=x)); const txt=name+' muốn đổi: đưa '+fmtV(g)+', lấy '+fmtV(w)+(to>=0?' (với '+S.seats[to].name+')':'')+'.';
+      if(!pending({...S,offer:o}).length){ S.log.unshift(txt,'Chưa ai đủ lá để đổi lại với '+name+'.'); ev(S,{k:'offer',seat}); return true; }
       S.offer=o; S.turnAt=t; S.log.unshift(name+' muốn đổi: đưa '+fmtV(g)+', lấy '+fmtV(w)+(to>=0?' (với '+S.seats[to].name+')':'')+'.'); ev(S,{k:'offer',seat}); return true; }
     if (S.phase==='setup'){
       if (S.step==='town' && a.t==='town'){ if(!(a.v>=0&&a.v<V.length)||!townOK(S,seat,a.v)) return false; S.vo[a.v]={p:seat,city:false}; P.towns--; S.setupV=a.v; S.step='road';
@@ -116,7 +117,7 @@ const KH = (()=>{
     if (a.t==='roaddev'){ if(S.devPlayed) return false; const i=P.dev.indexOf('road'); if(i<0) return false; P.dev.splice(i,1); S.devPlayed=true; S.free=Math.min(2,P.roads); S.log.unshift(name+' dùng Làm đường: xây 2 đường miễn phí.'); ev(S,{k:'dev',seat,d:'road'}); return true; }
     if (a.t==='end'){ P.dev.push(...P.newDev); P.newDev=[]; S._off=0; S.free=0; S.devPlayed=false; S.rolled=false; S.dice=S.dice; const n=S.seats.length; S.turn=(seat+1)%n; if(S.turn===0) S.round++; S.step='roll'; S.turnAt=t; ev(S,{k:'end',seat}); return true; }
     return false; }
-  function tick(S,t){ if(S&&S.offer&&t-S.offer.at>30000){ S.log.unshift('Lời mời đổi của '+S.seats[S.offer.from].name+' đã hết hạn.'); S.offer=null; S.turnAt=t; return true; } return false; }
+  function tick(S,t){ if(S&&S.offer&&t-S.offer.at>30000){ S.log.unshift('Yêu cầu đổi của '+S.seats[S.offer.from].name+' đã hết hạn.'); S.offer=null; S.turnAt=t; return true; } return false; }
   function whoActs(S){ if(S.phase==='over') return []; if(S.offer){ const p=pending(S); if(p.length) return p; } return [S.turn]; }
   // ---------- bot ----------
   function vScore(S,v,p){ let s=0; const seen=new Set(); V[v].hex.forEach(hi=>{ const h=S.hex[hi]; if(h.res<5){ s+=PIPS[h.num]*(h.res===4||h.res===3?1.15:1)*(hi===S.robber?.3:1); seen.add(h.res); } }); s+=seen.size*0.8;
