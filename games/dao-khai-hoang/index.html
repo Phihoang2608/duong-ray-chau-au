@@ -654,6 +654,9 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .tmr.low{background:#e11d1d!important;color:#fff;animation:tmrlow .5s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(255,40,40,.8)}
 @keyframes tmrlow{50%{transform:scale(1.25)}}
 .pl.turn.lowt{box-shadow:0 0 0 3px #ff4a4a,0 0 16px 6px rgba(255,50,50,.75)!important;animation:kmine .5s ease-in-out infinite}
+
+@media (min-width:901px){.ofnh:not(.dsc){position:fixed;right:auto;left:40%;top:92px;transform:translateX(-50%);width:250px;z-index:95}}
+@media (orientation:landscape) and (max-height:640px){.ofnh:not(.dsc){position:fixed;right:auto;left:37%;top:52px;transform:translateX(-50%);width:210px;z-index:95}}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:60, botDelay:700, css:CSS,
