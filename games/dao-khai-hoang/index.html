@@ -12,10 +12,10 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261127t"></script>
-<script src="assets/imgs.js?v=20261127t"></script>
-<script src="art.js?v=20261127t"></script>
-<script src="ui.js?v=20261127t"></script>
+<script src="game.js?v=20261127u"></script>
+<script src="assets/imgs.js?v=20261127u"></script>
+<script src="art.js?v=20261127u"></script>
+<script src="ui.js?v=20261127u"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -84,6 +84,9 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 #kh .cth,#kh .dice::before,#kh .chs .hd::before,#kh .ctx b,#kh .pl .ph b{color:#fff;-webkit-text-stroke:3px #3a210c;paint-order:stroke fill;text-shadow:0 2px 0 rgba(30,12,0,.6)}
 #kh .dice b,#kh .pl .vp{-webkit-text-stroke:3px #3a210c;paint-order:stroke fill}
 .side .chs .tb-chat .cm{background:#f6e6c3;color:#3a210c;text-shadow:none;border:2px solid #4a2b10;border-radius:11px;-webkit-text-stroke:0}.side .chs .tb-chat .cm.me{background:#ffd76a}.side .chs .tb-chat .cm b{color:#8a1d2c;margin-right:5px}.side .chs .tb-chat .mute{color:#ead9b4}
+.cbtn{font:inherit;color:inherit;text-align:left;width:100%;background:none;border:none;border-bottom:1px solid rgba(40,18,4,.45);cursor:pointer;border-radius:10px;text-shadow:inherit}.ctr.cbtn:last-of-type{border-bottom:none}.cbtn:hover:not(:disabled){background:rgba(255,220,150,.2)}.cbtn.on{background:rgba(253,224,71,.3);box-shadow:inset 0 0 0 2px #fde047}.cbtn:disabled{opacity:.55;cursor:default}
+.chint{text-align:center;font-size:12px;color:#ffe9b0;margin-top:5px}
+.pcn{display:flex;align-items:center;gap:12px;margin:5px 0 3px;font-size:16px;color:#fff}.pcn span{display:flex;align-items:center;gap:3px;background:rgba(40,18,4,.5);border-radius:9px;padding:1px 8px 1px 4px;-webkit-text-stroke:2px #2e1809;paint-order:stroke fill}.pcn img{width:26px;height:24px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}.pcn img.rd{height:16px}.pcn small{font-size:11.5px;color:#ffe9b0}
 .bl{display:grid;grid-template-columns:1fr 1fr;gap:6px}.bld{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-size:13.5px;background:linear-gradient(180deg,#fff9ec,#f1e2c0);color:#3b2a14;border:1.5px solid #c9a24e}.bld span{display:flex;gap:3px}.bld .cr{display:flex;background:rgba(0,0,0,.06);border-radius:6px;padding:0 2px}
 .bld.on{box-shadow:0 0 0 3px #fde047,0 0 14px rgba(253,224,71,.7);background:#fff6d0}
 .dvl{display:flex;gap:8px;flex-wrap:wrap}.dcard{position:relative;width:66px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px}.dcard svg{width:62px;height:87px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));transition:transform .2s}.dcard:hover svg{transform:translateY(-4px) rotate(-2deg)}

@@ -50,19 +50,20 @@ const KHUI=(()=>{
     let L=h; h='';
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,90-Math.floor((t-S.turnAt)/1000)):null;
       return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
-        <div class="ps"><span>Lá: ${KH.tot(Q.res)}</span><span>Thẻ: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span><span>Đường: ${Q.lr}</span></div>
+        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261127u">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261127u">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261127u" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
+        <div class="ps"><span>Lá: ${KH.tot(Q.res)}</span><span>Thẻ: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span></div>
         ${S.longest===i||S.largest===i?`<div class="aw">${S.longest===i?'<em>Đường dài nhất +2</em>':''}${S.largest===i?'<em>Quân mạnh nhất +2</em>':''}</div>`:''}</div>`; }).join('')}</div>`;
     const S1=h; h='';
-    { const V='?v=20261127t';
+    { const V='?v=20261127u';
       const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="21" height="19">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
-      const row=(ic,t,pt,c)=>`<div class="ctr"><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></div>`;
-      L+=`<div class="box ctab"><div class="cth">Bảng chi phí xây dựng</div>${row(`<img src="assets/road-neutral.webp${V}" class="ci rd">`,'Đường','',KH_COST.road)}${row(`<img src="assets/house-neutral.webp${V}" class="ci">`,'Nhà','+1 điểm',KH_COST.town)}${row(`<img src="assets/city-neutral.webp${V}" class="ci">`,'Thành phố','+2 điểm · nâng từ nhà',KH_COST.city)}${row('<span class="ci dc"></span>','Thẻ phát triển','',KH_COST.dev)}</div>`; }
+      const row=(ic,t,pt,c,att,dis,on)=>`<button class="ctr cbtn ${on?'on':''}" ${att} ${dis?'disabled':''}><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></button>`;
+      const okR=main&&P&&(KH.canPay(P,KH_COST.road)||S.free)&&P.roads>0, okT=main&&P&&KH.canPay(P,KH_COST.town)&&P.towns>0, okC=main&&P&&KH.canPay(P,KH_COST.city)&&P.cities>0, okD=main&&P&&KH.canPay(P,KH_COST.dev)&&S.dev.length>0;
+      L+=`<div class="box ctab"><div class="cth">Bảng chi phí xây dựng</div>${row(`<img src="assets/road-neutral.webp${V}" class="ci rd">`,'Đường',S.free?`Còn ${S.free} đường miễn phí`:'',KH_COST.road,'data-m="road"',!okR,mode==='road')}${row(`<img src="assets/house-neutral.webp${V}" class="ci">`,'Nhà','+1 điểm',KH_COST.town,'data-m="town"',!okT,mode==='town')}${row(`<img src="assets/city-neutral.webp${V}" class="ci">`,'Thành phố','+2 điểm · nâng từ nhà',KH_COST.city,'data-m="city"',!okC,mode==='city')}${row('<span class="ci dc"></span>','Thẻ phát triển','',KH_COST.dev,'data-a="buydev"',!okD,false)}${my&&S.phase==='play'?'<div class="chint">Bấm vào mục để xây</div>':''}</div>`; }
     if (P){
       h+=`<div class="box hand">${P.res.map((x,r)=>`<div class="rstack ${x?'':'none'}" title="${KH_RES[r]}">${[...Array(Math.max(1,Math.min(x,4)))].map((_,k)=>`<div class="rc" style="--k:${k}">${A.resCard(r)}</div>`).join('')}<b>${x}</b></div>`).join('')}</div>`;
       const cost=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="15" height="14">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
       const B=(k,label,c,dis)=>`<button class="tbtn bld ${mode===k?'on':''}" data-m="${k}" ${dis?'disabled':''}><b>${label}</b><span>${cost(c)}</span></button>`;
-      h+=`<div class="box bl">${B('road','Đường',KH_COST.road,!main||!KH.canPay(P,KH_COST.road)&&!S.free||!P.roads)}${B('town','Nhà · 1 điểm',KH_COST.town,!main||!KH.canPay(P,KH_COST.town)||!P.towns)}${B('city','Thành phố · 2 điểm',KH_COST.city,!main||!KH.canPay(P,KH_COST.city)||!P.cities)}
-        <button class="tbtn bld" data-a="buydev" ${main&&KH.canPay(P,KH_COST.dev)&&S.dev.length?'':'disabled'}><b>Thẻ phát triển</b><span>${cost(KH_COST.dev)}</span></button></div>`;
+
       const dv={}; P.dev.forEach(d=>dv[d]=(dv[d]||0)+1); const nv={}; P.newDev.forEach(d=>nv[d]=(nv[d]||0)+1);
       const canDev=my&&S.phase==='play'&&!S.devPlayed&&(S.step==='main'||S.step==='roll');
       const devs=Object.keys(KH_DEVN).filter(k=>dv[k]||nv[k]);
