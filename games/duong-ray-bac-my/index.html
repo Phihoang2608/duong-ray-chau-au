@@ -658,6 +658,12 @@ body.landphone .tpick .vticket.imgt{max-width:200px}
 body.landphone #tkPanel #tickets{max-width:270px!important}
 body.landphone #tkPanel .vticket.imgt{max-width:130px}
 @media (max-width:600px){ .tpicks{max-width:100%} .tpick .vticket.imgt{max-width:none} }
+
+/* gọn bảng bên: bỏ bảng điểm trùng thanh trên, thu nhỏ khung chữ */
+#scoreBoard{display:none!important}
+#side .panel h3,.panel h3{margin-bottom:6px}
+#status{font-size:14px;line-height:1.3;padding:6px 10px}
+#log{max-height:120px;overflow-y:auto;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -675,9 +681,9 @@ body.landphone #tkPanel .vticket.imgt{max-width:130px}
   </section>
   <aside>
     <div class="panel" id="scoreBoard"><h3 id="sbHead">📊 Bảng điểm <span class="sbtog">▾</span></h3><div id="sbBody"></div></div>
-    <div class="panel" id="tkPanel"><h3>🎫 Vé của bạn <small class="hint">— bấm vé để soi trên bản đồ</small></h3><div id="tickets"></div></div>
+    <div class="panel" id="tkPanel"><h3>🎫 Vé của bạn</h3><div id="tickets"></div></div>
     <div class="panel">
-      <h3>🃏 Bài toa tàu <small class="hint">— rút úp hoặc chọn lá đang lật</small></h3>
+      <h3>🃏 Bài toa tàu</h3>
       <div class="mrow">
         <button id="deckBtn" class="deckslot" title="Rút 1 lá úp từ chồng bài"><span class="deckart"><span class="card" style="display:block"></span></span><span class="dlab">Rút úp</span><small id="deckCount"></small></button>
         <div id="market"></div>
@@ -691,7 +697,7 @@ body.landphone #tkPanel .vticket.imgt{max-width:130px}
     </div>
     <div class="panel"><h3>✋ Bài trên tay</h3><div id="hand"></div></div>
     <div class="panel" id="chatPanel"><h3>💬 Trò chuyện</h3><div class="chatBox"></div></div>
-    <div class="panel"><h3>📜 Nhật ký ván chơi</h3><div id="log"></div></div>
+    <div class="panel"><h3>📜 Nhật ký</h3><div id="log"></div></div>
   </aside>
 </main>
 
@@ -1639,18 +1645,18 @@ function renderSide(){
   if (ub){ ub.classList.toggle('show', !!mu); if (mu) ub.innerHTML=`↩ Đi lại <small>(còn ${mu.l} lần)</small>`; }
   // trạng thái
   let st='';
-  if (ME<0) st='👀 Bạn đang xem ván này.';
-  else if (G.phase==='end') st='🏁 Ván đã kết thúc.';
-  else if (G.phase==='pick') st=G.initial[ME]?'🎫 Hãy chọn vé hành trình muốn giữ.':'⏳ Đang chờ mọi người chọn vé…';
-  else if (UIS.waiting) st='⏳ Đang gửi nước đi…';
-  else if (G.pending && G.pending.pi===ME) st='🎫 Hãy chọn vé hành trình muốn giữ.';
-  else if (G.tunnel && G.tunnel.pi===ME) st='⛰️ Đường hầm: quyết định có trả thêm bài không.';
+  if (ME<0) st='👀 Đang xem';
+  else if (G.phase==='end') st='🏁 Hết ván';
+  else if (G.phase==='pick') st=G.initial[ME]?'🎫 Chọn vé':'⏳ Chờ chọn vé…';
+  else if (UIS.waiting) st='⏳ Đang gửi…';
+  else if (G.pending && G.pending.pi===ME) st='🎫 Chọn vé';
+  else if (G.tunnel && G.tunnel.pi===ME) st='⛰️ Đường hầm: trả thêm bài?';
   else if (isMyTurn()){
-    if (UIS.stationMode) st='🏠 Bấm vào một thành phố chưa có ga để xây nhà ga.';
-    else if (G.drawn===1) st='🃏 Bạn đã rút 1 lá — rút thêm 1 lá nữa (không được lấy Đầu máy đang lộ).';
-    else st='<b>Lượt của bạn!</b> Rút 2 lá bài, HOẶC bấm vào tuyến để chiếm, HOẶC rút vé, HOẶC xây ga.';
+    if (UIS.stationMode) st='🏠 Chọn thành phố để xây ga';
+    else if (G.drawn===1) st='🃏 Rút thêm 1 lá';
+    else st='<b>Lượt bạn</b> · rút bài / chiếm tuyến / rút vé / xây ga';
   } else st=`<span class="think">${esc(cur().name)} đang suy nghĩ<span class="dots"><i>.</i><i>.</i><i>.</i></span></span>`;
-  if (G.finalTurns!=null && G.phase==='play') st=`<b class="final">🔥 VÒNG CUỐI (còn ${G.finalTurns} lượt)</b><br>`+st;
+  if (G.finalTurns!=null && G.phase==='play') st=`<b class="final">🔥 Vòng cuối · còn ${G.finalTurns}</b> `+st;
   $('#status').innerHTML=st;
   $('#status').classList.toggle('myturn', isMyTurn());
   // tay bài
@@ -1661,7 +1667,7 @@ function renderSide(){
     UIS.prevHand=Object.assign({}, me.hand);
     const tk = me.tickets.slice().sort((a,b)=>ticketDone(me,a)-ticketDone(me,b));
     const th = tk.length ? tk.map(id=>{ const t=TK[id]; const ok=ticketDone(me,id); const hue=TK_HUES[me.tickets.indexOf(id)%TK_HUES.length];
-        return ticketHTML(t, ok, ok?'#15803d':hue, UIS.focus&&UIS.focus.id===id?'focus':''); }).join('') : '<div class="muted">Chưa có vé.</div>';
+        return ticketHTML(t, ok, ok?'#15803d':hue, UIS.focus&&UIS.focus.id===id?'focus':''); }).join('') : '<div class="muted">—</div>';
     if (th!==UIS.tkHTML){ $('#tickets').innerHTML=th; UIS.tkHTML=th; }
   } else { $('#hand').innerHTML='<div class="muted">Bạn đang xem.</div>'; $('#tickets').innerHTML=''; }
   $('#log').innerHTML = G.log.slice(0,30).map(l=>`<div class="lg ${l.cls}">${esc(l.msg)}</div>`).join('');
