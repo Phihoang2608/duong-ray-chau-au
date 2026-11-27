@@ -775,6 +775,22 @@ body.landphone #tkToggle{font-size:9.5px!important}
 #tkPanel.tkov .vt-longtag{font-size:8.5px!important;padding:0 4px!important;left:4px!important;bottom:3px!important}
 body.landphone #tkPanel.tkov .vt-longtag{font-size:0!important;padding:0 3px!important}
 body.landphone #tkPanel.tkov .vt-longtag::before{content:"★";font-size:8px}
+
+/* vé tàu dưới khu lấy bài */
+#tkPanel{padding:8px 10px!important}
+#tkToggle{color:#6b1630!important;font-size:15px!important;margin-bottom:6px}
+#tkToggle b{color:#8a6a2a!important}
+#tkPanel #tickets{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;max-width:none!important}
+#tkPanel .vticket.imgt{max-width:none!important;width:100%!important}
+#tkPanel .vt-longtag{font-size:8.5px!important;padding:0 4px!important;left:4px!important;bottom:3px!important}
+body.landphone #tkPanel{padding:5px 7px!important}
+body.landphone #tkToggle{font-size:11.5px!important;margin-bottom:3px}
+body.landphone #tkPanel #tickets{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:4px!important}
+body.landphone #tkPanel .vt-longtag{font-size:0!important;padding:0 3px!important}
+body.landphone #tkPanel .vt-longtag::before{content:"★";font-size:8px}
+
+body.landphone #tkPanel #tickets{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+body.landphone #pbg-fab{transform:scale(.62)!important;opacity:.9}
 </style>
 </head>
 <body>
@@ -788,7 +804,6 @@ body.landphone #tkPanel.tkov .vt-longtag::before{content:"★";font-size:8px}
   <section id="mapWrap">
     <div id="mapTools"><button id="legendBtn" class="legbtn" title="Chú thích bản đồ">❓</button><button id="zoomOut" class="zb" title="Thu nhỏ">−</button><input type="range" id="zoom" min="40" max="400" value="100"><button id="zoomIn" class="zb" title="Phóng to">+</button><b id="zoomVal">100%</b><button id="zoomFit" class="legbtn" title="Vừa khung: thấy toàn bộ bản đồ">↺</button><button id="bigBtn" class="legbtn" title="Bản đồ lớn">⛶</button></div>
     <button id="undoBtn" title="Đi lại nước vừa rồi (Ctrl+Z)">↩ Đi lại</button> <div id="clock" class="hidden" title="Mỗi lượt có 60 giây"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" class="cbg"/><circle cx="32" cy="32" r="27" class="carc" transform="rotate(-90 32 32)"/></svg><div class="cnum">60</div><div class="cwho"></div></div> 
-    <div id="tkPanel" class="tkov"><button id="tkToggle" type="button">🎫 Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div></div>
     <div id="mapScroll"><svg id="map" viewBox="0 0 1330 1075" xmlns="http://www.w3.org/2000/svg"><g id="bg"></g><g id="dyn"></g><g id="fxl"></g><g id="clouds" pointer-events="none"></g></svg></div>
     <div id="handBar"><div class="hbtitle">🚂 Đoàn tàu<br>của bạn</div><div id="hand" class="htrain"></div></div>
   </section>
@@ -807,6 +822,7 @@ body.landphone #tkPanel.tkov .vt-longtag::before{content:"★";font-size:8px}
       <div id="status"></div>
     </div>
 
+    <div class="panel" id="tkPanel"><button id="tkToggle" type="button">🎫 Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div></div>
     <div class="panel" id="chatPanel"><h3>💬 Trò chuyện</h3><div class="chatBox"></div></div>
     <div class="panel"><h3>📜 Nhật ký</h3><div id="log"></div></div>
   </aside>
