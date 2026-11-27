@@ -13,8 +13,8 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=2026112812a"></script>
-<script src="assets/imgs.js?v=2026112812a"></script>
+<script src="game.js?v=2026112820a"></script>
+<script src="assets/imgs.js?v=2026112820a"></script>
 <script>
 window.KH_FX=(function(){const d=document.documentElement;
  function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
@@ -24,8 +24,8 @@ window.KH_FX=(function(){const d=document.documentElement;
  function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
  apply(); return {mode,apply,toggle};})();
 </script>
-<script src="art.js?v=2026112812a"></script>
-<script src="ui.js?v=2026112812a"></script>
+<script src="art.js?v=2026112820a"></script>
+<script src="ui.js?v=2026112820a"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -87,7 +87,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .dcard .rn{stroke-width:2px!important}.rcard .rn{font:800 14px "KhFont","Baloo 2","Arial Black",sans-serif;fill:#fff;text-anchor:middle;stroke:#1b0f06;stroke-width:3.2px;paint-order:stroke;stroke-linejoin:round}
 .ctab{padding:10px 12px 8px}.cth{text-align:center;font-weight:bold;font-size:16px;color:#ffd76a;border-bottom:2px solid rgba(40,18,4,.6);box-shadow:0 1px 0 rgba(255,215,150,.25);padding-bottom:6px;margin-bottom:6px;letter-spacing:.4px}
 .ctr{display:grid;grid-template-columns:60px 1fr;align-items:center;gap:2px 8px;padding:6px 0;border-bottom:1px solid rgba(40,18,4,.45)}.ctr:last-child{border:none}
-.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112812a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
+.cic{display:flex;justify-content:center;grid-row:span 2}.ci{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}.ci.rd{height:28px}.ci.dc{width:34px;height:50px;border:none;border-radius:0;background:url(assets/card-back.webp?v=2026112820a) center/contain no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.55))}
 .ctx{display:flex;flex-direction:column;font-size:15px;line-height:1.15}.ctx small{font-size:12px;color:#f0dcb0}.cco{display:flex;gap:3px;flex-wrap:wrap}.cco .cr{display:flex;background:rgba(40,18,4,.45);border-radius:7px;padding:1px 3px}
 #kh,#kh *{font-family:"KhFont","Baloo 2","Arial Black",sans-serif}#kh button,#kh select,#kh input{font-family:inherit}
 #kh .cth,#kh .dice::before,#kh .chs .hd::before,#kh .ctx b,#kh .pl .ph b,#kh .kst,#kh .tbtn{letter-spacing:.3px}
@@ -284,19 +284,51 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .kbadge img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
 .kbadge b{font:800 24px/1 'Baloo 2',KhFont,sans-serif;color:#fff;-webkit-text-stroke:5px #3a210c;paint-order:stroke fill;text-shadow:0 2px 4px rgba(0,0,0,.4)}
 @keyframes kbup{0%{transform:translate(-50%,-30%) scale(.3);opacity:0}15%{transform:translate(-50%,-90%) scale(1.25);opacity:1}30%{transform:translate(-50%,-110%) scale(1)}80%{opacity:1}100%{transform:translate(-50%,-230%) scale(1);opacity:0}}
+.tb-modal .tb-panel:has(.khr){box-sizing:border-box;max-width:760px;width:min(96vw,760px);margin:auto;max-height:92vh;padding:0;border:4px solid #2e1809;border-radius:22px;color:#fbeed0;background:repeating-linear-gradient(180deg,transparent 0 78px,rgba(30,14,2,.45) 78px 80px,rgba(255,215,150,.14) 80px 81px),linear-gradient(165deg,#a8753c 0%,#7d4f24 38%,#946032 62%,#6a4019 100%)!important;box-shadow:inset 0 0 0 3px #cf9f5f,0 16px 50px rgba(0,0,0,.6)}
+.tb-modal .tb-panel:has(.khr)>h2{display:none}.tb-modal .tb-panel:has(.khr)>div{margin:0!important;line-height:1.45!important}
+.tb-modal .tb-panel:has(.khr) .tb-grid .tbtn{width:100%;max-width:340px;margin:0 auto}.tb-modal .tb-panel:has(.khr) .tb-grid{display:flex;position:sticky;bottom:0;padding:10px;background:linear-gradient(180deg,transparent,rgba(40,20,6,.92) 40%)}
+.khr{padding:16px 18px 6px;font-size:15px;text-shadow:0 1px 0 rgba(30,12,0,.7)}
+.krh{text-align:center;font:800 26px/1.1 "KhFont","Baloo 2",sans-serif;color:#ffd76a;-webkit-text-stroke:5px #3a210c;paint-order:stroke fill;margin:2px 0 12px;letter-spacing:.5px}
+.krs{background:rgba(45,22,6,.38);border:2px solid rgba(40,18,4,.7);border-radius:14px;padding:30px 14px 10px;margin:20px 0 6px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,215,150,.18)}
+.krs h3{position:absolute;left:50%;top:-16px;transform:translateX(-50%);margin:0;white-space:nowrap}
+.krs h3 span{display:block;padding:5px 26px 7px;font:800 17px/1 "KhFont","Baloo 2",sans-serif;color:#fff;-webkit-text-stroke:4px #3a210c;paint-order:stroke fill;background:linear-gradient(180deg,#c98f50,#8a5a2c);border:3px solid #2e1809;border-radius:10px;box-shadow:inset 0 0 0 2px #e0b070,0 3px 0 rgba(0,0,0,.5)}
+.krs p{margin:6px 0;color:#fbeed0}.krs b{color:#ffe08a}.krs small{color:#e8d3a6;font-size:12.5px}
+.kri{width:34px;height:34px;object-fit:contain;vertical-align:middle;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}.kri.vc{width:30px;height:30px}
+.krn{margin:0 4px 0 1px;font:800 17px "KhFont","Baloo 2",sans-serif;color:#fff;-webkit-text-stroke:3.5px #3a210c;paint-order:stroke fill}
+.krg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.kri3{flex:1 1 130px;max-width:180px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:8px 6px;border-radius:12px;background:linear-gradient(180deg,#f9e9c2,#e3c98d);border:2px solid #4a2b10;color:#3a210c;text-shadow:none}
+.kri3 b{font:800 22px/1 "KhFont","Baloo 2",sans-serif;color:#fff;-webkit-text-stroke:4px #3a210c;paint-order:stroke fill}.kri3 span{font-weight:700;font-size:14px;color:#3a210c}.kri3 small{color:#6b4a22;font-weight:600}
+.kri3 img{width:46px;height:46px;object-fit:contain}.krg.r5 .kri3{flex-basis:96px}.krg.r5 .kri3 img{width:56px;height:56px}
+.krl{margin:6px 0 4px;padding-left:22px}.krl li{margin:5px 0}
+.krt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.krt>div{background:linear-gradient(180deg,#f9e9c2,#e3c98d);border:2px solid #4a2b10;border-radius:12px;padding:7px 10px;color:#3a210c;text-shadow:none;display:flex;flex-wrap:wrap;align-items:center;gap:0 2px}
+.krt>div b{flex:1 1 100%;font-size:16px;color:#3a210c}.krt>div small{flex:1 1 100%;color:#6b4a22;font-weight:600;margin-bottom:4px}.krc{display:inline-flex;align-items:center}.krt .krn{font-size:15px}
+.krd{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin:6px 0}.krd>div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px}
+.krd img{width:92px;height:128px;object-fit:cover;border-radius:8px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.55))}.krd b{font-size:15px;color:#ffe08a}
+@media (max-width:640px){.krt{grid-template-columns:1fr}.khr{padding:12px 10px 4px;font-size:14px}.krh{font-size:22px}.kri3{flex-basis:44%;max-width:none}}
+@media (orientation:portrait) and (max-width:700px){.lft,.lft>*,.ctab{min-width:0;max-width:100%}.ctab{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}.ctab .cth,.ctab .chint{grid-column:1/-1}.ctab .ctr{min-width:0;overflow:hidden}.ctab .cco,.ctab .cost{flex-wrap:wrap;min-width:0}}
+@media (orientation:landscape) and (max-height:640px){.hov .tbar .kend{font-size:11px;padding:7px 2px;white-space:nowrap}}
+@media (orientation:portrait) and (max-width:700px){.lft>.awp{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px;min-width:0}.lft>.awp .cth{grid-column:1/-1;writing-mode:horizontal-tb!important;width:auto!important;border-right:none;transform:none!important}.lft>.awp .arow{min-width:0;border:none;gap:6px}.lft>.awp .medal,.lft>.awp .slot{width:56px;height:56px}.lft>.awp .atx{min-width:0;font-size:13px}.lft>.awp .atx small{display:none}}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
   newGame:KH.newGame, apply:KH.apply, tick:KH.tick, whoActs:KH.whoActs, botAction:KH.botAction, timeoutAction:KH.timeoutAction,
   render:KHUI.render, tickView:KHUI.tickView,
-  rules:`<p><b>Mục tiêu:</b> đạt <b>${KH_WIN} điểm</b> trước. Nhà = 1 điểm, thành phố = 2 điểm, Đường dài nhất (từ 5 đoạn) = 2 điểm, Đạo quân mạnh nhất (từ 3 hiệp sĩ) = 2 điểm, thẻ Điểm thưởng = 1 điểm.</p>
-  <p><b>Xếp nhà đầu:</b> mỗi người đặt 1 nhà và 1 đường, sau đó đi ngược lại đặt thêm 1 lượt. Nhà thứ hai nhận ngay tài nguyên của các ô xung quanh. Hai nhà không được đặt sát nhau.</p>
-  <p><b>Mỗi lượt:</b> đổ 2 xúc xắc — ô đất mang số đó cho tài nguyên tới các nhà cạnh nó (thành phố nhận 2). Sau đó bạn xây dựng, mua thẻ, đổi hàng rồi bấm Kết thúc lượt.</p>
-  <p><b>Ra 7:</b> ai giữ hơn 7 lá tự mất một nửa; người đổ dời kẻ cướp sang ô khác (ô đó ngừng sản xuất) và lấy 1 lá của người có nhà cạnh ô.</p>
-  <p><b>Chi phí:</b> Đường = Gỗ + Gạch · Nhà = Gỗ + Gạch + Cừu + Lúa · Thành phố = 2 Lúa + 3 Đá · Thẻ phát triển = Cừu + Lúa + Đá.</p>
-  <p><b>Đổi với người chơi:</b> trong lượt của mình, bấm nút Chợ, chọn lá muốn đưa và lá muốn lấy rồi bấm Gửi yêu cầu đổi. Người được mời bấm Đồng ý hoặc Từ chối (lời mời tự hết hạn sau 30 giây).</p>
-  <p><b>Đổi hàng:</b> 4 lá cùng loại lấy 1 lá bất kỳ; có nhà ở cảng 3:1 hoặc cảng 2:1 thì đổi rẻ hơn.</p>
-  <p><b>Thẻ phát triển:</b> Hiệp sĩ (dời kẻ cướp), Làm đường (2 đường miễn phí), Được mùa (nhận 2 lá), Độc quyền (gom hết 1 loại tài nguyên của mọi người), Điểm thưởng. Mỗi lượt dùng tối đa 1 thẻ, không dùng thẻ vừa mua.</p>` });
+  rules:(()=>{ const I=(r,c)=>`<img class="kri" src="assets/ic-${r}.webp?v=2026112820a" alt="" title="${KH_RES[r]}">`+(c?`<b class="krn">${c}</b>`:''), N=['Gỗ','Gạch','Cừu','Lúa','Đá'], coin=`<img class="kri vc" src="assets/vp-coin.webp?v=2026112820a" alt="">`, V='?v=2026112820a',
+  cost=(c)=>c.map((x,r)=>x?`<span class="krc">${Array(x).fill(I(r)).join('')}</span>`:'').join(''),
+  sec=(t,b)=>`<section class="krs"><h3><span>${t}</span></h3>${b}</section>`;
+  return `<div class="khr"><div class="krh">Luật chơi · Đảo Khai Hoang</div>`
+  +sec('Mục tiêu',`<p>Ai đạt <b>${KH_WIN} điểm chiến thắng</b> ${coin} trước là thắng. Ván kết thúc ngay khi bạn đạt đủ điểm trong lượt của mình.</p>
+    <div class="krg"><div class="kri3"><img src="assets/house-neutral.webp${V}" alt=""><b>+1</b><span>Nhà</span></div><div class="kri3"><img src="assets/city-neutral.webp${V}" alt=""><b>+2</b><span>Thành phố</span></div><div class="kri3"><img src="assets/award-road.webp${V}" alt=""><b>+2</b><span>Đường dài nhất<br><small>từ 5 đoạn trở lên</small></span></div><div class="kri3"><img src="assets/award-army.webp${V}" alt=""><b>+2</b><span>Quân mạnh nhất<br><small>từ 3 hiệp sĩ</small></span></div><div class="kri3"><img src="assets/dev-vp.webp${V}" alt=""><b>+1</b><span>Thẻ điểm thưởng<br><small>giữ kín đến khi thắng</small></span></div></div>`)
+  +sec('Tài nguyên từ đâu ra',`<div class="krg r5">${[0,1,2,3,4].map(r=>`<div class="kri3">${I(r)}<span>${N[r]}<br><small>${['Rừng','Mỏ gạch','Đồng cỏ','Ruộng lúa','Núi đá'][r]}</small></span></div>`).join('')}</div><p>Sa mạc không sinh ra gì và là nơi kẻ cướp đứng lúc đầu. Mỗi ô đất có một con số (chấm bên dưới càng nhiều thì càng hay ra).</p>`)
+  +sec('Xếp nhà ban đầu',`<p>Mỗi người đặt <b>1 nhà + 1 đường</b> theo thứ tự, rồi đi <b>ngược lại</b> đặt thêm 1 nhà + 1 đường. Nhà thứ hai nhận ngay tài nguyên từ các ô quanh nó. Hai nhà không được đặt sát nhau (phải cách ít nhất 1 đoạn đường).</p>`)
+  +sec('Một lượt chơi',`<ol class="krl"><li><b>Đổ xúc xắc.</b> Ô nào mang đúng số tổng sẽ toả sóng; mỗi nhà kề ô đó nhận 1 tài nguyên, thành phố nhận 2.</li><li><b>Xây dựng, mua thẻ và đổi hàng</b> theo ý bạn, thứ tự tuỳ chọn.</li><li><b>Kết thúc lượt</b> khi xong. Có thể bấm <b>↩ Hoàn tác</b> để lùi nước vừa đi (xây, nâng cấp, đổi cảng) nếu chưa làm việc khác.</li></ol>`)
+  +sec('Bảng chi phí',`<div class="krt"><div><b>Đường</b><small>nối từ nhà hoặc đường của bạn</small>${cost(KH_COST.road)}</div><div><b>Nhà</b><small>+1 điểm · nối với đường của bạn</small>${cost(KH_COST.town)}</div><div><b>Thành phố</b><small>+2 điểm · nâng cấp từ nhà</small>${cost(KH_COST.city)}</div><div><b>Thẻ phát triển</b><small>rút 1 thẻ ngẫu nhiên</small>${cost(KH_COST.dev)}</div></div><p>Giới hạn: <b>15 đường · 5 nhà · 4 thành phố</b>. Nâng cấp thành phố thì nhà cũ được trả lại để xây chỗ khác.</p>`)
+  +sec('Ra 7 và kẻ cướp',`<p>Đổ ra <b>7</b> thì không ai nhận tài nguyên. Ai đang giữ <b>hơn 7 lá</b> mất đi một nửa. Sau đó người đổ dời <b>kẻ cướp</b> sang ô khác: ô đó ngừng sản xuất, và bạn lấy ngẫu nhiên 1 lá của một người có nhà cạnh ô đó.</p>`)
+  +sec('Đổi hàng',`<div class="krg"><div class="kri3"><b>4 : 1</b><span>Với ngân hàng<br><small>4 lá cùng loại lấy 1 lá bất kỳ</small></span></div><div class="kri3"><b>3 : 1</b><span>Cảng chung<br><small>có nhà ở cảng thì đổi 3 lá</small></span></div><div class="kri3">${I(2)}<b>2 : 1</b><span>Cảng riêng<br><small>2 lá đúng loại ghi trên cảng</small></span></div></div><p>Bấm <b>Đổi cảng</b> để đổi với ngân hàng. Bấm <b>Chợ</b> để gửi yêu cầu đổi với người chơi khác: chọn lá đưa, lá nhận rồi gửi; người nhận bấm Đồng ý hoặc Từ chối (lời mời hết hạn sau 30 giây).</p>`)
+  +sec('Thẻ phát triển',`<div class="krd">${[['knight','Hiệp sĩ','14 thẻ · dời kẻ cướp, góp vào Quân mạnh nhất'],['road','Làm đường','2 thẻ · xây 2 đường miễn phí'],['plenty','Được mùa','2 thẻ · nhận ngay 2 tài nguyên tuỳ chọn'],['mono','Độc quyền','2 thẻ · gom hết 1 loại tài nguyên của mọi người'],['vp','Điểm thưởng','5 thẻ · +1 điểm, không cần dùng']].map(([k,n,d])=>`<div><img src="assets/card-${k}-full.webp${V}" alt=""><b>${n}</b><small>${d}</small></div>`).join('')}</div><p>Mỗi lượt dùng tối đa <b>1 thẻ</b> (trừ Điểm thưởng) và không được dùng thẻ vừa mua trong lượt đó.</p>`)
+  +sec('Giải thưởng +2 điểm',`<p><b>Đường dài nhất:</b> chuỗi đường liên tục từ 5 đoạn trở lên; ai dài hơn sẽ cướp giải. <b>Quân mạnh nhất:</b> ai đã dùng từ 3 hiệp sĩ và nhiều hơn người khác.</p>`)
+  +sec('Mẹo nhỏ',`<p>Đặt nhà ở nơi có nhiều loại tài nguyên và số có nhiều chấm (6, 8, 5, 9). Chiếm cảng hợp với tài nguyên mình hay có. Giữ không quá 7 lá khi chưa chắc ra 7 để khỏi mất bài.</p>`)
+  +`</div>`; })() });
 </script>
 </body>
 </html>

@@ -83,35 +83,35 @@ const KHART=(()=>{
     d+='<pattern id="khWave" width="60" height="34" patternUnits="userSpaceOnUse"><path d="M0 8 q7.5 -7 15 0 t15 0 t15 0 t15 0" stroke="#fff" stroke-opacity=".5" fill="none" stroke-width="2" stroke-linecap="round"/><path d="M-8 26 q7.5 -6 15 0 t15 0 t15 0 t15 0 t15 0" stroke="#bff0ff" stroke-opacity=".4" fill="none" stroke-width="1.6" stroke-linecap="round"/><circle cx="44" cy="18" r="1.6" fill="#fff" opacity=".6"/><circle cx="12" cy="20" r="1.2" fill="#fff" opacity=".5"/></pattern>';
     return d; }
   // ---------- tài nguyên nhỏ (biểu tượng) ----------
-  function resMini(r,x,y,s){ s=s||1; return `<image href="assets/ic-${r}.webp?v=2026112812a" x="${f(x-9*s)}" y="${f(y-9*s)}" width="${f(18*s)}" height="${f(18*s)}"/>`; }
+  function resMini(r,x,y,s){ s=s||1; return `<image href="assets/ic-${r}.webp?v=2026112820a" x="${f(x-9*s)}" y="${f(y-9*s)}" width="${f(18*s)}" height="${f(18*s)}"/>`; }
   // ---------- cảng ----------
   function port(px,py,ax,ay,bx,by,t,ang){ let o='';
     [[ax,ay],[bx,by]].forEach(([x,y])=>{ const L=Math.hypot(px-x,py-y), ux=(px-x)/L, uy=(py-y)/L; const nx=-uy*3.2, ny=ux*3.2;
       o+=`<polygon points="${f(x+nx)},${f(y+ny)} ${f(px+nx*.6)},${f(py+ny*.6)} ${f(px-nx*.6)},${f(py-ny*.6)} ${f(x-nx)},${f(y-ny)}" fill="#d9b27a" stroke="#8a5a2c" stroke-width="1.4"/>`;
       for(let k=1;k<6;k++){ const q=k/6; o+=`<line x1="${f(x+(px-x)*q+nx)}" y1="${f(y+(py-y)*q+ny)}" x2="${f(x+(px-x)*q-nx)}" y2="${f(y+(py-y)*q-ny)}" stroke="#8a5a2c" stroke-width="1"/>`; } });
-    o+=`<g transform="translate(${f(px)},${f(py)}) scale(1.25)"><path d="M-25 10 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".9"/><path d="M-20 14 q5 -3 10 0 t10 0 t10 0 t10 0" stroke="#bff3fb" stroke-width="1.6" fill="none" opacity=".8"/><g class="boat"><image href="assets/boat.webp?v=2026112812a" x="-20" y="-36.8" width="40" height="47.7" preserveAspectRatio="none"/></g></g>`;
+    o+=`<g transform="translate(${f(px)},${f(py)}) scale(1.25)"><path d="M-25 10 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".9"/><path d="M-20 14 q5 -3 10 0 t10 0 t10 0 t10 0" stroke="#bff3fb" stroke-width="1.6" fill="none" opacity=".8"/><g class="boat"><image href="assets/boat.webp?v=2026112820a" x="-20" y="-36.8" width="40" height="47.7" preserveAspectRatio="none"/></g></g>`;
     const bx2=px+Math.cos(ang)*55, by2=py+Math.sin(ang)*55;
     o+=`<g transform="translate(${f(bx2)},${f(by2)}) scale(1.75)"><circle r="15.5" fill="#f7ebcd" stroke="#9a6b36" stroke-width="2.4"/><circle r="12.5" fill="none" stroke="#c9a26a" stroke-width=".9"/>${t>=0?resMini(t,0,-4.5,1):''}<text y="${t>=0?9:5}" class="pt">${t<0?'3:1':'2:1'}</text></g>`;
     return o; }
   // ---------- quân cờ ----------
   function shade(c,v){ return v>0?mix(c,'#ffffff',v):mix(c,'#000000',-v); }
   const HSPR={'#e11d48':'red','#2563eb':'blue','#16a34a':'green','#f8fafc':'white'};
-  function house(x,y,c,city,z){ z=z||1.28; const n=HSPR[c]||'red', u=`assets/house-${n}.webp?v=2026112812a`;
-    if(city){ const cu=`assets/city-${n}.webp?v=2026112812a`; return `<g transform="translate(${f(x)},${f(y)}) scale(${z})"><ellipse cx="0" cy="12" rx="19" ry="5.5" fill="#6b4423" opacity=".38"/><image href="${cu}" x="-19" y="-24" width="38" height="38" preserveAspectRatio="none"/></g>`; }
+  function house(x,y,c,city,z){ z=z||1.28; const n=HSPR[c]||'red', u=`assets/house-${n}.webp?v=2026112820a`;
+    if(city){ const cu=`assets/city-${n}.webp?v=2026112820a`; return `<g transform="translate(${f(x)},${f(y)}) scale(${z})"><ellipse cx="0" cy="12" rx="19" ry="5.5" fill="#6b4423" opacity=".38"/><image href="${cu}" x="-19" y="-24" width="38" height="38" preserveAspectRatio="none"/></g>`; }
     return `<g transform="translate(${f(x)},${f(y)}) scale(${z})"><ellipse cx="0" cy="10" rx="12" ry="3.6" fill="#6b4423" opacity=".35"/><image href="${u}" x="-12" y="-15.4" width="24" height="25.4" preserveAspectRatio="none"/></g>`; }
   function road(ax,ay,bx,by,c){ const n=HSPR[c]||'red', mx=(ax+bx)/2, my=(ay+by)/2; let ang=Math.atan2(by-ay,bx-ax)*180/Math.PI; if(ang>90) ang-=180; if(ang<-90) ang+=180;
     const L=Math.hypot(bx-ax,by-ay), w=Math.min(L-18,40), h=w*170/360;
-    return `<g transform="translate(${f(mx)},${f(my)}) rotate(${f(ang)})"><rect x="${f(-w/2+3)}" y="${f(-h/2+4)}" width="${f(w-6)}" height="${f(h-4)}" rx="4" fill="#6b4423" opacity=".35"/><image href="assets/road-${n}.webp?v=2026112812a" x="${f(-w/2)}" y="${f(-h/2-1)}" width="${f(w)}" height="${f(h)}" preserveAspectRatio="none"/></g>`; }
-  function robber(x,y){ return `<g transform="translate(${f(x)},${f(y)}) scale(.64)" class="robber"><ellipse cx="0" cy="15" rx="17" ry="4.4" fill="#000" opacity=".4"/><image href="assets/robber.webp?v=2026112812a" x="-23" y="-50" width="46" height="65.7"/></g>`; }
+    return `<g transform="translate(${f(mx)},${f(my)}) rotate(${f(ang)})"><rect x="${f(-w/2+3)}" y="${f(-h/2+4)}" width="${f(w-6)}" height="${f(h-4)}" rx="4" fill="#6b4423" opacity=".35"/><image href="assets/road-${n}.webp?v=2026112820a" x="${f(-w/2)}" y="${f(-h/2-1)}" width="${f(w)}" height="${f(h)}" preserveAspectRatio="none"/></g>`; }
+  function robber(x,y){ return `<g transform="translate(${f(x)},${f(y)}) scale(.64)" class="robber"><ellipse cx="0" cy="15" rx="17" ry="4.4" fill="#000" opacity=".4"/><image href="assets/robber.webp?v=2026112820a" x="-23" y="-50" width="46" height="65.7"/></g>`; }
   function token(x,y,n){ const hot=n===6||n===8, k=KH.PIPS[n]||0;
     return `<g class="tok"><ellipse cx="${f(x+2)}" cy="${f(y+5)}" rx="17" ry="7" fill="#000" opacity=".35"/><circle cx="${f(x)}" cy="${f(y+2.5)}" r="16.5" fill="#8a6636"/><circle cx="${f(x)}" cy="${f(y)}" r="16" fill="url(#khToken)" stroke="#8a6636" stroke-width="2.2"/><circle cx="${f(x)}" cy="${f(y)}" r="13" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".9"/>
       <text x="${f(x+.6)}" y="${f(y+5.6)}" class="nm sh">${n}</text><text x="${f(x)}" y="${f(y+5)}" class="nm ${hot?'hot':''}">${n}</text>${Array.from({length:k},(_,i)=>`<circle cx="${f(x+(i-(k-1)/2)*3.6)}" cy="${f(y+10)}" r="1.25" fill="${hot?'#b91c1c':'#3a2a14'}"/>`).join('')}</g>`; }
   // ---------- toàn bàn cờ tĩnh ----------
   function board(S,box){ const H=KH.HEX, V=KH.V, E=KH.E; const {minX,minY,w,h}=box;
     let s=`<defs>${defs()}${H.map((hx,i)=>`<clipPath id="khc${i}"><polygon points="${hexPts(hx.x*R,hx.y*R,R)}"/></clipPath>`).join('')}<clipPath id="khIsl"><polygon points="${island()}"/></clipPath></defs>`;
-    s+=`<rect x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" fill="#22b9e6"/><image href="assets/sea.webp?v=2026112812a" x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" preserveAspectRatio="xMidYMid slice"/>`;
+    s+=`<rect x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" fill="#22b9e6"/><image href="assets/sea.webp?v=2026112820a" x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" preserveAspectRatio="xMidYMid slice"/>`;
     { const Ri=4.3*R, kh=Ri/496.5, kv=.866*Ri/407.5, W=1254*kh, Hh=1254*kv; // đảo nền: lót cát + vành bãi cát vẽ sẵn
-      s+=`<polygon points="${island(4.35/4.85)}" fill="#e9bf7c"/><image href="assets/island-ring.webp?v=2026112812a" x="${f(-626.5*kh)}" y="${f(-615.5*kv)}" width="${f(W)}" height="${f(Hh)}" preserveAspectRatio="none"/>`; }
+      s+=`<polygon points="${island(4.35/4.85)}" fill="#e9bf7c"/><image href="assets/island-ring.webp?v=2026112820a" x="${f(-626.5*kh)}" y="${f(-615.5*kv)}" width="${f(W)}" height="${f(Hh)}" preserveAspectRatio="none"/>`; }
     s+=`<polygon points="${island(4.35/4.85)}" fill="#e9bf7c" opacity="0" clip-path="url(#khIsl)"/>`;
     const leaf=(x,y,r,c)=>`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="${c}" stroke="#1f4a14" stroke-width="2.2"/><circle cx="${f(x-r*.3)}" cy="${f(y-r*.3)}" r="${f(r*.45)}" fill="#b6e66a" opacity=".55"/>`;
     const fol=(x,y,sg)=>`<g>`+`<path d="M${f(x)} ${f(y+70)} q${f(sg*-30)} ${f(-40)} ${f(sg*-90)} ${f(-70)}" stroke="#5a3a1c" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M${f(x)} ${f(y+70)} q${f(sg*-30)} ${f(-40)} ${f(sg*-90)} ${f(-70)}" stroke="#8a5a2c" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>`+[[-20,28,26,'#4fa83a'],[-58,6,24,'#5fba44'],[-30,-6,22,'#3f9632'],[-78,34,20,'#4fa83a'],[4,-4,20,'#5fba44'],[-46,50,18,'#3f9632']].map(([dx,dy,r,c])=>leaf(x+sg*dx,y+dy,r,c)).join('')+`</g>`;
@@ -120,10 +120,10 @@ const KHART=(()=>{
     // ô đất (đế 3D + hình)
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#d2b27a"/>${window.KH_LITE?'':`<polygon points="${hexPts(cx+2,cy+9,R)}" fill="#7a5a2a" opacity=".18" filter="url(#khSoft)"/>`}`; });
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R, hd=S.hex[i];
-      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=5?`<image href="assets/hex-${hd.res}.webp?v=2026112812a" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=2026112812a" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}${window.KH_LITE?'':`<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/>`}</g>`;
+      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=5?`<image href="assets/hex-${hd.res}.webp?v=2026112820a" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=2026112820a" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}${window.KH_LITE?'':`<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/>`}</g>`;
       s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#d9bb82" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-4.5)}" fill="none" stroke="#b58b52" stroke-opacity=".45" stroke-width="1.3"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f3e2bb" stroke-width="1.6"/>`;
       });
-    H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.num) s+=token(hx.x*R,hx.y*R+8,hd.num); });
+    H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.num) s+=token(hx.x*R,hx.y*R,hd.num); });
     return s; }
   function island(k){ k=k||1; const p=[]; const R2=R*4.85*k; for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i); p.push(f(R2*Math.cos(a))+','+f(R2*Math.sin(a))); } return p.join(' '); }
   // ---------- xúc xắc ----------
@@ -136,7 +136,7 @@ const KHART=(()=>{
   function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, nm=RN[r].toUpperCase();
     const s=`<svg viewBox="0 0 100 76" class="rcard"><defs>
       <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset=".45" stop-color="#a8642f"/><stop offset="1" stop-color="#7d4520"/></linearGradient></defs>
-      <image href="assets/res-${r}.webp?v=2026112812a" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
+      <image href="assets/res-${r}.webp?v=2026112820a" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
       <g class="plank" transform="scale(1,.88)"><path d="M13 3.5 L16 1.5 H84 L87 3.5 L89 5.5 V17.5 L87 19.5 L84 21.5 H16 L13 19.5 L11 17.5 V5.5Z" fill="#1b0f06" transform="translate(0,1.2)" opacity=".55"/>
       <path d="M13 3 L16 1 H84 L87 3 L89 5 V17 L87 19 L84 21 H16 L13 19 L11 17 V5Z" fill="url(#${id}w)" stroke="#1b0f06" stroke-width="1.6" stroke-linejoin="round"/>
       <path d="M15 5 H55 M60 4.6 H84 M16 11 H40 M47 10.6 H70 M74 11 H86 M15 17.6 H48 M56 17.4 H84" stroke="#6b3a17" stroke-width=".7" stroke-linecap="round" fill="none" opacity=".7"/>
@@ -161,7 +161,7 @@ const KHART=(()=>{
     if(k==='vp') return `<defs><radialGradient id="sk${u}" cx=".5" cy=".35" r=".85"><stop offset="0" stop-color="#fff6c2"/><stop offset=".6" stop-color="#ffd86a"/><stop offset="1" stop-color="#f7a93a"/></radialGradient></defs><rect ${W} fill="url(#sk${u})"/><g stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".55"><path d="M35 30 L35 8 M35 30 L18 12 M35 30 L52 12 M35 30 L10 24 M35 30 L60 24"/></g>${sCloud(15,16,.7)}${sCloud(54,20,.7)}<path d="M7 50 Q22 43 36 49 T63 47 V68 H7Z" fill="#8ed04f"/>${[[10,53,.9],[16,51.5,.7],[56,52,.9],[61,54,.8]].map(t=>sPine(...t)).join('')}<path d="M7 57 Q24 51 40 57 T63 55 V68 H7Z" fill="#6cbd3c"/>${sTree(10,61,1.05)}${sTree(60.5,61,1.1)}${sBush(22,63.5,.8)}${sBush(48,64,.8)}${sFlow(30,65,'#ff6b9a')}${sFlow(40,64.5,'#fff')}`;
     return '';
   }
-  function devCard(k,fr=true){ const ck=fr?k+'F':k; if(ccache[ck]) return ccache[ck]; if(fr&&(k==='aroad'||k==='aarmy')) return ccache[ck]=`<svg viewBox="0 0 70 70" class="rcard"><image href="assets/award-${k==='aroad'?'road':'army'}.webp?v=2026112812a" x="0" y="0" width="70" height="70"/></svg>`; const [nm,c]=DV[k]; let a=''; const kk=k==='aroad'?'road':k==='aarmy'?'knight':k;
+  function devCard(k,fr=true){ const ck=fr?k+'F':k; if(ccache[ck]) return ccache[ck]; if(fr&&(k==='aroad'||k==='aarmy')) return ccache[ck]=`<svg viewBox="0 0 70 70" class="rcard"><image href="assets/award-${k==='aroad'?'road':'army'}.webp?v=2026112820a" x="0" y="0" width="70" height="70"/></svg>`; const [nm,c]=DV[k]; let a=''; const kk=k==='aroad'?'road':k==='aarmy'?'knight':k;
     const bgd=(c1,c2)=>`<defs><radialGradient id="kb${k}" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient><linearGradient id="km${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#b7c3d0"/><stop offset="1" stop-color="#7c8896"/></linearGradient><linearGradient id="kr${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7b7b"/><stop offset="1" stop-color="#c41e1e"/></linearGradient><linearGradient id="kg${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3a8"/><stop offset=".5" stop-color="#f7c52b"/><stop offset="1" stop-color="#c88a0c"/></linearGradient><linearGradient id="kw${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9b072"/><stop offset="1" stop-color="#9a5f2c"/></linearGradient></defs><rect width="70" height="70" fill="url(#kb${k})"/><circle cx="11" cy="11" r="1.6" fill="#fff" opacity=".85"/><circle cx="59" cy="9" r="1.2" fill="#fff" opacity=".85"/><circle cx="63" cy="30" r="1.3" fill="#fff" opacity=".6"/><ellipse cx="35" cy="63" rx="20" ry="3.6" fill="#000" opacity=".22"/>`;
     const star=(cx,cy,R,r)=>{let p=[];for(let q=0;q<10;q++){const ang=-Math.PI/2+q*Math.PI/5,rr=q%2?r:R;p.push((cx+rr*Math.cos(ang)).toFixed(1)+','+(cy+rr*Math.sin(ang)).toFixed(1));}return p.join(' ');};
     const O='#1f2a37';
@@ -178,7 +178,7 @@ const KHART=(()=>{
       if(k==='knight'||k==='road'||k==='plenty'||k==='mono'){
         body=`<image href="assets/card-${k}-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice"/>`;
       } else if(k==='vp'){
-        body=`<image href="assets/card-vp-full.webp?v=2026112812a" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice"/>`;
+        body=`<image href="assets/card-vp-full.webp?v=2026112820a" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice"/>`;
       } else body=`<g transform="translate(1.75,5.2) scale(.95,1.03)">${a}</g>`;
       const sF=`<svg viewBox="0 0 70 94.7" class="rcard"><defs><clipPath id="khfclip"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><g clip-path="url(#khfclip)">${body}</g><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="${(84.9+fs*.12).toFixed(1)}" class="rn" style="font-size:${fs.toFixed(1)}px;stroke-width:2.6px">${NM}</text>${isA?`<circle cx="60" cy="12" r="8" fill="#f7c52b" stroke="#5a3a00" stroke-width="1.2"/><circle cx="60" cy="12" r="6" fill="none" stroke="#fff3a8" stroke-width=".8"/><text x="60" y="15.4" class="rn" style="font-size:9px">+2</text>`:''}</svg>`;
       return ccache[ck]=sF;
@@ -189,7 +189,7 @@ const KHART=(()=>{
       <path d="M5 73 H65 L61 82 L65 91 H5 L9 82Z" fill="url(#${id}g)" stroke="#2e1809" stroke-width="1.2" stroke-linejoin="round"/><circle cx="7.5" cy="7.5" r="1.6" fill="#f3d27a" stroke="#5a330f" stroke-width=".5"/><circle cx="62.5" cy="7.5" r="1.6" fill="#f3d27a" stroke="#5a330f" stroke-width=".5"/><text x="35" y="86" class="rn" style="font-size:${nm.length>10?6.9:9.5}px">${nm}</text>${k[0]==='a'&&k.length===5?`<circle cx="58" cy="12" r="8" fill="url(#${id}g)" stroke="#5a3a00" stroke-width="1.2"/><circle cx="58" cy="12" r="6" fill="none" stroke="#fff3a8" stroke-width=".8"/><text x="58" y="15.4" class="rn" style="font-size:9px">+2</text>`:''}</svg>`;
     return ccache[k]=s; }
 
-  function devBack(){ return `<svg viewBox="0 0 70 102.4" class="rcard"><image href="assets/card-back.webp?v=2026112812a" x="0" y="0" width="70" height="102.4"/></svg>`; }
-  function medal(k){ return `<img class="mdl" src="assets/award-${k==='road'?'road':'army'}.webp?v=2026112812a" alt="">`; }
+  function devBack(){ return `<svg viewBox="0 0 70 102.4" class="rcard"><image href="assets/card-back.webp?v=2026112820a" x="0" y="0" width="70" height="102.4"/></svg>`; }
+  function medal(k){ return `<img class="mdl" src="assets/award-${k==='road'?'road':'army'}.webp?v=2026112820a" alt="">`; }
   return {R,board,house,road,robber,die,resCard,devCard,devBack,medal,resMini,hexPts,shade,RC};
 })();
