@@ -72,9 +72,9 @@ const KHART=(()=>{
     d+='<linearGradient id="khHay" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe58a"/><stop offset="1" stop-color="#c79616"/></linearGradient>';
     d+='<linearGradient id="khCac" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7cc04a"/><stop offset=".5" stop-color="#4c8f26"/><stop offset="1" stop-color="#2d5e14"/></linearGradient>';
     d+='<linearGradient id="khBevel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></linearGradient>';
-    d+='<radialGradient id="khToken" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#e3e7ea"/><stop offset="1" stop-color="#aab3bb"/></radialGradient>';
-    d+='<radialGradient id="khSea" cx="50%" cy="50%" r="62%"><stop offset="0" stop-color="#46cdf6"/><stop offset=".5" stop-color="#1aa6ea"/><stop offset="1" stop-color="#0a6fbe"/></radialGradient>';
-    d+='<radialGradient id="khSand" cx="50%" cy="50%" r="60%"><stop offset=".8" stop-color="#fbe99c"/><stop offset="1" stop-color="#ecc86a"/></radialGradient>';
+    d+='<radialGradient id="khToken" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#fffaf0"/><stop offset=".65" stop-color="#f2e3bf"/><stop offset="1" stop-color="#d4b77f"/></radialGradient>';
+    d+='<radialGradient id="khSea" cx="50%" cy="50%" r="62%"><stop offset="0" stop-color="#63d6ea"/><stop offset=".5" stop-color="#2fb6dc"/><stop offset="1" stop-color="#1a86bb"/></radialGradient>';
+    d+='<radialGradient id="khSand" cx="50%" cy="50%" r="60%"><stop offset=".8" stop-color="#f3dcaa"/><stop offset="1" stop-color="#e0bb78"/></radialGradient>';
     d+='<radialGradient id="khRob" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#7a7f8c"/><stop offset=".45" stop-color="#2c2e36"/><stop offset="1" stop-color="#050507"/></radialGradient>';
     d+='<linearGradient id="khHull" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a0612c"/><stop offset="1" stop-color="#4a2a10"/></linearGradient>';
     d+='<filter id="khNoise" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="4"/><feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.25"/></filter>';
@@ -93,11 +93,11 @@ const KHART=(()=>{
   // ---------- cảng ----------
   function port(px,py,ax,ay,bx,by,t,ang){ let o='';
     [[ax,ay],[bx,by]].forEach(([x,y])=>{ const L=Math.hypot(px-x,py-y), ux=(px-x)/L, uy=(py-y)/L; const nx=-uy*3.2, ny=ux*3.2;
-      o+=`<polygon points="${f(x+nx)},${f(y+ny)} ${f(px+nx*.6)},${f(py+ny*.6)} ${f(px-nx*.6)},${f(py-ny*.6)} ${f(x-nx)},${f(y-ny)}" fill="#c48a4c" stroke="#3a2412" stroke-width="1.4"/>`;
-      for(let k=1;k<6;k++){ const q=k/6; o+=`<line x1="${f(x+(px-x)*q+nx)}" y1="${f(y+(py-y)*q+ny)}" x2="${f(x+(px-x)*q-nx)}" y2="${f(y+(py-y)*q-ny)}" stroke="#3a2412" stroke-width="1"/>`; } });
+      o+=`<polygon points="${f(x+nx)},${f(y+ny)} ${f(px+nx*.6)},${f(py+ny*.6)} ${f(px-nx*.6)},${f(py-ny*.6)} ${f(x-nx)},${f(y-ny)}" fill="#d9b27a" stroke="#8a5a2c" stroke-width="1.4"/>`;
+      for(let k=1;k<6;k++){ const q=k/6; o+=`<line x1="${f(x+(px-x)*q+nx)}" y1="${f(y+(py-y)*q+ny)}" x2="${f(x+(px-x)*q-nx)}" y2="${f(y+(py-y)*q-ny)}" stroke="#8a5a2c" stroke-width="1"/>`; } });
     o+=`<g transform="translate(${f(px)},${f(py)}) scale(1.25)"><path d="M-25 10 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".9"/><path d="M-20 14 q5 -3 10 0 t10 0 t10 0 t10 0" stroke="#bff3fb" stroke-width="1.6" fill="none" opacity=".8"/><g class="boat"><ellipse cx="2" cy="9" rx="17" ry="4" fill="#06304f" opacity=".45"/><path d="M-16,1 L16,1 L11,10 L-12,10Z" fill="url(#khHull)" stroke="#1f1208" stroke-width="1.8" stroke-linejoin="round"/><path d="M-13,3.5 H13" stroke="#e0a66a" stroke-width="1.2" opacity=".8"/><line x1="0" y1="2" x2="0" y2="-22" stroke="#3a2412" stroke-width="1.6"/><path d="M1,-21 Q14,-11 1,0Z" fill="#ffffff" stroke="#39434d" stroke-width="1.3" stroke-linejoin="round"/><path d="M1,-21 Q6,-11 1,0 Q9,-11 1,-21Z" fill="#dfe6ec"/><path d="M-1,-18 Q-11,-10 -1,-2Z" fill="#f3f6f8" stroke="#39434d" stroke-width="1.3" stroke-linejoin="round"/><path d="M0,-22 L7,-20 L0,-18Z" fill="${t<0?'#e11d48':['#2f7d32','#c2562b','#8bc34a','#e8b923','#7b8794'][t]}"/></g></g>`;
     const bx2=px+Math.cos(ang)*26, by2=py+Math.sin(ang)*26;
-    o+=`<g transform="translate(${f(bx2)},${f(by2)})"><circle r="15.5" fill="#eef1f4" stroke="#2f363d" stroke-width="2.4"/><circle r="12.5" fill="none" stroke="#9aa3ab" stroke-width=".9"/>${t>=0?resMini(t,0,-4,.75):''}<text y="${t>=0?9:5}" class="pt">${t<0?'3:1':'2:1'}</text></g>`;
+    o+=`<g transform="translate(${f(bx2)},${f(by2)})"><circle r="15.5" fill="#f7ebcd" stroke="#9a6b36" stroke-width="2.4"/><circle r="12.5" fill="none" stroke="#c9a26a" stroke-width=".9"/>${t>=0?resMini(t,0,-4,.75):''}<text y="${t>=0?9:5}" class="pt">${t<0?'3:1':'2:1'}</text></g>`;
     return o; }
   // ---------- quân cờ ----------
   function shade(c,v){ return v>0?mix(c,'#ffffff',v):mix(c,'#000000',-v); }
@@ -113,7 +113,7 @@ const KHART=(()=>{
     return `<polygon points="${q(4.5,2,4)}" fill="#000" opacity=".35"/><polygon points="${q(4,0,3)}" fill="${shade(c,-.45)}" stroke="#111" stroke-width="1"/><polygon points="${q(4,0,0)}" fill="${c}" stroke="#111" stroke-width="1.1"/><line x1="${f(x1+nx*2)}" y1="${f(y1+ny*2-1)}" x2="${f(x2+nx*2)}" y2="${f(y2+ny*2-1)}" stroke="${shade(c,.55)}" stroke-width="1.6" opacity=".9"/>`; }
   function robber(x,y){ return `<g transform="translate(${f(x)},${f(y)})" class="robber"><ellipse cx="2" cy="15" rx="11" ry="4" fill="#000" opacity=".45"/><path d="M-9,14 Q-11,6 -5,0 Q-8,-4 -6,-8 A7,7 0 1 1 6,-8 Q8,-4 5,0 Q11,6 9,14Z" fill="url(#khRob)" stroke="#000" stroke-width="1.2"/><ellipse cx="-3" cy="-10" rx="2.6" ry="3.6" fill="#fff" opacity=".35"/><ellipse cx="-5" cy="6" rx="2" ry="5" fill="#fff" opacity=".18"/><rect x="-9" y="12" width="18" height="3" rx="1.5" fill="#111"/></g>`; }
   function token(x,y,n){ const hot=n===6||n===8, k=KH.PIPS[n]||0;
-    return `<g class="tok"><ellipse cx="${f(x+2)}" cy="${f(y+5)}" rx="17" ry="7" fill="#000" opacity=".35"/><circle cx="${f(x)}" cy="${f(y+2.5)}" r="16.5" fill="#3d444c"/><circle cx="${f(x)}" cy="${f(y)}" r="16" fill="url(#khToken)" stroke="#2f363d" stroke-width="2.2"/><circle cx="${f(x)}" cy="${f(y)}" r="13" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".9"/>
+    return `<g class="tok"><ellipse cx="${f(x+2)}" cy="${f(y+5)}" rx="17" ry="7" fill="#000" opacity=".35"/><circle cx="${f(x)}" cy="${f(y+2.5)}" r="16.5" fill="#8a6636"/><circle cx="${f(x)}" cy="${f(y)}" r="16" fill="url(#khToken)" stroke="#8a6636" stroke-width="2.2"/><circle cx="${f(x)}" cy="${f(y)}" r="13" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".9"/>
       <text x="${f(x+.6)}" y="${f(y+5.6)}" class="nm sh">${n}</text><text x="${f(x)}" y="${f(y+5)}" class="nm ${hot?'hot':''}">${n}</text>${Array.from({length:k},(_,i)=>`<circle cx="${f(x+(i-(k-1)/2)*3.6)}" cy="${f(y+10)}" r="1.25" fill="${hot?'#b91c1c':'#3a2a14'}"/>`).join('')}</g>`; }
   // ---------- toàn bàn cờ tĩnh ----------
   function board(S,box){ const H=KH.HEX, V=KH.V, E=KH.E; const {minX,minY,w,h}=box;
@@ -126,10 +126,10 @@ const KHART=(()=>{
     // cảng
     KH.PORT_E.forEach((e,i)=>{ const E0=E[e], a=V[E0.a], b=V[E0.b]; const mx=(a.x+b.x)/2, my=(a.y+b.y)/2, L=Math.hypot(mx,my); const px=(mx+mx/L*.62)*R, py=(my+my/L*.62)*R; s+=port(px,py,a.x*R,a.y*R,b.x*R,b.y*R,S.ports[i],Math.atan2(my,mx)); });
     // ô đất (đế 3D + hình)
-    H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#4a3018"/><polygon points="${hexPts(cx+2,cy+9,R)}" fill="#000" opacity=".22" filter="url(#khSoft)"/>`; });
+    H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#d2b27a"/><polygon points="${hexPts(cx+2,cy+9,R)}" fill="#7a5a2a" opacity=".18" filter="url(#khSoft)"/>`; });
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R, hd=S.hex[i];
-      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=4?`<image href="assets/hex-${hd.res}.webp?v=20261127f" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127f" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
-      s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#25140a" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-3.5)}" fill="none" stroke="url(#khBevel)" stroke-width="2.4"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f6ead0" stroke-width="2.2"/>`;
+      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=5?`<image href="assets/hex-${hd.res}.webp?v=20261127g" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127g" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
+      s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#d9bb82" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-4.5)}" fill="none" stroke="#b58b52" stroke-opacity=".45" stroke-width="1.3"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f3e2bb" stroke-width="1.6"/>`;
       });
     H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.num) s+=token(hx.x*R,hx.y*R+8,hd.num); });
     return s; }
@@ -144,7 +144,7 @@ const KHART=(()=>{
   function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, nm=RN[r].toUpperCase();
     const s=`<svg viewBox="0 0 100 76" class="rcard"><defs>
       <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset=".45" stop-color="#a8642f"/><stop offset="1" stop-color="#7d4520"/></linearGradient></defs>
-      <image href="assets/res-${r}.webp?v=20261127f" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
+      <image href="assets/res-${r}.webp?v=20261127g" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
       <g class="plank" transform="scale(1,.88)"><path d="M13 3.5 L16 1.5 H84 L87 3.5 L89 5.5 V17.5 L87 19.5 L84 21.5 H16 L13 19.5 L11 17.5 V5.5Z" fill="#1b0f06" transform="translate(0,1.2)" opacity=".55"/>
       <path d="M13 3 L16 1 H84 L87 3 L89 5 V17 L87 19 L84 21 H16 L13 19 L11 17 V5Z" fill="url(#${id}w)" stroke="#1b0f06" stroke-width="1.6" stroke-linejoin="round"/>
       <path d="M15 5 H55 M60 4.6 H84 M16 11 H40 M47 10.6 H70 M74 11 H86 M15 17.6 H48 M56 17.4 H84" stroke="#6b3a17" stroke-width=".7" stroke-linecap="round" fill="none" opacity=".7"/>
