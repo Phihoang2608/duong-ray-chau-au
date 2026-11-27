@@ -15,9 +15,9 @@ p{margin:0 0 14px}
 <script src="art.js"></script>
 <script>
 const R=document.getElementById('r');
-['knight','road','plenty','mono','vp'].forEach(k=>{R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devCard(k)+'</div>');});
+['knight','road','plenty','mono','vp'].forEach(k=>{R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devCard(k,false)+'</div>');});
 R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devBack()+'</div>');
-['aroad','aarmy'].forEach(k=>{R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devCard(k)+'</div>');});
+['aroad','aarmy'].forEach(k=>{R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devCard(k,false)+'</div>');});
 R.insertAdjacentHTML('beforeend','<div style="width:100%;height:1px"></div>');
 ['knight','road','plenty','mono','vp','aroad','aarmy'].forEach(k=>{R.insertAdjacentHTML('beforeend','<div class="c">'+KHART.devCard(k,true)+'</div>');});
 </script></body></html>
