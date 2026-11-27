@@ -14,7 +14,7 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js?v=20261127fix"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261128d"></script>
+<script src="game.js?v=20261128e"></script>
 <script src="assets/imgs.js?v=2026112823y"></script>
 <script>
 document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('khhid',document.hidden));
@@ -26,7 +26,7 @@ window.KH_FX=(function(){const d=document.documentElement;
  apply(); return {mode,apply,toggle};})();
 </script>
 <script src="art.js?v=2026112823y"></script>
-<script src="ui.js?v=20261128d"></script>
+<script src="ui.js?v=20261128e"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -51,7 +51,7 @@ const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:ra
 #khd .pickh{fill:rgba(255,255,255,.02);stroke:#fff;stroke-width:3;stroke-dasharray:8 6;cursor:pointer;animation:ph 1.2s infinite}#khd .pickh:hover{fill:rgba(255,220,120,.3)}#khd .pickh.on{fill:rgba(239,68,68,.25);stroke:#ef4444}@keyframes ph{50%{stroke-opacity:.35}}
 #khd .spot{stroke:var(--pc);stroke-width:10;stroke-linecap:round;opacity:.45;cursor:pointer;animation:sp 1s infinite;}#khd .spot:hover{opacity:1}@keyframes sp{50%{opacity:.9}}
 #khd *{pointer-events:none}
-#khd [data-v],#khd [data-v] *,#khd [data-e],#khd [data-c],#khd [data-c] *,#khd [data-h],#khd [data-h] *{pointer-events:auto}
+#khd [data-port],#khd [data-port] *,#khd [data-v],#khd [data-v] *,#khd [data-e],#khd [data-c],#khd [data-c] *,#khd [data-h],#khd [data-h] *{pointer-events:auto}
 #khd .vhit{fill:#000;fill-opacity:0;pointer-events:all;cursor:pointer}
 #khd .ehit{stroke:#000;stroke-opacity:0;stroke-width:28;stroke-linecap:butt;pointer-events:stroke;cursor:pointer}
 #khd [data-v]:hover .vspot{fill:#fde047}
@@ -1003,6 +1003,16 @@ body:not(.ingame) #tb-box{margin-top:24px!important}body:not(.ingame) #tb-box::b
 @media (max-height:520px){#ktrd .trp{padding:6px 12px 8px}#ktrd .tc .xstep .xpm,#ktrd .tc .xstep .xdv{height:28px}#ktrd .tsum{min-height:28px;padding:2px 8px}#ktrd .tq img{width:20px;height:20px}#ktrd .xdb{margin-top:4px}#ktrd .xdb .tbtn{min-height:36px;padding:4px 6px;font-size:15px}#ktrd .tt{min-height:28px;padding:2px 10px}#ktrd .thint{display:none}}
 @media (max-height:520px){#ktrd .tsum{display:none}#ktrd .ttg,#ktrd .xdb{display:inline-flex;vertical-align:middle;margin-top:6px}#ktrd .ttg{width:58%;font-size:13px}#ktrd .xdb{width:41%;float:right}}
 @media (max-height:520px){#kvic .vpn{width:min(96vw,780px)}#kvic .vrk{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important;gap:5px}#kvic .vr{padding:2px 8px;gap:6px}#kvic .vr img{width:24px;height:24px}#kvic .vk{width:20px;height:20px;flex-basis:20px;font-size:12px}#kvic .vn b{font-size:14px}#kvic .vp{font-size:19px}#kvic .vwin{padding:3px 10px}#kvic .vh,#kvic .vcoin{width:38px;height:38px;flex-basis:38px}#kvic .vcoin b{font-size:17px}#kvic .vwn{font-size:19px}#kvic .vmeta{font-size:12px;margin:4px 0 0}#kvic .vbt .tbtn{min-height:38px;font-size:15px!important}}
+
+/* cảng đổi được: phát sáng vàng */
+#khd .pgr{fill:rgba(255,213,74,.25);stroke:#ffd54a;stroke-width:5;filter:drop-shadow(0 0 8px #ffd54a);animation:pgl 1.4s ease-in-out infinite}
+#khd .pgh{fill:transparent;stroke:#fff7c0;stroke-width:2;opacity:.8;animation:pgw 1.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
+#khd .pgb{fill:#2f9a2b;stroke:#0f3d0c;stroke-width:2.5}
+#khd .pgt{fill:#fff;font:800 14px "KhFont","Baloo 2",sans-serif;text-anchor:middle;paint-order:stroke;stroke:#0f3d0c;stroke-width:2.5}
+#khd .pglow:hover .pgr{fill:rgba(255,213,74,.5)}
+@keyframes pgl{50%{stroke:#fff3a0;fill:rgba(255,213,74,.45)}}
+@keyframes pgw{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+html.khlite #khd .pgh{display:none}
 /* === Thanh nút xây (điện thoại dọc) === */
 .xbb{display:none}
 @media (max-width:900px) and (orientation:portrait){

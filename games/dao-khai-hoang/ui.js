@@ -50,6 +50,10 @@ const KHUI=(()=>{
       s+=`<g class="${fresh?'newp':''}" ${canUp?`data-c="${i}" style="cursor:pointer"`:''}>${A.house(X(v.x),X(v.y),PC[o.p],o.city)}${canUp?`<circle cx="${X(v.x)}" cy="${X(v.y)}" r="18" class="vspot ring"/><circle cx="${X(v.x)}" cy="${X(v.y)}" r="26" class="vhit"/>`:''}</g>`;
       if (fresh) s+=[0,1,2,3,4,5].map(k=>`<circle class="dust" style="--dx:${Math.cos(k)*22}px;--dy:${Math.sin(k)*10}px" cx="${X(v.x)}" cy="${X(v.y)+8}" r="4"/>`).join(''); });
     s+=robG;
+    if (my&&S.phase==='play'&&S.step==='main'&&!S.offer&&ME>=0){ const Pm=S.P[ME];
+      KH.PORT_E.forEach((e,i)=>{ const E0=E[e]; if(![E0.a,E0.b].some(v=>S.vo[v]&&S.vo[v].p===ME)) return; const t=S.ports[i]; const ok=t>=0?Pm.res[t]>=2:Pm.res.some(x=>x>=3); if(!ok) return;
+        const a=V[E0.a], b=V[E0.b], mx=(a.x+b.x)/2, my2=(a.y+b.y)/2, L=Math.hypot(mx,my2), px=(mx+mx/L*1.32)*R, py=(my2+my2/L*1.32)*R, ang=Math.atan2(my2,mx), cx=px+Math.cos(ang)*55, cy=py+Math.sin(ang)*55;
+        s+=`<g class="pglow" data-port="${i}" style="cursor:pointer"><circle cx="${f1(cx)}" cy="${f1(cy)}" r="31" class="pgr"/><circle cx="${f1(cx)}" cy="${f1(cy)}" r="34" class="pgh"/><g transform="translate(${f1(cx)},${f1(cy+36)})"><rect x="-22" y="-10" width="44" height="20" rx="10" class="pgb"/><text y="5.5" class="pgt">Đổi</text></g></g>`; }); }
     if (my){ const wantTown=(S.phase==='setup'&&S.step==='town')||(S.phase==='play'&&S.step==='main'&&mode==='town');
       if (wantTown) V.forEach((v,i)=>{ if(KH.townOK(S,ME,i)) s+=`<g data-v="${i}" style="cursor:pointer"><circle cx="${X(v.x)}" cy="${X(v.y)}" r="24" class="vhit"/><circle cx="${X(v.x)}" cy="${X(v.y)}" r="9" class="vspot" style="--pc:${PC[ME]}"/></g>`; }); }
     return s; }
@@ -104,6 +108,17 @@ const KHUI=(()=>{
   if(window.visualViewport) window.visualViewport.addEventListener('resize',()=>requestAnimationFrame(fit));
   document.addEventListener('fullscreenchange',()=>setTimeout(fit,100)); document.addEventListener('webkitfullscreenchange',()=>setTimeout(fit,100));
   function setH(el,h){ if(el.__h===h) return; el.__h=h; el.innerHTML=h; }
+  function patchN(a,b){ const ac=a.childNodes, bc=b.childNodes; let i=0;
+    for(;i<bc.length;i++){ const x=ac[i], y=bc[i]; if(!x){ a.appendChild(y.cloneNode(true)); continue; }
+      if(x.nodeType!==y.nodeType||x.nodeName!==y.nodeName){ a.replaceChild(y.cloneNode(true),x); continue; }
+      if(x.nodeType===3){ if(x.nodeValue!==y.nodeValue) x.nodeValue=y.nodeValue; continue; }
+      if(x.nodeType!==1) continue;
+      for(const at of [...x.attributes]) if(!y.hasAttribute(at.name)) x.removeAttribute(at.name);
+      for(const at of [...y.attributes]) if(x.getAttribute(at.name)!==at.value) x.setAttribute(at.name,at.value);
+      if('disabled' in x) x.disabled=y.hasAttribute('disabled');
+      patchN(x,y); }
+    while(ac.length>bc.length) a.removeChild(a.lastChild); }
+  function morph(el,h){ if(el.__h===h) return; if(el.__h==null){ el.__h=h; el.innerHTML=h; return; } el.__h=h; const t=document.createElement('div'); t.innerHTML=h; patchN(el,t); }
   function render(S,ME,api){
     if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div><button class="kfx" type="button" title="Đổi chế độ hiệu ứng"></button><button class="kfs" type="button" title="Toàn màn hình" aria-label="Toàn màn hình">⛶</button><div class="kzm"><button type="button" data-z="in" title="Phóng to bản đồ" aria-label="Phóng to">＋</button><button type="button" data-z="out" title="Thu nhỏ bản đồ" aria-label="Thu nhỏ">－</button><button type="button" data-z="reset" title="Về cỡ ban đầu (100%)" aria-label="Về cỡ ban đầu">100%</button></div><div class="hov"></div></div><div class="side"><div class="ofn"></div><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
       { const ch=document.getElementById('tb-chat'); if(ch){ root0chat=ch; root0=document.querySelector('#kh .chs'); root0.appendChild(ch); ch.classList.add('show'); } }
@@ -177,8 +192,7 @@ const KHUI=(()=>{
         const others=S.seats.map((x,i)=>i).filter(i=>i!==ME), okO=main&&P.res[og]>=oq&&og!==ow;
         const popH=(pop==='bank'||pop==='port')?`<div class="box pop"><button class="pclose" type="button" data-a="closepop" aria-label="Đóng">×</button><div class="cth">${isB?'Ngân hàng · đổi 4 lấy 1':'Cảng · đổi theo cảng của bạn'}</div><div class="plb">Đưa (số lá cần có)</div><div class="rrow">${gb}</div><div class="plb">Lấy</div><div class="rrow">${wb}</div><button class="tbtn pri wide" data-a="trade" ${okT?'':'disabled'}>Đổi ${rt[tg]} <img class="ri" src="assets/ic-${tg}.webp?v=2026112823y" alt=""> lấy 1 <img class="ri" src="assets/ic-${tw}.webp?v=2026112823y" alt=""></button></div>`
           :'';
-        HV+=buildBar(S,ME,P,main);
-        HV+=`<div class="tbar">${popH}<button class="bt bk ${anyBk?'ring':''} ${pop==='bank'?'on':''}" data-a="pop" data-k="bank" title="Ngân hàng: đổi 4 lá cùng loại lấy 1 lá bất kỳ"><img src="assets/bank.webp?v=2026112823y" alt=""><small>Ngân hàng</small></button><button class="bt pt ${anyPt?'ring':''} ${pop==='port'?'on':''}" data-a="pop" data-k="port" ${hasPort?'':'disabled'} title="${hasPort?'Cảng: đổi theo tỉ lệ cảng của bạn':'Cần có nhà hoặc thành phố ở cảng mới đổi được'}"><img src="assets/boat.webp?v=2026112823y" alt=""><small>Cảng</small></button><button class="bt bm ${pop==='offer'?'on':''}" data-a="pop" data-k="offer" title="Trao đổi: gửi yêu cầu đổi với người chơi khác"><img src="assets/market.webp?v=2026112823y" alt=""><small>Trao đổi</small></button>${S.undo===ME&&ME>=0&&S.phase!=='over'?'<button class="tbtn kundo" data-a="undo" title="Quay lại nước vừa đi">↩ Hoàn tác</button>':''}${my&&S.phase==='play'&&S.step==='roll'?'<button class="tbtn pri kend rdy kroll" data-a="roll">🎲 Đổ xúc xắc</button>':`<button class="tbtn pri kend ${main?'rdy':''}" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>`}</div>`; }
+                HV+=`<div class="tbar">${popH}<button class="bt bk ${anyBk?'ring':''} ${pop==='bank'?'on':''}" data-a="pop" data-k="bank" title="Ngân hàng: đổi 4 lá cùng loại lấy 1 lá bất kỳ"><img src="assets/bank.webp?v=2026112823y" alt=""><small>Ngân hàng</small></button><button class="bt pt ${anyPt?'ring':''} ${pop==='port'?'on':''}" data-a="pop" data-k="port" ${hasPort?'':'disabled'} title="${hasPort?'Cảng: đổi theo tỉ lệ cảng của bạn':'Cần có nhà hoặc thành phố ở cảng mới đổi được'}"><img src="assets/boat.webp?v=2026112823y" alt=""><small>Cảng</small></button><button class="bt bm ${pop==='offer'?'on':''}" data-a="pop" data-k="offer" title="Trao đổi: gửi yêu cầu đổi với người chơi khác"><img src="assets/market.webp?v=2026112823y" alt=""><small>Trao đổi</small></button>${S.undo===ME&&ME>=0&&S.phase!=='over'?'<button class="tbtn kundo" data-a="undo" title="Quay lại nước vừa đi">↩ Hoàn tác</button>':''}${my&&S.phase==='play'&&S.step==='roll'?'<button class="tbtn pri kend rdy kroll" data-a="roll">🎲 Đổ xúc xắc</button>':`<button class="tbtn pri kend ${main?'rdy':''}" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>`}</div>`; }
       { const mx=Math.max(0,...S.P.map(q=>q.lr)), mk=Math.max(0,...S.P.map(q=>q.knights)); const hd=i=>i>=0?`<span class="hold" style="--pc:${PC[i]}">${api.esc(S.seats[i].name)}</span>`:'<span class="hold none">Chưa ai</span>';
         const slot=(k,cls,own)=>own<0?`<span class="medal ${cls}">${A.medal(k)}</span>`:`<span class="slot"></span>`;
         L+=`<div class="box awp"><div class="cth">Giải thưởng +2 điểm</div>
@@ -294,7 +308,7 @@ const KHUI=(()=>{
     const others=S.seats.map((_,i)=>i).filter(i=>i!==ME), ok=main&&sg>0&&sw>0;
     const tgt=`<button type="button" class="tt ${ot<0?'on':''}" data-a="tgt" data-p="-1">Tất cả</button>`+others.map(i=>`<button type="button" class="tt ${ot===i?'on':''}" data-a="tgt" data-p="${i}" style="--pc:${PC[i]}"><i></i>${api.esc(S.seats[i].name)}</button>`).join('');
     const hint=!main?'Chỉ gửi được trong lượt của bạn, sau khi đổ xúc xắc':!sg?'Chọn lá bạn muốn đưa':!sw?'Chọn lá bạn muốn lấy':'';
-    setH(tmod,`<div class="xdp trp"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><button type="button" class="tx" data-a="closepop" aria-label="Đóng">×</button>
+    morph(tmod,`<div class="xdp trp"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><button type="button" class="tx" data-a="closepop" aria-label="Đóng">×</button>
       <div class="xdt">ĐỔI TÀI NGUYÊN</div>
       <div class="tsec give"><div class="tlab">Bạn đưa</div><div class="tg">${[0,1,2,3,4].map(r=>col(r,true)).join('')}</div></div>
       <div class="tsec get"><div class="tlab">Bạn muốn lấy</div><div class="tg">${[0,1,2,3,4].map(r=>col(r,false)).join('')}</div></div>
@@ -307,14 +321,14 @@ const KHUI=(()=>{
     if(!smod){ smod=document.createElement('div'); smod.id='kdst'; document.body.appendChild(smod); smod.addEventListener('click',e=>{ dstat=false; statModal(S); }); }
     const h=Array.isArray(S.dh)?S.dh:Array(13).fill(0), tot=h.reduce((a,b)=>a+b,0), W=[0,0,1,2,3,4,5,6,5,4,3,2,1], mx=Math.max(1,...h.slice(2).map((x,i)=>Math.max(x,tot*W[i+2]/36)));
     const cols=[2,3,4,5,6,7,8,9,10,11,12].map(n=>{ const ex=tot*W[n]/36; return `<div class="xsc ${n===7?'s7':''}"><i class="xsn">${h[n]}</i><div class="xsb"><span class="xse" style="height:${Math.round(ex/mx*100)}%"></span><span class="xsv" style="height:${Math.round(h[n]/mx*100)}%"></span></div><b>${n}</b></div>`; }).join('');
-    setH(smod,`<div class="xdp xst"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="xstt">Thống kê xúc xắc</div><div class="xsts">Ván này đã đổ <b>${tot}</b> lần</div><div class="xsg">${cols}</div><div class="xslg"><span><i class="lv"></i>Số lần đã ra</span><span><i class="le"></i>Mức trung bình theo xác suất</span></div><div class="xsh">Chạm bất kỳ đâu để đóng</div></div>`); }
+    morph(smod,`<div class="xdp xst"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="xstt">Thống kê xúc xắc</div><div class="xsts">Ván này đã đổ <b>${tot}</b> lần</div><div class="xsg">${cols}</div><div class="xslg"><span><i class="lv"></i>Số lần đã ra</span><span><i class="le"></i>Mức trung bình theo xác suất</span></div><div class="xsh">Chạm bất kỳ đâu để đóng</div></div>`); }
 
   function dscModal(S,ME,api,need,P){ if(!need||!P){ if(dmod){ dmod.remove(); dmod=null; } return; }
     if(!dmod){ dmod=document.createElement('div'); dmod.id='kdsc'; document.body.appendChild(dmod); dmod.addEventListener('click',onClick); }
     const sel=dsc.reduce((a,b)=>a+b,0), V='?v=2026112823y';
     const cols=KH_RES.map((nm,r)=>{ const has=P.res[r], n=dsc[r]; return `<div class="xdc ${n?'pick':''} ${has?'':'none'}"><div class="xdi"><img src="assets/ic-${r}.webp${V}" alt=""><i>${has}</i></div><b class="xdn">${nm}</b>
       <div class="xstep"><button type="button" class="xpm" data-a="dplus" data-r="${r}" ${has>n&&sel<need?'':'disabled'} aria-label="Thêm ${nm}">+</button><div class="xdv">${n}</div><button type="button" class="xpm" data-a="dminus" data-r="${r}" ${n?'':'disabled'} aria-label="Bớt ${nm}">−</button></div></div>`; }).join('');
-    setH(dmod,`<div class="xdp"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="xdt"><img src="assets/robber.webp${V}" alt="">RA SỐ 7!</div>
+    morph(dmod,`<div class="xdp"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="xdt"><img src="assets/robber.webp${V}" alt="">RA SỐ 7!</div>
       <div class="xds">Bạn có <b>${KH.tot(P.res)}</b> lá — phải bỏ <b>${need}</b> lá</div>
       <div class="xdg">${cols}</div>
       <div class="xdpr"><span style="width:${Math.round(sel/need*100)}%"></span><em>Đã chọn ${sel}/${need}</em></div>
@@ -322,12 +336,13 @@ const KHUI=(()=>{
   let lastTk=-1; function tickView(S,ME,api){ const el=root&&root.querySelector('.pl.turn .tmr'); if(!el) return; const l=Math.max(0,60-Math.floor((api.now()-S.turnAt)/1000)); el.textContent=l; const low=l<=10&&l>0; el.classList.toggle('low',low); const pl=el.closest('.pl'); if(pl) pl.classList.toggle('lowt',low); if(low&&l!==lastTk&&S.turn===ME&&S.phase!=='over'){ try{ SFX.tone(l<=3?1500:1100,.09,{type:'square',vol:.16}); }catch(e){} } lastTk=l; }
   function onChange(e){ const s=e.target.dataset.s; if(!s) return; const v=+e.target.value; if(s==='g') tg=v; else if(s==='w') tw=v; else if(s==='og') og=v; else if(s==='oq') oq=v; else if(s==='ow') ow=v; else if(s==='on') on=v; else if(s==='ot') ot=v; render(window.__S,Table.API.me(),Table.API); }
   function onClick(e){ const api=Table.API, S=window.__S, ME=api.me(); if(!S) return; const rr=()=>render(S,ME,api);
-    const t=e.target.closest('[data-v],[data-e],[data-c],[data-h],[data-vic],[data-m],[data-a],[data-dev],[data-pr]'); if(!t) return; const d=t.dataset;
+    const t=e.target.closest('[data-port],[data-v],[data-e],[data-c],[data-h],[data-vic],[data-m],[data-a],[data-dev],[data-pr]'); if(!t) return; const d=t.dataset;
     if (t.disabled) return;
     if (d.v!=null){ mode=null; api.act({t:'town',v:+d.v}); rr(); return; }
     if (d.e!=null){ api.act({t:'road',e:+d.e}); const S2=window.__S; if(!S2.free) mode=null; render(S2,ME,api); return; }
     if (d.c!=null){ mode=null; api.act({t:'city',v:+d.c}); rr(); return; }
     if (d.vic!=null){ api.act({t:'robber',h:robH,v:+d.vic}); robH=null; return; }
+    if (d.port!=null){ const i=+d.port, t=S.ports[i], Pm=S.P[ME]; if(!Pm) return; const rp=KH.rates(S,ME); pop='port'; if(t>=0) tg=t; else { const f=Pm.res.findIndex((x,r)=>x>=rp[r]); if(f>=0) tg=f; } if(tw===tg) tw=(tg+1)%5; rr(); return; }
     if (d.h!=null){ if(!(S.turn===ME&&S.step==='robber')) return; const h=+d.h; if(h===S.robber){ say('Hãy chọn ô khác ô hiện tại'); return; }
       const vs=KH.victims(S,h,ME); if(vs.length>1){ robH=h; rr(); } else api.act({t:'robber',h,v:vs[0]}); return; }
     SFX.pop();
