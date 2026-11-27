@@ -3,8 +3,8 @@ const KHUI=(()=>{
   const PC=['#e11d48','#2563eb','#16a34a','#f8fafc'];
   const A=KHART, R=A.R;
   let prevRob=-1, f1=v=>Math.round(v*10)/10, lastVp={}, lastArgs=null, root=null, prevAw={}, pop=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='', sayTxt='', sayUntil=0, sayTm=null, hotH='', dsc=[0,0,0,0,0];
-  const KH_TIP={knight:'Hiệp sĩ: dời kẻ cướp sang ô khác và lấy trộm 1 lá của người có nhà ở ô đó. Ai dùng từ 3 hiệp sĩ trở lên và nhiều nhất sẽ nhận Quân mạnh nhất (+2 điểm).',vp:'Điểm thưởng: mỗi thẻ được +1 điểm ẩn, không cần dùng. Đủ điểm là thắng.',road:'Làm đường: xây ngay 2 đường miễn phí.',plenty:'Được mùa: lấy 2 tài nguyên bất kỳ từ ngân hàng.',mono:'Độc quyền: chọn 1 loại tài nguyên, mọi người phải đưa bạn toàn bộ số lá loại đó.'};
-  const TIP_LR=mx=>`Đường dài nhất (+2 điểm): có chuỗi đường liền nhau dài từ 5 đoạn trở lên và dài hơn mọi người. Hiện cao nhất: ${mx}. Ai vượt qua sẽ lấy giải.`, TIP_LA=mk=>`Quân mạnh nhất (+2 điểm): đã dùng từ 3 hiệp sĩ trở lên và nhiều hơn mọi người. Hiện cao nhất: ${mk}. Ai vượt qua sẽ lấy giải.`;
+  const KH_TIP={knight:'Hiệp sĩ: dời kẻ cướp sang ô khác và lấy trộm 1 lá của người có nhà ở ô đó. Ai dùng từ 3 hiệp sĩ trở lên và nhiều nhất sẽ nhận Quân đội mạnh nhất (+2 điểm).',vp:'Điểm thưởng: mỗi thẻ được +1 điểm ẩn, không cần dùng. Đủ điểm là thắng.',road:'Làm đường: xây ngay 2 đường miễn phí.',plenty:'Được mùa: lấy 2 tài nguyên bất kỳ từ ngân hàng.',mono:'Độc quyền: chọn 1 loại tài nguyên, mọi người phải đưa bạn toàn bộ số lá loại đó.'};
+  const TIP_LR=mx=>`Đường dài nhất (+2 điểm): có chuỗi đường liền nhau dài từ 5 đoạn trở lên và dài hơn mọi người. Hiện cao nhất: ${mx}. Ai vượt qua sẽ lấy giải.`, TIP_LA=mk=>`Quân đội mạnh nhất (+2 điểm): đã dùng từ 3 hiệp sĩ trở lên và nhiều hơn mọi người. Hiện cao nhất: ${mk}. Ai vượt qua sẽ lấy giải.`;
   function zoomInit(){ const frame=root.querySelector('.frame'), svgs=[root.querySelector('#khs'),root.querySelector('#khd')], base=svgs[0]; if(!frame||!base) return;
     const Z={s:1,x:VB.minX,y:VB.minY,moved:false}, ptrs=new Map(); let pinch=null;
     const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -68,7 +68,7 @@ const KHUI=(()=>{
     try{ SFX.fanfare(); }catch(e){}
     const el=document.createElement('div'); el.className='kcong'; el.style.setProperty('--pc',PC[ev.seat]);
     const cols=['#fde047','#f87171','#60a5fa','#4ade80','#fb923c','#f0abfc']; let cf=''; for(let q=0;q<26;q++) cf+=`<i style="left:${Math.random()*100}%;background:${cols[q%6]};animation-delay:${(Math.random()*.5).toFixed(2)}s;animation-duration:${(1.3+Math.random()*.8).toFixed(2)}s;--r:${Math.round(Math.random()*720-360)}deg"></i>`;
-    el.innerHTML=`<div class="kcf">${cf}</div><div class="kcb"><div class="kct">Chúc mừng${me?' bạn':''}!</div><div class="kcm">${A.medal(k)}</div><div class="kcn">${me?'Bạn':nm}</div><div class="kcx">giành <b>${ev.a==='road'?'Đường dài nhất':'Quân mạnh nhất'}</b></div><div class="kcp">+2 điểm</div></div>`;
+    el.innerHTML=`<div class="kcf">${cf}</div><div class="kcb"><div class="kct">Chúc mừng${me?' bạn':''}!</div><div class="kcm">${A.medal(k)}</div><div class="kcn">${me?'Bạn':nm}</div><div class="kcx">giành <b>${ev.a==='road'?'Đường dài nhất':'Quân đội mạnh nhất'}</b></div><div class="kcp">+2 điểm</div></div>`;
     document.body.appendChild(el); setTimeout(()=>el.remove(),2000);
     hideMed={seat:ev.seat,c,until:Date.now()+2800};
     const hide=()=>{ const m=root&&root.querySelector(`.pl[data-p="${ev.seat}"] .medal.${c}`); if(m) m.style.visibility='hidden'; }; hide();
@@ -183,7 +183,7 @@ const KHUI=(()=>{
         const slot=(k,cls,own)=>own<0?`<span class="medal ${cls}">${A.medal(k)}</span>`:`<span class="slot"></span>`;
         L+=`<div class="box awp"><div class="cth">Giải thưởng +2 điểm</div>
           <div class="arow" data-tip="${TIP_LR(mx)}">${slot('road','lr',S.longest)}<span class="atx"><b>Đường dài nhất</b><small>Từ 5 đoạn trở lên · cao nhất: ${mx}</small>${hd(S.longest)}</span></div>
-          <div class="arow" data-tip="${TIP_LA(mk)}">${slot('army','la',S.largest)}<span class="atx"><b>Quân mạnh nhất</b><small>Từ 3 hiệp sĩ trở lên · cao nhất: ${mk}</small>${hd(S.largest)}</span></div></div>`; }
+          <div class="arow" data-tip="${TIP_LA(mk)}">${slot('army','la',S.largest)}<span class="atx"><b>Quân đội mạnh nhất</b><small>Từ 3 hiệp sĩ trở lên · cao nhất: ${mk}</small>${hd(S.largest)}</span></div></div>`; }
       if(S.phase==='over'&&api.mode()!=='client') L+=`<div class="box"><button class="tbtn gold wide" data-a="again">Chơi ván mới</button></div>`; }
     h+=`<div class="xlog">${S.log.slice(0,6).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
     const preM={lr:rectOf('.medal.lr'),la:rectOf('.medal.la')}; const awardEv=isNew&&ev.k==='award';
@@ -200,7 +200,7 @@ const KHUI=(()=>{
     if(isNew){ lastEv=ev.n;
       if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7){ banner('<img src="assets/robber.webp?v=2026112823y" alt=""><span>RA SỐ 7!</span>','seven',1750); const ks=ev.disc?Object.keys(ev.disc):[]; say(ks.length?'Ra 7! '+ks.map(i=>'<b>'+api.esc(S.seats[i].name)+'</b>').join(', ')+' có hơn 7 lá, phải bỏ một nửa':'Ra 7! <b>Kẻ cướp</b> xuất hiện'); if(ev.disc&&ev.disc[ME]!=null) SFX.ding&&SFX.ding(); }
         if(ev.got){ prodFX(S,sum); if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),3900); } }
-      else if(ev.k==='award'){ banner('<span>'+api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành ĐƯỜNG DÀI NHẤT!':' giành QUÂN MẠNH NHẤT!')+'</span>','award',1450); setTimeout(()=>congrats(S,ev,ME),1250); }
+      else if(ev.k==='award'){ banner('<span>'+api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành ĐƯỜNG DÀI NHẤT!':' giành QUÂN ĐỘI MẠNH NHẤT!')+'</span>','award',1450); setTimeout(()=>congrats(S,ev,ME),1250); }
       else if(ev.k==='offer'){ if(ev.seat!==ME&&S.offer&&ME>=0&&(S.offer.to<0||S.offer.to===ME)) { SFX.ding&&SFX.ding(); say(api.esc(S.seats[ev.seat].name)+' muốn đổi tài nguyên — xem ở khung Trò chuyện'); } }
       else if(ev.k==='town'||ev.k==='city'||ev.k==='road'){ SFX.clack(2); if(ev.seat===ME&&ev.k!=='road') SFX.reward(); buildTag(S,ev); }
       else if(ev.k==='discard'){ SFX.pop&&SFX.pop(); ev.res.forEach((x,r)=>{ if(x) popNum(rectOf(`.pl[data-p="${ev.seat}"]`),r,'-'+x,true,r*180); }); if(ev.seat!==ME) say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> đã bỏ '+ev.n+' lá'); }
@@ -209,7 +209,7 @@ const KHUI=(()=>{
           setTimeout(()=>{ if(ev.vic===ME) say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> lấy của bạn 1 '+KH_RES[ev.r]); else if(ev.seat===ME) say('Bạn lấy được 1 '+KH_RES[ev.r]+' của <b>'+api.esc(S.seats[ev.vic].name)+'</b>'); else say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> lấy 1 lá của <b>'+api.esc(S.seats[ev.vic].name)+'</b>'); },T0+1150); }
         else say('<b>'+api.esc(S.seats[ev.vic].name)+'</b> không có lá nào để lấy'); }
       else if(ev.k==='buydev'){ SFX.flip(); if(ev.seat===ME){ say('Bạn nhận thẻ: '+KH_DEVN[ev.d],true); fly(rectOf('[data-a="buydev"]'),rectOf('.dv')||rectOf('.hand'),A.devCard(ev.d),56,78,0); } }
-      else if(ev.k==='award'){ SFX.ding(); say(api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành Đường dài nhất (+2)':' giành Đạo quân mạnh nhất (+2)'),ev.seat===ME); }
+      else if(ev.k==='award'){ SFX.ding(); say(api.esc(S.seats[ev.seat].name)+(ev.a==='road'?' giành Đường dài nhất (+2)':' giành Quân đội mạnh nhất (+2)'),ev.seat===ME); }
       else if(ev.k==='over'){ SFX.ding(); if(S.winner===ME){ SFX.reward(); FX.confetti(innerWidth/2,innerHeight*.4,140); } }
       else if(ev.k==='dev'||ev.k==='trade'){ SFX.pop(); if(ev.k==='dev'){ banner('<div class="kdc">'+A.devCard(ev.d)+'<i class="sp s1">✦</i><i class="sp s2">✦</i><i class="sp s3">✧</i><i class="sp s4">✦</i></div>','devc',2050); say('<b>'+api.esc(S.seats[ev.seat].name)+'</b> dùng thẻ '+KH_DEVN[ev.d]); try{SFX.chime&&SFX.chime();}catch(e){} } }
       if(my && (S.step==='roll'||S.phase==='setup'&&S.step==='town') && ev.k!=='roll' && SFX.hiss) SFX.hiss(); }

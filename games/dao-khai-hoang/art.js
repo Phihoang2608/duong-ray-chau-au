@@ -145,7 +145,7 @@ const KHART=(()=>{
       <circle cx="83" cy="11" r="2.1" fill="#4b4752" stroke="#1b0f06" stroke-width=".8"/><path d="M81.7 12.2 L84.3 9.8" stroke="#1b0f06" stroke-width=".7"/>
       <text x="50" y="${nm.length>4?15.6:16.4}" class="rn" style="font-size:${nm.length>4?12.5:14.5}px">${nm}</text></g></svg>`;
     return ccache['r'+r]=s; }
-  const DV={knight:['Hiệp sĩ','#7c2d12'],road:['Làm đường','#1e3a8a'],plenty:['Được mùa','#166534'],mono:['Độc quyền','#6b21a8'],vp:['Điểm thưởng','#a16207'],aroad:['Đường dài nhất','#a16207'],aarmy:['Quân mạnh nhất','#a16207']};
+  const DV={knight:['Hiệp sĩ','#7c2d12'],road:['Làm đường','#1e3a8a'],plenty:['Được mùa','#166534'],mono:['Độc quyền','#6b21a8'],vp:['Điểm thưởng','#a16207'],aroad:['Đường dài nhất','#a16207'],aarmy:['Quân đội mạnh nhất','#a16207']};
   /* nền phong cảnh cho khung thẻ (toạ độ khung thẻ 70x94.7, cửa sổ x8..62, y5.5..65.5) */
   const sTree=(x,y,s,c1='#4fc25a',c2='#2f9a3a')=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-1" y="0" width="2" height="5" rx=".6" fill="#7a4a1a"/><circle cx="0" cy="-3" r="5.6" fill="${c2}" stroke="#14602a" stroke-width=".6"/><circle cx="-1.6" cy="-4.6" r="2.4" fill="${c1}" opacity=".75"/></g>`;
   const sPine=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-.9" y="0" width="1.8" height="4" fill="#7a4a1a"/><path d="M0 -12 L5 -4 H2.4 L6 1 H-6 L-2.4 -4 H-5Z" fill="#1f8a4a" stroke="#0f4a28" stroke-width=".6" stroke-linejoin="round"/><path d="M0 -12 L2.6 -7 L0 -7Z" fill="#46c46f" opacity=".7"/></g>`;

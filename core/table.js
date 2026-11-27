@@ -205,7 +205,7 @@ const Table = (()=>{
     const A=await api(); if(!A) return fail('Không tải được phần kết nối.', ()=>joinRoom(code, watch));
     let r; try{ r=await A.join(CFG.prefix+'-'+code.toLowerCase(),{host:false}); }catch(e){ return fail('Không vào được phòng '+esc(code)+'. Kiểm tra lại mã và mạng.', ()=>joinRoom(code, watch)); }
     leaveQuiet(); ROOM=r; CODE=code; MODE=watch?'watcher':'client'; S=null; ME=-1; seq=0; resetChat(); if(!watch) saveLast('guest'); document.body.classList.add('online');
-    r.onPeers(ch=>{ if(ROOM!==r) return; PEERS=ch.peers; const me=PEERS.find(p=>p.sameTab); if(me) MYPEER=me.peer; onClientPeers(); });
+    r.onPeers(ch=>{ if(ROOM!==r) return; PEERS=ch.peers; const me=PEERS.find(p=>p.sameTab); if(me) MYPEER=me.peer; MODE==='host'?onHostPeers():onClientPeers(); });
     r.presence(Object.assign({role:watch?'viewer':'guest', name:myName(), pid:PID, act:null},acct())).catch(()=>{});
     if(!S) lobby(); setTimeout(()=>{ if((MODE==='client'||MODE==='watcher') && !hostPeer() && !S) lobby(); },5000);
   }
@@ -333,6 +333,28 @@ const Table = (()=>{
   function setTop(){ const on=MODE!=='local'; $('#tb-chatbtn').style.display=on?'':'none'; $('#tb-leave').style.display=on?'':'none'; $('#tb-code').innerHTML=on&&CODE?`Phòng <b>${esc(CODE)}</b>${MODE==='watcher'?' · Đang xem':''}`:''; if(!on) $('#tb-chat').classList.remove('show'); }
 
   const API={ act, now, toast, modal, esc, avatar, me:()=>ME, mode:()=>MODE, isMine:seat=>seat===ME, menu, rematch:()=>{ if(MODE==='watcher') return toast('Khán giả không thể yêu cầu chơi lại'); if(MODE==='client') return toast('Chờ chủ phòng bắt đầu ván mới'); S=CFG.newGame(S.seats, now(), S); commit(); } };
-  function init(cfg){ CFG=cfg; shell(); if(!window.PBG&&!document.getElementById('pbg-js')){ const a=document.createElement('script'); a.id='pbg-js'; a.src='../../core/account.js'; document.head.appendChild(a); } const h=location.hash||''; const w=h.match(/^#s-([a-z0-9]{4,6})$/i), m=h.match(/^#p-([a-z0-9]{4,6})$/i); if(w){ menu(); askJoin(w[1].toUpperCase(),true); } else if(m){ menu(); askJoin(m[1].toUpperCase()); } else menu(); }
+  /* Chủ phòng thoát giữa ván: một người chơi còn lại được chọn ngẫu nhiên (giống nhau trên mọi máy) làm chủ phòng mới */
+  let goneSince=0;
+  function hashStr(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+  function becomeHost(){ const mine=S.seats.find(p=>p.pid===PID); MODE='host'; LOBBY=false; lastAct={}; goneSince=0; saveLast('host');
+    S.seats.forEach(p=>{ if(p!==mine && !p.bot && !fresh(p.peer)) p.peer=null; });
+    guests().forEach(g=>{ lastAct[g.peer]=(g.presence.act&&g.presence.act.n)||0; });
+    if(S.turnAt) S.turnAt=now(); ME=S.seats.indexOf(mine);
+    ROOM.presence({act:null}).catch(()=>{}); toast('Chủ phòng đã thoát — bạn được chọn làm chủ phòng mới'); commit(); }
+  function migrateChk(){
+    if(MODE!=='client'||!S||LOBBY||!ROOM||S.phase==='over'||S.winner!=null||ME<0){ goneSince=0; return; }
+    const h=hostPeer(); if(h&&fresh(h.peer)&&!h.presence.lobby){ goneSince=0; return; }
+    if(typeof ROOM.connected==='function'&&!ROOM.connected()){ goneSince=0; return; }
+    if(!goneSince) goneSince=Date.now(); if(Date.now()-goneSince<2500) return;
+    const hp=h&&h.peer; const cand=S.seats.filter(p=>!p.bot&&p.pid&&p.peer&&p.peer!==hp&&fresh(p.peer)).map(p=>p.pid).sort(); if(!cand.length) return;
+    const pick=cand[hashStr(CODE+':'+cand.join(','))%cand.length]; if(pick===PID) becomeHost(); }
+  function dupHostChk(){ if(MODE!=='host'||!ROOM) return; const o=hostPeer(); if(!o||!fresh(o.peer)||o.presence.lobby&&!LOBBY) return; const ov=(o.presence.st&&o.presence.st.v)||0, mv=(S&&S.v)||0; if(LOBBY||ov>mv||(ov===mv&&String(o.presence.pid)<String(PID))){ const code=CODE; leaveQuiet(); MODE='local'; S=null; joinRoom(code); } }
+  let offSince=0;
+  function rejoinBar(show){ let b=document.getElementById('tb-rj'); if(!show){ if(b) b.remove(); return; } if(b) return;
+    if(!document.getElementById('tb-rj-css')){ const st=document.createElement('style'); st.id='tb-rj-css'; st.textContent='#tb-rj{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:100000;display:flex;align-items:center;gap:10px;max-width:94vw;padding:8px 12px;border-radius:14px;background:linear-gradient(#7a1d1d,#4d0f0f);border:2px solid #ffcf6b;color:#fff;font:700 14px/1.2 inherit;box-shadow:0 6px 18px rgba(0,0,0,.5)}#tb-rj button{border:0;border-radius:10px;padding:8px 12px;font:800 14px inherit;color:#3b1d00;background:linear-gradient(#ffe08a,#f2a81d);cursor:pointer;white-space:nowrap}'; document.head.appendChild(st); }
+    b=document.createElement('div'); b.id='tb-rj'; b.innerHTML='<span>Mất kết nối phòng <b>'+esc(CODE||'')+'</b></span><button type="button">Vào lại phòng</button>'; document.body.appendChild(b);
+    b.querySelector('button').onclick=()=>{ const code=CODE, host=MODE==='host'; rejoinBar(false); offSince=0; if(host && S && !LOBBY) savedS=S; leaveQuiet(); host?createRoom(code):joinRoom(code); }; }
+  function rejoinChk(){ migrateChk(); dupHostChk(); if(!ROOM||MODE==='local'||typeof ROOM.connected!=='function'){ offSince=0; rejoinBar(false); return; } if(ROOM.connected()){ offSince=0; rejoinBar(false); return; } if(!offSince) offSince=Date.now(); if(Date.now()-offSince>=4000) rejoinBar(true); }
+  function init(cfg){ CFG=cfg; shell(); setInterval(rejoinChk,1500); if(!window.PBG&&!document.getElementById('pbg-js')){ const a=document.createElement('script'); a.id='pbg-js'; a.src='../../core/account.js'; document.head.appendChild(a); } const h=location.hash||''; const w=h.match(/^#s-([a-z0-9]{4,6})$/i), m=h.match(/^#p-([a-z0-9]{4,6})$/i); if(w){ menu(); askJoin(w[1].toUpperCase(),true); } else if(m){ menu(); askJoin(m[1].toUpperCase()); } else menu(); }
   return { init, API };
 })();
