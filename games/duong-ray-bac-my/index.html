@@ -680,7 +680,7 @@ body.landphone #tkPanel .vticket.imgt{max-width:130px}
     <div id="mapScroll"><svg id="map" viewBox="0 0 1330 1000" xmlns="http://www.w3.org/2000/svg"><g id="bg"></g><g id="dyn"></g><g id="fxl"></g><g id="clouds" pointer-events="none"></g></svg></div>
   </section>
   <aside>
-    <div class="panel" id="scoreBoard"><h3 id="sbHead">📊 Bảng điểm <span class="sbtog">▾</span></h3><div id="sbBody"></div></div>
+    
     <div class="panel" id="tkPanel"><h3>🎫 Vé của bạn</h3><div id="tickets"></div></div>
     <div class="panel">
       <h3>🃏 Bài toa tàu</h3>
@@ -2244,8 +2244,8 @@ function bind(){
   document.addEventListener('keydown', e=>{ if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='z' && myUndo()){ e.preventDefault(); $('#undoBtn').onclick(); } });
   $('#passBtn').onclick=()=>{ if(!isMyTurn()) return; doAction({t:'pass'}); };
   $('#legendBtn').onclick=showLegend;
-  $('#sbHead').onclick=()=>{ const sb=$('#scoreBoard'); sb.classList.toggle('closed'); try{ localStorage.setItem('dr-sb', sb.classList.contains('closed')?'0':'1'); }catch(e){} };
-  try{ const v=localStorage.getItem('dr-sb'); if (v==='0') $('#scoreBoard').classList.add('closed'); }catch(e){}
+  if ($('#sbHead')) $('#sbHead').onclick=()=>{ const sb=$('#scoreBoard'); sb.classList.toggle('closed'); try{ localStorage.setItem('dr-sb', sb.classList.contains('closed')?'0':'1'); }catch(e){} };
+  
   $('#rulesBtn').onclick=showRules; $('#rulesBtn2').onclick=showRules;
   $('#menuBtn').onclick=()=>{ if (NET.mode==='local') return goMenu();
     showModal('☰ Về menu?', `<p>Bạn vẫn ở trong phòng <b>${esc(NET.code)}</b> (không bị rời phòng). Ở menu bấm <b>↩ Quay lại phòng</b> để chơi tiếp.</p>`,
