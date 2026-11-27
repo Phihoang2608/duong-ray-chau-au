@@ -26,7 +26,7 @@ window.KH_FX=(function(){const d=document.documentElement;
  apply(); return {mode,apply,toggle};})();
 </script>
 <script src="art.js?v=2026112823y"></script>
-<script src="ui.js?v=20261127fix"></script>
+<script src="ui.js?v=20261127b"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -710,6 +710,58 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 
 #kh .pclose{top:-10px!important;right:-8px!important;width:22px!important;height:22px!important;border-width:2px!important;font-size:14px!important;z-index:12}
 #kh .pop{overflow:visible!important}
+/* === Bảng bỏ bài khi ra 7 === */
+#kdsc{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:rgba(10,5,0,.55);backdrop-filter:blur(2px);padding:8px;animation:xdfade .25s both}
+@keyframes xdfade{from{opacity:0}}
+#kdsc .xdp{position:relative;width:min(96vw,600px);max-height:96vh;overflow:auto;padding:16px 16px 14px;border-radius:20px;color:#fff3d6;font-family:"KhFont","Baloo 2","Arial Black",sans-serif;
+ background:repeating-linear-gradient(90deg,rgba(0,0,0,.06) 0 3px,transparent 3px 40px),linear-gradient(180deg,#9b6634,#7a4a20 45%,#5c3414);
+ border:4px solid #2e1809;box-shadow:inset 0 0 0 3px #d9a85c,inset 0 0 0 6px #4a2a0c,inset 0 8px 18px rgba(255,220,160,.25),0 16px 40px rgba(0,0,0,.7);animation:xdpop .4s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes xdpop{from{transform:scale(.7);opacity:0}}
+#kdsc .xnl{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c0,#b8862f 60%,#5a3a10);box-shadow:0 1px 2px rgba(0,0,0,.6)}
+#kdsc .n1{left:10px;top:10px}#kdsc .n2{right:10px;top:10px}#kdsc .n3{left:10px;bottom:10px}#kdsc .n4{right:10px;bottom:10px}
+#kdsc .xdt{display:flex;align-items:center;justify-content:center;gap:10px;font-size:30px;line-height:1;color:#ffe066;letter-spacing:1px;-webkit-text-stroke:5px #4a1a05;paint-order:stroke fill;text-shadow:0 3px 0 #2a0c02}
+#kdsc .xdt img{width:46px;height:46px;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+#kdsc .xds{text-align:center;font-size:17px;margin:6px 0 10px;text-shadow:0 2px 0 #2a1205}
+#kdsc .xds b{color:#ffd54a;font-size:21px}
+#kdsc .xdg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+#kdsc .xdc{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:14px;background:linear-gradient(180deg,#f6deaa,#e3bd7a);border:3px solid #5a330f;box-shadow:inset 0 2px 0 #fff4d2,0 3px 0 #3a1f08;color:#3a210c;transition:box-shadow .2s,transform .2s}
+#kdsc .xdc.pick{box-shadow:inset 0 2px 0 #fff4d2,0 0 0 3px #ef4444,0 0 14px rgba(239,68,68,.8);transform:translateY(-2px)}
+#kdsc .xdc.none{opacity:.5;filter:grayscale(.6)}
+#kdsc .xdi{position:relative;width:58px;height:58px}
+#kdsc .xdi img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+#kdsc .xdi i{position:absolute;right:-8px;bottom:-4px;font:800 14px/20px "KhFont","Baloo 2",sans-serif;font-style:normal;color:#fff;background:#3a210c;border:2px solid #f6deaa;border-radius:11px;min-width:22px;text-align:center}
+#kdsc .xdn{font-size:14px;color:#5a330f}
+#kdsc .xpm{width:52px;height:44px;border-radius:12px;font:800 30px/1 "KhFont","Baloo 2",sans-serif;cursor:pointer;touch-action:manipulation;color:#3a210c;background:linear-gradient(180deg,#fff0b8,#f4b73d 55%,#d9901c);border:2px solid #5a330f;box-shadow:inset 0 1.5px 0 #fff3cf,0 3px 0 #4a2a0c;padding:0}
+#kdsc .xpm[data-a=dminus]{background:linear-gradient(180deg,#ffd0c4,#ef6a4f 55%,#c2361f);color:#fff;text-shadow:0 1px 0 #6a1408}
+#kdsc .xpm:active:not(:disabled){transform:translateY(2px);box-shadow:inset 0 1.5px 0 #fff3cf,0 1px 0 #4a2a0c}
+#kdsc .xpm:disabled{filter:grayscale(1);opacity:.4;cursor:default}
+#kdsc .xdv{font-size:26px;line-height:28px;font-weight:800;color:#c2361f;min-width:30px;text-align:center}
+#kdsc .xdpr{position:relative;height:26px;margin:12px 4px 4px;border-radius:13px;background:#2e1809;border:2px solid #d9a85c;overflow:hidden}
+#kdsc .xdpr span{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#ef6a4f,#ffd54a);transition:width .25s}
+#kdsc .xdpr em{position:relative;display:block;text-align:center;font-style:normal;font-size:15px;line-height:22px;text-shadow:0 1px 2px #000}
+#kdsc .xdb{display:flex;gap:8px;margin-top:8px}
+#kdsc .xdb .tbtn{background:linear-gradient(180deg,#fbe3a0,#e0a645 55%,#c98b2c);color:#3a210c;border:2px solid #5a330f;flex:1;width:auto;margin:0;padding:11px 6px;font-size:17px;min-height:48px}
+#kdsc .xdb .xdok{flex:1.6;font-size:19px;background:linear-gradient(180deg,#d9ffd0,#5fd35a 55%,#2f9a2b);color:#fff;text-shadow:0 1px 0 #1d5a1a}
+#kdsc .xdb .tbtn:disabled{filter:grayscale(.8);opacity:.55}
+@media (max-width:480px){#kdsc .xdp{padding:12px 8px 10px}#kdsc .xdg{gap:5px}#kdsc .xdi{width:44px;height:44px}#kdsc .xpm{width:100%;max-width:52px;height:46px}#kdsc .xdt{font-size:26px}#kdsc .xdn{font-size:12px}}
+@media (max-height:520px){#kdsc .xdp{padding:8px 12px}#kdsc .xdt{font-size:22px}#kdsc .xdt img{width:32px;height:32px}#kdsc .xds{margin:2px 0 6px;font-size:14px}#kdsc .xdc{flex-direction:row;flex-wrap:wrap;justify-content:center;padding:5px 3px;gap:3px}#kdsc .xdi{width:36px;height:36px}#kdsc .xdn{display:none}#kdsc .xpm{width:40px;height:38px;font-size:24px}#kdsc .xdv{font-size:22px;min-width:22px}#kdsc .xdpr{margin:8px 4px 2px;height:22px}#kdsc .xdpr em{line-height:18px;font-size:13px}#kdsc .xdb .tbtn{min-height:40px;padding:6px;font-size:15px}}
+#kh .frame.zout #khs,#kh .frame.zout{background:radial-gradient(circle at 50% 45%,#5fd0f0,#22a6d6 70%,#1689bd)!important}
+/* === Thanh nút xây (điện thoại dọc) === */
+.xbb{display:none}
+@media (max-width:900px) and (orientation:portrait){
+ #kh .xbb{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;grid-area:1/1;align-self:end;justify-self:stretch;margin:0 14px 64px;z-index:6;position:relative;pointer-events:auto}
+ #kh:has(.xbb) .kst{margin-bottom:122px!important}
+ .xbbt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:50px;padding:3px 2px;border-radius:12px;text-transform:none;cursor:pointer;touch-action:manipulation;font-family:"KhFont","Baloo 2",sans-serif;color:#e9d7b4;
+  background:linear-gradient(180deg,#7a4a20,#5c3414);border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #8a6236,0 3px 0 #2a1406;opacity:.75}
+ .xbbt img{height:24px;width:auto;max-width:44px;object-fit:contain;filter:grayscale(.7)}
+ .xbbt img.rd{height:13px}.xbbt img.cd{height:26px}
+ .xbbt b{font-size:12.5px;line-height:1.1;white-space:nowrap}
+ .xbbt.can{opacity:1;color:#3a210c;background:linear-gradient(180deg,#fff0b8,#f4c24d 55%,#d9901c);border-color:#5a330f;box-shadow:inset 0 2px 0 #fff4d2,0 3px 0 #4a2a0c,0 0 12px rgba(255,213,74,.85);animation:xbglow 1.6s ease-in-out infinite}
+ .xbbt.can img{filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+ .xbbt.on{background:linear-gradient(180deg,#d9ffd0,#5fd35a 55%,#2f9a2b);box-shadow:inset 0 2px 0 #f0fff0,0 3px 0 #1d5a1a,0 0 14px rgba(95,211,90,.9);animation:none}
+ .xbbt:active:not(:disabled){transform:translateY(2px)}
+}
+@keyframes xbglow{50%{box-shadow:inset 0 2px 0 #fff4d2,0 3px 0 #4a2a0c,0 0 20px rgba(255,213,74,1)}}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:60, botDelay:700, css:CSS,
