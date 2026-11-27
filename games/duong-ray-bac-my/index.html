@@ -968,6 +968,16 @@ body.landphone #tkPick .tpc{width:9px!important;height:9px!important}
 body.landphone #tkPick .mbtns button{font-size:11px!important;padding:3px 8px!important}
 
 .wagonfly{position:fixed;z-index:9500;pointer-events:none;transform-origin:0 0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));will-change:transform}
+
+/* nút trả bài: đoàn toa tàu nhỏ */
+button.pay{display:inline-flex!important;flex-direction:column;align-items:center;gap:3px!important;padding:8px 14px 6px!important;border-radius:12px!important;
+  background:linear-gradient(180deg,#fff6dc,#f1d99a)!important;border:2px solid #b8862b!important;color:#4a0f22!important;box-shadow:0 3px 8px rgba(0,0,0,.25),inset 0 1px 0 #fff!important;font-family:"Times New Roman",serif!important;transition:transform .15s,box-shadow .15s}
+button.pay:hover{transform:translateY(-2px);box-shadow:0 0 0 3px rgba(34,197,94,.45),0 6px 14px rgba(0,0,0,.3)!important;border-color:#16a34a!important}
+.paytrain{display:flex;align-items:flex-end;padding:2px 4px 0;border-bottom:3px solid #5b4326}
+.paytrain img{height:30px;width:auto;margin-left:-4px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.paytrain img:first-child{margin-left:0}
+.paylab{font-size:13.5px;white-space:nowrap}.paylab b{font-size:15px;color:#7a1f3d}
+body.landphone .paytrain img{height:20px}body.landphone .paylab{font-size:11px}
 </style>
 </head>
 <body>
@@ -1818,7 +1828,7 @@ function scheduleBots(){
 let BG_DONE=false;
 function routeSym(k,col){
   const dark=['black','blue','purple','red','green'].includes(col);
-  const f=k==='loco'?'#7a4a00':(dark?'#fff':'#000'), o=k==='loco'?.6:(dark?.42:.32), R=3.6;
+  const f=k==='loco'?'#ffd447':(dark?'#fff':'#000'), o=k==='loco'?1:(dark?.42:.32), R=k==='loco'?4.4:3.6;
   const P=n=>Array.from({length:n},(_,i)=>{const a=(-90+360/n*i)*Math.PI/180; return (R*Math.cos(a)).toFixed(2)+','+(R*Math.sin(a)).toFixed(2);}).join(' ');
   let d;
   switch(k){
@@ -1832,7 +1842,7 @@ function routeSym(k,col){
     case 'white': d=`<path d="M0 3.4C-4.6 0-3.6-3.8-1.6-3.8C-.7-3.8 0-3.1 0-2.3C0-3.1.7-3.8 1.6-3.8C3.6-3.8 4.6 0 0 3.4Z"/>`; break;
     default: d=`<polygon points="${Array.from({length:10},(_,i)=>{const a=(-90+36*i)*Math.PI/180, rr=i%2?1.8:4.2; return (rr*Math.cos(a)).toFixed(2)+','+(rr*Math.sin(a)).toFixed(2);}).join(' ')}"/>`;
   }
-  return `<g fill="${f}" opacity="${o}" pointer-events="none">${d}</g>`;
+  return k==='loco' ? `<g fill="${f}" stroke="#2a1200" stroke-width=".9" stroke-linejoin="round" pointer-events="none" transform="scale(1.95)">${d}</g>` : `<g fill="${f}" opacity="${o}" pointer-events="none">${d}</g>`;
 }
 function routeSVG(r, afford, now){
   const g=routeGeom(r); const pad=13; const seg=(g.d-2*pad)/r.len; const w=Math.max(6,seg-3);
@@ -2300,7 +2310,12 @@ function showLegend(){
     <p class="hint">Mẹo: bấm vào bất kỳ tuyến nào trên bản đồ để xem chú thích riêng của tuyến đó.</p></div>`,
     [{label:'Đã hiểu', cls:'primary', onClick:()=>hideModal()}], {center:true});
 }
-function payHTML(o){ let s='<span class="paycards">'; for(let i=0;i<o.nColor;i++) s+=`<span class="mini">${cardSVG(o.color)}</span>`; for(let i=0;i<o.nLoco;i++) s+=`<span class="mini">${cardSVG('loco')}</span>`; return s+'</span>'+optLabel(o); }
+function payHTML(o){
+  if (typeof RA_BASE==='undefined'){ let s='<span class="paycards">'; for(let i=0;i<o.nColor;i++) s+=`<span class="mini">${cardSVG(o.color)}</span>`; for(let i=0;i<o.nLoco;i++) s+=`<span class="mini">${cardSVG('loco')}</span>`; return s+'</span>'+optLabel(o); }
+  let t='<span class="paytrain">'; for(let i=0;i<o.nLoco;i++) t+=`<img src="${RA_BASE}wagons/loco.png" alt="">`; for(let i=0;i<o.nColor;i++) t+=`<img src="${RA_BASE}wagons/${o.color}.png" alt="">`; t+='</span>';
+  const lab=[]; if(o.nColor) lab.push(`<b>${o.nColor}</b> ${esc(cname(o.color))}`); if(o.nLoco) lab.push(`<b>${o.nLoco}</b> Đầu máy`);
+  return t+`<span class="paylab">${lab.join(' + ')}</span>`;
+}
 function showTunnelModal(key){
   const t=G.tunnel; const opts=tunnelOptions();
   const body=`<p>Lật 3 lá từ chồng bài:</p><div class="rev">${t.rev.map((c,i)=>`<div class="flip" style="animation-delay:${i*.25}s">${cardHTML(c, (c==='loco'||(t.opt.color!=='loco'&&c===t.opt.color))?'match':'')}</div>`).join('')}</div>
