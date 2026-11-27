@@ -29,7 +29,7 @@ const KHUI=(()=>{
     document.addEventListener('pointerdown',e=>{ const el=e.target.closest&&e.target.closest('[data-tip]'); if(el) show(el); else hide(); });
     ['pointerup','pointercancel'].forEach(n=>document.addEventListener(n,e=>{ if(e.pointerType!=='mouse') hide(); }));
     document.addEventListener('scroll',hide,true); window.addEventListener('blur',hide);
-    document.addEventListener('click',e=>{ if(pop&&!(e.target.closest&&e.target.closest('.pop,[data-k],[data-a="res"],[data-a="pop"]'))){ pop=null; if(lastArgs) render(...lastArgs); } },true); }
+    document.addEventListener('click',e=>{ if(pop&&!(e.target.closest&&e.target.closest('.pop,#ktrd,[data-k],[data-a="res"],[data-a="pop"],[data-a="offerto"]'))){ pop=null; if(lastArgs) render(...lastArgs); } },true); }
   if(!window.__kbnTap){ window.__kbnTap=1; document.addEventListener('pointerdown',()=>{ document.querySelectorAll('.kbn,.kcong').forEach(e=>e.remove()); },true); }
   function banner(h,cls,ms){ document.querySelectorAll('.kbn').forEach(e=>e.remove()); const b=document.createElement('div'); b.className='kbn '+cls; b.innerHTML=h; document.body.appendChild(b); setTimeout(()=>b.remove(),ms||1300); }
   function say(m){ sayTxt=m; sayUntil=Date.now()+5200; setTimeout(()=>{ if(lastArgs) render(...lastArgs); },0); clearTimeout(sayTm); sayTm=setTimeout(()=>{ if(lastArgs) render(...lastArgs); },5300); }
@@ -142,7 +142,7 @@ const KHUI=(()=>{
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,60-Math.floor((t-S.turnAt)/1000)):null;
       return `<div class="pl ${S.turn===i?'turn':''} ${S.turn===i&&i===ME&&S.phase!=='over'?'mine':''} ${S.step==='discard'&&S.disc&&S.disc[i]!=null?'mustd':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${S.step==='discard'&&S.disc&&S.disc[i]!=null?`<span class="dtag">Bỏ ${S.disc[i]}</span>`:''}${(()=>{const v=KH.vp(S,i,i===ME||S.phase==='over');const up=lastVp[i]!==undefined&&v>lastVp[i];lastVp[i]=v;return `<span class="vp${up?' up':''}" title="Điểm chiến thắng"><span class="vtk${String(v).length>1?' two':''}"><img src="assets/vp-coin.webp?v=2026112823y" alt=""><b>${v}</b></span></span>`;})()}<span class="meds">${S.longest===i?`<span class="medal lr" data-tip="${TIP_LR(Math.max(0,...S.P.map(q=>q.lr)))}">${A.medal('road')}</span>`:''}${S.largest===i?`<span class="medal la" data-tip="${TIP_LA(Math.max(0,...S.P.map(q=>q.knights)))}">${A.medal('army')}</span>`:''}</span>${left!=null?` <span class="tmr"></span>`:''}</div>
         <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=2026112823y">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=2026112823y">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=2026112823y" class="rd">${15-Q.roads}</span></div>
-        ${i!==ME&&ME>=0?`<button class="tbtn sm pto" data-a="offerto" data-p="${i}" ${main&&P&&P.res[og]>=oq&&og!==ow?'':'disabled'} title="Gửi: đưa ${oq} ${KH_RES[og]}, lấy ${on} ${KH_RES[ow]}">Yêu cầu đổi</button>`:''}
+        ${i!==ME&&ME>=0?`<button class="tbtn sm pto" data-a="offerto" data-p="${i}" ${main&&P&&KH.tot(P.res)>0?'':'disabled'} title="Mở bảng đổi với người này">Yêu cầu đổi</button>`:''}
         <div class="ps"><span title="Tài nguyên"><i>Tài nguyên: </i><u>🎴</u><b class="rn2">${KH.tot(Q.res)}</b></span><span title="Thẻ phát triển"><i>Thẻ PT: </i><u>📜</u>${Q.dev.length+Q.newDev.length}</span><span title="Hiệp sĩ đã dùng"><i>Hiệp sĩ: </i><u>⚔️</u>${Q.knights}</span></div>
         </div>`; }).join('')}</div>`;
     const S1=h; h='';
@@ -176,8 +176,7 @@ const KHUI=(()=>{
         if(pop==='offer'&&P.res[og]<oq){ if(P.res[og]>0) oq=Math.min(4,P.res[og]); else { const f=P.res.findIndex(x=>x>0); if(f>=0){ og=f; oq=Math.min(oq,P.res[f])||1; } } } if(ow===og) ow=(og+1)%5;
         const others=S.seats.map((x,i)=>i).filter(i=>i!==ME), okO=main&&P.res[og]>=oq&&og!==ow;
         const popH=(pop==='bank'||pop==='port')?`<div class="box pop"><button class="pclose" type="button" data-a="closepop" aria-label="Đóng">×</button><div class="cth">${isB?'Ngân hàng · đổi 4 lấy 1':'Cảng · đổi theo cảng của bạn'}</div><div class="plb">Đưa (số lá cần có)</div><div class="rrow">${gb}</div><div class="plb">Lấy</div><div class="rrow">${wb}</div><button class="tbtn pri wide" data-a="trade" ${okT?'':'disabled'}>Đổi ${rt[tg]} <img class="ri" src="assets/ic-${tg}.webp?v=2026112823y" alt=""> lấy 1 <img class="ri" src="assets/ic-${tw}.webp?v=2026112823y" alt=""></button></div>`
-          :pop==='offer'?`<div class="box pop ptr"><button class="pclose" type="button" data-a="closepop" aria-label="Đóng">×</button><div class="cth">Yêu cầu đổi với người chơi</div><div class="prow"><span>Đưa</span><select data-s="oq">${qty(oq)}</select></div><div class="rrow">${pk('og',og)}</div><div class="prow"><span>Lấy</span><select data-s="on">${qty(on)}</select></div><div class="rrow">${pk('ow',ow)}</div>
-          <div class="prow"><span>Cho</span><select data-s="ot"><option value="-1" ${ot<0?'selected':''}>Tất cả</option>${others.map(i=>`<option value="${i}" ${ot===i?'selected':''}>${api.esc(S.seats[i].name)}</option>`).join('')}</select></div>${main?(P.res[og]>=oq?'':'<div class="chint">Bạn chưa đủ lá để đưa</div>'):'<div class="chint">Chỉ gửi được trong lượt của bạn, sau khi đổ xúc xắc</div>'}<button class="tbtn pri wide" data-a="offer" ${okO?'':'disabled'}>Gửi yêu cầu đổi</button></div>`:'';
+          :'';
         HV+=buildBar(S,ME,P,main);
         HV+=`<div class="tbar">${popH}<button class="bt bk ${anyBk?'ring':''} ${pop==='bank'?'on':''}" data-a="pop" data-k="bank" title="Ngân hàng: đổi 4 lá cùng loại lấy 1 lá bất kỳ"><img src="assets/bank.webp?v=2026112823y" alt=""><small>Ngân hàng</small></button><button class="bt pt ${anyPt?'ring':''} ${pop==='port'?'on':''}" data-a="pop" data-k="port" ${hasPort?'':'disabled'} title="${hasPort?'Cảng: đổi theo tỉ lệ cảng của bạn':'Cần có nhà hoặc thành phố ở cảng mới đổi được'}"><img src="assets/boat.webp?v=2026112823y" alt=""><small>Cảng</small></button><button class="bt bm ${pop==='offer'?'on':''}" data-a="pop" data-k="offer" title="Trao đổi: gửi yêu cầu đổi với người chơi khác"><img src="assets/market.webp?v=2026112823y" alt=""><small>Trao đổi</small></button>${S.undo===ME&&ME>=0&&S.phase!=='over'?'<button class="tbtn kundo" data-a="undo" title="Quay lại nước vừa đi">↩ Hoàn tác</button>':''}${my&&S.phase==='play'&&S.step==='roll'?'<button class="tbtn pri kend rdy kroll" data-a="roll">🎲 Đổ xúc xắc</button>':`<button class="tbtn pri kend ${main?'rdy':''}" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>`}</div>`; }
       { const mx=Math.max(0,...S.P.map(q=>q.lr)), mk=Math.max(0,...S.P.map(q=>q.knights)); const hd=i=>i>=0?`<span class="hold" style="--pc:${PC[i]}">${api.esc(S.seats[i].name)}</span>`:'<span class="hold none">Chưa ai</span>';
@@ -197,7 +196,7 @@ const KHUI=(()=>{
       const tl=S.log.slice(0,12).filter(l=>/muốn đổi|đổi với|lời mời|yêu cầu đổi|Không ai đồng ý|đủ lá để đổi/.test(l)).slice(0,S.offer?2:3).reverse();
       setH(cf,tl.map(l=>`<div class="tl">${api.esc(l)}</div>`).join('')+(S.offer&&!hotH?ofH:'')); }
     const dscH0=dNeed?`<div class="box ofr hot dscp"><div class="cth">Ra 7! Bạn phải bỏ ${dNeed} lá</div><div class="chint">Bạn có ${KH.tot(P.res)} lá, phải bỏ một nửa (làm tròn xuống). Bấm vào tài nguyên có vòng đỏ để chọn lá bỏ.</div><div class="orow"><small>Đã chọn ${dSel}/${dNeed}</small>${dSel?resRow(dsc):'<span class="chint">chưa chọn</span>'}</div><div class="obt"><button class="tbtn" data-a="dclr">Làm lại</button><button class="tbtn" data-a="dauto">Tự chọn</button></div><button class="tbtn pri wide" data-a="ddo" ${dSel===dNeed?'':'disabled'}>Bỏ ${dNeed} lá</button></div>`:'';
-    dscModal(S,ME,api,dNeed,P); statModal(S); setH(root.querySelector('.ofn'),((hotH||ofH)?`<div class="ofnh">${hotH||ofH}</div>`:''));
+    dscModal(S,ME,api,dNeed,P); statModal(S); trdModal(S,ME,api,P,main); vicRender(S,ME,api); setH(root.querySelector('.ofn'),((hotH||ofH)?`<div class="ofnh">${hotH||ofH}</div>`:''));
     if(isNew){ lastEv=ev.n;
       if(ev.k==='roll'){ SFX.clack(3); const sum=ev.d[0]+ev.d[1]; if(sum===7){ banner('<img src="assets/robber.webp?v=2026112823y" alt=""><span>RA SỐ 7!</span>','seven',1750); const ks=ev.disc?Object.keys(ev.disc):[]; say(ks.length?'Ra 7! '+ks.map(i=>'<b>'+api.esc(S.seats[i].name)+'</b>').join(', ')+' có hơn 7 lá, phải bỏ một nửa':'Ra 7! <b>Kẻ cướp</b> xuất hiện'); if(ev.disc&&ev.disc[ME]!=null) SFX.ding&&SFX.ding(); }
         if(ev.got){ prodFX(S,sum); if(ME>=0&&KH.tot(ev.got[ME])) setTimeout(()=>SFX.ding(),3900); } }
@@ -220,6 +219,89 @@ const KHUI=(()=>{
     const C=KH_COST, V='?v=2026112823y';
     const it=[['road','Đường',main&&(KH.canPay(P,C.road)||S.free>0)&&P.roads>0,'road-neutral.webp','rd'],['town','Nhà',main&&KH.canPay(P,C.town)&&P.towns>0,'house-neutral.webp',''],['city','Thành phố',main&&KH.canPay(P,C.city)&&P.cities>0,'city-neutral.webp',''],['dev','Thẻ PT',main&&KH.canPay(P,C.dev)&&S.dev.length>0,'card-back.webp','cd']];
     return `<div class="xbb">${it.map(([k,t,ok,img,c])=>`<button type="button" class="xbbt ${ok?'can':''} ${mode===k?'on':''}" ${k==='dev'?'data-a="buydev"':`data-m="${k}"`} ${ok?'':'disabled'}><img class="${c}" src="assets/${img}${V}" alt=""><b>${mode===k?'Chọn chỗ':t}</b></button>`).join('')}</div>`; }
+  /* ===== Kết thúc ván: bảng chiến thắng + xem lại ván ===== */
+  const CN=['red','blue','green','white'];
+  let vic=null, vicKey='', vicClosed='', vicAt=0, rev=null, revTab='pl', vicBtn=null;
+  function gKey(S){ return (S.t0||0)+'_'+S.winner; }
+  function ptsOf(S,i){ let t=0,c=0; S.vo.forEach(o=>{ if(o&&o.p===i){ if(o.city) c++; else t++; } }); const P=S.P[i], vc=P.dev.filter(d=>d==='vp').length+P.newDev.filter(d=>d==='vp').length;
+    return {t,c,lr:S.longest===i,la:S.largest===i,vc,tot:KH.vp(S,i,true),roads:S.eo.filter(x=>x===i).length}; }
+  function fmtDur(ms){ if(!(ms>0)) return ''; const m=Math.round(ms/60000); return m<1?'dưới 1 phút':m+' phút'; }
+  function vicRender(S,ME,api){
+    if(S.phase!=='over'||S.winner<0){ [vic,rev,vicBtn].forEach(e=>e&&e.remove()); vic=rev=vicBtn=null; vicAt=0; return; }
+    const k=gKey(S); if(k!==vicKey){ vicKey=k; vicAt=Date.now()+1500; setTimeout(()=>{ if(lastArgs) render(...lastArgs); },1550); }
+    if(Date.now()<vicAt) return;
+    const show=vicClosed!==k;
+    if(!vicBtn){ vicBtn=document.createElement('button'); vicBtn.type='button'; vicBtn.id='kvicb'; vicBtn.className='tbtn pri'; vicBtn.textContent='Kết quả ván'; vicBtn.onclick=()=>{ vicClosed=''; render(...lastArgs); }; document.body.appendChild(vicBtn); }
+    vicBtn.style.display=show||rev?'none':'';
+    if(!show){ if(vic){ vic.remove(); vic=null; } } else {
+      if(!vic){ vic=document.createElement('div'); vic.id='kvic'; document.body.appendChild(vic); vic.addEventListener('click',vicClick); }
+      const W=S.winner, order=S.seats.map((_,i)=>i).sort((a,b)=>KH.vp(S,b,true)-KH.vp(S,a,true)||(a===W?-1:b===W?1:0));
+      const rolls=(S.dr&&S.dr.length)||(S.dh?S.dh.reduce((a,b)=>a+b,0):0), host=api.mode()!=='client'&&api.mode()!=='watcher';
+      const rows=order.map((i,n)=>{ const q=ptsOf(S,i); const br=[q.t?q.t+' nhà':'',q.c?q.c+' thành phố':'',q.lr?'đường dài nhất':'',q.la?'quân đội mạnh nhất':'',q.vc?q.vc+' thẻ điểm':''].filter(Boolean).join(' · ');
+        return `<div class="vr ${i===W?'w':''}" style="--pc:${PC[i]}"><b class="vk">${n+1}</b><img src="assets/house-${CN[i]||'red'}.webp?v=2026112823y" alt=""><div class="vn"><b>${api.esc(S.seats[i].name)}${i===ME?' (bạn)':''}</b><small>${br||'—'}</small></div><b class="vp">${q.tot}</b></div>`; }).join('');
+      setH(vic,`<div class="vpn"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i>
+        <div class="vrib"><span>CHIẾN THẮNG!</span></div>
+        <div class="vwin" style="--pc:${PC[W]}"><img class="vh" src="assets/house-${CN[W]||'red'}.webp?v=2026112823y" alt=""><div><div class="vwn">${api.esc(S.seats[W].name)}</div><div class="vws">${W===ME?'Chúc mừng bạn đã chinh phục hòn đảo!':'Chúc mừng '+api.esc(S.seats[W].name)+' đã chinh phục hòn đảo!'}</div></div><div class="vcoin"><img src="assets/vp-coin.webp?v=2026112823y" alt=""><b>${KH.vp(S,W,true)}</b></div></div>
+        <div class="vrk">${rows}</div>
+        <div class="vmeta">${S.round||1} vòng · ${rolls} lần đổ xúc xắc${S.tEnd&&S.t0?' · '+fmtDur(S.tEnd-S.t0):''}</div>
+        <div class="vbt"><button type="button" class="tbtn pri" data-v="again" ${host?'':'disabled'}>${host?'Chơi ván mới':'Chờ chủ phòng mở ván mới'}</button><button type="button" class="tbtn vgr" data-v="review">Xem lại ván</button><button type="button" class="tbtn" data-v="map">Xem bản đồ</button></div></div>`); }
+    if(rev) revRender(S,ME,api); }
+  function vicClick(e){ const b=e.target.closest('[data-v]'); if(!b||b.disabled) return; const v=b.dataset.v, [S,ME,api]=lastArgs;
+    if(v==='again'){ api.rematch(); return; }
+    if(v==='map'){ vicClosed=vicKey; render(S,ME,api); return; }
+    if(v==='review'){ vicClosed=vicKey; revTab='pl'; rev=document.createElement('div'); rev.id='krev'; document.body.appendChild(rev); rev.addEventListener('click',revClick); render(S,ME,api); } }
+  function revClick(e){ const b=e.target.closest('[data-r]'); if(!b) return; const v=b.dataset.r;
+    if(v==='close'){ rev.remove(); rev=null; render(...lastArgs); return; }
+    if(v==='back'){ rev.remove(); rev=null; vicClosed=''; render(...lastArgs); return; }
+    revTab=v; render(...lastArgs); }
+  const icR=r=>`<img class="ri" src="assets/ic-${r}.webp?v=2026112823y" alt="${KH_RES[r]}" title="${KH_RES[r]}">`;
+  function revRender(S,ME,api){
+    const n=S.seats.length, X=Array.isArray(S.sx)?S.sx:S.seats.map(()=>({})), g=(i,k)=>(X[i]&&X[i][k])||0;
+    const head=`<tr><th></th>${S.seats.map((p,i)=>`<th style="--pc:${PC[i]}"><img src="assets/house-${CN[i]||'red'}.webp?v=2026112823y" alt=""><b>${api.esc(p.name)}</b>${i===S.winner?'<em>Thắng</em>':''}</th>`).join('')}</tr>`;
+    const row=(lab,f,cls)=>`<tr class="${cls||''}"><td>${lab}</td>${S.seats.map((_,i)=>`<td>${f(i)}</td>`).join('')}</tr>`, sec=t=>`<tr class="sec"><td colspan="${n+1}">${t}</td></tr>`;
+    const P=i=>ptsOf(S,i);
+    let body='';
+    if(revTab==='pl'){
+      body=`<div class="rtw"><table class="rt">${head}
+        ${sec('Điểm')}${row('<b>Tổng điểm</b>',i=>`<b class="big">${P(i).tot}</b>`,'tot')}${row('Nhà',i=>P(i).t)}${row('Thành phố',i=>P(i).c)}${row('Đường đã xây',i=>P(i).roads)}${row('Đường dài nhất',i=>S.P[i].lr+(P(i).lr?' ★':''))}${row('Hiệp sĩ đã dùng',i=>S.P[i].knights+(P(i).la?' ★':''))}${row('Thẻ điểm thưởng',i=>P(i).vc)}
+        ${sec('Tài nguyên nhận từ xúc xắc')}${[0,1,2,3,4].map(r=>row(icR(r)+KH_RES[r],i=>(X[i]&&X[i].prod?X[i].prod[r]:0))).join('')}${row('<b>Tổng</b>',i=>`<b>${X[i]&&X[i].prod?X[i].prod.reduce((a,b)=>a+b,0):0}</b>`)}${row('Nhận lúc đặt nhà đầu',i=>g(i,'start'))}
+        ${sec('Trao đổi')}${row('Ngân hàng (đưa → nhận)',i=>g(i,'bankG')||g(i,'bankR')?g(i,'bankG')+' → '+g(i,'bankR'):'—')}${row('Cảng (đưa → nhận)',i=>g(i,'portG')||g(i,'portR')?g(i,'portG')+' → '+g(i,'portR'):'—')}${row('Đổi với người chơi',i=>g(i,'trN')?g(i,'trN')+' lần<small>đưa '+g(i,'trG')+', nhận '+g(i,'trR')+'</small>':'—')}
+        ${sec('Kẻ cướp và mất bài')}${row('Cướp được',i=>g(i,'stole'))}${row('Bị cướp',i=>g(i,'robbed'))}${row('Bỏ khi ra 7',i=>g(i,'disc'))}${row('Độc quyền gom được',i=>g(i,'monoG'))}${row('Mất vì Độc quyền',i=>g(i,'monoL'))}
+        ${sec('Thẻ phát triển và lượt chơi')}${row('Thẻ đã mua',i=>g(i,'devB'))}${row('Thẻ đã dùng',i=>g(i,'devU'))}${row('Được mùa nhận',i=>g(i,'plenty'))}${row('Tài nguyên đã tiêu để xây/mua',i=>g(i,'spent'))}${row('Số lần đổ xúc xắc',i=>g(i,'rolls'))}${row('Đổ ra 7',i=>g(i,'sevens'))}
+      </table></div>`; }
+    else if(revTab==='dice'){
+      const h=Array.isArray(S.dh)?S.dh:Array(13).fill(0), tot=h.reduce((a,b)=>a+b,0), W=[0,0,1,2,3,4,5,6,5,4,3,2,1], mx=Math.max(1,...h.slice(2).map((x,i)=>Math.max(x,tot*W[i+2]/36)));
+      const cols=[2,3,4,5,6,7,8,9,10,11,12].map(k=>`<div class="xsc ${k===7?'s7':''}"><i class="xsn">${h[k]}</i><div class="xsb"><span class="xse" style="height:${Math.round(tot*W[k]/36/mx*100)}%"></span><span class="xsv" style="height:${Math.round(h[k]/mx*100)}%"></span></div><b>${k}</b></div>`).join('');
+      const seq=(S.dr||[]).map((x,j)=>`<span class="dq ${x===7?'s7':''}"><i>${j+1}</i>${x}</span>`).join('');
+      body=`<div class="rsum">Đã đổ <b>${tot}</b> lần · ra 7: <b>${h[7]}</b> lần</div><div class="xsg">${cols}</div><div class="xslg"><span><i class="lv"></i>Số lần đã ra</span><span><i class="le"></i>Mức trung bình theo xác suất</span></div><div class="rlab">Thứ tự các lần đổ</div><div class="dseq">${seq||'<span class="mute">Chưa có</span>'}</div>`; }
+    else if(revTab==='map'){
+      const a=root&&root.querySelector('#khs'), b=root&&root.querySelector('#khd'), vb=`${VB.minX} ${VB.minY} ${VB.w} ${VB.h}`;
+      body=`<div class="rmap"><svg viewBox="${vb}" preserveAspectRatio="xMidYMid meet">${a?a.innerHTML:''}</svg><svg viewBox="${vb}" preserveAspectRatio="xMidYMid meet" class="top">${b?b.innerHTML.replace(/class="(hot|spot|vspot|vhit|ehit|pickh)[^"]*"/g,'class="hid"'):''}</svg></div><div class="rleg">${S.seats.map((p,i)=>`<span style="--pc:${PC[i]}"><img src="assets/house-${CN[i]||'red'}.webp?v=2026112823y" alt="">${api.esc(p.name)}</span>`).join('')}</div>`; }
+    else { const L=S.log.slice().reverse(); body=`<div class="rlog">${L.map((l,j)=>`<div><i>${j+1}</i>${api.esc(l)}</div>`).join('')}</div>`; }
+    const tabs=[['pl','Người chơi'],['dice','Xúc xắc'],['map','Bản đồ'],['log','Nhật ký']].map(([k,t])=>`<button type="button" class="rtab ${revTab===k?'on':''}" data-r="${k}">${t}</button>`).join('');
+    setH(rev,`<div class="rpn"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><div class="rhd"><div class="rtt">Xem lại ván</div><button type="button" class="rx" data-r="close" aria-label="Đóng">×</button></div><div class="rtabs">${tabs}</div><div class="rbody">${body}</div><div class="rft"><button type="button" class="tbtn" data-r="back">Về bảng kết quả</button><button type="button" class="tbtn" data-r="close">Xem bản đồ thật</button></div></div>`);
+    if(revTab==='log'){ const lg=rev.querySelector('.rlog'); if(lg&&!lg.__s){ lg.__s=1; } } }
+  let TG=[0,0,0,0,0], TW=[0,0,0,0,0], tmod=null;
+  function trdModal(S,ME,api,P,main){ if(pop!=='offer'||!P||S.phase==='over'){ if(tmod){ tmod.remove(); tmod=null; } return; }
+    if(!tmod){ tmod=document.createElement('div'); tmod.id='ktrd'; document.body.appendChild(tmod); tmod.addEventListener('click',e=>{ if(e.target===tmod){ pop=null; render(...lastArgs); return; } onClick(e); }); }
+    TG=TG.map((x,r)=>Math.min(x,P.res[r]));
+    const V='?v=2026112823y', sg=TG.reduce((a,b)=>a+b,0), sw=TW.reduce((a,b)=>a+b,0);
+    if(ot>=0&&(ot===ME||ot>=S.seats.length)) ot=-1;
+    const col=(r,isG)=>{ const v=isG?TG[r]:TW[r], has=P.res[r], o=isG?TW[r]:TG[r], canP=isG?has>v&&v<9:v<9;
+      return `<div class="tc ${v?'on':''} ${isG&&!has?'none':''}"><div class="ti"><img src="assets/ic-${r}.webp${V}" alt="">${isG?`<i>${has}</i>`:''}</div><b class="tn">${KH_RES[r]}</b>
+        <div class="xstep"><button type="button" class="xpm" data-a="${isG?'tgm':'twm'}" data-r="${r}" ${v?'':'disabled'} aria-label="Bớt">−</button><div class="xdv">${v}</div><button type="button" class="xpm" data-a="${isG?'tgp':'twp'}" data-r="${r}" ${canP?'':'disabled'} aria-label="Thêm">+</button></div></div>`; };
+    const fmt=v=>v.map((x,r)=>x?`<span class="tq">${x}<img src="assets/ic-${r}.webp${V}" alt="${KH_RES[r]}"></span>`:'').filter(Boolean).join('<em>+</em>');
+    const others=S.seats.map((_,i)=>i).filter(i=>i!==ME), ok=main&&sg>0&&sw>0;
+    const tgt=`<button type="button" class="tt ${ot<0?'on':''}" data-a="tgt" data-p="-1">Tất cả</button>`+others.map(i=>`<button type="button" class="tt ${ot===i?'on':''}" data-a="tgt" data-p="${i}" style="--pc:${PC[i]}"><i></i>${api.esc(S.seats[i].name)}</button>`).join('');
+    const hint=!main?'Chỉ gửi được trong lượt của bạn, sau khi đổ xúc xắc':!sg?'Chọn lá bạn muốn đưa':!sw?'Chọn lá bạn muốn lấy':'';
+    setH(tmod,`<div class="xdp trp"><i class="xnl n1"></i><i class="xnl n2"></i><i class="xnl n3"></i><i class="xnl n4"></i><button type="button" class="tx" data-a="closepop" aria-label="Đóng">×</button>
+      <div class="xdt">ĐỔI TÀI NGUYÊN</div>
+      <div class="tsec give"><div class="tlab">Bạn đưa</div><div class="tg">${[0,1,2,3,4].map(r=>col(r,true)).join('')}</div></div>
+      <div class="tsec get"><div class="tlab">Bạn muốn lấy</div><div class="tg">${[0,1,2,3,4].map(r=>col(r,false)).join('')}</div></div>
+      <div class="tsum">${sg||sw?`<span class="tl">Đưa</span>${sg?fmt(TG):'<span class="mute">?</span>'}<b class="ta">⇄</b><span class="tl">Lấy</span>${sw?fmt(TW):'<span class="mute">?</span>'}`:'<span class="mute">Bấm + để chọn số lá mỗi loại</span>'}</div>
+      <div class="ttg"><span>Gửi cho:</span>${tgt}</div>
+      ${hint?`<div class="thint">${hint}</div>`:''}
+      <div class="xdb"><button type="button" class="tbtn" data-a="tclr" ${sg||sw?'':'disabled'}>Làm lại</button><button type="button" class="tbtn pri xdok" data-a="offer" ${ok?'':'disabled'}>Gửi yêu cầu đổi</button></div></div>`); }
   let dmod=null, dstat=false, smod=null;
   function statModal(S){ if(!dstat){ if(smod){ smod.remove(); smod=null; } return; }
     if(!smod){ smod=document.createElement('div'); smod.id='kdst'; document.body.appendChild(smod); smod.addEventListener('click',e=>{ dstat=false; statModal(S); }); }
@@ -259,15 +341,19 @@ const KHUI=(()=>{
     if(a==='dauto'){ const Pm=S.P[ME], nd=S.disc&&S.disc[ME]; if(Pm&&nd){ dsc=KH.autoLost(Pm,nd); rr(); } return; }
     if(a==='ddo'){ const nd=S.disc&&S.disc[ME]; if(nd&&dsc.reduce((x,y)=>x+y,0)===nd){ api.act({t:'discard',res:dsc.slice()}); dsc=[0,0,0,0,0]; } return; }
     if (a==='closepop'){ pop=null; rr(); return; } if(a==='dcancel'){ dsel=null; rr(); return; } if(a==='again'){ api.rematch(); return; }
-    if (a==='res'){ const r=+d.r, Pm=ME>=0?S.P[ME]:null; if(!Pm||Pm.res[r]<1){ say('Bạn chưa có '+KH_RES[r]+' để đổi'); return; } og=r; if(ow===og) ow=(og+1)%5; oq=Math.min(oq,Pm.res[r])||1; pop='offer'; rr(); return; }
-    if (a==='pop'){ pop=pop===d.k?null:d.k; rr(); return; }
+    if (a==='res'){ const r=+d.r, Pm=ME>=0?S.P[ME]:null; if(!Pm||Pm.res[r]<1){ say('Bạn chưa có '+KH_RES[r]+' để đổi'); return; } TG=[0,0,0,0,0]; TW=[0,0,0,0,0]; TG[r]=1; pop='offer'; rr(); return; }
+    if (a==='pop'){ pop=pop===d.k?null:d.k; if(pop==='offer'){ TG=[0,0,0,0,0]; TW=[0,0,0,0,0]; } rr(); return; }
     if (a==='bg'){ tg=+d.r; if(tw===tg) tw=(tg+1)%5; rr(); return; }
     if (a==='bw'){ tw=+d.r; rr(); return; }
     if (a==='og'){ og=+d.r; if(ow===og) ow=(og+1)%5; rr(); return; }
     if (a==='ow'){ ow=+d.r; if(og===ow) og=(ow+1)%5; rr(); return; }
     if (a==='trade'){ api.act({t:'trade',give:tg,get:tw,bank:pop==='bank'}); pop=null; return; }
-    if (a==='offerto'){ const g=[0,0,0,0,0], w=[0,0,0,0,0]; g[og]=oq; w[ow]=on; ot=+d.p; api.act({t:'offer',give:g,get:w,to:ot}); return; }
-    if (a==='offer'){ const g=[0,0,0,0,0], w=[0,0,0,0,0]; g[og]=oq; w[ow]=on; api.act({t:'offer',give:g,get:w,to:ot}); pop=null; return; }
+    if (a==='offerto'){ ot=+d.p; pop='offer'; rr(); return; }
+    if (a==='offer'){ if(!TG.some(x=>x)||!TW.some(x=>x)) return; api.act({t:'offer',give:TG.slice(),get:TW.slice(),to:ot}); TG=[0,0,0,0,0]; TW=[0,0,0,0,0]; pop=null; rr(); return; }
+    if (a==='tgp'||a==='tgm'||a==='twp'||a==='twm'){ const r=+d.r, Pm=ME>=0?S.P[ME]:null; if(!Pm) return; const V=a[1]==='g'?TG:TW, O=a[1]==='g'?TW:TG;
+      if(a[2]==='p'){ if(a[1]==='g'&&V[r]>=Pm.res[r]) return; if(V[r]>=9) return; if(O[r]) O[r]=0; V[r]++; } else { if(V[r]<=0) return; V[r]--; } rr(); return; }
+    if (a==='tgt'){ ot=+d.p; rr(); return; }
+    if (a==='tclr'){ TG=[0,0,0,0,0]; TW=[0,0,0,0,0]; rr(); return; }
     if (a==='yes'||a==='no'){ api.act({t:'answer',ok:a==='yes'}); return; }
     if (a) api.act({t:a}); }
   return { render:(S,ME,api)=>{ window.__S=S; render(S,ME,api); }, tickView };

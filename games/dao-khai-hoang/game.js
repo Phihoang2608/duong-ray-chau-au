@@ -33,7 +33,7 @@ const KH = (()=>{
       hex, robber:hex.findIndex(h=>h.res===5), ports, vo:V.map(()=>null), eo:E.map(()=>-1), dev,
       P:seats.map(()=>({res:[0,0,0,0,0], dev:[], newDev:[], knights:0, roads:15, towns:5, cities:4, vp:0, lr:0})),
       phase:'setup', setupStep:0, setupV:-1, turn:0, step:'town', dice:null, rolled:false, devPlayed:false, free:0, largest:-1, longest:-1,
-      turnAt:t, log:[], evN:0, ev:null, winner:-1, round:1};
+      turnAt:t, log:[], evN:0, ev:null, winner:-1, round:1, t0:t, dh:Array(13).fill(0), dr:[], sx:seats.map(()=>newSx())};
     S.order=[...Array(n).keys()].concat([...Array(n).keys()].reverse());
     S.log.unshift('Xếp nhà đầu tiên: mỗi người đặt 1 nhà và 1 đường, rồi đi ngược lại lần hai.');
     return S; }
@@ -58,7 +58,7 @@ const KH = (()=>{
     const ca=S.largest; let kb=ca>=0?S.P[ca].knights:2, kw=ca; S.P.forEach((P,i)=>{ if(P.knights>kb){ kb=P.knights; kw=i; } });
     if (kw!==ca){ S.log.unshift(S.seats[kw].name+' giành Quân đội mạnh nhất ('+kb+' hiệp sĩ).'); ev(S,{k:'award',seat:kw,a:'army'}); } S.largest=kw; }
   function vp(S,i,hidden){ const P=S.P[i]; let v=0; S.vo.forEach(o=>{ if(o&&o.p===i) v+=o.city?2:1; }); if(S.longest===i) v+=2; if(S.largest===i) v+=2; if(hidden) v+=P.dev.filter(d=>d==='vp').length+P.newDev.filter(d=>d==='vp').length; return v; }
-  function checkWin(S,t){ const i=S.turn; if(vp(S,i,true)>=KH_WIN){ S.phase='over'; S.winner=i; S.log.unshift(S.seats[i].name+' đạt '+vp(S,i,true)+' điểm và chiến thắng!'); ev(S,{k:'over'}); return true; } return false; }
+  function checkWin(S,t){ const i=S.turn; if(vp(S,i,true)>=KH_WIN){ S.phase='over'; S.winner=i; S.tEnd=t; S.log.unshift(S.seats[i].name+' đạt '+vp(S,i,true)+' điểm và chiến thắng!'); ev(S,{k:'over'}); return true; } return false; }
   function produce(S,num){ const got=S.seats.map(()=>[0,0,0,0,0]);
     S.hex.forEach((h,hi)=>{ if(h.num!==num||hi===S.robber) return; HEX[hi].v.forEach(v=>{ const o=S.vo[v]; if(o){ got[o.p][h.res]+=o.city?2:1; } }); });
     got.forEach((g,i)=>g.forEach((x,r)=>S.P[i].res[r]+=x)); return got; }
@@ -107,7 +107,7 @@ const KH = (()=>{
     if (S.step==='robber'){ if(a.t!=='robber'||!(a.h>=0&&a.h<19)||a.h===S.robber) return false; S.robber=a.h;
       const vs=victims(S,a.h,seat); let msg=name+' dời kẻ cướp'; if(vs.length){ const vic=a.v!=null&&vs.includes(a.v)?a.v:vs[Math.floor(Math.random()*vs.length)]; const r=stealFrom(S,seat,vic); msg+=' và lấy 1 lá của '+S.seats[vic].name; ev(S,{k:'steal',seat,vic,r}); } else ev(S,{k:'robber',seat});
       S.log.unshift(msg+'.'); S.step=S.rolled?'main':'roll'; S.turnAt=t; return true; }
-    if (a.t==='roll'){ if(S.step!=='roll') return false; if(!Array.isArray(S.dk)||S.dk.length<7) S.dk=shuffle([...Array(36).keys()]); const x=S.dk.pop(), d=[1+Math.floor(x/6),1+x%6], s=d[0]+d[1]; if(!Array.isArray(S.dh)) S.dh=Array(13).fill(0); S.dh[s]++; S.dice=d; S.rolled=true;
+    if (a.t==='roll'){ if(S.step!=='roll') return false; if(!Array.isArray(S.dk)||S.dk.length<7) S.dk=shuffle([...Array(36).keys()]); const x=S.dk.pop(), d=[1+Math.floor(x/6),1+x%6], s=d[0]+d[1]; if(!Array.isArray(S.dh)) S.dh=Array(13).fill(0); S.dh[s]++; if(!Array.isArray(S.dr)) S.dr=[]; if(S.dr.length<400) S.dr.push(s); S.dice=d; S.rolled=true;
       if (s===7){ const dd=startDiscard(S,t), ks=Object.keys(dd).map(Number); if(ks.length){ S.disc=dd; S.step='discard'; S.log.unshift(name+' đổ ra 7 — '+ks.map(i=>S.seats[i].name+' (bỏ '+dd[i]+')').join(', ')+' có hơn 7 lá phải bỏ một nửa.'); } else { S.step='robber'; S.log.unshift(name+' đổ ra 7 — dời kẻ cướp!'); } ev(S,{k:'roll',seat,d,disc:ks.length?dd:null}); }
       else { const got=produce(S,s); S.step='main'; const g=got.map((x,i)=>tot(x)?S.seats[i].name+' +'+x.map((c,r)=>c?c+' '+KH_RES[r]:'').filter(Boolean).join(', '):'').filter(Boolean); S.log.unshift(name+' đổ '+s+'. '+(g.length?g.join(' · '):'Không ai nhận được gì.')); ev(S,{k:'roll',seat,d,got}); }
       S.turnAt=t; return true; }
@@ -125,12 +125,27 @@ const KH = (()=>{
     if (a.t==='end'){ P.dev.push(...P.newDev); P.newDev=[]; S._off=0; S.free=0; S.devPlayed=false; S.rolled=false; S.dice=S.dice; const n=S.seats.length; S.turn=(seat+1)%n; if(S.turn===0) S.round++; S.step='roll'; S.turnAt=t; ev(S,{k:'end',seat}); return true; }
     return false; }
   // ----- hoàn tác (chỉ máy chủ giữ ảnh chụp; S.undo = ghế được hoàn tác) -----
+  function newSx(){ return {prod:[0,0,0,0,0],start:0,stole:0,robbed:0,disc:0,bankG:0,bankR:0,portG:0,portR:0,trG:0,trR:0,trN:0,monoG:0,monoL:0,plenty:0,spent:0,devB:0,devU:0,rolls:0,sevens:0,turns:0}; }
+  function track(S,seat,a,b,ph0){ if(!Array.isArray(S.sx)) S.sx=S.seats.map(()=>newSx()); const X=S.sx, me=X[seat]; if(!me) return;
+    const d=S.P.map((P,i)=>P.res.map((x,r)=>x-b[i][r])), pos=v=>v.reduce((s,x)=>s+(x>0?x:0),0), neg=v=>v.reduce((s,x)=>s+(x<0?-x:0),0);
+    switch(a.t){
+      case 'roll': me.rolls++; if(S.dice&&S.dice[0]+S.dice[1]===7) me.sevens++; else d.forEach((v,i)=>v.forEach((x,r)=>{ if(x>0) X[i].prod[r]+=x; })); break;
+      case 'robber': d.forEach((v,i)=>{ if(i===seat) me.stole+=pos(v); else X[i].robbed+=neg(v); }); break;
+      case 'discard': me.disc+=neg(d[seat]); break;
+      case 'trade': if(a.bank){ me.bankG+=neg(d[seat]); me.bankR+=pos(d[seat]); } else { me.portG+=neg(d[seat]); me.portR+=pos(d[seat]); } break;
+      case 'answer': if(pos(d[seat])+neg(d[seat])>0) d.forEach((v,i)=>{ if(pos(v)+neg(v)>0){ X[i].trG+=neg(v); X[i].trR+=pos(v); X[i].trN++; } }); break;
+      case 'mono': me.devU++; d.forEach((v,i)=>{ if(i===seat) me.monoG+=pos(v); else X[i].monoL+=neg(v); }); break;
+      case 'plenty': me.devU++; me.plenty+=pos(d[seat]); break;
+      case 'knight': case 'roaddev': me.devU++; break;
+      case 'buydev': me.devB++; me.spent+=neg(d[seat]); break;
+      case 'town': case 'city': case 'road': if(ph0==='setup') me.start+=pos(d[seat]); else me.spent+=neg(d[seat]); break;
+      case 'end': me.turns++; break; } }
   let UND=null; const UNDOABLE=['town','road','city','trade'];
   function apply(S,seat,a,t){
     if (a&&a.t==='undo'){ if(!UND||UND.seat!==seat||S.phase==='over'||S.offer) return false; const sn=JSON.parse(JSON.stringify(UND.snap)), n=(S.evN||0)+1; UND=null;
       Object.keys(S).forEach(k=>{ delete S[k]; }); Object.assign(S,sn); S.undo=-1; S.evN=n; S.ev={n,k:'undo',seat}; S.log.unshift(S.seats[seat].name+' hoàn tác nước vừa đi.'); S.turnAt=t; return true; }
     const keep=a&&UNDOABLE.includes(a.t)&&seat===S.turn&&!S.offer&&S.phase!=='over'?JSON.parse(JSON.stringify(Object.assign({},S,{undo:-1}))):null;
-    const ok=apply0(S,seat,a,t);
+    const b0=S.P.map(P=>P.res.slice()), ph0=S.phase; const ok=apply0(S,seat,a,t); if(ok&&a) try{ track(S,seat,a,b0,ph0); }catch(e){}
     if (ok&&a&&a.t!=='undo'){ if(keep&&S.phase!=='over'){ UND={seat,snap:keep}; S.undo=seat; } else { UND=null; S.undo=-1; } }
     return ok; }
   function tick(S,t){ if(S&&S.offer&&t-S.offer.at>30000){ S.log.unshift('Yêu cầu đổi của '+S.seats[S.offer.from].name+' đã hết hạn.'); S.offer=null; S.turnAt=t; return true; } return false; }
