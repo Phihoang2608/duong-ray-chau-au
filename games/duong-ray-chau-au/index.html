@@ -943,6 +943,29 @@ body.picking #tkPick h2{color:#b91c1c!important}
 .beacons.strong .wcore{opacity:.5!important;fill:#4ade80!important}
 .beacons.strong circle[r="9"]{stroke:#16a34a;stroke-width:5;filter:drop-shadow(0 0 8px #22c55e)}
 .beacons.strong .pglow{stroke:#22c55e!important;stroke-opacity:.5!important;filter:drop-shadow(0 0 10px #22c55e)!important}
+
+/* chọn vé: 2 vé/hàng, to, nổi bật */
+#tkPick .tpicks{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+#tkPick .tpk{font-size:14px!important;padding:2px 12px!important}
+#tkPick .tpc{width:15px!important;height:15px!important}
+#tkPick .vt-longtag{font-size:10px!important;padding:0 6px!important}#tkPick .vt-longtag::before{content:none!important}
+#tkPick h2{text-align:center;margin-bottom:8px!important}
+.pkcall{display:inline-block;font:bold 21px "Times New Roman",serif;color:#b91c1c;letter-spacing:.02em;animation:pkcall 1.1s ease-in-out infinite;text-shadow:0 0 10px rgba(239,68,68,.45)}
+@keyframes pkcall{0%,100%{transform:scale(1)}50%{transform:scale(1.08);color:#dc2626;text-shadow:0 0 18px rgba(239,68,68,.8)}}
+#tkPick h2::before,#tkPick h2::after{content:"";display:inline-block;width:0;height:0;border:8px solid transparent;vertical-align:middle;animation:pkarr 1.1s ease-in-out infinite}
+#tkPick h2::before{border-left-color:#dc2626;margin-right:8px}
+#tkPick h2::after{border-right-color:#dc2626;margin-left:8px}
+@keyframes pkarr{50%{transform:translateX(4px)}}
+#tkPick h2::after{animation-direction:reverse}
+#tkPick .tpick:not(.sel){animation:tpkHint 1.6s ease-in-out infinite}
+@keyframes tpkHint{50%{transform:translateY(-3px)}}
+#tkPick .mbtns button{font-size:16px!important;padding:8px 18px!important}
+body.landphone #tkPick .tpicks{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important}
+body.landphone .pkcall{font-size:12px}
+body.landphone #tkPick h2::before,body.landphone #tkPick h2::after{border-width:5px}
+body.landphone #tkPick .tpk{font-size:9px!important;padding:0 4px!important}
+body.landphone #tkPick .tpc{width:9px!important;height:9px!important}
+body.landphone #tkPick .mbtns button{font-size:11px!important;padding:3px 8px!important}
 </style>
 </head>
 <body>
@@ -2187,7 +2210,7 @@ function showTicketPicker(ids, min, key){
   const body = `<p>Giữ ít nhất <b>${min}</b> vé. Chạm vào vé để chọn/bỏ và xem vị trí trên bản đồ. Vé hoàn thành được <b>cộng</b> điểm, vé không hoàn thành bị <b>trừ</b> điểm.</p>
     <div class="tpicks">${ids.map((id,i)=>`<div class="tpick" data-i="${i}">${ticketHTML(TK[id], false, TK_HUES[(i+3)%TK_HUES.length])}<div class="tpk"><span class="tpc"></span><span class="tpt">Chọn</span></div></div>`).join('')}</div>`;
   const btn={label:'Giữ các vé đã chọn', cls:'primary', onClick:()=>{ hideModal(true); UIS.hl=null; SFX.paper(); doAction(key==='init'?{t:'init', idx:[...sel]}:{t:'keep', idx:[...sel]}); render(); }};
-  const m=showModal('Chọn vé hành trình', body, [btn], {key, dock:true});
+  const m=showModal('<span class="pkcall">Hãy chọn vé hành trình!</span>', body, [btn], {key, dock:true});
   m.querySelectorAll('.tpick').forEach(el=>{ const i=+el.dataset.i, t=TK[ids[i]];
     const hue=TK_HUES[(i+3)%TK_HUES.length];
     el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); UIS.hl={a:t.a,b:t.b,hue,at:performance.now(),strong:1}; el.classList.toggle('sel', sel.has(i)); el.querySelector('.tpt').textContent=sel.has(i)?'Đã chọn':'Chọn'; btn.el.disabled = sel.size<min; btn.el.textContent=sel.size<min?`Chọn ít nhất ${min} vé (${sel.size}/${min})`:`Giữ ${sel.size} vé đã chọn`; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
