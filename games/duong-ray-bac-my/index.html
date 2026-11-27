@@ -756,6 +756,25 @@ body.landphone .hcar .hn{margin-bottom:-4px}
 body.landphone .hcar .wsym{width:14px!important;height:14px!important;margin-top:0}
 body.landphone #mapTools{bottom:calc(var(--hbh) + 2px)!important}
 body.landphone .mkbar .deckart{width:70%}body.landphone .mkbar .tkart{width:60%}
+
+/* số lá nằm dưới toa, cạnh ký hiệu */
+.hcar .hbot{display:flex;align-items:center;gap:3px;margin-top:2px}
+.hcar .hn{order:0!important;margin:0!important;min-width:20px!important;padding:0 5px!important;font-size:14px!important;line-height:18px!important}
+.hcar .wsym{margin:0!important}
+#handBar{align-items:center}
+.htrain{align-items:flex-end;padding-top:4px!important}
+body.landphone .hcar .hbot{gap:2px;margin-top:1px}
+body.landphone .hcar .hn{font-size:10px!important;line-height:13px!important;min-width:14px!important;padding:0 3px!important}
+body.landphone .hcar .wimg{height:32px!important}
+/* vé tàu: nhỏ hơn, bên phải bản đồ (dưới đồng hồ) */
+#tkPanel.tkov{left:auto!important;right:12px!important;top:92px!important;width:124px!important;max-height:calc(100% - var(--hbh) - 104px)!important}
+#tkToggle{font-size:12px!important}
+body.landphone #tkPanel.tkov{right:6px!important;left:auto!important;top:66px!important;width:84px!important;max-height:calc(100% - var(--hbh) - 74px)!important}
+body.landphone #tkToggle{font-size:9.5px!important}
+
+#tkPanel.tkov .vt-longtag{font-size:8.5px!important;padding:0 4px!important;left:4px!important;bottom:3px!important}
+body.landphone #tkPanel.tkov .vt-longtag{font-size:0!important;padding:0 3px!important}
+body.landphone #tkPanel.tkov .vt-longtag::before{content:"★";font-size:8px}
 </style>
 </head>
 <body>
@@ -1757,7 +1776,7 @@ function renderSide(){
     const ORD=['loco',...CARDS.filter(c=>c!=='loco')];
     $('#hand').innerHTML = ORD.map(c=>{ const n=me.hand[c]; const up = UIS.prevHand && n>UIS.prevHand[c];
       if (typeof RA_BASE==='undefined') return `<div class="hcard ${n?'':'zero'} ${up?'bump':''}" data-c="${c}">${cardHTML(c)}<div class="cnt">${n}</div><div class="hname">${cname(c)}</div></div>`;
-      return `<div class="hcar ${c} ${n?'':'zero'} ${up?'bump':''}" data-c="${c}" title="${esc(cname(c))}: ${n} lá"><b class="hn">${n}</b><img class="wimg" src="${RA_BASE}wagons/${c}.png" alt="" draggable="false"><img class="wsym" src="${RA_BASE}sym/${c}.png" alt="" draggable="false"></div>`; }).join('');
+      return `<div class="hcar ${c} ${n?'':'zero'} ${up?'bump':''}" data-c="${c}" title="${esc(cname(c))}: ${n} lá"><img class="wimg" src="${RA_BASE}wagons/${c}.png" alt="" draggable="false"><div class="hbot"><img class="wsym" src="${RA_BASE}sym/${c}.png" alt="" draggable="false"><b class="hn">${n}</b></div></div>`; }).join('');
     const nT=$('#tkCnt'); if(nT) nT.textContent=me.tickets.length?`(${me.tickets.filter(id=>ticketDone(me,id)).length}/${me.tickets.length})`:'';
     UIS.prevHand=Object.assign({}, me.hand);
     const tk = me.tickets.slice().sort((a,b)=>ticketDone(me,a)-ticketDone(me,b));
