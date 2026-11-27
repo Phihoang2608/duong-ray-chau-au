@@ -66,8 +66,27 @@ const KH = (()=>{
   function victims(S,hexI,me){ return [...new Set(HEX[hexI].v.map(v=>S.vo[v]).filter(o=>o&&o.p!==me).map(o=>o.p))].filter(p=>tot(S.P[p].res)>0); }
   function autoDiscard(S){ S.P.forEach((P,i)=>{ const c=tot(P.res); if(c>7){ let k=Math.floor(c/2); const lost=[0,0,0,0,0]; while(k-->0){ let m=0; for(let r=1;r<5;r++) if(P.res[r]>P.res[m]) m=r; P.res[m]--; lost[m]++; }
       S.log.unshift(S.seats[i].name+' có hơn 7 lá, mất '+lost.map((x,r)=>x?x+' '+KH_RES[r]:'').filter(Boolean).join(', ')+'.'); } }); }
+  // ---------- đổi với người chơi ----------
+  function vecOK(v){ return Array.isArray(v)&&v.length===5&&v.every(x=>Number.isInteger(x)&&x>=0&&x<=9)&&v.reduce((s,x)=>s+x,0)>0; }
+  function fmtV(v){ return v.map((c,r)=>c?c+' '+KH_RES[r]:'').filter(Boolean).join(' + '); }
+  function offerSeats(S,o){ return S.seats.map((_,i)=>i).filter(i=>i!==o.from&&(o.to<0||o.to===i)); }
+  function pending(S){ const o=S.offer; return o?offerSeats(S,o).filter(i=>!o.no.includes(i)):[]; }
+  function answer(S,seat,ok,t){ const o=S.offer; if(!o||seat===o.from||(o.to>=0&&o.to!==seat)||o.no.includes(seat)) return false;
+    const Q=S.P[seat], P=S.P[o.from];
+    if (ok){ if(!o.get.every((x,i)=>Q.res[i]>=x)||!o.give.every((x,i)=>P.res[i]>=x)) return false;
+      o.give.forEach((x,i)=>{ P.res[i]-=x; Q.res[i]+=x; }); o.get.forEach((x,i)=>{ Q.res[i]-=x; P.res[i]+=x; });
+      S.log.unshift(S.seats[o.from].name+' đổi với '+S.seats[seat].name+': '+fmtV(o.give)+' ⇄ '+fmtV(o.get)+'.'); S.offer=null; S.turnAt=t; ev(S,{k:'trade',seat:o.from}); return true; }
+    o.no.push(seat); if(!pending(S).length){ S.log.unshift('Không ai đồng ý đổi với '+S.seats[o.from].name+'.'); S.offer=null; S.turnAt=t; } return true; }
   function apply(S,seat,a,t){
-    if (!a||S.phase==='over'||seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
+    if (!a||S.phase==='over') return false;
+    if (a.t==='answer') return answer(S,seat,!!a.ok,t);
+    if (seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
+    if (S.offer){ if(a.t==='cancel'){ S.log.unshift(name+' huỷ lời mời đổi.'); S.offer=null; S.turnAt=t; return true; } return false; }
+    if (a.t==='offer'){ if(S.phase!=='play'||S.step!=='main') return false; const g=a.give, w=a.get; if(!vecOK(g)||!vecOK(w)) return false;
+      for(let i=0;i<5;i++){ if((g[i]&&w[i])||P.res[i]<g[i]) return false; }
+      const to=Number.isInteger(a.to)&&a.to>=0&&a.to<S.seats.length&&a.to!==seat?a.to:-1; const o={from:seat,give:g,get:w,to,no:[],at:t};
+      o.no=offerSeats(S,o).filter(i=>!w.every((x,r)=>S.P[i].res[r]>=x)); if(!pending(S.offer?S:{...S,offer:o}).length) return false;
+      S.offer=o; S.turnAt=t; S.log.unshift(name+' muốn đổi: đưa '+fmtV(g)+', lấy '+fmtV(w)+(to>=0?' (với '+S.seats[to].name+')':'')+'.'); ev(S,{k:'offer',seat}); return true; }
     if (S.phase==='setup'){
       if (S.step==='town' && a.t==='town'){ if(!(a.v>=0&&a.v<V.length)||!townOK(S,seat,a.v)) return false; S.vo[a.v]={p:seat,city:false}; P.towns--; S.setupV=a.v; S.step='road';
         if (S.setupStep>=S.seats.length){ V[a.v].hex.forEach(hi=>{ const r=S.hex[hi].res; if(r<5) P.res[r]++; }); }
@@ -95,10 +114,10 @@ const KH = (()=>{
     if (a.t==='plenty'){ if(S.devPlayed) return false; const i=P.dev.indexOf('plenty'); if(i<0||!(a.r1>=0&&a.r1<5&&a.r2>=0&&a.r2<5)) return false; P.dev.splice(i,1); S.devPlayed=true; P.res[a.r1]++; P.res[a.r2]++; S.log.unshift(name+' dùng Được mùa: +1 '+KH_RES[a.r1]+', +1 '+KH_RES[a.r2]+'.'); ev(S,{k:'dev',seat,d:'plenty'}); return true; }
     if (a.t==='mono'){ if(S.devPlayed) return false; const i=P.dev.indexOf('mono'); if(i<0||!(a.r>=0&&a.r<5)) return false; P.dev.splice(i,1); S.devPlayed=true; let n=0; S.P.forEach((Q,k)=>{ if(k!==seat){ n+=Q.res[a.r]; Q.res[a.r]=0; } }); P.res[a.r]+=n; S.log.unshift(name+' dùng Độc quyền: gom '+n+' '+KH_RES[a.r]+'.'); ev(S,{k:'dev',seat,d:'mono'}); return true; }
     if (a.t==='roaddev'){ if(S.devPlayed) return false; const i=P.dev.indexOf('road'); if(i<0) return false; P.dev.splice(i,1); S.devPlayed=true; S.free=Math.min(2,P.roads); S.log.unshift(name+' dùng Làm đường: xây 2 đường miễn phí.'); ev(S,{k:'dev',seat,d:'road'}); return true; }
-    if (a.t==='end'){ P.dev.push(...P.newDev); P.newDev=[]; S.free=0; S.devPlayed=false; S.rolled=false; S.dice=S.dice; const n=S.seats.length; S.turn=(seat+1)%n; if(S.turn===0) S.round++; S.step='roll'; S.turnAt=t; ev(S,{k:'end',seat}); return true; }
+    if (a.t==='end'){ P.dev.push(...P.newDev); P.newDev=[]; S._off=0; S.free=0; S.devPlayed=false; S.rolled=false; S.dice=S.dice; const n=S.seats.length; S.turn=(seat+1)%n; if(S.turn===0) S.round++; S.step='roll'; S.turnAt=t; ev(S,{k:'end',seat}); return true; }
     return false; }
-  function tick(){ return false; }
-  function whoActs(S){ return S.phase==='over'?[]:[S.turn]; }
+  function tick(S,t){ if(S&&S.offer&&t-S.offer.at>30000){ S.log.unshift('Lời mời đổi của '+S.seats[S.offer.from].name+' đã hết hạn.'); S.offer=null; S.turnAt=t; return true; } return false; }
+  function whoActs(S){ if(S.phase==='over') return []; if(S.offer){ const p=pending(S); if(p.length) return p; } return [S.turn]; }
   // ---------- bot ----------
   function vScore(S,v,p){ let s=0; const seen=new Set(); V[v].hex.forEach(hi=>{ const h=S.hex[hi]; if(h.res<5){ s+=PIPS[h.num]*(h.res===4||h.res===3?1.15:1)*(hi===S.robber?.3:1); seen.add(h.res); } }); s+=seen.size*0.8;
     PORT_E.forEach((e,i)=>{ if(E[e].a===v||E[e].b===v) s+=S.ports[i]<0?1:1.5; }); if(p!=null){ const P=S.P[p]; seen.forEach(r=>{ if(!ownsRes(S,p,r)) s+=1.2; }); } return s; }
@@ -110,6 +129,9 @@ const KH = (()=>{
     for(let g=0;g<5;g++){ if(P.res[g]-cost[g]>=r[g]) return {t:'trade',give:g,get:want}; } return null; }
   function botAction(S,seat,t){
     if (t-S.turnAt<650) return null; const P=S.P[seat];
+    if (S.offer&&S.offer.from!==seat){ const o=S.offer; if(!pending(S).includes(seat)) return null; const hasT=S.vo.some(x=>x&&x.p===seat&&!x.city), keep=(P.cities>0&&hasT)?KH_COST.city:KH_COST.town;
+      const gain=o.give.reduce((s,x)=>s+x,0), lose=o.get.reduce((s,x)=>s+x,0); let ok=o.get.every((x,i)=>P.res[i]>=x)&&gain>=lose&&o.get.every((x,i)=>!x||P.res[i]-x>=keep[i])&&vp(S,o.from,true)<KH_WIN-2&&Math.random()<.85;
+      return {t:'answer',ok}; }
     if (S.phase==='setup'){
       if (S.step==='town'){ let b=-1,bs=-1; V.forEach((_,v)=>{ if(townOK(S,seat,v)){ const s=vScore(S,v,seat)+Math.random()*.3; if(s>bs){bs=s;b=v;} } }); return {t:'town',v:b}; }
       const opts=V[S.setupV].e.filter(e=>roadOK(S,seat,e)); let b=opts[0],bs=-1; opts.forEach(e=>{ const o=E[e].a===S.setupV?E[e].b:E[e].a; let s=0; V[o].adj.forEach(u=>{ if(townFree(S,u)) s=Math.max(s,vScore(S,u,seat)); }); if(s>bs){bs=s;b=e;} }); return {t:'road',e:b}; }
@@ -131,9 +153,10 @@ const KH = (()=>{
     if (S.dev.length && canPay(P,KH_COST.dev) && (P.res[3]>1||P.res[4]>1||!S.vo.some(o=>o&&o.p===seat&&!o.city)||Math.random()<.35)) return {t:'buydev'};
     const goal = P.cities>0 && S.vo.some(o=>o&&o.p===seat&&!o.city) && (P.res[4]>=2||!spots.length) ? KH_COST.city : spots.length? KH_COST.town : KH_COST.road;
     const tr=tradeFor(S,seat,goal)||tradeFor(S,seat,KH_COST.dev); if(tr && (S._tr||0)<4){ S._tr=(S._tr||0)+1; return tr; }
+    if (!S._off && S.seats.some((s,i)=>i!==seat&&!s.bot)){ const nd=need(S,seat,goal), want=nd.findIndex(x=>x>0); if(want>=0&&tot(nd)<=2){ let sr=-1,sv=0; for(let r=0;r<5;r++){ const sp=P.res[r]-goal[r]; if(r!==want&&sp>sv){ sv=sp; sr=r; } } if(sr>=0){ S._off=1; const gv=[0,0,0,0,0], wv=[0,0,0,0,0]; gv[sr]=1; wv[want]=1; return {t:'offer',give:gv,get:wv,to:-1}; } } }
     if (P.roads>0 && canPay(P,KH_COST.road) && tot(P.res)>=5){ const r=bestRoadTo(S,seat); if(r) return {t:'road',e:r.e}; }
     S._tr=0; return {t:'end'}; }
-  function timeoutAction(S,seat,t){ if(S.phase==='play'&&S.step==='main') return {t:'end'}; return botAction(S,seat,Infinity); }
+  function timeoutAction(S,seat,t){ if(S.offer) return seat===S.offer.from?{t:'cancel'}:{t:'answer',ok:false}; if(S.phase==='play'&&S.step==='main') return {t:'end'}; return botAction(S,seat,Infinity); }
   return {HEX,V,E,PORT_E,PIPS,newGame,apply,tick,whoActs,botAction,timeoutAction,townOK,roadOK,rates,vp,canPay,tot,victims};
 })();
 if (typeof module!=='undefined') module.exports=KH;

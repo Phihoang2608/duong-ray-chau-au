@@ -12,10 +12,10 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261127x"></script>
-<script src="assets/imgs.js?v=20261127x"></script>
-<script src="art.js?v=20261127x"></script>
-<script src="ui.js?v=20261127x"></script>
+<script src="game.js?v=20261127y"></script>
+<script src="assets/imgs.js?v=20261127y"></script>
+<script src="art.js?v=20261127y"></script>
+<script src="ui.js?v=20261127y"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -91,6 +91,10 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 .hov .rstack{width:56px;height:44px}.hov .rstack .rc{width:52px;height:40px}
 @media (max-width:900px){.hov{position:static;margin-top:8px}.hov .hand{flex-direction:row;justify-content:space-between;gap:4px;padding:10px 8px 8px}}
 @media (max-height:520px){.hov{right:10px;top:10px}.hov .hand{gap:6px;padding:6px}.hov .rstack{width:50px;height:42px}.hov .rstack .rc{width:46px;height:35px}}
+.kst{left:22px!important;top:22px!important;transform:none!important;max-width:44%;white-space:normal!important;text-align:left}
+.ofr .orow{display:flex;align-items:center;gap:6px;margin:3px 0}.ofr .orow small{width:62px;color:#f0dcb0;font-size:13px}.ofr .cr{display:flex;background:rgba(40,18,4,.45);border-radius:7px;padding:1px 3px}.obt{display:flex;gap:8px;margin-top:8px}.obt .tbtn{flex:1;padding:9px 4px;font-size:16px}
+.ofr.hot{animation:ofh 1.2s ease-in-out infinite}@keyframes ofh{50%{box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2d10,0 0 0 3px #fde047,0 0 22px rgba(253,224,71,.85)}}
+.ptr{display:flex;flex-direction:column;gap:6px}.ptr .prow{display:flex;align-items:center;gap:6px}.ptr .prow>span{width:34px;color:#f0dcb0}.ptr select{font-family:inherit;font-size:14px;border:2px solid #4a2b10;border-radius:8px;padding:2px 4px;background:#f6e6c3;color:#3a210c}.ptr .prow .tbtn{margin-left:auto;padding:5px 10px}
 .bl{display:grid;grid-template-columns:1fr 1fr;gap:6px}.bld{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-size:13.5px;background:linear-gradient(180deg,#fff9ec,#f1e2c0);color:#3b2a14;border:1.5px solid #c9a24e}.bld span{display:flex;gap:3px}.bld .cr{display:flex;background:rgba(0,0,0,.06);border-radius:6px;padding:0 2px}
 .bld.on{box-shadow:0 0 0 3px #fde047,0 0 14px rgba(253,224,71,.7);background:#fff6d0}
 .dvl{display:flex;gap:8px;flex-wrap:wrap}.dcard{position:relative;width:66px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px}.dcard svg{width:62px;height:87px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));transition:transform .2s}.dcard:hover svg{transform:translateY(-4px) rotate(-2deg)}
@@ -115,6 +119,7 @@ Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', taglin
   <p><b>Mỗi lượt:</b> đổ 2 xúc xắc — ô đất mang số đó cho tài nguyên tới các nhà cạnh nó (thành phố nhận 2). Sau đó bạn xây dựng, mua thẻ, đổi hàng rồi bấm Kết thúc lượt.</p>
   <p><b>Ra 7:</b> ai giữ hơn 7 lá tự mất một nửa; người đổ dời kẻ cướp sang ô khác (ô đó ngừng sản xuất) và lấy 1 lá của người có nhà cạnh ô.</p>
   <p><b>Chi phí:</b> Đường = Gỗ + Gạch · Nhà = Gỗ + Gạch + Cừu + Lúa · Thành phố = 2 Lúa + 3 Đá · Thẻ phát triển = Cừu + Lúa + Đá.</p>
+  <p><b>Đổi với người chơi:</b> trong lượt của mình, chọn lá muốn đưa và lá muốn lấy rồi bấm Gửi lời mời. Người được mời bấm Đồng ý hoặc Từ chối (lời mời tự hết hạn sau 30 giây).</p>
   <p><b>Đổi hàng:</b> 4 lá cùng loại lấy 1 lá bất kỳ; có nhà ở cảng 3:1 hoặc cảng 2:1 thì đổi rẻ hơn.</p>
   <p><b>Thẻ phát triển:</b> Hiệp sĩ (dời kẻ cướp), Làm đường (2 đường miễn phí), Được mùa (nhận 2 lá), Độc quyền (gom hết 1 loại tài nguyên của mọi người), Điểm thưởng. Mỗi lượt dùng tối đa 1 thẻ, không dùng thẻ vừa mua.</p>` });
 </script>

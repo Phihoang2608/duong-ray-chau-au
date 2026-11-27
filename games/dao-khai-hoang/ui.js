@@ -2,7 +2,7 @@
 const KHUI=(()=>{
   const PC=['#e11d48','#2563eb','#16a34a','#f8fafc'];
   const A=KHART, R=A.R;
-  let root=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, dsel=null, DP=[], boardSig='';
+  let root=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='';
   const $=s=>document.querySelector(s);
   const VB={minX:-372,minY:-348,w:744,h:696};
   const X=v=>v*R;
@@ -27,13 +27,20 @@ const KHUI=(()=>{
     Object.assign(el.style,{left:x0+'px',top:y0+'px',width:w+'px',height:h+'px'}); document.body.appendChild(el);
     el.animate([{transform:'translate(0,0) scale(.3) rotate(-20deg)',opacity:0},{transform:'translate(0,-30px) scale(1.15) rotate(0)',opacity:1,offset:.25},{transform:`translate(${x1-x0}px,${y1-y0}px) scale(.55) rotate(10deg)`,opacity:.3}],{duration:1100,delay:delay||0,easing:'cubic-bezier(.4,.1,.3,1)',fill:'both'}).onfinish=()=>el.remove(); }
   let root0chat=null, root0=null;
+  function resRow(c){ return c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="22" height="20">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join(''); }
+  function offerBox(S,ME,api){ const o=S.offer; if(!o) return ''; const nm=api.esc(S.seats[o.from].name);
+    if (ME===o.from) return `<div class="box ofr"><div class="cth">Lời mời của bạn</div><div class="orow"><small>Bạn đưa</small>${resRow(o.give)}</div><div class="orow"><small>Bạn nhận</small>${resRow(o.get)}</div><div class="chint">${o.to>=0?'Chờ '+api.esc(S.seats[o.to].name)+' trả lời…':'Chờ mọi người trả lời…'}</div><button class="tbtn wide" data-a="cancel">Huỷ lời mời</button></div>`;
+    const mine=ME>=0&&(o.to<0||o.to===ME)&&!o.no.includes(ME);
+    if (!mine) return `<div class="box ofr"><div class="cth">${nm} đang đề nghị đổi</div><div class="orow"><small>Đưa</small>${resRow(o.give)}</div><div class="orow"><small>Lấy</small>${resRow(o.get)}</div></div>`;
+    const P=S.P[ME], can=o.get.every((x,i)=>P.res[i]>=x);
+    return `<div class="box ofr hot"><div class="cth">${nm} muốn đổi với bạn</div><div class="orow"><small>Bạn nhận</small>${resRow(o.give)}</div><div class="orow"><small>Bạn đưa</small>${resRow(o.get)}</div>${can?'':'<div class="chint">Bạn không đủ lá để đổi</div>'}<div class="obt"><button class="tbtn pri" data-a="yes" ${can?'':'disabled'}>Đồng ý</button><button class="tbtn" data-a="no">Từ chối</button></div></div>`; }
   function render(S,ME,api){
     if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div><div class="hov"></div></div><div class="side"><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
       { const ch=document.getElementById('tb-chat'); if(ch){ root0chat=ch; root0=document.querySelector('#kh .chs'); root0.appendChild(ch); ch.classList.add('show'); } }
       root=$('#kh'); root.addEventListener('click',onClick); root.addEventListener('change',onChange); }
     const sig=S.hex.map(h=>h.res+'.'+h.num).join()+S.ports.join();
     if (sig!==boardSig){ boardSig=sig; root.querySelector('#khs').innerHTML=A.board(S,VB); }
-    const t=api.now(), my=S.turn===ME&&S.phase!=='over', P=ME>=0?S.P[ME]:null, main=my&&S.phase==='play'&&S.step==='main';
+    const t=api.now(), my=S.turn===ME&&S.phase!=='over', P=ME>=0?S.P[ME]:null, main=my&&S.phase==='play'&&S.step==='main'&&!S.offer;
     if (!main) mode=null; if (!(my&&S.step==='robber')) robH=null;
     if (lastEv===null) lastEv=S.ev?S.ev.n:0; const ev=S.ev, isNew=ev&&ev.n!==lastEv;
     const pre={}; if(isNew&&ev.k==='steal') pre.vic=rectOf(`.pl[data-p="${ev.vic}"]`);
@@ -47,14 +54,14 @@ const KHUI=(()=>{
     root.querySelector('.kst').innerHTML=st;
     let h=`<div class="dice ${isNew&&ev.k==='roll'?'rolling':''}">${S.dice?A.die(S.dice[0])+A.die(S.dice[1],'#fdecc8')+`<b>${S.dice[0]+S.dice[1]}</b>`:'<span>Chưa đổ</span>'}<button class="tbtn pri" data-a="roll" ${my&&S.phase==='play'&&S.step==='roll'?'':'disabled'}>Đổ xúc xắc</button></div>`;
     if (robH!=null){ const vs=KH.victims(S,robH,ME); h+=`<div class="box">Lấy 1 lá của: ${vs.map(v=>`<button class="tbtn" data-vic="${v}">${api.esc(S.seats[v].name)}</button>`).join(' ')}</div>`; }
-    let L=h, HV=''; h='';
+    let L=offerBox(S,ME,api)+h, HV=''; h='';
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,90-Math.floor((t-S.turnAt)/1000)):null;
       return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
-        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261127x">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261127x">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261127x" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
+        <div class="pcn"><span title="Nhà"><img src="assets/house-neutral.webp?v=20261127y">${5-Q.towns}</span><span title="Thành phố"><img src="assets/city-neutral.webp?v=20261127y">${4-Q.cities}</span><span title="Đường"><img src="assets/road-neutral.webp?v=20261127y" class="rd">${15-Q.roads}</span>${Q.lr>=2?`<small>đường dài ${Q.lr}</small>`:''}</div>
         <div class="ps"><span>Lá: ${KH.tot(Q.res)}</span><span>Thẻ: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span></div>
         ${S.longest===i||S.largest===i?`<div class="aw">${S.longest===i?'<em>Đường dài nhất +2</em>':''}${S.largest===i?'<em>Quân mạnh nhất +2</em>':''}</div>`:''}</div>`; }).join('')}</div>`;
     const S1=h; h='';
-    { const V='?v=20261127x';
+    { const V='?v=20261127y';
       const cc=c=>c.map((x,r)=>x?`<span class="cr">${[...Array(x)].map(()=>`<svg viewBox="-9 -8 18 16" width="21" height="19">${A.resMini(r,0,0,.8)}</svg>`).join('')}</span>`:'').join('');
       const row=(ic,t,pt,c,att,dis,on)=>`<button class="ctr cbtn ${on?'on':''}" ${att} ${dis?'disabled':''}><span class="cic">${ic}</span><span class="ctx"><b>${t}</b><small>${pt}</small></span><span class="cco">${cc(c)}</span></button>`;
       const okR=main&&P&&(KH.canPay(P,KH_COST.road)||S.free)&&P.roads>0, okT=main&&P&&KH.canPay(P,KH_COST.town)&&P.towns>0, okC=main&&P&&KH.canPay(P,KH_COST.city)&&P.cities>0, okD=main&&P&&KH.canPay(P,KH_COST.dev)&&S.dev.length>0;
@@ -73,6 +80,10 @@ const KHUI=(()=>{
       const rt=KH.rates(S,ME);
       h+=`<div class="box tr"><span>Đổi với ngân hàng:</span> đưa <select data-s="g">${KH_RES.map((nm,r)=>`<option value="${r}" ${r===tg?'selected':''}>${rt[r]} ${nm}</option>`).join('')}</select> lấy <select data-s="w">${KH_RES.map((nm,r)=>`<option value="${r}" ${r===tw?'selected':''}>1 ${nm}</option>`).join('')}</select>
         <button class="tbtn" data-a="trade" ${main&&P.res[tg]>=rt[tg]&&tg!==tw?'':'disabled'}>Đổi</button></div>`;
+      { const opt=(n,sel)=>KH_RES.map((x,r)=>`<option value="${r}" ${r===sel?'selected':''}>${x}</option>`).join(''), qty=(sel)=>[1,2,3,4].map(q=>`<option value="${q}" ${q===sel?'selected':''}>${q}</option>`).join('');
+        const others=S.seats.map((x,i)=>i).filter(i=>i!==ME), okO=my&&S.phase==='play'&&S.step==='main'&&!S.offer&&P.res[og]>=oq&&og!==ow;
+        h+=`<div class="box tr ptr"><div class="cth">Đổi với người chơi</div><div class="prow"><span>Đưa</span><select data-s="oq">${qty(oq)}</select><select data-s="og">${opt(0,og)}</select></div><div class="prow"><span>Lấy</span><select data-s="on">${qty(on)}</select><select data-s="ow">${opt(0,ow)}</select></div>
+        <div class="prow"><span>Cho</span><select data-s="ot"><option value="-1" ${ot<0?'selected':''}>Tất cả</option>${others.map(i=>`<option value="${i}" ${ot===i?'selected':''}>${api.esc(S.seats[i].name)}</option>`).join('')}</select><button class="tbtn" data-a="offer" ${okO?'':'disabled'}>Gửi lời mời</button></div></div>`; }
       L+=`<div class="box"><button class="tbtn pri wide" data-a="end" ${main?'':'disabled'}>Kết thúc lượt</button>${S.phase==='over'&&api.mode()!=='client'?'<button class="tbtn gold wide" data-a="again">Chơi ván mới</button>':''}</div>`; }
     h+=`<div class="xlog">${S.log.slice(0,6).map(l=>`<div>${api.esc(l)}</div>`).join('')}</div>`;
     root.querySelector('.hov').innerHTML=HV; root.querySelector('.lft').innerHTML=L; root.querySelector('.s1').innerHTML=S1; root.querySelector('.s2').innerHTML=h;
@@ -90,7 +101,7 @@ const KHUI=(()=>{
       if(my && (S.step==='roll'||S.phase==='setup'&&S.step==='town') && ev.k!=='roll' && SFX.hiss) SFX.hiss(); }
   }
   function tickView(S,ME,api){ const el=root&&root.querySelector('.pl.turn .tmr'); if(el) el.textContent=Math.max(0,90-Math.floor((api.now()-S.turnAt)/1000)); }
-  function onChange(e){ const s=e.target.dataset.s; if(!s) return; if(s==='g') tg=+e.target.value; else tw=+e.target.value; render(window.__S,Table.API.me(),Table.API); }
+  function onChange(e){ const s=e.target.dataset.s; if(!s) return; const v=+e.target.value; if(s==='g') tg=v; else if(s==='w') tw=v; else if(s==='og') og=v; else if(s==='oq') oq=v; else if(s==='ow') ow=v; else if(s==='on') on=v; else if(s==='ot') ot=v; render(window.__S,Table.API.me(),Table.API); }
   function onClick(e){ const api=Table.API, S=window.__S, ME=api.me(); if(!S) return; const rr=()=>render(S,ME,api);
     const t=e.target.closest('[data-v],[data-e],[data-c],[data-h],[data-vic],[data-m],[data-a],[data-dev],[data-pr]'); if(!t) return; const d=t.dataset;
     if (t.disabled) return;
@@ -106,6 +117,8 @@ const KHUI=(()=>{
     if (d.pr!=null){ const r=+d.pr; if(dsel==='mono'){ api.act({t:'mono',r}); dsel=null; } else { DP.push(r); if(DP.length===2){ api.act({t:'plenty',r1:DP[0],r2:DP[1]}); dsel=null; } else api.toast('Đã chọn '+KH_RES[r]+', chọn thêm 1 lá'); } return; }
     const a=d.a; if(a==='dcancel'){ dsel=null; rr(); return; } if(a==='again'){ api.rematch(); return; }
     if (a==='trade'){ api.act({t:'trade',give:tg,get:tw}); return; }
+    if (a==='offer'){ const g=[0,0,0,0,0], w=[0,0,0,0,0]; g[og]=oq; w[ow]=on; api.act({t:'offer',give:g,get:w,to:ot}); return; }
+    if (a==='yes'||a==='no'){ api.act({t:'answer',ok:a==='yes'}); return; }
     if (a) api.act({t:a}); }
   return { render:(S,ME,api)=>{ window.__S=S; render(S,ME,api); }, tickView };
 })();
