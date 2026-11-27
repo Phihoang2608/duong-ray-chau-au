@@ -932,6 +932,17 @@ body.landphone .mkbar .deckslot,body.landphone .mkbar .tkdeck,body.landphone .mk
 body.landphone .mkbar small{font-size:7.5px!important}
 body.landphone .mkbar .stico{font-size:11px!important}
 body.landphone #status{font-size:10px!important;padding:2px 6px!important;margin-top:3px!important}
+
+/* khung chọn vé đỏ nhấp nháy để gây chú ý */
+body.picking #tkPanel{border:3px solid #dc2626!important;box-shadow:0 0 0 3px rgba(220,38,38,.25),0 0 22px rgba(220,38,38,.55)!important;animation:tkAlert 1.2s ease-in-out infinite}
+body.picking #tkPick h2{color:#b91c1c!important}
+@keyframes tkAlert{50%{box-shadow:0 0 0 5px rgba(220,38,38,.35),0 0 34px rgba(220,38,38,.8)}}
+/* soi vé mạnh: sóng lớn, viền xanh sáng rõ */
+.beacons.strong .wave{stroke:#22c55e!important;stroke-width:6!important;animation:waveS 1.2s ease-out 3 both!important;filter:drop-shadow(0 0 6px #4ade80)}
+@keyframes waveS{0%{transform:scale(1);opacity:1}100%{transform:scale(6);opacity:0}}
+.beacons.strong .wcore{opacity:.5!important;fill:#4ade80!important}
+.beacons.strong circle[r="9"]{stroke:#16a34a;stroke-width:5;filter:drop-shadow(0 0 8px #22c55e)}
+.beacons.strong .pglow{stroke:#22c55e!important;stroke-opacity:.5!important;filter:drop-shadow(0 0 10px #22c55e)!important}
 </style>
 </head>
 <body>
@@ -1866,7 +1877,7 @@ function beaconSVG(){
   const el=performance.now()-(f.at||0); if (el>3200) return '';
   const A=CITIES[f.a], B=CITIES[f.b];
   if (!UIS._bT || UIS._bF!==f){ UIS._bF=f; clearTimeout(UIS._bT); UIS._bT=setTimeout(()=>{ UIS._bT=null; renderMap(); }, 3250-el); }
-  let s=`<g class="beacons" pointer-events="none" style="animation-delay:${-el.toFixed(0)}ms">`;
+  let s=`<g class="beacons ${f.strong?'strong':''}" pointer-events="none" style="animation-delay:${-el.toFixed(0)}ms">`;
   /* các tuyến nên đi: đường ngắn nhất (tuyến của mình = 0, bỏ tuyến người khác) */
   pathRoutes(f.a,f.b).forEach(r=>{ const g=routeGeom(r), pad=11;
     const x1=g.ax+g.ux*pad, y1=g.ay+g.uy*pad, x2=g.ax+g.ux*(g.d-pad), y2=g.ay+g.uy*(g.d-pad);
@@ -2179,8 +2190,8 @@ function showTicketPicker(ids, min, key){
   const m=showModal('Chọn vé hành trình', body, [btn], {key, dock:true});
   m.querySelectorAll('.tpick').forEach(el=>{ const i=+el.dataset.i, t=TK[ids[i]];
     const hue=TK_HUES[(i+3)%TK_HUES.length];
-    el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); UIS.hl={a:t.a,b:t.b,hue,at:performance.now()}; el.classList.toggle('sel', sel.has(i)); el.querySelector('.tpt').textContent=sel.has(i)?'Đã chọn':'Chọn'; btn.el.disabled = sel.size<min; btn.el.textContent=sel.size<min?`Chọn ít nhất ${min} vé (${sel.size}/${min})`:`Giữ ${sel.size} vé đã chọn`; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
-    el.onmouseenter=()=>{ if(UIS.hl&&UIS.hl.a===t.a&&UIS.hl.b===t.b) return; UIS.hl={a:t.a,b:t.b,hue,at:performance.now()}; renderMap(); }; });
+    el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); UIS.hl={a:t.a,b:t.b,hue,at:performance.now(),strong:1}; el.classList.toggle('sel', sel.has(i)); el.querySelector('.tpt').textContent=sel.has(i)?'Đã chọn':'Chọn'; btn.el.disabled = sel.size<min; btn.el.textContent=sel.size<min?`Chọn ít nhất ${min} vé (${sel.size}/${min})`:`Giữ ${sel.size} vé đã chọn`; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
+    el.onmouseenter=()=>{ if(UIS.hl&&UIS.hl.a===t.a&&UIS.hl.b===t.b) return; UIS.hl={a:t.a,b:t.b,hue,at:performance.now(),strong:1}; renderMap(); }; });
   btn.el.disabled=true; btn.el.textContent=`Chọn ít nhất ${min} vé (0/${min})`; UIS.hl=null; renderMap();
 }
 function miniRouteSVG(r, ownerColor){
@@ -2584,7 +2595,7 @@ function bind(){
   $('#tickets').addEventListener('mouseover', e=>{ const t=e.target.closest('.vticket'); if(!t) return; const h={a:+t.dataset.a,b:+t.dataset.b,hue:t.dataset.hue}; if(UIS.hl && UIS.hl.a===h.a && UIS.hl.b===h.b) return; UIS.hl=h; renderMap(); });
   $('#tickets').addEventListener('click', e=>{ const t=e.target.closest('.vticket'); if(!t) return; SFX.init();
     if (UIS.focus && UIS.focus.id===t.dataset.id){ UIS.focus=null; SFX.flip(); }
-    else { UIS.focus={id:t.dataset.id, a:+t.dataset.a, b:+t.dataset.b, hue:t.dataset.hue, at:performance.now()}; SFX.chimeSoft(); Ticker.push(`<b>${esc(CITIES[+t.dataset.a].name)}</b> và <b>${esc(CITIES[+t.dataset.b].name)}</b> đang phát sáng trên bản đồ — bấm lại vé để tắt`, 'claim'); scrollMapTo(+t.dataset.a,+t.dataset.b); }
+    else { UIS.focus={id:t.dataset.id, a:+t.dataset.a, b:+t.dataset.b, hue:t.dataset.hue, at:performance.now(), strong:1}; SFX.chimeSoft(); Ticker.push(`<b>${esc(CITIES[+t.dataset.a].name)}</b> và <b>${esc(CITIES[+t.dataset.b].name)}</b> đang phát sáng trên bản đồ — bấm lại vé để tắt`, 'claim'); scrollMapTo(+t.dataset.a,+t.dataset.b); }
     UIS.hl=null; UIS.tkHTML=null; renderSide(); renderMap(); });
   $('#tickets').addEventListener('mouseleave', ()=>{ UIS.hl=null; renderMap(); });
   $('#zoom').oninput=e=>setZoom(+e.target.value);
