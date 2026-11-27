@@ -791,6 +791,18 @@ body.landphone #tkPanel .vt-longtag::before{content:"★";font-size:8px}
 
 body.landphone #tkPanel #tickets{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 body.landphone #pbg-fab{transform:scale(.62)!important;opacity:.9}
+
+/* ký hiệu trên thân toa, số đơn giản bên dưới */
+.hcar .wbox{position:relative;display:block}
+.hcar .wbox .wsym{position:absolute!important;left:50%;top:44%;transform:translate(-50%,-50%);width:26px!important;height:26px!important;margin:0!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.hcar.loco .wbox .wsym{left:62%;top:52%}
+.hcar .hn{all:unset;display:block;margin-top:1px;font:bold 20px/1 "Times New Roman",serif;color:#fff3cf;text-shadow:0 1px 0 #3e0c1b,0 0 4px rgba(0,0,0,.6);text-align:center}
+.hcar.loco.zero .hn{color:#cdb78a}
+body.landphone .hcar .wbox .wsym{width:15px!important;height:15px!important}
+body.landphone .hcar .hn{font-size:13px}
+
+.hcar .hn{font-size:20px!important;line-height:1!important;min-width:0!important;padding:0!important;background:none!important;border:none!important;box-shadow:none!important;color:#fff3cf!important}
+body.landphone .hcar .hn{font-size:13px!important}
 </style>
 </head>
 <body>
@@ -1792,7 +1804,7 @@ function renderSide(){
     const ORD=['loco',...CARDS.filter(c=>c!=='loco')];
     $('#hand').innerHTML = ORD.map(c=>{ const n=me.hand[c]; const up = UIS.prevHand && n>UIS.prevHand[c];
       if (typeof RA_BASE==='undefined') return `<div class="hcard ${n?'':'zero'} ${up?'bump':''}" data-c="${c}">${cardHTML(c)}<div class="cnt">${n}</div><div class="hname">${cname(c)}</div></div>`;
-      return `<div class="hcar ${c} ${n?'':'zero'} ${up?'bump':''}" data-c="${c}" title="${esc(cname(c))}: ${n} lá"><img class="wimg" src="${RA_BASE}wagons/${c}.png" alt="" draggable="false"><div class="hbot"><img class="wsym" src="${RA_BASE}sym/${c}.png" alt="" draggable="false"><b class="hn">${n}</b></div></div>`; }).join('');
+      return `<div class="hcar ${c} ${n?'':'zero'} ${up?'bump':''}" data-c="${c}" title="${esc(cname(c))}: ${n} lá"><div class="wbox"><img class="wimg" src="${RA_BASE}wagons/${c}.png" alt="" draggable="false"><img class="wsym" src="${RA_BASE}sym/${c}.png" alt="" draggable="false"></div><b class="hn">${n}</b></div>`; }).join('');
     const nT=$('#tkCnt'); if(nT) nT.textContent=me.tickets.length?`(${me.tickets.filter(id=>ticketDone(me,id)).length}/${me.tickets.length})`:'';
     UIS.prevHand=Object.assign({}, me.hand);
     const tk = me.tickets.slice().sort((a,b)=>ticketDone(me,a)-ticketDone(me,b));
