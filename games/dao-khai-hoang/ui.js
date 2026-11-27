@@ -117,7 +117,7 @@ const KHUI=(()=>{
       root.addEventListener('click',onClick); tipInit(); zoomInit(); fit(); setTimeout(fit,300); root.addEventListener('change',onChange); }
     lastArgs=[S,ME,api]; const sig=S.hex.map(h=>h.res+'.'+h.num).join()+S.ports.join()+(window.KH_LITE?'L':'F');
     if (sig!==boardSig){ boardSig=sig; root.querySelector('#khs').innerHTML=A.board(S,VB); }
-    if(!window.__khLT) window.__khLT={v:null}; { const nm=S.turn===ME&&S.phase!=='over'&&ME>=0; if(nm&&window.__khLT.v===false&&root){ const b=document.createElement('div'); b.className='kturn'; b.textContent='ĐẾN LƯỢT BẠN!'; document.body.appendChild(b); try{SFX.pop&&SFX.pop();}catch(e){} setTimeout(()=>b.remove(),2400); } window.__khLT.v=nm; }
+    if(!window.__khLT) window.__khLT={v:null}; { const nm=S.turn===ME&&S.phase!=='over'&&ME>=0; if(nm&&window.__khLT.v===false&&root){ const b=document.createElement('div'); b.className='kturn'; b.textContent='ĐẾN LƯỢT BẠN!'; document.body.appendChild(b); try{SFX.pop&&SFX.pop();}catch(e){} setTimeout(()=>b.remove(),1150); } window.__khLT.v=nm; }
     const t=api.now(), my=S.turn===ME&&S.phase!=='over', P=ME>=0?S.P[ME]:null, main=my&&S.phase==='play'&&S.step==='main'&&!S.offer;
     if (S.step!=='discard'||!S.disc||S.disc[ME]==null) dsc=[0,0,0,0,0];
     const dNeed=(S.step==='discard'&&S.disc&&S.disc[ME]!=null)?S.disc[ME]:0, dSel=dsc.reduce((a,b)=>a+b,0);
