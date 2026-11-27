@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#4a2d15">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đảo Khai Hoang | Phi Board Games</title>
 </head>
@@ -12,8 +13,8 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261128w"></script>
-<script src="assets/imgs.js?v=20261128w"></script>
+<script src="game.js?v=20261128y"></script>
+<script src="assets/imgs.js?v=20261128y"></script>
 <script>
 window.KH_FX=(function(){const d=document.documentElement;
  function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
@@ -23,8 +24,8 @@ window.KH_FX=(function(){const d=document.documentElement;
  function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
  apply(); return {mode,apply,toggle};})();
 </script>
-<script src="art.js?v=20261128w"></script>
-<script src="ui.js?v=20261128w"></script>
+<script src="art.js?v=20261128y"></script>
+<script src="ui.js?v=20261128y"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -145,6 +146,7 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 @media (max-height:520px){ #kh{padding:3px;min-height:0} .khwrap{grid-template-columns:150px minmax(0,1fr) 280px;gap:6px} .lft .ctab{display:none}.die{width:44px;height:44px}.dice b{font-size:22px}.dice::before{display:none}.dice .tbtn{font-size:14px;padding:6px} .frame{padding:5px;border-radius:14px} #khd{left:5px;top:5px;width:calc(100% - 10px);height:calc(100% - 10px)} #khs{height:calc(100vh - 70px);min-height:0;max-height:none;border-radius:10px}
   .side{max-height:calc(100vh - 60px)} .kst{font-size:12px;padding:2px 10px;top:8px} .xlog{display:none} .pl .ps{font-size:11px;gap:6px} .box,.dice,.pl{padding:4px 6px} .die{width:34px;height:34px} .rstack{width:58px;height:48px}.rstack .rc{width:54px;height:41px} }
 .ps u{display:none;text-decoration:none}
+.kfs{position:absolute;left:22px;bottom:56px;z-index:5;font:inherit;font-size:12px;color:#ffecc0;background:rgba(30,18,8,.78);border:1.5px solid #c9a24e;border-radius:14px;padding:3px 10px;cursor:pointer}
 .kfx{position:absolute;left:22px;bottom:22px;z-index:5;font:inherit;font-size:12px;color:#ffecc0;background:rgba(30,18,8,.78);border:1.5px solid #c9a24e;border-radius:14px;padding:3px 10px;cursor:pointer}
 #kh{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #kh button,#kh .cbtn,#kh select{touch-action:manipulation}
@@ -165,12 +167,12 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  body.ingame .tb-top{padding:2px 8px;gap:6px;min-height:0;backdrop-filter:none}
  body.ingame .tb-top h1{display:none}
  body.ingame .tb-top .tbtn{padding:3px 9px;font-size:13px}
- body.ingame #tb-game{height:calc(100vh - 34px);height:calc(100dvh - 34px)}
- #kh{height:100%;min-height:0!important;padding:3px;box-sizing:border-box;overflow:hidden}
+ body.ingame #tb-game{height:calc(100vh - 34px);height:calc(100dvh - 34px);overflow:hidden;position:relative}
+ #kh{min-height:0!important;padding:3px;box-sizing:border-box;overflow:hidden;height:100%}
  .lft{order:1!important;display:flex!important;flex-direction:column!important}.kbwrap{order:2!important}.side{order:3!important}
  .hov{position:absolute!important;margin:0!important;pointer-events:none!important}.hov .hand{flex-direction:column!important;justify-content:flex-start!important}
  .tbar{position:static!important;flex-direction:column!important;flex-wrap:nowrap!important}.pop{position:absolute!important;width:190px!important}
- .khwrap{height:100%;grid-template-columns:clamp(124px,19vw,176px) minmax(0,1fr) clamp(190px,28vw,262px)!important;grid-template-rows:minmax(0,1fr);gap:4px;max-width:none;align-items:stretch}
+ .khwrap{height:100%;grid-template-columns:clamp(124px,19%,176px) minmax(0,1fr) clamp(190px,28%,262px)!important;grid-template-rows:minmax(0,1fr);gap:4px;max-width:none;align-items:stretch}
  .lft{position:static;min-height:0;overflow-y:auto;scrollbar-width:none;gap:4px}
  .lft::-webkit-scrollbar{display:none}
  .kbwrap{min-height:0;height:100%}
@@ -182,6 +184,8 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  .side .s1{flex:0 0 auto;gap:3px}.side .chs{flex:1 1 0;min-height:0;overflow:hidden}.side .s2{flex:0 0 auto;gap:3px;max-height:34%;overflow-y:auto;scrollbar-width:none}
  .kst{top:6px;font-size:12px;padding:2px 10px}
  .kfx{left:8px;bottom:8px;font-size:11px;padding:2px 8px}
+ .kfs{left:8px;bottom:34px;font-size:11px;padding:2px 8px}
+ body.khfs .tb-top{display:none}body.khfs.ingame #tb-game{height:100vh;height:100dvh}
  .hov{right:8px;top:8px;bottom:8px}
  .hov .hand{gap:3px;padding:4px 3px}.hov .rstack{width:42px;height:34px}.hov .rstack .rc{width:38px;height:29px}.rstack b{font-size:11px;padding:0 5px}
  .bt{width:54px;height:54px}.bt img{width:30px;height:36px}.bt small{font-size:9px}
@@ -227,6 +231,8 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #khd{left:4px;top:4px;width:calc(100% - 8px);height:calc(100% - 8px)}
  .kst{top:6px;left:50%;font-size:11px;padding:1px 9px;white-space:nowrap}
  .kfx{left:auto;right:8px;top:8px;bottom:auto;font-size:11px;padding:2px 8px}
+ .kfs{left:auto;right:8px;top:36px;bottom:auto;font-size:11px;padding:2px 8px}
+ body.khfs .tb-top{display:none}
  .hov{position:relative!important;inset:auto!important;margin-top:4px!important;pointer-events:auto!important}
  .hov .hand{flex-direction:row!important;justify-content:space-around;gap:2px;padding:4px 3px}
  .hov .rstack{width:50px;height:40px}.hov .rstack .rc{width:46px;height:34px}.rstack b{font-size:12px;padding:0 6px}
