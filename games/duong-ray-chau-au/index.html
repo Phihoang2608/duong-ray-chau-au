@@ -1644,6 +1644,24 @@ function scheduleBots(){
 
 /* ----- Bản đồ ----- */
 let BG_DONE=false;
+function routeSym(k,col){
+  const dark=['black','blue','purple','red','green'].includes(col);
+  const f=k==='loco'?'#7a4a00':(dark?'#fff':'#000'), o=k==='loco'?.6:(dark?.42:.32), R=3.6;
+  const P=n=>Array.from({length:n},(_,i)=>{const a=(-90+360/n*i)*Math.PI/180; return (R*Math.cos(a)).toFixed(2)+','+(R*Math.sin(a)).toFixed(2);}).join(' ');
+  let d;
+  switch(k){
+    case 'red': d=`<rect x="-3" y="-3" width="6" height="6"/>`; break;
+    case 'orange': d=`<polygon points="${Array.from({length:6},(_,i)=>{const a=i*60*Math.PI/180; return (R*Math.cos(a)).toFixed(2)+','+(R*Math.sin(a)).toFixed(2);}).join(' ')}"/>`; break;
+    case 'yellow': d=`<circle r="3.3"/>`; break;
+    case 'green': d=`<polygon points="0,-3.9 3.6,2.8 -3.6,2.8"/>`; break;
+    case 'blue': d=`<polygon points="0,-4 3.2,0 0,4 -3.2,0"/>`; break;
+    case 'purple': d=`<path d="M-1.1-3.6h2.2v2.5h2.5v2.2h-2.5v2.5h-2.2v-2.5h-2.5v-2.2h2.5z"/>`; break;
+    case 'black': d=`<polygon points="${P(5)}"/>`; break;
+    case 'white': d=`<path d="M0 3.4C-4.6 0-3.6-3.8-1.6-3.8C-.7-3.8 0-3.1 0-2.3C0-3.1.7-3.8 1.6-3.8C3.6-3.8 4.6 0 0 3.4Z"/>`; break;
+    default: d=`<polygon points="${Array.from({length:10},(_,i)=>{const a=(-90+36*i)*Math.PI/180, rr=i%2?1.8:4.2; return (rr*Math.cos(a)).toFixed(2)+','+(rr*Math.sin(a)).toFixed(2);}).join(' ')}"/>`;
+  }
+  return `<g fill="${f}" opacity="${o}" pointer-events="none">${d}</g>`;
+}
 function routeSVG(r, afford, now){
   const g=routeGeom(r); const pad=13; const seg=(g.d-2*pad)/r.len; const w=Math.max(6,seg-3);
   const owner=G.owner[r.id]; const canClick = owner==null && isMyTurn() && !UIS.stationMode;
@@ -1664,10 +1682,11 @@ function routeSVG(r, afford, now){
         ${W>15?`<rect x="${-W/2+3.5}" y="-2.5" width="${win}" height="4.5" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/><rect x="${W/2-3.5-win}" y="-2.5" width="${win}" height="4.5" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/>`:''}
         <circle cx="${-W/4}" cy="${h/2+.5}" r="2.6" fill="#0b0b0b"/><circle cx="${W/4}" cy="${h/2+.5}" r="2.6" fill="#0b0b0b"/></g>`;
     } else {
-      const h=10.5; const fill = r.color==='gray' ? '#bdb5a6' : CINFO[r.color].hex;
-      const stroke = r.tunnel ? 'stroke="#1a1a1a" stroke-width="2" stroke-dasharray="3 2"' : 'stroke="#3b2a1a" stroke-width="1.1"';
-      s+=`<rect class="slot" x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="2.5" fill="${fill}" ${stroke}/><rect x="${-w/2+1.5}" y="${-h/2+1.5}" width="${w-3}" height="2.5" rx="1" fill="#fff" opacity=".3" pointer-events="none"/>`;
-      if (i<r.ferry) s+=`<circle cx="0" cy="0" r="3.4" fill="url(#rainbow)" stroke="#222" stroke-width=".8"/>`;
+      const h=14; const fill = r.color==='gray' ? '#bdb5a6' : CINFO[r.color].hex;
+      const stroke = r.tunnel ? 'stroke="#111" stroke-width="2.4" stroke-dasharray="3.5 2"' : 'stroke="#1e140b" stroke-width="1.8"';
+      s+=`<rect class="slot" x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" fill="${fill}" ${stroke}/>`;
+      if (i<r.ferry) s+=routeSym('loco',r.color);
+      else if (r.color!=='gray') s+=routeSym(r.color,r.color);
     }
     s+='</g>';
   }
