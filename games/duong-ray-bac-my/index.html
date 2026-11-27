@@ -978,13 +978,56 @@ button.pay:hover{transform:translateY(-2px);box-shadow:0 0 0 3px rgba(34,197,94,
 .paytrain img:first-child{margin-left:0}
 .paylab{font-size:13.5px;white-space:nowrap}.paylab b{font-size:15px;color:#7a1f3d}
 body.landphone .paytrain img{height:20px}body.landphone .paylab{font-size:11px}
+
+/* ===== Mức hiệu ứng ===== */
+#fxBtn{display:inline-flex;align-items:center;gap:4px}#fxBtn span{font-size:13px}
+#fxBtn[data-m="full"]{color:#ffe08a!important;border-color:#e9c46a!important}
+#fxBtn[data-m="off"]{opacity:.75}
+body.fx-lite .cloud,body.fx-off .cloud{display:none!important}
+body.fx-lite .ship,body.fx-off .ship{animation:none!important}
+body.fx-lite .brays,body.fx-off .brays{animation:none!important}
+body.fx-lite #mapWrap,body.fx-off #mapWrap{box-shadow:none!important}
+body.fx-lite .hcar .wimg,body.fx-off .hcar .wimg,body.fx-lite .wagonfly{filter:none!important}
+body.fx-lite .pglow,body.fx-off .pglow{filter:none!important}
+body.fx-lite .beacons.strong .wave,body.fx-lite .beacons.strong circle[r="9"]{filter:none!important}
+body.fx-lite.picking #tkPanel{animation:none!important}
+body.fx-lite #tkPick .tpick:not(.sel){animation:none!important}
+body.fx-off *{animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}
+body.fx-off .wave,body.fx-off .bring,body.fx-off .bglow{display:none!important}
+body.fx-off .pkcall{animation:none!important}
+body.fx-off .route.glow *{animation:none!important}
+body.fx-full .mkbar .mslot .card.clickable{transition:transform .2s}
+/* ===== Trò chuyện nổi (giống Thương Nhân Đá Quý) ===== */
+#chatPanel{display:none!important;position:fixed!important;right:14px;bottom:64px;z-index:9200;width:min(340px,92vw);max-height:min(460px,70vh);
+  flex-direction:column;padding:10px 12px!important;border-radius:16px!important;background:linear-gradient(180deg,#5e1730,#2e0915)!important;border:2px solid #d6a83e!important;box-shadow:0 14px 34px rgba(0,0,0,.55)!important;color:#fbf1d8}
+#chatPanel.open{display:flex!important}
+#chatPanel h3{display:flex;align-items:center;justify-content:space-between;color:#f6d680!important;font:bold 16px "Times New Roman",serif!important;margin:0 0 8px!important}
+#chatClose{all:unset;cursor:pointer;color:#f6d680;font-size:16px;padding:2px 6px;border-radius:6px}#chatClose:hover{background:rgba(255,255,255,.1)}
+#chatPanel .chatBox{display:flex;flex-direction:column;min-height:0;flex:1}
+#chatPanel .chatList{flex:1;min-height:150px;max-height:none!important;height:auto!important;overflow-y:auto;background:rgba(0,0,0,.25);border:1px solid rgba(214,168,62,.4);border-radius:10px;padding:6px 8px}
+#chatPanel .chatList{display:flex;flex-direction:column;gap:5px}#chatPanel .cm{color:#3a2410;background:#fbf1d8}#chatPanel .cm.me{background:#e9c46a;color:#3e0c1b}#chatPanel .cm time{color:#8a6a2a}#chatPanel .cmx{font-size:15px}
+#chatPanel .cmempty{color:#e9d9b0;font-size:13.5px;text-align:center;padding:16px 4px}
+#chatPanel .chatForm{display:flex;gap:6px;margin-top:8px}
+#chatPanel .chatForm input{flex:1;min-width:0;background:#fbf1d8;border:1px solid #d6a83e;border-radius:9px;padding:6px 9px;font:15px "Times New Roman",serif}
+#chatPanel .chatForm button{border-radius:9px;padding:6px 12px}
+#chatPanel .quick button{background:rgba(0,0,0,.3);color:#f6d680;border:1px solid rgba(214,168,62,.6);font:13px "Times New Roman",serif}
+#chatBtn{display:inline-block!important;position:relative}
+#chatBtn.on{background:#d6a83e!important;color:#3e0c1b!important}
+body.landphone #chatPanel{right:6px;bottom:6px;width:min(300px,46vw);max-height:86vh;padding:6px 8px!important}
+body.landphone #chatPanel .chatList{min-height:90px}
+@media (max-width:900px){ #chatPanel{left:8px;right:8px;width:auto;bottom:8px} }
+
+#ticker{flex:1 1 300px!important;min-width:200px}
+.hbtns button{padding-left:8px!important;padding-right:8px!important}
+
+@media (max-width:1700px){ #rulesBtn,#leaveBtn{font-size:0!important;gap:0} #rulesBtn .ico,#leaveBtn .ico{margin:0!important} #fxBtn span{font-size:12px} }
 </style>
 </head>
 <body>
 <header>
   <h1>Đường Ray Bắc Mỹ</h1>
   <div id="players"></div>
-  <div class="hbtns"><button id="chatBtn" title="Trò chuyện"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="musicBtn" title="Tắt nhạc nền"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg></button><button id="soundBtn" title="Bật/tắt âm thanh"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button id="rulesBtn"><svg class="ico" viewBox="0 0 24 24"><path d="M3 5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0zM21 5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Luật</button><button id="leaveBtn" title="Rời phòng online"><svg class="ico" viewBox="0 0 24 24"><path d="M14 4H6v16h8M10 12h11M18 8l3 4-3 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Rời phòng</button><button id="menuBtn">☰ Menu</button></div>
+  <div class="hbtns"><button id="chatBtn" title="Trò chuyện"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="fxBtn" title="Hiệu ứng"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor"/></svg><span>Đơn giản</span></button><button id="musicBtn" title="Tắt nhạc nền"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg></button><button id="soundBtn" title="Bật/tắt âm thanh"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button id="rulesBtn"><svg class="ico" viewBox="0 0 24 24"><path d="M3 5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0zM21 5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Luật</button><button id="leaveBtn" title="Rời phòng online"><svg class="ico" viewBox="0 0 24 24"><path d="M14 4H6v16h8M10 12h11M18 8l3 4-3 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Rời phòng</button><button id="menuBtn">☰ Menu</button></div>
   <div id="ticker"><div id="turnPill" style="display:none"><span class="tdot"></span><span id="turnName"></span></div><div id="tmsg"></div></div>
 </header>
 <main>
@@ -1010,7 +1053,7 @@ body.landphone .paytrain img{height:20px}body.landphone .paylab{font-size:11px}
     </div>
 
     <div class="panel" id="tkPanel"><button id="tkToggle" type="button">Vé của bạn <b id="tkCnt"></b><span class="tkarr">▾</span></button><div id="tickets"></div><div id="tkPick"></div></div>
-    <div class="panel" id="chatPanel"><h3>Trò chuyện</h3><div class="chatBox"></div></div>
+    <div class="panel" id="chatPanel"><h3>Trò chuyện trong ván <button type="button" id="chatClose" title="Đóng">✕</button></h3><div class="chatBox"></div></div>
     <div class="panel"><h3>Nhật ký</h3><div id="log"></div></div>
   </aside>
 </main>
@@ -1878,7 +1921,7 @@ function renderMap(){
   if (!BG_DONE){ $('#bg').innerHTML=bgSVG(); $('#clouds').innerHTML=cloudsSVG(); BG_DONE=true; }
   const afford=new Set(); const now=performance.now();
   if (isMyTurn() && G.drawn===0) ROUTES.forEach(r=>{ if (claimOptions(ME,r).length) afford.add(r.id); });
-  let s=`<g filter="url(#soft)">`; ROUTES.forEach(r=>{ s+=routeSVG(r, afford, now); }); s+='</g>';
+  let s=FXMODE==='full'?`<g filter="url(#soft)">`:'<g>'; ROUTES.forEach(r=>{ s+=routeSVG(r, afford, now); }); s+='</g>';
   s+=heldMarksSVG();
   const stMode = UIS.stationMode && isMyTurn();
   CITIES.forEach(C=>{
@@ -1909,7 +1952,7 @@ function beaconSVG(){
   if (!UIS._bT || UIS._bF!==f){ UIS._bF=f; clearTimeout(UIS._bT); UIS._bT=setTimeout(()=>{ UIS._bT=null; renderMap(); }, 3250-el); }
   let s=`<g class="beacons ${f.strong?'strong':''}" pointer-events="none" style="animation-delay:${-el.toFixed(0)}ms">`;
   /* các tuyến nên đi: đường ngắn nhất (tuyến của mình = 0, bỏ tuyến người khác) */
-  pathRoutes(f.a,f.b).forEach(r=>{ const g=routeGeom(r), pad=11;
+  tkPathRoutes(f.a,f.b).forEach(r=>{ const g=routeGeom(r), pad=11;
     const x1=g.ax+g.ux*pad, y1=g.ay+g.uy*pad, x2=g.ax+g.ux*(g.d-pad), y2=g.ay+g.uy*(g.d-pad);
     s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#22c55e" stroke-width="26" stroke-opacity=".28" class="pglow"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#4ade80" stroke-width="20" stroke-opacity=".0" class="pglow2"/>`; });
   [A,B].forEach(C=>{
@@ -1918,7 +1961,7 @@ function beaconSVG(){
   });
   return s+'</g>';
 }
-function pathRoutes(a,b){
+function tkPathRoutes(a,b){
   const dist=CITIES.map(()=>Infinity), prev=CITIES.map(()=>null), done=new Set(); dist[a]=0;
   const adj={}; ROUTES.forEach(r=>{ const o=G.owner[r.id]; if(o!=null && o!==ME) return; const w=o===ME?0:r.len;
     (adj[r.a]=adj[r.a]||[]).push([r.b,w,r]); (adj[r.b]=adj[r.b]||[]).push([r.a,w,r]); });
@@ -2139,7 +2182,7 @@ function processFx(){
 }
 /* Toa tàu (đã xoá nền) bay mượt từ chỗ lấy bài về đúng vị trí toa đó trong đoàn tàu của bạn */
 function wagonFly(fromRect, c, fromDeck){
-  if (!fromRect) return;
+  if (!fromRect || FXMODE==='off') return;
   requestAnimationFrame(()=>{
     const car=document.querySelector(`#hand .hcar[data-c="${c}"]`); const tgt=car && car.querySelector('.wimg'); if(!tgt) return;
     const tr=tgt.getBoundingClientRect(); if(!tr.width) return;
@@ -2523,7 +2566,7 @@ function chatIngest(){
     arr.slice(-3).forEach(m=>{ if(!m || typeof m.x!=='string' || typeof m.i!=='number') return; const k=pe.peer+':'+m.i; if (CHAT.seen.has(k)) return; CHAT.seen.add(k);
       const msg={k, peer:pe.peer, me:pe.sameTab, name:cleanName(pe.presence.name), x:cleanText(m.x), t:Math.min(Date.now(), +m.t||Date.now())};
       if (!msg.x) return; CHAT.list.push(msg);
-      if (!pe.sameTab && CHAT.primed){ fresh++; CHAT.unread++; Ticker.push(`<b>${esc(msg.name)}</b>: ${esc(msg.x)}`, 'chat'); } }); });
+      if (!pe.sameTab && CHAT.primed){ fresh++; if(!($('#chatPanel')&&$('#chatPanel').classList.contains('open'))) CHAT.unread++; Ticker.push(`<b>${esc(msg.name)}</b>: ${esc(msg.x)}`, 'chat'); } }); });
   CHAT.primed=true;
   if (fresh) SFX.chatPing();
   CHAT.list.sort((a,b)=>a.t-b.t); CHAT.list=CHAT.list.slice(-80); renderChat();
@@ -2531,13 +2574,13 @@ function chatIngest(){
 function renderChat(){
   const html = CHAT.list.length ? CHAT.list.map(m=>{ const d=new Date(m.t); const tm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
       return `<div class="cm ${m.me?'me':''}"><span class="cmn" style="color:${chatColor(m.peer)}">${esc(m.me?'Bạn':m.name)}</span><span class="cmx">${esc(m.x)}</span><time>${tm}</time></div>`; }).join('')
-    : '<div class="cmempty">Chưa có tin nhắn. Chào mọi người một câu nhé! </div>';
+    : (NET.mode==='local' ? '<div class="cmempty">Trò chuyện dùng khi chơi online.<br>Vào Menu → Tạo phòng và gửi mã cho bạn bè để cùng chơi và nhắn tin.</div>' : '<div class="cmempty">Chưa có tin nhắn. Chào mọi người một câu nhé!</div>');
   $$('.chatList').forEach(el=>{ const atBottom = el.scrollHeight-el.scrollTop-el.clientHeight<40; el.innerHTML=html; if(atBottom || true) el.scrollTop=el.scrollHeight; });
   const b=$('#chatBtn'); if(b){ b.querySelector('.badge').textContent=CHAT.unread||''; b.classList.toggle('has', CHAT.unread>0); }
 }
 function chatWidgetHTML(){
   return `<div class="chatList"></div><form class="chatForm" autocomplete="off"><input maxlength="80" placeholder="Nhắn gì đó cho cả phòng…"><button type="submit" class="primary">Gửi</button></form>
-    <div class="quick">${['👍','😂','😮','🔥','👏','😭','GG','Nhanh lên!'].map(q=>`<button type="button" data-q="${q}">${q}</button>`).join('')}</div>`;
+    <div class="quick">${['Chào cả nhà!','Hay quá!','GG','Nhanh lên!','Chờ chút nhé','Ván nữa không?'].map(q=>`<button type="button" data-q="${q}">${q}</button>`).join('')}</div>`;
 }
 
 /* ----- Màn hình sảnh chờ ----- */
@@ -2679,7 +2722,11 @@ function bind(){
   document.addEventListener('submit', e=>{ const f=e.target.closest('.chatForm'); if(!f) return; e.preventDefault(); SFX.init(); const inp=f.querySelector('input'); if (chatSend(inp.value)) inp.value=''; });
   document.addEventListener('click', e=>{ const q=e.target.closest('.quick button'); if(!q) return; SFX.init(); chatSend(q.dataset.q); });
   $$('.chatBox').forEach(el=>el.addEventListener('focusin', ()=>{ CHAT.unread=0; renderChat(); }));
-  $('#chatBtn').onclick=()=>{ CHAT.unread=0; renderChat(); const p=$('#chatPanel'); if(p){ p.scrollIntoView({behavior:'smooth', block:'nearest'}); setTimeout(()=>{ const i=p.querySelector('input'); if(i) i.focus({preventScroll:true}); }, 350); } };
+  $('#chatBtn').onclick=()=>{ const p=$('#chatPanel'); if(!p) return; const open=!p.classList.contains('open'); p.classList.toggle('open',open); $('#chatBtn').classList.toggle('on',open); CHAT.unread=0; renderChat(); if(open) setTimeout(()=>{ const i=p.querySelector('input'); if(i && innerWidth>900) i.focus({preventScroll:true}); }, 120); };
+  { const cx=$('#chatClose'); if(cx) cx.onclick=()=>{ $('#chatPanel').classList.remove('open'); $('#chatBtn').classList.remove('on'); }; }
+  { const fb=$('#fxBtn'); const lab={lite:'Hiệu ứng: Đơn giản',full:'Hiệu ứng: Đầy đủ',off:'Hiệu ứng: Tắt'};
+    const upd=()=>{ if(fb){ fb.dataset.m=FXMODE; fb.title=lab[FXMODE]+' (bấm để đổi)'; fb.querySelector('span').textContent={lite:'Đơn giản',full:'Đầy đủ',off:'Tắt'}[FXMODE]; } };
+    if(fb){ upd(); fb.onclick=()=>{ FXMODE={lite:'full',full:'off',off:'lite'}[FXMODE]; try{ localStorage.setItem('dr-fx',FXMODE); }catch(e){} applyFxMode(); upd(); BG_DONE=false; if(G) renderMap(); toast(lab[FXMODE]); }; } }
   $('#resumeBtn').onclick=resumeRoom;
   try{ const hn=localStorage.getItem('bg-name'); if (hn) $('#pname').value=hn; }catch(e){}
   $('#pname').addEventListener('change', ()=>{ try{ localStorage.setItem('bg-name', cleanName($('#pname').value)); }catch(e){} });
