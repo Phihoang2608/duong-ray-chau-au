@@ -623,6 +623,14 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
  #kh .hov .hand.box{background-image:repeating-linear-gradient(180deg,transparent 0 40px,rgba(30,14,2,.22) 40px 41px),linear-gradient(165deg,#b07f45,#8a5a2b 48%,#6e4420)!important}
  .kcb{background-image:repeating-linear-gradient(180deg,transparent 0 56px,rgba(30,14,2,.3) 56px 58px,rgba(255,215,150,.12) 58px 59px),linear-gradient(165deg,#b98249,#8a5a2b 48%,#6e4420)!important}
 }
+
+/* ===== phóng to / kéo bản đồ ===== */
+.frame{touch-action:pan-y}.frame.zoomed{touch-action:none;cursor:grab}
+.kzm{position:absolute;z-index:6;display:flex;gap:5px;right:12px;top:66px}
+.kzm button{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid #c9a24e;background:rgba(30,18,8,.85);color:#fff;font:800 17px/1 "KhFont","Baloo 2",Arial,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-text-stroke:0}
+.kzm button:active{background:#6e431a}
+@media (orientation:landscape) and (max-height:640px){#kh .kzm{right:124px;top:58px}.kzm button{width:28px;height:28px;font-size:15px}}
+@media (min-width:901px){.kzm{right:auto;left:22px;top:auto;bottom:90px;flex-direction:column}}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,

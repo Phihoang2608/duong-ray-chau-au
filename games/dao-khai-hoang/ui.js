@@ -5,6 +5,22 @@ const KHUI=(()=>{
   let prevRob=-1, f1=v=>Math.round(v*10)/10, lastVp={}, lastArgs=null, root=null, prevAw={}, pop=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, og=0, oq=1, ow=3, on=1, ot=-1, dsel=null, DP=[], boardSig='', sayTxt='', sayUntil=0, sayTm=null, hotH='';
   const KH_TIP={knight:'Hiệp sĩ: dời kẻ cướp sang ô khác và lấy trộm 1 lá của người có nhà ở ô đó. Ai dùng từ 3 hiệp sĩ trở lên và nhiều nhất sẽ nhận Quân mạnh nhất (+2 điểm).',vp:'Điểm thưởng: mỗi thẻ được +1 điểm ẩn, không cần dùng. Đủ điểm là thắng.',road:'Làm đường: xây ngay 2 đường miễn phí.',plenty:'Được mùa: lấy 2 tài nguyên bất kỳ từ ngân hàng.',mono:'Độc quyền: chọn 1 loại tài nguyên, mọi người phải đưa bạn toàn bộ số lá loại đó.'};
   const TIP_LR=mx=>`Đường dài nhất (+2 điểm): có chuỗi đường liền nhau dài từ 5 đoạn trở lên và dài hơn mọi người. Hiện cao nhất: ${mx}. Ai vượt qua sẽ lấy giải.`, TIP_LA=mk=>`Quân mạnh nhất (+2 điểm): đã dùng từ 3 hiệp sĩ trở lên và nhiều hơn mọi người. Hiện cao nhất: ${mk}. Ai vượt qua sẽ lấy giải.`;
+  function zoomInit(){ const frame=root.querySelector('.frame'), svgs=[root.querySelector('#khs'),root.querySelector('#khd')], base=svgs[0]; if(!frame||!base) return;
+    const Z={s:1,x:VB.minX,y:VB.minY,moved:false}, ptrs=new Map(); let pinch=null;
+    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+    const apply=()=>{ const w=VB.w/Z.s, h=VB.h/Z.s; Z.x=clamp(Z.x,VB.minX,VB.minX+VB.w-w); Z.y=clamp(Z.y,VB.minY,VB.minY+VB.h-h); const v=Z.x+' '+Z.y+' '+w+' '+h; svgs.forEach(e=>e.setAttribute('viewBox',v)); frame.classList.toggle('zoomed',Z.s>1.02); };
+    const toSvg=(cx,cy)=>{ const m=base.getScreenCTM(); if(!m) return {x:Z.x,y:Z.y}; const q=new DOMPoint(cx,cy).matrixTransform(m.inverse()); return {x:q.x,y:q.y}; };
+    const zoomAt=(ns,cx,cy)=>{ ns=clamp(ns,1,4.5); const p=toSvg(cx,cy), r=Z.s/ns; Z.x=p.x-(p.x-Z.x)*r; Z.y=p.y-(p.y-Z.y)*r; Z.s=ns; apply(); };
+    const center=()=>{ const r=frame.getBoundingClientRect(); return [r.left+r.width/2,r.top+r.height/2]; };
+    root.querySelector('.kzm').addEventListener('click',e=>{ const b=e.target.closest('[data-z]'); if(!b) return; e.stopPropagation(); const k=b.dataset.z; if(k==='reset'){ Z.s=1; Z.x=VB.minX; Z.y=VB.minY; apply(); } else { const c=center(); zoomAt(Z.s*(k==='in'?1.5:1/1.5),c[0],c[1]); } });
+    frame.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); Z.moved=false; if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y)||1,s:Z.s}; Z.moved=true; } });
+    frame.addEventListener('pointermove',e=>{ const o=ptrs.get(e.pointerId); if(!o) return;
+      if(ptrs.size===2&&pinch){ ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); const [a,b]=[...ptrs.values()], d=Math.hypot(a.x-b.x,a.y-b.y)||1; zoomAt(pinch.s*d/pinch.d,(a.x+b.x)/2,(a.y+b.y)/2); Z.moved=true; return; }
+      const dx=e.clientX-o.x, dy=e.clientY-o.y; if(Z.s>1.02&&e.pointerType!=='mouse'||Z.s>1.02&&e.buttons===1){ if(Math.abs(dx)+Math.abs(dy)>0){ const m=base.getScreenCTM(); if(m){ Z.x-=dx/m.a; Z.y-=dy/m.d; apply(); } if(Math.hypot(dx,dy)>0) Z.mv=(Z.mv||0)+Math.hypot(dx,dy); if(Z.mv>8) Z.moved=true; } ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); } });
+    const up=e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2) pinch=null; if(!ptrs.size) Z.mv=0; };
+    frame.addEventListener('pointerup',up); frame.addEventListener('pointercancel',up); frame.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse') up(e); });
+    frame.addEventListener('click',e=>{ if(Z.moved){ e.stopPropagation(); e.preventDefault(); Z.moved=false; } },true);
+    frame.addEventListener('wheel',e=>{ if(!(e.ctrlKey||e.metaKey||Z.s>1)&&!e.shiftKey) return; e.preventDefault(); zoomAt(Z.s*(e.deltaY<0?1.15:1/1.15),e.clientX,e.clientY); },{passive:false}); }
   function tipInit(){ if(document.getElementById('khtip')) return; const tip=document.createElement('div'); tip.id='khtip'; document.body.appendChild(tip);
     const show=el=>{ tip.textContent=el.dataset.tip; tip.style.display='block'; const r=el.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight; let x=r.left+r.width/2-tw/2; x=Math.max(6,Math.min(innerWidth-tw-6,x)); let y=r.top-th-10; if(y<6) y=r.bottom+10; tip.style.left=x+'px'; tip.style.top=y+'px'; };
     const hide=()=>{ tip.style.display='none'; };
@@ -87,7 +103,7 @@ const KHUI=(()=>{
   document.addEventListener('fullscreenchange',()=>setTimeout(fit,100)); document.addEventListener('webkitfullscreenchange',()=>setTimeout(fit,100));
   function setH(el,h){ if(el.__h===h) return; el.__h=h; el.innerHTML=h; }
   function render(S,ME,api){
-    if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div><button class="kfx" type="button" title="Đổi chế độ hiệu ứng"></button><button class="kfs" type="button" title="Toàn màn hình">⛶ Toàn màn hình</button><div class="hov"></div></div><div class="side"><div class="ofn"></div><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
+    if(!root){ document.getElementById('tb-game').innerHTML=`<div id="kh"><div class="khwrap"><div class="lft"></div><div class="kbwrap"><div class="frame"><svg id="khs" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg><svg id="khd" viewBox="${VB.minX} ${VB.minY} ${VB.w} ${VB.h}" preserveAspectRatio="xMidYMid meet"></svg></div><div class="kst"></div><button class="kfx" type="button" title="Đổi chế độ hiệu ứng"></button><button class="kfs" type="button" title="Toàn màn hình">⛶ Toàn màn hình</button><div class="kzm"><button type="button" data-z="in" title="Phóng to bản đồ" aria-label="Phóng to">＋</button><button type="button" data-z="out" title="Thu nhỏ bản đồ" aria-label="Thu nhỏ">－</button><button type="button" data-z="reset" title="Về cỡ ban đầu" aria-label="Về cỡ ban đầu">⤢</button></div><div class="hov"></div></div><div class="side"><div class="ofn"></div><div class="s1"></div><div class="chs"></div><div class="s2"></div></div></div></div>`;
       { const ch=document.getElementById('tb-chat'); if(ch){ root0chat=ch; root0=document.querySelector('#kh .chs'); root0.appendChild(ch); ch.classList.add('show'); } }
       root=$('#kh'); { const fx=root.querySelector('.kfx'); const lab=()=>{ fx.textContent=window.KH_LITE?'🌙 Nhẹ':'✨ Đẹp'; }; lab(); fx.addEventListener('click',e=>{ e.stopPropagation(); const m=KH_FX.toggle(); lab(); boardSig=''; if(lastArgs) render(...lastArgs); if(lastArgs) lastArgs[2].toast(m==='lite'?'Chế độ nhẹ: ít hiệu ứng, mượt trên máy yếu':'Chế độ đẹp: đầy đủ hiệu ứng'); }); } { const fs=root.querySelector('.kfs'); const de=document.documentElement;
         const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
@@ -98,7 +114,7 @@ const KHUI=(()=>{
             else if(de.requestFullscreen||de.webkitRequestFullscreen){ await (de.requestFullscreen||de.webkitRequestFullscreen).call(de); try{ await screen.orientation.lock('landscape'); }catch(_){ } }
             else if(lastArgs) lastArgs[2].toast('iPhone chưa hỗ trợ nút này: bấm Chia sẻ → Thêm vào Màn hình chính rồi mở game từ biểu tượng để chơi toàn màn hình'); }
           catch(err){ if(lastArgs) lastArgs[2].toast('Trình duyệt không cho bật toàn màn hình'); } }); }
-      root.addEventListener('click',onClick); tipInit(); fit(); setTimeout(fit,300); root.addEventListener('change',onChange); }
+      root.addEventListener('click',onClick); tipInit(); zoomInit(); fit(); setTimeout(fit,300); root.addEventListener('change',onChange); }
     lastArgs=[S,ME,api]; const sig=S.hex.map(h=>h.res+'.'+h.num).join()+S.ports.join()+(window.KH_LITE?'L':'F');
     if (sig!==boardSig){ boardSig=sig; root.querySelector('#khs').innerHTML=A.board(S,VB); }
     const t=api.now(), my=S.turn===ME&&S.phase!=='over', P=ME>=0?S.P[ME]:null, main=my&&S.phase==='play'&&S.step==='main'&&!S.offer;
