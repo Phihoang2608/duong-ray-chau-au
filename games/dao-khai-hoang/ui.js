@@ -1,6 +1,6 @@
 /* ===================== GIAO DIỆN ĐẢO KHAI HOANG ===================== */
 const KHUI=(()=>{
-  const PC=['#e11d48','#2563eb','#f59e0b','#f8fafc'];
+  const PC=['#e11d48','#2563eb','#16a34a','#f8fafc'];
   const A=KHART, R=A.R;
   let root=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, dsel=null, DP=[], boardSig='';
   const $=s=>document.querySelector(s);
@@ -46,7 +46,7 @@ const KHUI=(()=>{
     let h=`<div class="dice ${isNew&&ev.k==='roll'?'rolling':''}">${S.dice?A.die(S.dice[0])+A.die(S.dice[1],'#fdecc8')+`<b>${S.dice[0]+S.dice[1]}</b>`:'<span>Chưa đổ</span>'}<button class="tbtn pri" data-a="roll" ${my&&S.phase==='play'&&S.step==='roll'?'':'disabled'}>Đổ xúc xắc</button></div>`;
     if (robH!=null){ const vs=KH.victims(S,robH,ME); h+=`<div class="box">Lấy 1 lá của: ${vs.map(v=>`<button class="tbtn" data-vic="${v}">${api.esc(S.seats[v].name)}</button>`).join(' ')}</div>`; }
     h+=`<div class="pls">${S.seats.map((p,i)=>{ const Q=S.P[i]; const left=S.turn===i&&S.phase!=='over'?Math.max(0,90-Math.floor((t-S.turnAt)/1000)):null;
-      return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
+      return `<div class="pl ${S.turn===i?'turn':''} ${S.winner===i?'win':''}" data-p="${i}" style="--pc:${PC[i]}"><div class="ph"><svg viewBox="-12 -16 24 28" class="pk">${A.house(0,0,PC[i],false,1)}</svg><b>${api.esc(p.name)}</b>${i===ME?' (bạn)':''}${left!=null?` <span class="tmr">${left}</span>`:''}<span class="vp">${KH.vp(S,i,i===ME||S.phase==='over')}<small>điểm</small></span></div>
         <div class="ps"><span>Lá: ${KH.tot(Q.res)}</span><span>Thẻ: ${Q.dev.length+Q.newDev.length}</span><span>Hiệp sĩ: ${Q.knights}</span><span>Đường: ${Q.lr}</span></div>
         ${S.longest===i||S.largest===i?`<div class="aw">${S.longest===i?'<em>Đường dài nhất +2</em>':''}${S.largest===i?'<em>Quân mạnh nhất +2</em>':''}</div>`:''}</div>`; }).join('')}</div>`;
     if (P){
