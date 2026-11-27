@@ -4,7 +4,7 @@ const KHUI=(()=>{
   const A=KHART, R=A.R;
   let root=null, mode=null, robH=null, lastEv=null, tg=0, tw=3, dsel=null, DP=[], boardSig='';
   const $=s=>document.querySelector(s);
-  const VB={minX:-340,minY:-318,w:680,h:636};
+  const VB={minX:-372,minY:-348,w:744,h:696};
   const X=v=>v*R;
   function dynSVG(S,ME,ev){ const H=KH.HEX, V=KH.V, E=KH.E, my=S.turn===ME&&S.phase!=='over'; let s='';
     if (ev&&ev.k==='roll'){ const sum=ev.d[0]+ev.d[1]; S.hex.forEach((h,i)=>{ if(h.num===sum) s+=`<polygon points="${A.hexPts(X(H[i].x),X(H[i].y),R-3)}" class="hot ${i===S.robber?'blocked':''}"/>`; }); }

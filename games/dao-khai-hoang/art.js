@@ -118,18 +118,18 @@ const KHART=(()=>{
   // ---------- toàn bàn cờ tĩnh ----------
   function board(S,box){ const H=KH.HEX, V=KH.V, E=KH.E; const {minX,minY,w,h}=box;
     let s=`<defs>${defs()}${H.map((hx,i)=>`<clipPath id="khc${i}"><polygon points="${hexPts(hx.x*R,hx.y*R,R)}"/></clipPath>`).join('')}<clipPath id="khIsl"><polygon points="${island()}"/></clipPath></defs>`;
-    s+=`<rect x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" fill="#22b9e6"/><image href="assets/sea.webp?v=20261127l" x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" preserveAspectRatio="xMidYMid slice"/>`;
-    { const Ri=4.05*R, kh=Ri/496.5, kv=.866*Ri/407.5, W=1254*kh, Hh=1254*kv; // đảo nền: lót cát + vành bãi cát vẽ sẵn
-      s+=`<polygon points="${island(4.1/4.85)}" fill="#e9bf7c"/><image href="assets/island-ring.webp?v=20261127l" x="${f(-626.5*kh)}" y="${f(-615.5*kv)}" width="${f(W)}" height="${f(Hh)}" preserveAspectRatio="none"/>`; }
-    s+=`<polygon points="${island(4.1/4.85)}" fill="#e9bf7c" opacity="0" clip-path="url(#khIsl)"/>`;
+    s+=`<rect x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" fill="#22b9e6"/><image href="assets/sea.webp?v=20261127m" x="${minX-500}" y="${minY-200}" width="${w+1000}" height="${h+400}" preserveAspectRatio="xMidYMid slice"/>`;
+    { const Ri=4.3*R, kh=Ri/496.5, kv=.866*Ri/407.5, W=1254*kh, Hh=1254*kv; // đảo nền: lót cát + vành bãi cát vẽ sẵn
+      s+=`<polygon points="${island(4.35/4.85)}" fill="#e9bf7c"/><image href="assets/island-ring.webp?v=20261127m" x="${f(-626.5*kh)}" y="${f(-615.5*kv)}" width="${f(W)}" height="${f(Hh)}" preserveAspectRatio="none"/>`; }
+    s+=`<polygon points="${island(4.35/4.85)}" fill="#e9bf7c" opacity="0" clip-path="url(#khIsl)"/>`;
     const leaf=(x,y,r,c)=>`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="${c}" stroke="#1f4a14" stroke-width="2.2"/><circle cx="${f(x-r*.3)}" cy="${f(y-r*.3)}" r="${f(r*.45)}" fill="#b6e66a" opacity=".55"/>`;
     const fol=(x,y,sg)=>`<g>`+`<path d="M${f(x)} ${f(y+70)} q${f(sg*-30)} ${f(-40)} ${f(sg*-90)} ${f(-70)}" stroke="#5a3a1c" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M${f(x)} ${f(y+70)} q${f(sg*-30)} ${f(-40)} ${f(sg*-90)} ${f(-70)}" stroke="#8a5a2c" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>`+[[-20,28,26,'#4fa83a'],[-58,6,24,'#5fba44'],[-30,-6,22,'#3f9632'],[-78,34,20,'#4fa83a'],[4,-4,20,'#5fba44'],[-46,50,18,'#3f9632']].map(([dx,dy,r,c])=>leaf(x+sg*dx,y+dy,r,c)).join('')+`</g>`;
     // cảng
-    KH.PORT_E.forEach((e,i)=>{ const E0=E[e], a=V[E0.a], b=V[E0.b]; const mx=(a.x+b.x)/2, my=(a.y+b.y)/2, L=Math.hypot(mx,my); const px=(mx+mx/L*.84)*R, py=(my+my/L*.84)*R; s+=port(px,py,a.x*R,a.y*R,b.x*R,b.y*R,S.ports[i],Math.atan2(my,mx)); });
+    KH.PORT_E.forEach((e,i)=>{ const E0=E[e], a=V[E0.a], b=V[E0.b]; const mx=(a.x+b.x)/2, my=(a.y+b.y)/2, L=Math.hypot(mx,my); const px=(mx+mx/L*1.32)*R, py=(my+my/L*1.32)*R; s+=port(px,py,a.x*R,a.y*R,b.x*R,b.y*R,S.ports[i],Math.atan2(my,mx)); });
     // ô đất (đế 3D + hình)
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R; s+=`<polygon points="${hexPts(cx,cy+6,R-1)}" fill="#d2b27a"/><polygon points="${hexPts(cx+2,cy+9,R)}" fill="#7a5a2a" opacity=".18" filter="url(#khSoft)"/>`; });
     H.forEach((hx,i)=>{ const cx=hx.x*R, cy=hx.y*R, hd=S.hex[i];
-      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=5?`<image href="assets/hex-${hd.res}.webp?v=20261127l" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127l" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
+      const HI=(window.KH_IMGS||{}).hex||[]; s+=`<g clip-path="url(#khc${i})">${HI.includes(hd.res)?`${hd.res<=5?`<image href="assets/hex-${hd.res}.webp?v=20261127m" x="${f(cx-R*.9)}" y="${f(cy-R*1.04)}" width="${f(R*1.8)}" height="${f(R*2.08)}" preserveAspectRatio="none"/>`:`<image href="assets/hex-${hd.res}.webp?v=20261127m" x="${f(cx-R*1.1)}" y="${f(cy-R*1.1)}" width="${f(R*2.2)}" height="${f(R*2.2)}" preserveAspectRatio="xMidYMid slice"/>`}`:terrain(hd.res,cx,cy,i)}<rect x="${f(cx-R)}" y="${f(cy-R)}" width="${2*R}" height="${2*R}" filter="url(#khNoise)" opacity=".07"/></g>`;
       s+=`<polygon points="${hexPts(cx,cy,R-1)}" fill="none" stroke="#d9bb82" stroke-width="3.4" stroke-linejoin="round"/><polygon points="${hexPts(cx,cy,R-4.5)}" fill="none" stroke="#b58b52" stroke-opacity=".45" stroke-width="1.3"/><polygon points="${hexPts(cx,cy,R)}" fill="none" stroke="#f3e2bb" stroke-width="1.6"/>`;
       });
     H.forEach((hx,i)=>{ const hd=S.hex[i]; if(hd.num) s+=token(hx.x*R,hx.y*R+8,hd.num); });
@@ -145,7 +145,7 @@ const KHART=(()=>{
   function resCard(r){ if(ccache['r'+r]) return ccache['r'+r]; const id='khrc'+r, nm=RN[r].toUpperCase();
     const s=`<svg viewBox="0 0 100 76" class="rcard"><defs>
       <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c98a52"/><stop offset=".45" stop-color="#a8642f"/><stop offset="1" stop-color="#7d4520"/></linearGradient></defs>
-      <image href="assets/res-${r}.webp?v=20261127l" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
+      <image href="assets/res-${r}.webp?v=20261127m" x="1" y="10" width="98" height="65" preserveAspectRatio="none"/>
       <g class="plank" transform="scale(1,.88)"><path d="M13 3.5 L16 1.5 H84 L87 3.5 L89 5.5 V17.5 L87 19.5 L84 21.5 H16 L13 19.5 L11 17.5 V5.5Z" fill="#1b0f06" transform="translate(0,1.2)" opacity=".55"/>
       <path d="M13 3 L16 1 H84 L87 3 L89 5 V17 L87 19 L84 21 H16 L13 19 L11 17 V5Z" fill="url(#${id}w)" stroke="#1b0f06" stroke-width="1.6" stroke-linejoin="round"/>
       <path d="M15 5 H55 M60 4.6 H84 M16 11 H40 M47 10.6 H70 M74 11 H86 M15 17.6 H48 M56 17.4 H84" stroke="#6b3a17" stroke-width=".7" stroke-linecap="round" fill="none" opacity=".7"/>
