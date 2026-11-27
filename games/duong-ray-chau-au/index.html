@@ -507,7 +507,7 @@ body.landphone #players{display:flex!important;flex:0 1 auto!important;overflow-
 body.landphone .pchip{padding:1px 6px 1px 1px!important;gap:4px!important;border-width:1.5px}
 body.landphone .pchip .chiploco{width:24px!important;height:24px!important}
 body.landphone .pinfo{flex-direction:row!important;align-items:center!important}
-body.landphone .pstats,body.landphone .botlab{display:none!important}
+body.landphone .botlab{display:none!important}
 body.landphone .pname{font-size:12px!important}
 body.landphone .scpill{font-size:10.5px;padding:0 5px}.landphone .scpill .sc{font-size:12.5px}
 body.landphone #ticker{flex:1 1 auto!important;height:28px!important;flex-direction:row!important;order:2;min-width:110px;grid-column:auto!important}
@@ -664,6 +664,18 @@ body.landphone #tkPanel .vticket.imgt{max-width:130px}
 #side .panel h3,.panel h3{margin-bottom:6px}
 #status{font-size:14px;line-height:1.3;padding:6px 10px}
 #log{max-height:120px;overflow-y:auto;font-size:12.5px}
+
+/* chỉ số người chơi luôn hiện (gọn) trên điện thoại ngang */
+body.landphone .pinfo{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:0!important;line-height:1.1}
+body.landphone .pstats{display:flex!important;flex-wrap:nowrap!important;gap:2px!important;font-size:9.5px!important;margin-top:1px}
+body.landphone .scpill{font-size:10px!important;padding:0 5px!important}body.landphone .pline1{gap:4px!important}
+body.landphone .pstats span{padding:0 3px!important;border-radius:5px;line-height:1.35}
+body.landphone .pstats span i{font-size:0!important;margin:0!important}
+body.landphone .pstats span i::before{font-size:9px;margin-right:1px}
+body.landphone .pstats span:nth-child(1) i::before{content:"🚃"}
+body.landphone .pstats span:nth-child(2) i::before{content:"🃏"}
+body.landphone .pstats span:nth-child(3) i::before{content:"🎫"}
+body.landphone .pstats span:nth-child(4) i::before{content:"🏠"}
 </style>
 </head>
 <body>
@@ -1583,7 +1595,7 @@ function renderPlayers(){
     const bump = UIS.prevScores[i]!=null && UIS.prevScores[i]!==p.score;
     return `<div class="pchip ${G.cur===i&&G.phase==='play'?'active':''} ${i===ME?'mine':''}" data-p="${i}" style="--pc:${p.color}">
       ${chipLoco(p.color)}<div class="pinfo"><div class="pline1"><span class="pname">${online}${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.isBot?' <small class="botlab">máy</small>':''}</span><span class="scpill"><b class="sc ${bump?'bump':''}">${p.score}</b> điểm</span></div>
-      <div class="pstats"><span><i>Toa</i> ${p.trains}</span><span><i>Bài</i> ${handCount(p)}</span><span><i>Vé</i> ${p.tickets.length}</span><span><i>Ga</i> ${p.stations}</span></div></div></div>`; }).join('');
+      <div class="pstats"><span title="Số toa tàu còn lại"><i>Toa</i> ${p.trains}</span><span title="Số lá bài trên tay"><i>Bài</i> ${handCount(p)}</span><span title="Số vé hành trình"><i>Vé</i> ${p.tickets.length}</span><span title="Số nhà ga còn lại"><i>Ga</i> ${p.stations}</span></div></div></div>`; }).join('');
   $('#players').innerHTML=html;
   const gains=G.players.map((p,i)=>UIS.prevScores[i]!=null ? p.score-UIS.prevScores[i] : 0);
   UIS.prevScores=G.players.map(p=>p.score);
