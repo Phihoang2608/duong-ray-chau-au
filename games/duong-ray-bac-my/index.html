@@ -1096,6 +1096,27 @@ body.portphone main{padding-bottom:0!important}
 body.portphone #zoom,body.portphone #zoomVal,body.portphone #legendBtn{display:none!important}
 body.portphone #mapTools{transform:scale(.62)!important;padding:2px 5px!important}
 body.landphone #zoom,body.landphone #zoomVal{display:none!important}
+
+/* Rút úp / Rút vé: hình phủ kín ô, chữ trên dải riêng không bị che */
+.mkbar .deckslot,.mkbar .tkdeck{position:relative;padding:0!important;overflow:hidden;justify-content:flex-start!important;gap:0!important}
+.mkbar .deckslot .deckart,.mkbar .tkdeck .tkart{width:100%!important;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:4px 4px 0}
+.mkbar .deckslot .deckart .card{width:auto!important;height:100%;max-height:100%;aspect-ratio:3/2;border-radius:6px}
+.mkbar .tkdeck .tkart img{width:auto!important;height:100%;max-width:100%;object-fit:contain;box-shadow:2px 2px 0 #c9a24e!important}
+.mkbar .deckslot .dlab,.mkbar .tkdeck .dlab{flex:none;width:100%;text-align:center;padding:2px 0 3px;background:linear-gradient(180deg,#5e1730,#3e0c1b);border-top:1px solid rgba(246,214,128,.6);font-size:13px;line-height:1.1;color:#f6d680;display:block!important}
+.mkbar .deckslot small,.mkbar .tkdeck small{position:absolute;top:3px;right:4px;min-width:16px;padding:0 4px;border-radius:9px;background:#dc2626;color:#fff!important;font:bold 11px/16px "Times New Roman",serif!important;text-align:center;display:block!important}
+.mkbar .deckslot small:empty,.mkbar .tkdeck small:empty{display:none!important}
+body.landphone .mkbar .deckslot .dlab,body.landphone .mkbar .tkdeck .dlab{font-size:9.5px;padding:1px 0 2px}
+body.landphone .mkbar .deckslot .deckart,body.landphone .mkbar .tkdeck .tkart{width:100%!important;padding:2px 2px 0}
+body.portphone .mkbar .deckslot .deckart,body.portphone .mkbar .tkdeck .tkart{display:flex!important;width:100%!important;padding:2px 2px 0}
+body.portphone .mkbar .deckslot small,body.portphone .mkbar .tkdeck small{display:block!important}
+body.portphone .mkbar .deckslot .dlab,body.portphone .mkbar .tkdeck .dlab{font-size:10px}
+
+.mkbar .deckslot .deckart,.mkbar .tkdeck .tkart{overflow:hidden;padding-bottom:5px!important}
+.mkbar .deckslot .dlab,.mkbar .tkdeck .dlab{position:relative;z-index:2}
+.mkbar .deckslot .deckart .card{box-shadow:2px 2px 0 #c9a24e,3px 3px 0 #8a6a2a!important}
+
+@media (max-height:700px){ body.portphone .mkbar .deckslot .deckart,body.portphone .mkbar .tkdeck .tkart{display:none!important} body.portphone .mkbar .deckslot,body.portphone .mkbar .tkdeck{justify-content:center!important} body.portphone .mkbar .deckslot .dlab,body.portphone .mkbar .tkdeck .dlab{background:none;border:0;font-size:12px} }
+#tkPick .tpk,.tpk{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -2022,7 +2043,8 @@ const STAR='M0,-7.5 L2.2,-2.4 L7.6,-2.3 L3.4,1.3 L4.8,6.6 L0,3.6 L-4.8,6.6 L-3.4
 /* Hai thành phố của vé đang chọn phát sáng mạnh */
 function beaconSVG(){
   const f = UIS.hl || UIS.focus; if (!f) return '';
-  const el=performance.now()-(f.at||0); if (el>3200) return '';
+  if (!f.at){ f.at=performance.now(); f.strong=1; }
+  const el=performance.now()-f.at; if (el>3200) return '';
   const A=CITIES[f.a], B=CITIES[f.b];
   if (!UIS._bT || UIS._bF!==f){ UIS._bF=f; clearTimeout(UIS._bT); UIS._bT=setTimeout(()=>{ UIS._bT=null; renderMap(); }, 3250-el); }
   let s=`<g class="beacons ${f.strong?'strong':''}" pointer-events="none" style="animation-delay:${-el.toFixed(0)}ms">`;
@@ -2112,8 +2134,8 @@ function renderSide(){
     return `<div class="mslot" data-i="${i}">${cardHTML(c, (ok?'clickable':'dim')+(isNew?' flipin':''))}</div>`;
   }).join('');
   UIS.prevMarket=G.market.slice();
-  $('#deckCount').textContent = (G.deck.length+G.discard.length)+' lá';
-  $('#ticketCount').textContent = G.ticketDeck.length+' vé';
+  { const nd=G.deck.length+G.discard.length, nt=G.ticketDeck.length;
+    $('#deckCount').textContent = nd<5 ? nd : ''; $('#ticketCount').textContent = nt<5 ? nt : ''; }
   $('#deckBtn').classList.toggle('disabled', !my || (G.deck.length+G.discard.length===0));
   $('#ticketBtn').classList.toggle('disabled', !my || G.drawn>0 || G.ticketDeck.length===0);
   const me=G.players[ME];
@@ -2372,7 +2394,7 @@ function showTicketPicker(ids, min, key){
   const m=showModal('<span class="pkcall">Hãy chọn vé hành trình!</span>', body, [btn], {key, dock:true});
   m.querySelectorAll('.tpick').forEach(el=>{ const i=+el.dataset.i, t=TK[ids[i]];
     const hue=TK_HUES[(i+3)%TK_HUES.length];
-    el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); UIS.hl={a:t.a,b:t.b,hue,at:performance.now(),strong:1}; el.classList.toggle('sel', sel.has(i)); el.querySelector('.tpt').textContent=sel.has(i)?'Đã chọn':'Chọn'; btn.el.disabled = sel.size<min; btn.el.textContent=sel.size<min?`Chọn ít nhất ${min} vé (${sel.size}/${min})`:`Giữ ${sel.size} vé đã chọn`; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
+    el.onclick=()=>{ SFX.flip(); sel.has(i)?sel.delete(i):sel.add(i); UIS.hl={a:t.a,b:t.b,hue,at:performance.now(),strong:1}; renderMap(); el.classList.toggle('sel', sel.has(i)); el.querySelector('.tpt').textContent=sel.has(i)?'Đã chọn':'Chọn'; btn.el.disabled = sel.size<min; btn.el.textContent=sel.size<min?`Chọn ít nhất ${min} vé (${sel.size}/${min})`:`Giữ ${sel.size} vé đã chọn`; UIS.hl={a:t.a,b:t.b,hue}; renderMap(); scrollMapTo(t.a,t.b); };
     el.onmouseenter=()=>{ if(UIS.hl&&UIS.hl.a===t.a&&UIS.hl.b===t.b) return; UIS.hl={a:t.a,b:t.b,hue,at:performance.now(),strong:1}; renderMap(); }; });
   btn.el.disabled=true; btn.el.textContent=`Chọn ít nhất ${min} vé (0/${min})`; UIS.hl=null; renderMap();
 }
