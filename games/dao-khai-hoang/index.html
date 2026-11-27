@@ -19,8 +19,7 @@
 document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('khhid',document.hidden));
 window.KH_FX=(function(){const d=document.documentElement;
  function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
-  try{const weak=(navigator.deviceMemory&&navigator.deviceMemory<=4)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4);
-   return (matchMedia('(pointer:coarse)').matches||Math.min(innerWidth,innerHeight)<600||weak||/lite=1/.test(location.search))?'lite':'full';}catch(e){return 'full';}}
+  return 'lite';}
  function apply(){const m=mode();d.classList.toggle('khlite',m==='lite');window.KH_LITE=m==='lite';return m;}
  function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
  apply(); return {mode,apply,toggle};})();

@@ -26,7 +26,7 @@ const BMUI=(()=>{
     if(d.classList.contains('bmlite')&&Array.isArray(kf)) kf=kf.map(f=>{ if(!f||f.filter==null) return f; const g=Object.assign({},f); delete g.filter; return g; });
     return _anim.call(this,kf,o); }; }
   const FXN={full:'✨ Hiệu ứng: Đầy đủ',lite:'🌙 Hiệu ứng: Nhẹ',off:'⚡ Hiệu ứng: Tắt'};
-  function fxMode(){ let m=null; try{ m=localStorage.getItem('bm-fx'); }catch(e){} if(m&&FXN[m]) return m; try{ return (matchMedia('(pointer:coarse)').matches||innerWidth<900||/lite=1/.test(location.search))?'lite':'full'; }catch(e){ return 'full'; } }
+  function fxMode(){ let m=null; try{ m=localStorage.getItem('bm-fx'); }catch(e){} if(m&&FXN[m]) return m; return 'lite'; }
   function applyFx(){ const m=fxMode(), d=document.documentElement; d.classList.toggle('bmlite',m!=='full'); d.classList.toggle('bmoff',m==='off'); document.querySelectorAll('[data-tool="fx"]').forEach(b=>{ b.textContent=m==='full'?'✨':m==='lite'?'🌙':'⚡'; b.title=FXN[m]; }); }
   function cycleFx(){ const o=['full','lite','off'], m=o[(o.indexOf(fxMode())+1)%3]; try{ localStorage.setItem('bm-fx',m); }catch(e){} applyFx(); Table.API.toast(FXN[m]); }
   applyFx();

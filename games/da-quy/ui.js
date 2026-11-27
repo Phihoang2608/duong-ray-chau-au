@@ -42,7 +42,7 @@ const DQUI=(()=>{
   const WOB={};
   const landQ=()=>{ try{ document.documentElement.classList.toggle('dqland',matchMedia('(orientation:landscape) and (max-height:500px)').matches); }catch(e){} }; landQ(); addEventListener('resize',landQ);
   const FXN={full:'✨ Hiệu ứng: Đầy đủ',lite:'🌙 Hiệu ứng: Nhẹ',off:'⚡ Hiệu ứng: Tắt'};
-  function fxMode(){ let m=null; try{ m=localStorage.getItem('dq-fx'); }catch(e){} if(m&&FXN[m]) return m; try{ return (matchMedia('(pointer:coarse)').matches||innerWidth<900||/lite=1/.test(location.search))?'lite':'full'; }catch(e){ return 'full'; } }
+  function fxMode(){ let m=null; try{ m=localStorage.getItem('dq-fx'); }catch(e){} if(m&&FXN[m]) return m; return 'lite'; }
   function applyFx(){ const m=fxMode(), d=document.documentElement; d.classList.toggle('dqlite',m!=='full'); d.classList.toggle('dqoff',m==='off');
     const b=document.getElementById('dq-fx'); if(b) b.textContent=FXN[m]; document.querySelectorAll('[data-tool=fx]').forEach(x=>x.textContent=m==='full'?'✨':m==='lite'?'🌙':'⚡'); }
   function cycleFx(){ const m=fxMode(), n=m==='full'?'lite':m==='lite'?'off':'full'; try{ localStorage.setItem('dq-fx',n); }catch(e){} applyFx(); Table.API.toast(FXN[n]+(n==='full'?' — đẹp nhất':n==='lite'?' — tắt ánh sáng nặng, vẫn có chuyển động':' — không chuyển động, mượt nhất cho máy yếu')); }

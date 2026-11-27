@@ -2,7 +2,7 @@
 /* ===================== HIỆU ỨNG ===================== */
 /* Mức hiệu ứng: 'lite' (mặc định, đơn giản), 'full' (máy mạnh), 'off' (máy yếu) */
 const FX_SCOPED=/duong-ray/.test(location.pathname)||!/\/games\//.test(location.pathname);
-let FXMODE=FX_SCOPED?'lite':'full'; try{ if(FX_SCOPED) FXMODE=localStorage.getItem('dr-fx')||'lite'; }catch(e){}
+let FXMODE='lite'; try{ FXMODE=localStorage.getItem(FX_SCOPED?'dr-fx':'pbg-fx')||'lite'; }catch(e){}
 if (!['lite','full','off'].includes(FXMODE)) FXMODE='lite';
 function applyFxMode(){ const b=document.body; if(!b) return; b.classList.remove('fx-lite','fx-full','fx-off'); b.classList.add('fx-'+FXMODE); }
 document.addEventListener('DOMContentLoaded', applyFxMode); if (document.body) applyFxMode();
