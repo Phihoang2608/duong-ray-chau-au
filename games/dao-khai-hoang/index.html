@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Đảo Khai Hoang | Phi Board Games</title>
 </head>
 <body>
@@ -12,10 +12,19 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261128q"></script>
-<script src="assets/imgs.js?v=20261128q"></script>
-<script src="art.js?v=20261128q"></script>
-<script src="ui.js?v=20261128q"></script>
+<script src="game.js?v=20261128w"></script>
+<script src="assets/imgs.js?v=20261128w"></script>
+<script>
+window.KH_FX=(function(){const d=document.documentElement;
+ function mode(){let m=null;try{m=localStorage.getItem('kh-fx');}catch(e){} if(m==='full'||m==='lite') return m;
+  try{const weak=(navigator.deviceMemory&&navigator.deviceMemory<=4)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4);
+   return (matchMedia('(pointer:coarse)').matches||Math.min(innerWidth,innerHeight)<600||weak||/lite=1/.test(location.search))?'lite':'full';}catch(e){return 'full';}}
+ function apply(){const m=mode();d.classList.toggle('khlite',m==='lite');window.KH_LITE=m==='lite';return m;}
+ function toggle(){const n=mode()==='lite'?'full':'lite';try{localStorage.setItem('kh-fx',n);}catch(e){} return apply();}
+ apply(); return {mode,apply,toggle};})();
+</script>
+<script src="art.js?v=20261128w"></script>
+<script src="ui.js?v=20261128w"></script>
 <script>
 const CSS=`#kh{padding:8px 10px 14px;min-height:calc(100vh - 60px);background:radial-gradient(ellipse at 40% 30%,#6b4524 0%,#4a2d15 55%,#2c1a0b 100%);color:#f6ead0}
 #kh::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:repeating-linear-gradient(92deg,transparent 0 22px,rgba(0,0,0,.25) 22px 24px,transparent 24px 60px),repeating-linear-gradient(88deg,rgba(255,220,170,.06) 0 3px,transparent 3px 9px)}
@@ -135,6 +144,115 @@ border:3px solid #2e1809;box-shadow:inset 0 0 0 2px #cf9f5f,inset 0 0 0 4px #4d2
 @media (max-width:900px){ .khwrap{grid-template-columns:1fr} .kbwrap{order:1}.lft{order:2;position:static;display:grid;grid-template-columns:1fr 1fr;align-items:start}.side{order:3}.die{width:70px;height:70px} #khs{height:auto;max-height:70vh} .side{max-height:none} }
 @media (max-height:520px){ #kh{padding:3px;min-height:0} .khwrap{grid-template-columns:150px minmax(0,1fr) 280px;gap:6px} .lft .ctab{display:none}.die{width:44px;height:44px}.dice b{font-size:22px}.dice::before{display:none}.dice .tbtn{font-size:14px;padding:6px} .frame{padding:5px;border-radius:14px} #khd{left:5px;top:5px;width:calc(100% - 10px);height:calc(100% - 10px)} #khs{height:calc(100vh - 70px);min-height:0;max-height:none;border-radius:10px}
   .side{max-height:calc(100vh - 60px)} .kst{font-size:12px;padding:2px 10px;top:8px} .xlog{display:none} .pl .ps{font-size:11px;gap:6px} .box,.dice,.pl{padding:4px 6px} .die{width:34px;height:34px} .rstack{width:58px;height:48px}.rstack .rc{width:54px;height:41px} }
+.ps u{display:none;text-decoration:none}
+.kfx{position:absolute;left:22px;bottom:22px;z-index:5;font:inherit;font-size:12px;color:#ffecc0;background:rgba(30,18,8,.78);border:1.5px solid #c9a24e;border-radius:14px;padding:3px 10px;cursor:pointer}
+#kh{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#kh button,#kh .cbtn,#kh select{touch-action:manipulation}
+/* ===== CHẾ ĐỘ NHẸ (máy yếu / điện thoại) ===== */
+.khlite #kh::before{display:none}
+.khlite .box,.khlite .dice,.khlite .pl,.khlite .tb-chat{--grain:none}
+.khlite #kh *{filter:none!important;text-shadow:none!important;transition:none!important}
+.khlite .frame,.khlite .box,.khlite .dice,.khlite .pl,.khlite .tb-chat,.khlite .ctab,.khlite .bt,.khlite #kh .tbtn{box-shadow:inset 0 0 0 2px #cf9f5f!important}
+.khlite .frame{box-shadow:0 0 0 2px #2e1809!important}
+.khlite #khs [filter]{display:none}
+.khlite #khs *{animation:none!important}
+.khlite .bt img,.khlite .bt.ring,.khlite .ofr.hot,.khlite .dice.rolling .die{animation:none!important}
+.khlite .pl.turn{box-shadow:0 0 0 3px var(--pc)!important}
+.khlite .kst{box-shadow:none}
+/* ===== ĐIỆN THOẠI XOAY NGANG: vừa trọn một màn hình, không cuộn ===== */
+@media (orientation:landscape) and (max-height:640px){
+ body.ingame{overflow:hidden;height:100vh;height:100dvh}
+ body.ingame .tb-top{padding:2px 8px;gap:6px;min-height:0;backdrop-filter:none}
+ body.ingame .tb-top h1{display:none}
+ body.ingame .tb-top .tbtn{padding:3px 9px;font-size:13px}
+ body.ingame #tb-game{height:calc(100vh - 34px);height:calc(100dvh - 34px)}
+ #kh{height:100%;min-height:0!important;padding:3px;box-sizing:border-box;overflow:hidden}
+ .lft{order:1!important;display:flex!important;flex-direction:column!important}.kbwrap{order:2!important}.side{order:3!important}
+ .hov{position:absolute!important;margin:0!important;pointer-events:none!important}.hov .hand{flex-direction:column!important;justify-content:flex-start!important}
+ .tbar{position:static!important;flex-direction:column!important;flex-wrap:nowrap!important}.pop{position:absolute!important;width:190px!important}
+ .khwrap{height:100%;grid-template-columns:clamp(124px,19vw,176px) minmax(0,1fr) clamp(190px,28vw,262px)!important;grid-template-rows:minmax(0,1fr);gap:4px;max-width:none;align-items:stretch}
+ .lft{position:static;min-height:0;overflow-y:auto;scrollbar-width:none;gap:4px}
+ .lft::-webkit-scrollbar{display:none}
+ .kbwrap{min-height:0;height:100%}
+ .frame{height:100%;box-sizing:border-box;padding:4px;border-radius:12px}
+ .frame::after{inset:2px;border-radius:10px}
+ #khs{height:100%!important;min-height:0!important;max-height:none!important;border-radius:9px}
+ #khd{left:4px;top:4px;width:calc(100% - 8px);height:calc(100% - 8px)}
+ .side{max-height:none!important;height:100%;min-height:0;overflow:hidden;gap:4px;padding:0}
+ .side .s1{flex:0 0 auto;gap:3px}.side .chs{flex:1 1 0;min-height:0;overflow:hidden}.side .s2{flex:0 0 auto;gap:3px;max-height:34%;overflow-y:auto;scrollbar-width:none}
+ .kst{top:6px;font-size:12px;padding:2px 10px}
+ .kfx{left:8px;bottom:8px;font-size:11px;padding:2px 8px}
+ .hov{right:8px;top:8px;bottom:8px}
+ .hov .hand{gap:3px;padding:4px 3px}.hov .rstack{width:42px;height:34px}.hov .rstack .rc{width:38px;height:29px}.rstack b{font-size:11px;padding:0 5px}
+ .bt{width:54px;height:54px}.bt img{width:30px;height:36px}.bt small{font-size:9px}
+ .box,.dice,.pl{padding:4px 7px;border-width:2px;border-radius:9px}
+ .dice{gap:2px}.dice::before{display:none}.die{width:34px;height:34px}.dice b{font-size:20px}.dice .tbtn{font-size:13px;padding:5px 6px}
+ .ctab{padding:3px 5px}.cth{font-size:12px;margin-bottom:2px;padding-bottom:1px}.ctab .ci{width:30px;height:24px}.ctab .ci.rd{height:14px}.ctab .ci.dcs{width:20px;height:28px}
+ .ctx{font-size:11px}.ctab .ctr{padding:2px 0}.ctab .cost{gap:1px}
+ .awp{display:none}
+ .lft .ctab{display:block!important}
+ .cth{font-size:11px!important;margin:0 0 1px!important;padding:0 0 1px!important;-webkit-text-stroke:2px #3a210c}.ctab>div:last-child:not(.ctr):not(.cth),.ctab .chint{display:none}
+ .ctr{grid-template-columns:28px 1fr!important;grid-template-rows:auto auto;gap:0 4px!important;padding:1px 0!important}.cic{grid-row:span 2}.ctx small{display:none}.ctx b{font-size:11px;line-height:1.1}.cco{gap:2px}.cco .cr{padding:0 2px;border-radius:5px}.cco .cr svg{width:13px;height:17px}
+ .dice{display:flex!important;flex-wrap:wrap;flex-direction:row!important;align-items:center;justify-content:center;gap:3px 5px!important}.dice b{width:auto!important;font-size:22px!important}.dice .tbtn{width:100%}
+ .pl{display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:4px;row-gap:1px;padding:3px 6px!important}
+ .pl .ph{grid-column:1/-1;font-size:13px;display:flex;align-items:center;gap:4px;line-height:1.1}.pl .ph>svg{width:17px;height:17px}.pl .vp{margin-left:auto;font-size:16px;white-space:nowrap}.pl .vp small{font-size:9px}
+ .pl .ph .tmr{font-size:10px}.pl .ph .meds{margin:0}
+ .pcn{margin:0!important;font-size:12px;gap:3px!important;grid-column:1;grid-row:2}.pcn span{padding:0 4px 0 1px}.pcn img{width:16px!important;height:16px!important}
+ .pl .ps{grid-column:2;grid-row:2;font-size:11px;gap:4px;line-height:1.1;display:flex;align-items:center;justify-content:flex-end;flex-wrap:nowrap;white-space:nowrap}.pl .ps i{display:none}.pl .ps u{display:inline}.pl .ps b{font-size:11px}
+ .pl .pto{top:3px!important;bottom:auto!important;right:60px!important;font-size:10px;padding:0 7px}
+ .meds .medal{width:18px;height:18px}
+ .side .chs .tb-chat{display:flex;flex-direction:column;height:100%;padding:3px 4px;gap:2px}
+ .side .chs .tb-chat .hd{display:none}
+ .side .chs .tb-chat .ls{height:auto!important;flex:1 1 0;min-height:0;font-size:11.5px;padding:2px 4px}
+ .side .chs .tb-chat .qk{display:flex;flex-wrap:nowrap;max-height:none;overflow-x:auto;overflow-y:hidden;padding:0;gap:3px;flex:0 0 auto;scrollbar-width:none}.side .chs .tb-chat .qk::-webkit-scrollbar{display:none}
+ .side .chs .tb-chat .qk button{font-size:11px;padding:1px 7px;white-space:nowrap;flex:0 0 auto}
+ #tb-chatf{display:flex;gap:3px;flex:0 0 auto}#tb-chatf input{min-width:0;flex:1;font-size:13px;padding:3px 6px}#tb-chatf .tbtn{font-size:12px;padding:2px 8px}
+ .cfeed{flex:0 0 auto;max-height:70px;overflow-y:auto}
+ .dvl{gap:3px;flex-wrap:nowrap}.dcard{width:40px!important}.dcard svg{width:38px!important;height:54px!important}.dcard>b{font-size:10px!important;padding:0 4px!important;top:-4px!important;right:-4px!important}.dcard .tbtn{font-size:9px!important;padding:0 3px!important}
+ .box.dv{padding:3px 5px}
+ .xlog{display:none}
+ .lft .tbtn.wide{font-size:15px;padding:6px 4px}
+ .kst{left:44%;top:4px;font-size:11px;padding:1px 9px;line-height:1.25;white-space:nowrap;max-width:none;text-align:center}
+ .box{box-sizing:border-box;max-width:100%}.cth{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .pl .ph b{max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pl .pto{font-size:9px!important;padding:0 5px!important;right:54px!important}
+ #pbg-chip,.pbg-chip,#pbg-fab{display:none!important}
+}
+/* ===== ĐIỆN THOẠI XOAY DỌC ===== */
+@media (orientation:portrait) and (max-width:700px){
+ body.ingame .tb-top{padding:3px 8px;gap:6px}body.ingame .tb-top h1{display:none}body.ingame .tb-top .tbtn{padding:3px 9px;font-size:13px}
+ #kh{padding:3px 3px 40px;min-height:0}
+ .khwrap{grid-template-columns:minmax(0,1fr)!important;gap:5px}
+ .frame{padding:4px;border-radius:12px}.frame::after{inset:2px;border-radius:10px}
+ #khs{height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:1.04;border-radius:9px}
+ #khd{left:4px;top:4px;width:calc(100% - 8px);height:calc(100% - 8px)}
+ .kst{top:6px;left:50%;font-size:11px;padding:1px 9px;white-space:nowrap}
+ .kfx{left:auto;right:8px;top:8px;bottom:auto;font-size:11px;padding:2px 8px}
+ .hov{position:relative!important;inset:auto!important;margin-top:4px!important;pointer-events:auto!important}
+ .hov .hand{flex-direction:row!important;justify-content:space-around;gap:2px;padding:4px 3px}
+ .hov .rstack{width:50px;height:40px}.hov .rstack .rc{width:46px;height:34px}.rstack b{font-size:12px;padding:0 6px}
+ .tbar{position:absolute!important;right:4px;bottom:calc(100% + 8px);flex-direction:row!important;gap:6px;margin:0!important;z-index:6}
+ .tbar .bt{width:52px;height:52px}.bt img{width:28px;height:34px}.bt small{font-size:9px}
+ .pop{position:absolute!important;right:0;bottom:calc(100% + 66px);width:210px!important}
+ .lft{display:grid!important;grid-template-columns:1fr 1.15fr;gap:5px;align-items:stretch;position:static}
+ .lft>.dice{grid-column:1;grid-row:1}.lft>.box:last-child{grid-column:2;grid-row:1;display:flex;align-items:center}.lft>.box:last-child .tbtn{width:100%}
+ .lft>.ctab{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.lft>.ctab .cth{grid-column:1/-1}.lft>.ctab .chint{grid-column:1/-1}
+ .lft>.awp{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:1fr 1fr;gap:0 6px}.lft>.awp .cth{grid-column:1/-1}.awp .atx small{display:none}
+ .dice{display:flex!important;flex-wrap:wrap;flex-direction:row!important;align-items:center;justify-content:center;gap:3px 6px!important;padding:5px 7px}.dice::before{display:none}.die{width:38px;height:38px}.dice b{width:auto!important;font-size:22px!important}.dice .tbtn{width:100%;font-size:15px;padding:6px}
+ .ctr{grid-template-columns:34px 1fr!important;gap:0 5px!important;padding:3px 0!important}.ctx small{font-size:10px}.ctx b{font-size:13px}.cco .cr svg{width:15px;height:19px}.cth{font-size:13px!important}
+ .box,.pl{padding:5px 8px}
+ .pl{display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:6px;row-gap:2px}
+ .pl .ph{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:5px;line-height:1.1}.pl .ph>svg{width:19px;height:19px}.pl .vp{margin-left:auto;font-size:18px;white-space:nowrap}.pl .vp small{font-size:10px}
+ .pcn{margin:0!important;font-size:13px;gap:4px!important;grid-column:1;grid-row:2}.pcn span{padding:0 5px 0 2px}.pcn img{width:17px!important;height:17px!important}
+ .pl .ps{grid-column:2;grid-row:2;font-size:12px;gap:6px;display:flex;align-items:center;justify-content:flex-end;white-space:nowrap}.pl .ps i{display:none}.pl .ps u{display:inline}
+ .pl .pto{top:3px!important;bottom:auto!important;right:62px!important;font-size:11px;padding:1px 8px}
+ .side{max-height:none!important;overflow:visible;gap:5px}.side .s1,.side .s2,.side .chs{gap:5px}
+ .side .chs .tb-chat{padding:4px 6px;gap:3px;display:flex;flex-direction:column}.side .chs .tb-chat .hd{display:none}
+ .side .chs .tb-chat .ls{height:120px!important;font-size:13.5px}
+ .side .chs .tb-chat .qk{flex-wrap:nowrap;max-height:none;overflow-x:auto;overflow-y:hidden;padding:0 0 2px;scrollbar-width:none}.side .chs .tb-chat .qk::-webkit-scrollbar{display:none}.side .chs .tb-chat .qk button{white-space:nowrap;flex:0 0 auto}
+ .dcard{width:56px!important}.dcard svg{width:54px!important;height:76px!important}
+ .xlog{display:none}
+ #pbg-chip,.pbg-chip,#pbg-fab{display:none!important}
+}
 `;
 Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', tagline:'Khai thác tài nguyên, xây làng mở đường trên hòn đảo mới',
   quick:["Tung xúc xắc đi!", "Nhanh lên nào!", "Đến lượt bạn rồi", "Chờ tôi chút", "Tôi đổi lấy cừu", "Tôi đổi lấy gỗ", "Tôi đổi lấy gạch", "Tôi đổi lấy lúa", "Tôi đổi lấy đá", "Ai có gỗ không?", "Ai có gạch không?", "Ai có cừu không?", "Ai có lúa không?", "Ai có đá không?", "Đổi 1 lấy 1 nhé?", "Đổi đi, tôi không lừa đâu", "Không đổi đâu", "Đừng cướp tôi!", "Cướp hắn đi!", "Cướp ô lúa của hắn đi", "Tha cho tôi đi mà", "Ra 7 rồi, khổ rồi!", "Tôi xây nhà đây", "Tôi lên thành phố rồi nhé", "Chặn đường hắn đi", "Cho tôi mượn gỗ", "Tôi sắp thắng rồi đó", "Số đẹp thế!", "Xui ghê", "Hay quá!", "GG", "Haha"], minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:2, turnLimit:90, botDelay:700, css:CSS,
