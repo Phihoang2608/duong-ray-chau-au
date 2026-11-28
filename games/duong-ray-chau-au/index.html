@@ -1281,8 +1281,8 @@ const CINFO = {
 };
 const POINTS = {1:1,2:2,3:4,4:7,5:10,6:15,7:18,8:21};
 const PLAYER_COLORS = [
-  {hex:'#c1121f',name:'Đỏ thẫm'},{hex:'#4cc3f5',name:'Xanh nhạt'},{hex:'#15803d',name:'Lục'},
-  {hex:'#d97706',name:'Hổ phách'},{hex:'#f0449a',name:'Hồng'}
+  {hex:'#ff7b7b',name:'Đỏ nhạt'},{hex:'#7fd3ff',name:'Xanh nhạt'},{hex:'#86e08f',name:'Xanh lá nhạt'},
+  {hex:'#ffb36b',name:'Cam nhạt'},{hex:'#ff9bd2',name:'Hồng nhạt'}
 ];
 const BOT_NAMES = ['Bot An','Bot Bình','Bot Chi','Bot Dũng'];
 const START_TRAINS = 45;
@@ -2609,7 +2609,7 @@ function showLegend(){
     <div class="lgi">${ex(R(3,'blue',{tunnel:true}))}<div>${HELP.tunnel}</div></div>
     <div class="lgi">${ex(R(3,'gray',{ferry:1}))}<div>${HELP.ferry(R(3,'gray',{ferry:1}))}</div></div>
     <div class="lgi"><div>${ex(R(2,'green'))}<br>${ex(R(2,'yellow'))}</div><div>${HELP.double}</div></div>
-    <div class="lgi">${ex(R(3,'red'),'#4cc3f5')}<div><b>Tuyến đã có chủ</b>: hiện hình toa tàu màu của người chơi đã chiếm.</div></div>
+    <div class="lgi">${ex(R(3,'red'),'#7fd3ff')}<div><b>Tuyến đã có chủ</b>: hiện hình toa tàu màu của người chơi đã chiếm.</div></div>
     <div class="lgi"><svg width="60" height="30" viewBox="0 0 60 30"><rect x="4" y="9" width="52" height="12" rx="3" fill="#d8392b" stroke="#ffcc00" stroke-width="3"/></svg><div><b>Viền vàng nhấp nháy</b>: tuyến bạn đang đủ bài để chiếm ngay.</div></div>
     <div class="lgi"><svg width="60" height="34" viewBox="0 0 60 34"><path d="M21,13 L30,4 L39,13 L39,26 L21,26Z" fill="#c1121f" stroke="#111" stroke-width="1.5"/></svg><div><b>Nhà ga</b>: cuối ván cho mượn 1 tuyến của đối thủ nối vào thành phố đó.</div></div>
     <p class="hint">Mẹo: bấm vào bất kỳ tuyến nào trên bản đồ để xem chú thích riêng của tuyến đó.</p></div>`,
