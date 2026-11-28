@@ -536,6 +536,9 @@ button,input{font-family:inherit;font-size:15px}
 .g-cover img,.hero-art-box img,.room-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
 .g-card:hover .g-cover img{transform:scale(1.06)}
 .hero-art-box{aspect-ratio:1200/896}
+.g-cover:has(img.wide){aspect-ratio:16/9}
+.g-cover:has(img.wide) .g-play-fab{top:auto;bottom:8px;left:8px;width:28px;height:28px;font-size:11px}
+.g-cover:has(img.wide) .g-tag{top:auto;bottom:8px;right:8px;font-size:11px;padding:2px 8px}
 </style>
 </head>
 <body>
@@ -659,8 +662,8 @@ const $=s=>document.querySelector(s);
 
 function card(x,y,r,rank,suit,red,w){ w=w||46; const hgt=w*1.4; return `<g transform="translate(${x},${y}) rotate(${r})"><rect x="${-w/2}" y="${-hgt/2}" width="${w}" height="${hgt}" rx="5" fill="#fff" stroke="#c9c2b4"/><text x="${-w/2+5}" y="${-hgt/2+15}" font-size="14" font-family="Times New Roman" font-weight="bold" fill="${red?'#c0392b':'#1b1b1b'}">${rank}</text><text x="0" y="8" text-anchor="middle" font-size="24" fill="${red?'#c0392b':'#1b1b1b'}">${suit}</text></g>`; }
 const THUMBS={
-  'dao-khai-hoang':big=>`<img src="games/dao-khai-hoang/assets/${big?'cover':'thumb'}.jpg?v=3" alt="Đảo Khai Hoang" loading="${big?'eager':'lazy'}" decoding="async">`,
-  'duong-ray-chau-au':big=>`<img src="games/duong-ray-chau-au/assets/${big?'cover':'thumb'}.jpg?v=2" alt="Đường Ray Châu Âu" loading="${big?'eager':'lazy'}" decoding="async">`,
+  'dao-khai-hoang':big=>`<img class="wide" src="games/dao-khai-hoang/assets/${big?'cover':'thumb'}.jpg?v=4" alt="Đảo Khai Hoang" loading="${big?'eager':'lazy'}" decoding="async">`,
+  'duong-ray-chau-au':big=>`<img class="wide" src="games/duong-ray-chau-au/assets/${big?'cover':'thumb'}.jpg?v=3" alt="Đường Ray Châu Âu" loading="${big?'eager':'lazy'}" decoding="async">`,
   'ma-soi':()=>`<svg viewBox="0 0 300 225"><rect width="300" height="225" fill="#1b2537"/><circle cx="210" cy="62" r="34" fill="#f3f0dc"/><path d="M0 175 L40 150 L80 168 L130 140 L180 165 L230 145 L300 170 L300 225 L0 225Z" fill="#0f1622"/><path d="M120 175 L124 140 L118 126 L128 132 L136 118 L144 132 L154 126 L148 140 L152 175Z" fill="#0b0f17"/><circle cx="131" cy="136" r="2" fill="#ffcf3f"/><circle cx="141" cy="136" r="2" fill="#ffcf3f"/></svg>`,
   'da-quy':big=>`<img src="games/da-quy/assets/${big?'cover':'thumb'}.jpg" alt="Thương Nhân Đá Quý" loading="${big?'eager':'lazy'}" decoding="async">`,
   'bien-muoi':()=>`<svg viewBox="0 0 300 225"><defs><linearGradient id="bmT1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fe0ff"/><stop offset="1" stop-color="#e9f9ff"/></linearGradient><linearGradient id="bmT2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2eaee0"/><stop offset="1" stop-color="#145f93"/></linearGradient></defs><rect width="300" height="225" fill="url(#bmT1)"/><circle cx="238" cy="52" r="26" fill="#fff6b0"/><rect y="118" width="300" height="107" fill="url(#bmT2)"/><g fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3"><path d="M0 140 q18-10 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0"/><path d="M-10 176 q18-10 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0"/></g><path d="M70 120 L210 120 L186 158 L94 158Z" fill="#fffaf0"/><path d="M140 40 L140 116 L88 106Z" fill="#fff"/><path d="M140 40 L196 106 L140 116Z" fill="#ffd9a8"/><path d="M140 40 L162 52 L140 58Z" fill="#e8553a"/><g transform="rotate(-8 60 190)"><rect x="34" y="160" width="52" height="72" rx="6" fill="#fff" stroke="#e9c46a" stroke-width="3"/><circle cx="60" cy="190" r="12" fill="#ff7a55"/></g><g transform="rotate(7 246 186)"><rect x="220" y="158" width="52" height="72" rx="6" fill="#fff" stroke="#e9c46a" stroke-width="3"/><path d="M230 200 q16-30 32 0 q-16 14-32 0Z" fill="#b97af0"/></g></svg>`,
