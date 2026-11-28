@@ -144,3 +144,19 @@ body{font-family:"Times New Roman",Times,serif;background:radial-gradient(120% 9
 #bm.land .pl.op .bmrow{flex:1 1 0;min-width:0}
 #bm.land .pl.op .tmr svg{width:24px;height:27px}
 @media (max-height:520px){#bmres{inset:1.5%;padding:4px}#bmres .rp{gap:3px}#bmres h3{font-size:16px}#bmres .rw{font-size:12px}#bmres .rbs{grid-template-columns:repeat(2,1fr);gap:3px}#bmres .rb{padding:2px 5px}#bmres .rh{font-size:12.5px}#bmres .rc{margin:1px 0}#bmres .rc .bmc{--w:min(20px,4.5vw)}#bmres .rl{font-size:10.5px;gap:1px 6px}#bmres .rt{font-size:10.5px}#bmres .rbt{padding-top:0}}
+
+/* thanh thông báo hành động + kéo bỏ bài */
+.bmnote{flex:0 0 auto;background:rgba(255,224,138,.12);border:1px solid rgba(255,224,138,.35);border-radius:8px;padding:3px 8px;font-size:12.5px;line-height:1.3;color:#fff3c4;overflow:hidden;max-height:3.4em}
+.bmnote .old{font-size:11px;color:#9cc3e0;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bmnote div:first-child{font-weight:normal}
+.bmdrawb{font-size:15px;padding:10px 16px;min-height:44px}
+.bmstat.bmsm{font-size:12px;flex:1 1 120px}
+.bmdrawn .bmc{touch-action:none}
+.bmdrawn .bmc.pk::after{content:'GIỮ';position:absolute;left:50%;bottom:3px;transform:translateX(-50%);background:#ffe08a;color:#3a2410;font:bold 11px/1 sans-serif;padding:3px 7px;border-radius:8px;z-index:3}
+.bmdrawn .bmc.dis{outline:2px dashed #ff9a9a;outline-offset:2px;cursor:grab;animation:bmwig 1s ease-in-out infinite}
+.bmdrawn .bmc.dis::after{content:'KÉO ĐI';position:absolute;left:50%;bottom:3px;transform:translateX(-50%);white-space:nowrap;background:#ff9a9a;color:#4a1010;font:bold 9px/1 sans-serif;padding:3px 5px;border-radius:8px;z-index:3}
+@keyframes bmwig{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-2px)}}
+.pile.hot .bmc{box-shadow:0 0 0 4px #7dffb0,0 0 20px #7dffb0;transform:scale(1.08)}
+.pile.drop small{font-size:12px}
+.bmpick{justify-content:center;gap:18px;padding:6px 0 4px}.bmpick .bmc{--w:calc(var(--pw)*1.15)}
+#bm img{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}

@@ -8,7 +8,7 @@ const BMUI=(()=>{
     vo:'Vỏ sò: 1 lá = 0 điểm, 2 lá = 2, 3 lá = 4, 4 lá = 6, 5 lá = 8, 6 lá = 10.',bt:'Bạch tuộc: 1 lá = 0, 2 lá = 3, 3 lá = 6, 4 lá = 9, 5 lá = 12.',cc:'Chim cánh cụt: 1 lá = 1 điểm, 2 lá = 3, 3 lá = 5.',tt:'Thủy thủ: 1 lá = 0 điểm, 2 lá = 5 điểm.',
     hd:'Hải đăng: mỗi lá Thuyền bạn có được +1 điểm.',dc:'Đàn cá: mỗi lá Cá bạn có được +1 điểm.',dcc:'Đàn chim cánh cụt: mỗi lá Chim cánh cụt bạn có được +2 điểm.',tn:'Thuyền trưởng: mỗi lá Thủy thủ bạn có được +3 điểm.',
     tf:'Nàng tiên cá: mỗi nàng cho điểm bằng số lá của màu bạn có nhiều nhất (nàng thứ hai tính màu nhiều thứ hai…). Đủ 4 nàng là thắng ngay!'};
-  let root=null, sel=-1, lastEv=null, ZM=1, lastSec=-1, firstDraw=true, lastTurnMe=false, resShown=-1;
+  let autoKey='', autoT=0, dragT=0, root=null, sel=-1, lastEv=null, ZM=1, lastSec=-1, firstDraw=true, lastTurnMe=false, resShown=-1;
   const PREV={};
   /* ---------- tiện ích ---------- */
   function syncKids(a,b){ const A_=a.childNodes, B=b.childNodes; let i=0;
@@ -94,9 +94,9 @@ const BMUI=(()=>{
     if(S.phase==='over') return S.mermaid?`🧜 <b>${api.esc(S.seats[S.winner].name)}</b> gom đủ 4 nàng tiên cá!`:`🏆 <b>${api.esc(S.seats[S.winner].name)}</b> thắng chung cuộc!`;
     if(st==='roundover') return 'Ván đã kết thúc — xem bảng điểm.';
     const lc=S.call?`<div class="bmlc">⏳ CƠ HỘI CUỐI của <b>${api.esc(S.seats[S.call.by].name)}</b> — còn <b>${S.call.left.length}</b> lượt cuối</div>`:'';
-    if(my){ const txt={draw:'<b class="me blink">Đến lượt bạn!</b> Bấm <b>chồng bài</b> để rút 2 lá (giữ 1), hoặc bấm lá trên cùng của <b>chồng bỏ</b> để lấy.',
-        keep:sel<0?'Bấm <b>1 lá để GIỮ</b>; lá còn lại sẽ bỏ lên một chồng.':'Bấm <b>chồng bỏ 1</b> hoặc <b>chồng bỏ 2</b> để bỏ lá còn lại.',
-        play:'Đánh cặp (nếu có) rồi <b>kết thúc lượt</b>.'+(BM.myPts(S,ME)>=BM_MIN_END&&!S.call?' Bạn đủ <b>7 điểm</b>: có thể hô DỪNG hoặc CƠ HỘI CUỐI.':''),
+    if(my){ const txt={draw:'<b class="me blink">Đến lượt bạn!</b> Bấm nút <b>Lấy 2 lá</b> bên dưới, hoặc chạm lá trên cùng của <b>chồng bỏ</b>.',
+        keep:sel<0?'<b>Bước 1/2:</b> chạm <b>1 lá để GIỮ</b>.':'<b>Bước 2/2:</b> <b>kéo lá còn lại</b> thả vào <b>Chồng bỏ 1</b> hoặc <b>Chồng bỏ 2</b>.',
+        play:(BM.pairsOf(S.P[ME]).length?'Đánh cặp (nếu có) rồi <b>kết thúc lượt</b>.':'Không có cặp để đánh — <b>tự kết thúc lượt</b>…')+(BM.myPts(S,ME)>=BM_MIN_END&&!S.call?' Bạn đủ <b>7 điểm</b>: có thể hô DỪNG hoặc CƠ HỘI CUỐI.':''),
         crab:'Đôi Cua: chọn <b>1 lá</b> trong hai chồng bỏ.',shark:'Chạm vào <b>1 đối thủ</b> để rút ngẫu nhiên 1 lá trên tay họ.'}[st]; return lc+txt; }
     const who={draw:'đang chọn cách lấy bài',keep:'đang chọn lá để giữ',play:'đang đánh bài',crab:'đang xem chồng bỏ',shark:'đang chọn người để rút trộm'}[st]||'';
     return lc+`Đang chờ <b>${nm}</b> ${who}…`; }
@@ -121,14 +121,15 @@ const BMUI=(()=>{
       <button data-tool="chat" class="bmchatb" style="${api.mode()==='local'?'display:none':''}" title="Trò chuyện trong phòng">💬<i class="bmcu"></i></button>
       <button data-tool="fx" title="Mức hiệu ứng">✨</button><button data-tool="app" data-pbg-app title="Tải app">📲</button><button data-tool="acc" title="Tài khoản · Bạn bè · Online">👤</button><button data-tool="fs" title="Toàn màn hình">⛶</button><button data-hist="1" title="Lịch sử ván">📜</button><button data-tool="snd" title="Âm thanh">${SFX.on===false?'🔇':'🔊'}</button><button data-tool="rules" title="Luật chơi">📖</button><button data-tool="zin" title="Phóng to">＋</button><button data-tool="zout" title="Thu nhỏ">－</button></div>
       <div class="bmmain"><div class="bmtab"><div class="bminfo">Ván <b>${S.round}</b> · Đích <b>${S.target}</b> điểm · Chồng bài còn <b>${S.deck.length}</b> lá</div>
+      <div class="bmnote">${S.log.slice(0,2).map((l,i)=>`<div class="${i?'old':''}">${api.esc(l)}</div>`).join('')}</div>
       <div class="bmbody"><div class="bmpiles"><div class="pile deck ${my&&S.step==='draw'&&S.deck.length?'go':''}" data-deck="1">${A.back('big')}<em>${S.deck.length}</em><small>Chồng bài</small></div>${pileHtml(S,0,ME,my)}${pileHtml(S,1,ME,my)}</div>
-      <div class="bmside"><div class="bmdrawn">${my&&S.step==='keep'?S.pend.map((id,i)=>card(id,'big '+(sel===i?'pk':''),`data-pend="${i}"`)).join(''):''}</div>
-      ${my&&S.step==='keep'?'':`<div class="bmstat">${statusText(S,ME,api)}</div>`}</div></div>`;
+      <div class="bmside">${my&&S.step==='keep'?'':`<div class="bmstat">${statusText(S,ME,api)}</div>`}</div></div>${my&&S.step==='keep'?`<div class="bmdrawn bmpick">${S.pend.map((id,i)=>card(id,'big '+(sel===i?'pk':(sel>=0?'dis':'')),`data-pend="${i}"`)).join('')}</div>`:''}`;
     if(my&&S.step==='play'){ h+=`<div class="bmacts">`+Object.keys(kinds).filter(k=>k!=='ms'||BM.victims(S,ME).length).map(k=>`<button class="tbtn gold" data-duo="${k}" title="${KIND[k][2]}">${KIND[k][0]} ${KIND[k][1]}</button>`).join('')
       +`<button class="tbtn pri" data-a="end">Kết thúc lượt</button>`
       +(!S.call?`<button class="tbtn stop" data-a="stop" ${mypts>=BM_MIN_END?'':'disabled'} title="Cần từ ${BM_MIN_END} điểm">🛑 DỪNG</button><button class="tbtn last" data-a="last" ${mypts>=BM_MIN_END?'':'disabled'} title="Cần từ ${BM_MIN_END} điểm">⏳ CƠ HỘI CUỐI</button>`:'')+`</div>`; }
+    else if(my&&S.step==='draw') h+=`<div class="bmacts"><button class="tbtn pri bmdrawb" data-a="deck" ${S.deck.length?'':'disabled'}>🂠 Lấy ${S.deck.length>1?'2 lá':'lá cuối'} từ chồng bài</button><div class="bmstat bmsm">${statusText(S,ME,api)}</div></div>`;
     else if(my&&S.step==='keep') h+=`<div class="bmacts bmhint"><div class="bmstat">${statusText(S,ME,api)}</div></div>`;
-    else h+=`<div class="bmacts bmlog">${api.esc(S.log[0]||'')}</div>`;
+    else h+=`<div class="bmacts bmlog"></div>`;
     h+=`</div>`;
     h+=`<div class="bmpl">`;
 
@@ -151,6 +152,8 @@ const BMUI=(()=>{
     else if(cp) cp.remove();
     // điểm nhảy +N cho điểm lá hiện có
     S.seats.forEach((_,i)=>{ const show=i===ME||S.rev[i]||S.step==='roundover'; const v=show?BM.myPts(S,i):BM.tablePts(S,i); const pv=PREV[i]; if(pv!=null&&v>pv&&S.step!=='roundover') setTimeout(()=>ptsPop(i,v-pv,'.live'),400); PREV[i]=v; });
+    if(my&&S.step==='play'){ const can=Object.keys(kinds).filter(k=>k!=='ms'||BM.victims(S,ME).length).length, canStop=!S.call&&mypts>=BM_MIN_END;
+      if(!can&&!canStop){ const key=S.round+':'+S.turn+':'+S.turnAt+':'+S.deck.length+':'+P.hand.length; if(autoKey!==key){ autoKey=key; clearTimeout(autoT); autoT=setTimeout(()=>{ const N=window.__S; if(N&&N.phase==='play'&&N.turn===ME&&N.step==='play'&&N.turnAt===S.turnAt&&!BM.pairsOf(N.P[ME]).length) api.act({t:'end'}); },1300); } } }
     if(my&&!lastTurnMe&&!firstDraw&&SFX.turn) SFX.turn(); lastTurnMe=my; firstDraw=false;
     if(isNew){ lastEv=ev.n; runEvent(S,ME,api,ev,pre); } }
   function frameRect(seat,mine){ return rectOf(`.pl[data-p="${seat}"] ${seat===window.__ME?'.bmhand':'.bmopb'}`)||rectOf(`.pl[data-p="${seat}"]`); }
@@ -185,7 +188,7 @@ const BMUI=(()=>{
   function syncChatBadge(){ const u=document.getElementById('tb-unread'); const n=u&&u.style.display!=='none'?u.textContent:''; document.querySelectorAll('.bmcu').forEach(e=>{ e.textContent=n; e.style.display=n?'':'none'; }); }
   setInterval(syncChatBadge,700);
   /* ---------- bấm ---------- */
-  function onClick(e){ const api=Table.API, S=window.__S, ME=api.me(); if(!S) return; const my=S.phase==='play'&&S.turn===ME;
+  function onClick(e){ const api=Table.API, S=window.__S, ME=api.me(); if(!S) return; const my=S.phase==='play'&&S.turn===ME; if(Date.now()-dragT<350) return;
     const tl=e.target.closest('[data-tool]'); if(tl){ const k=tl.dataset.tool; if(k==='chat'){ const cb=document.getElementById('tb-chatbtn'); if(cb) cb.click(); } else if(k==='fx') cycleFx(); else if(k==='app'){ window.PBG&&PBG.install(); } else if(k==='acc'){ if(window.PBG) (PBG.user?PBG.open():PBG.login()); } else if(k==='fs') toggleFS(); else if(k==='snd'){ const sb=document.getElementById('tb-sound'); sb&&sb.click(); tl.textContent=SFX.on===false?'🔇':'🔊'; } else if(k==='rules'){ const rb=document.getElementById('tb-rules'); rb&&rb.click(); } else if(k==='zin') setZ(ZM*1.2); else if(k==='zout') setZ(ZM/1.2); return; }
     if(e.target.closest('[data-hist]')){ showHist(); return; }
     const b=e.target.closest('[data-a]'); if(b&&!b.disabled){ SND.pop(); const a=b.dataset.a; if(a==='again'){ api.rematch(); return; } if(a==='skipcrab'){ api.act({t:'skip'}); return; } api.act({t:a}); return; }
@@ -197,5 +200,17 @@ const BMUI=(()=>{
       if(S.step==='draw'){ api.act({t:'take',pile:p}); return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
     const dk=e.target.closest('[data-deck]'); if(dk&&my&&S.step==='draw'){ api.act({t:'deck'}); return; }
     const hc=e.target.closest('.me .bmhand [data-cid],.bmopb:not(.bk) [data-cid],.bmtabl [data-cid],.pile .bmc[data-cid],#bmres [data-cid]'); if(hc){ zoomCard(+hc.dataset.cid); return; } }
+  /* ---------- kéo lá còn lại vào chồng bỏ ---------- */
+  document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('#bm')) e.preventDefault(); });
+  (function drag(){ let el=null,clone=null,x0=0,y0=0,mv=false,hot=null;
+    const pileAt=(x,y)=>{ const l=document.elementsFromPoint(x,y); for(const n of l){ const p=n.closest&&n.closest('#bm [data-pile]'); if(p&&!p.closest('#bmcrab')) return p; } return null; };
+    document.addEventListener('pointerdown',e=>{ const S=window.__S, api=Table.API; if(!S||S.phase!=='play'||S.turn!==api.me()||S.step!=='keep'||sel<0) return; const c=e.target.closest&&e.target.closest('#bm [data-pend]'); if(!c||+c.dataset.pend===sel) return; el=c; x0=e.clientX; y0=e.clientY; mv=false; });
+    document.addEventListener('pointermove',e=>{ if(!el) return; if(!mv){ if(Math.hypot(e.clientX-x0,e.clientY-y0)<8) return; mv=true; const r=el.getBoundingClientRect(); clone=el.cloneNode(true); clone.classList.add('bmdragc'); clone.style.cssText=`position:fixed;z-index:9995;pointer-events:none;width:${r.width}px;height:${r.height}px;left:${r.left}px;top:${r.top}px;--w:${r.width}px;transform:scale(1.12) rotate(4deg);box-shadow:0 10px 24px rgba(0,0,0,.6)`; document.body.appendChild(clone); el.style.opacity='.3'; }
+      e.preventDefault&&e.cancelable&&e.preventDefault(); const r=clone.getBoundingClientRect(); clone.style.left=(e.clientX-r.width/2)+'px'; clone.style.top=(e.clientY-r.height/2)+'px';
+      const p=pileAt(e.clientX,e.clientY); if(hot!==p){ hot&&hot.classList.remove('hot'); hot=p; hot&&hot.classList.add('hot'); } },{passive:false});
+    const end=e=>{ if(!el) return; const S=window.__S, api=Table.API; if(mv){ dragT=Date.now(); const p=pileAt(e.clientX,e.clientY); if(clone) clone.remove(); el.style.opacity=''; if(hot) hot.classList.remove('hot');
+        if(p&&S&&S.step==='keep'&&S.turn===api.me()&&sel>=0){ SND.pop(); const i=sel; sel=-1; api.act({t:'keep',i,pile:+p.dataset.pile}); } else api.toast('Hãy thả lá vào Chồng bỏ 1 hoặc Chồng bỏ 2'); }
+      el=null; clone=null; hot=null; mv=false; };
+    document.addEventListener('pointerup',end); document.addEventListener('pointercancel',end); })();
   return {render,tickView,fit};
 })();
