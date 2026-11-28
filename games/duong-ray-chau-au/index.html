@@ -1412,11 +1412,12 @@ function rname(r){ return CITIES[r.a].name+' – '+CITIES[r.b].name; }
 function log(msg, cls){ G.log.unshift({msg, cls:cls||''}); if (G.log.length>60) G.log.pop(); }
 function pushFx(o){ G.fxN=(G.fxN||0)+1; o.n=G.fxN; G.fx.push(o); if (G.fx.length>10) G.fx.shift(); }
 
+const HAS_ST = (typeof MAP_ID==='undefined' || MAP_ID!=='na'); /* Bản Bắc Mỹ không có nhà ga */
 /* seats: [{name, bot:true|false, peer:null|string}] */
 function newGame(seats){
   UNDO_USED={};
   const players = seats.map((s,i)=>({ name:s.name, isBot:!!s.bot, peer:s.peer||null, pid:s.pid||null, colorIdx:i, color:PLAYER_COLORS[i].hex,
-    hand:emptyHand(), trains:START_TRAINS, stations:3, tickets:[], score:0, routes:[] }));
+    hand:emptyHand(), trains:START_TRAINS, stations:HAS_ST?3:0, tickets:[], score:0, routes:[] }));
   G = { players, deck:[], discard:[], market:[null,null,null,null,null], owner:ROUTES.map(()=>null), stations:{},
         hist:[], ticketDeck: shuffle(TICKETS.shorts.map(t=>t.id)), cur:0, drawn:0, finalTurns:null, passes:0,
         phase:'pick', pending:null, tunnel:null, initial:{}, log:[], fx:[], fxN:0, results:null, turnNo:0, ver:0 };
@@ -1430,7 +1431,7 @@ function newGame(seats){
     if (p.isBot) botKeepInitial(pi, offer); else G.initial[pi] = offer;
   });
   G.cur = Math.floor(rand()*players.length);
-  log('Ván mới bắt đầu! Mỗi người có 45 toa tàu và 3 nhà ga.', 'sys');
+  log(HAS_ST?'Ván mới bắt đầu! Mỗi người có 45 toa tàu và 3 nhà ga.':'Ván mới bắt đầu! Mỗi người có 45 toa tàu.', 'sys');
   if (!Object.keys(G.initial).length) startPlay();
 }
 function startPlay(){ G.phase='play'; log(`${cur().name} đi trước.`, 'sys'); pushFx({k:'turn', p:G.cur}); }
@@ -1988,16 +1989,16 @@ function bgSVG(){
 
 /* Bảng điểm mỗi tuyến vẽ thẳng trên bản đồ (vùng trống Thổ Nhĩ Kỳ) */
 function pointsTableSVG(x,y){
-  const W=222, rowH=23, H=40+6*rowH+30;
+  const NL=Math.max(...ROUTES.map(r=>r.len)), W=222, rowH=23, H=40+NL*rowH+30;
   let s=`<g transform="translate(${x},${y}) scale(.84)" class="ptable"><rect x="3" y="4" width="${W}" height="${H}" rx="10" fill="#000" opacity=".15"/>
     <rect width="${W}" height="${H}" rx="10" fill="#fbf2dc" stroke="${INK}" stroke-width="2"/><rect x="4" y="4" width="${W-8}" height="${H-8}" rx="7" fill="none" stroke="${INK}" stroke-width=".7" stroke-dasharray="3 2"/>
     <text x="${W/2}" y="27" text-anchor="middle" class="pt-title">ĐIỂM MỖI TUYẾN</text>`;
-  for(let n=1;n<=6;n++){ const yy=40+(n-1)*rowH; const segW=12, gap=2;
+  for(let n=1;n<=NL;n++){ const yy=40+(n-1)*rowH; const segW=12, gap=2;
     s+=`<text x="16" y="${yy+15}" class="pt-n">${n} ô</text>`;
     for(let i=0;i<n;i++) s+=`<rect x="${52+i*(segW+gap)}" y="${yy+5}" width="${segW}" height="10" rx="2" fill="#e9dcbc" stroke="#5b4227" stroke-width="1"/>`;
     s+=`<text x="${W-14}" y="${yy+15}" text-anchor="end" class="pt-p2">${POINTS[n]} điểm</text>`;
   }
-  s+=`<text x="${W/2}" y="${H-12}" text-anchor="middle" class="pt-x">Đường dài nhất +10 · Ga chưa xây +4</text></g>`;
+  s+=`<text x="${W/2}" y="${H-12}" text-anchor="middle" class="pt-x">Đường dài nhất +10${HAS_ST?' · Ga chưa xây +4':''}</text></g>`;
   return s;
 }
 
@@ -2187,7 +2188,7 @@ function renderPlayers(){
     const bump = false;
     return `<div class="pchip ${G.cur===i&&G.phase==='play'?'active':''} ${i===ME?'mine':''}" data-p="${i}" style="--pc:${p.color}">
       ${chipLoco(p.color)}<div class="pinfo"><div class="pline1"><span class="pname">${online}${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.isBot?' <small class="botlab">máy</small>':''}</span><span class="scpill"><b class="sc ${bump?'bump':''}">${UIS.holdSc[i]!=null?UIS.holdSc[i]:p.score}</b> điểm</span></div>
-      <div class="pstats"><span title="Số toa tàu còn lại"><i>Toa</i> ${p.trains}</span><span title="Số lá bài trên tay"><i>Bài</i> ${handCount(p)}</span><span title="Số vé hành trình"><i>Vé</i> ${p.tickets.length}</span><span title="Số nhà ga còn lại"><i>Ga</i> ${p.stations}</span></div></div></div>`; }).join('');
+      <div class="pstats"><span title="Số toa tàu còn lại"><i>Toa</i> ${p.trains}</span><span title="Số lá bài trên tay"><i>Bài</i> ${handCount(p)}</span><span title="Số vé hành trình"><i>Vé</i> ${p.tickets.length}</span>${HAS_ST?`<span title="Số nhà ga còn lại"><i>Ga</i> ${p.stations}</span>`:''}</div></div></div>`; }).join('');
   $('#players').innerHTML=html;
   const gains=G.players.map((p,i)=>UIS.prevScores[i]!=null ? p.score-UIS.prevScores[i] : 0);
   UIS.prevScores=G.players.map(p=>p.score);
@@ -2229,11 +2230,11 @@ function renderScoreboard(){
   const lps=G.players.map(p=>longestPath(p.routes)); const maxLP=Math.max(0,...lps); const maxSc=Math.max(...G.players.map(p=>p.score));
   let rows=G.players.map((p,i)=>{ const done = i===ME ? p.tickets.filter(id=>ticketDone(p,id)).length+'/'+p.tickets.length : p.tickets.length;
     return `<tr class="${G.cur===i&&G.phase==='play'?'now':''}"><td class="sbn"><span class="dot" style="background:${p.color}"></span>${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.score===maxSc&&maxSc>0?' ':''}</td>
-      <td><b>${p.score}</b></td><td>${done}</td><td>${lps[i]}${lps[i]===maxLP&&maxLP>0?' ':''}</td><td>${p.stations}</td><td>${p.trains}</td></tr>`; }).join('');
+      <td><b>${p.score}</b></td><td>${done}</td><td>${lps[i]}${lps[i]===maxLP&&maxLP>0?' ':''}</td>${HAS_ST?`<td>${p.stations}</td>`:''}<td>${p.trains}</td></tr>`; }).join('');
   let est='';
   if (ME>=0 && G.players[ME] && G.phase!=='idle'){ const me=G.players[ME]; const ev=ticketEval(me, me.routes); const lp=lps[ME]===maxLP&&maxLP>0?10:0; const tot=me.score+ev.score+me.stations*4+lp;
-    est=`<div class="sbest">Nếu kết thúc ngay, bạn được khoảng <b>${tot}</b> điểm <small>(tuyến ${me.score} · vé ${ev.score>=0?'+':''}${ev.score} · ga +${me.stations*4}${lp?' · dài nhất +10':''})</small></div>`; }
-  sb.innerHTML=`<table class="sbt"><tr><th>Người chơi</th><th>Điểm</th><th title="Vé của bạn: xong/tổng">Vé</th><th>Dài nhất</th><th>Ga</th><th>Toa</th></tr>${rows}</table>${est}
+    est=`<div class="sbest">Nếu kết thúc ngay, bạn được khoảng <b>${tot}</b> điểm <small>(tuyến ${me.score} · vé ${ev.score>=0?'+':''}${ev.score} ${HAS_ST?` · ga +${me.stations*4}`:''}${lp?' · dài nhất +10':''})</small></div>`; }
+  sb.innerHTML=`<table class="sbt"><tr><th>Người chơi</th><th>Điểm</th><th title="Vé của bạn: xong/tổng">Vé</th><th>Dài nhất</th>${HAS_ST?'<th>Ga</th>':''}<th>Toa</th></tr>${rows}</table>${est}
 `;
 }
 
@@ -2252,6 +2253,7 @@ function renderSide(){
   $('#ticketBtn').classList.toggle('disabled', !my || G.drawn>0 || G.ticketDeck.length===0);
   const me=G.players[ME];
   if (me){
+    $('#stationBtn').style.display = HAS_ST?'':'none';
     $('#stationBtn').disabled = !my || G.drawn>0 || me.stations<=0 || !stationOptions(ME).length;
     $('#stationBtn').innerHTML = UIS.stationMode ? '<span class="stico">✖</span><span class="dlab">Huỷ</span>' : `<span class="stico"><svg viewBox="-4 -8 38 42" style="display:block;margin:0 auto;width:1.6em;height:1.75em">${stationSVG(me.color,'btn')}</svg></span><span class="dlab">Xây ga</span><small>tốn ${Math.min(3,stationCost(me))} lá</small>`;
     const hasMove = canDrawMore() || G.ticketDeck.length || ROUTES.some(r=>claimOptions(ME,r).length) || stationOptions(ME).length;
@@ -2623,7 +2625,7 @@ function showEndModal(){
   const res=G.results; if(!res) return;
   const podium = res.slice(0,3).map((r,i)=>({r,i})); const order=[1,0,2].filter(i=>podium[i]);
   const pod = `<div class="podium">${order.map(i=>{ const {r}=podium[i]; const col=G.players[r.pi].color; return `<div class="pod p${i+1}" style="--pc:${col}"><div class="pava">${chipLoco(col)}</div><div class="pn">${esc(r.name)}${r.pi===ME?' (bạn)':''}</div><div class="pblock"><span class="medal">${['1','2','3'][i]}</span><b class="count" data-to="${r.total}">0</b></div></div>`; }).join('')}</div>`;
-  const rows=res.map((r,i)=>`<tr class="${i===0?'win':''}"><td><span class="dot" style="background:${G.players[r.pi].color}"></span>${esc(r.name)}</td><td>${r.routePts}</td><td>${r.ticketPts>=0?'+':''}${r.ticketPts}<br><small>${r.done.length} xong / ${r.fail.length} hỏng</small></td><td>${r.stationPts}</td><td>${r.lpBonus?'+10':'0'}<br><small>dài ${r.lp}</small></td><td><b>${r.total}</b></td></tr>`).join('');
+  const rows=res.map((r,i)=>`<tr class="${i===0?'win':''}"><td><span class="dot" style="background:${G.players[r.pi].color}"></span>${esc(r.name)}</td><td>${r.routePts}</td><td>${r.ticketPts>=0?'+':''}${r.ticketPts}<br><small>${r.done.length} xong / ${r.fail.length} hỏng</small></td>${HAS_ST?`<td>${r.stationPts}</td>`:''}<td>${r.lpBonus?'+10':'0'}<br><small>dài ${r.lp}</small></td><td><b>${r.total}</b></td></tr>`).join('');
   const me=res.find(r=>r.pi===ME);
   let detail='';
   if (me){
@@ -2631,7 +2633,7 @@ function showEndModal(){
     if (me.borrowed.length) detail+=`<p>Nhà ga đã mượn: ${me.borrowed.map(id=>esc(rname(ROUTES[id]))).join(', ')}</p>`;
   }
   const win = me && res[0].pi===ME;
-  const m=showModal(win?'Bạn thắng rồi!':`${esc(res[0].name)} thắng!`, pod+`<table class="res"><tr><th>Người chơi</th><th>Tuyến</th><th>Vé</th><th>Ga</th><th>Dài nhất</th><th>Tổng</th></tr>${rows}</table>${detail}`,
+  const m=showModal(win?'Bạn thắng rồi!':`${esc(res[0].name)} thắng!`, pod+`<table class="res"><tr><th>Người chơi</th><th>Tuyến</th><th>Vé</th>${HAS_ST?'<th>Ga</th>':''}<th>Dài nhất</th><th>Tổng</th></tr>${rows}</table>${detail}`,
     [{label:NET.mode==='client'?'Chờ ván mới':'Chơi ván mới', cls:'primary', onClick:()=>{ hideModal(); if (NET.mode==='host'){ hostBackToLobby(); } else if (NET.mode==='client'){ showLobby(); } else { goMenu(); } }}, {label:'Xem bản đồ', onClick:()=>hideModal()}], {center:true, key:'endm'});
   m.querySelectorAll('.count').forEach(el=>{ const to=+el.dataset.to; const t0=performance.now(); const f=now=>{ const k=Math.min(1,(now-t0)/1600); el.textContent=Math.round(to*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(f); }; requestAnimationFrame(f); });
   if (win){ FX.rain(4); setTimeout(()=>SFX.fanfare(), 300); }
@@ -2639,12 +2641,12 @@ function showEndModal(){
 function showRules(){
   showModal('Luật chơi', `<div class="rules">
   <p><b>Mục tiêu:</b> ghi nhiều điểm nhất bằng cách chiếm các tuyến đường sắt giữa các thành phố châu Âu và hoàn thành vé hành trình.</p>
-  <p><b>Mỗi lượt chọn 1 trong 4 việc:</b></p>
+  <p><b>Mỗi lượt chọn 1 trong ${HAS_ST?4:3} việc:</b></p>
   <p>1. <b>Rút 2 lá bài toa tàu</b> — từ 5 lá đang lộ hoặc chồng úp. Lấy lá Đầu máy (cầu vồng) đang lộ thì chỉ được lấy 1 lá đó. Đầu máy thay được mọi màu.</p>
   <p>2. <b>Chiếm 1 tuyến</b> — bấm vào tuyến trên bản đồ (sẽ hiện chú thích và nút chiếm), trả số lá cùng màu bằng số ô. Tuyến xám trả 1 màu bất kỳ. Tuyến viền vàng là tuyến bạn đang đủ bài.</p>
   <p>&nbsp;&nbsp;• <b>Đường hầm</b> (viền nét đứt): lật 3 lá, lá nào trùng màu bạn dùng (hoặc Đầu máy) phải trả thêm 1 lá.<br>&nbsp;&nbsp;• <b>Phà</b> (chấm cầu vồng): mỗi chấm cần 1 Đầu máy.<br>&nbsp;&nbsp;• <b>Đường đôi</b>: 2–3 người chơi chỉ dùng được 1 làn; 4–5 người thì mỗi làn 1 người.</p>
   <p>3. <b>Rút vé</b> — rút 3 vé, giữ ít nhất 1.</p>
-  <p>4. <b>Xây nhà ga</b> — ga 1 tốn 1 lá, ga 2 tốn 2, ga 3 tốn 3 lá cùng màu. Cuối ván mỗi ga mượn 1 tuyến của đối thủ để nối vé. Ga không xây: +4 điểm/ga.</p>
+${HAS_ST?`  <p>4. <b>Xây nhà ga</b> — ga 1 tốn 1 lá, ga 2 tốn 2, ga 3 tốn 3 lá cùng màu. Cuối ván mỗi ga mượn 1 tuyến của đối thủ để nối vé. Ga không xây: +4 điểm/ga.</p>`:''}
   <p><b>Điểm tuyến:</b> ${[...new Set(ROUTES.map(r=>r.len))].sort((a,b)=>a-b).map(l=>l+' ô='+POINTS[l]).join(', ')} điểm.</p>
   <p><b>Kết thúc:</b> khi ai đó còn ≤ 2 toa, mọi người (kể cả người đó) đi thêm đúng 1 lượt. Vé xong được cộng, vé hỏng bị trừ. Đường liên tục dài nhất +10 điểm.</p>
   <p style="text-align:center;margin-top:12px"><a href="luat.html" target="_blank" class="rlink">📖 Luật chi tiết</a> <a href="tom-tat.html" target="_blank" class="rlink">📋 Tóm tắt</a> <a href="${MAP_ID==='na'?'Luat-choi-Duong-Ray-Bac-My.pdf':'Luat-choi-Duong-Ray-Chau-Au.pdf'}" download class="rlink">⬇ Tải PDF</a></p></div>`,
