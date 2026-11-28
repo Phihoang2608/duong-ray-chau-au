@@ -1170,6 +1170,10 @@ body.portphone #ticker:has(#tmsg),body.landphone #ticker:has(#tmsg){flex:0 0 aut
 /* nhãn ĐÃ HOÀN THÀNH luôn vừa trong vé */
 .vticket.imgt{container-type:inline-size}
 html body .vticket.imgt .vt-done{font-size:11cqw!important;border-width:2px!important;letter-spacing:0!important;max-width:90%!important;padding:.25em .6em!important;white-space:nowrap}
+
+/* vé vừa xong rơi xuống nhóm Đã hoàn thành */
+#tickets .vticket.drop{animation:tkdrop .6s cubic-bezier(.2,1.4,.4,1)}
+@keyframes tkdrop{0%{transform:translateY(-70px) scale(1.1);opacity:.3}60%{transform:translateY(6px)}100%{transform:none;opacity:.72}}
 </style>
 </head>
 <body>
@@ -2444,8 +2448,12 @@ function ticketShow(pi,id){
   const stars=FXMODE==='off'?'':Array.from({length:FXMODE==='full'?18:10},(_,k)=>`<i style="--x:${(Math.random()*120-10).toFixed(0)}%;--y:${(Math.random()*120-10).toFixed(0)}%;--d:${(Math.random()*1.2).toFixed(2)}s;--s:${(0.6+Math.random()*0.9).toFixed(2)}"></i>`).join('');
   el.innerHTML=`<div class="tkh"><b>${esc(pi===ME?'Bạn':pl.name)}</b> hoàn thành vé!</div><div class="tkc"><img src="${RA_BASE}tickets/${RA_REG}/${t.id}.webp?v=9" alt="${esc(tname(t))}">${stars}</div><div class="tkp">+${t.pts} điểm khi kết thúc ván</div>`;
   document.body.appendChild(el);
-  setTimeout(()=>{ const r=chipRect(pi), b=el.getBoundingClientRect(); if(r&&FXMODE!=='off'){ el.animate([{transform:'translate(-50%,0) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${(r.left+r.width/2)-(b.left+b.width/2)}px),${(r.top+r.height/2)-(b.top+b.height/2)}px) scale(.15)`,opacity:.2}],{duration:650,easing:'cubic-bezier(.5,0,.6,1)',fill:'forwards'}).onfinish=()=>el.remove(); } else el.remove(); }, 2600);
-  setTimeout(()=>{ if(el.isConnected) el.remove(); }, 3600); }
+  let gone=false; const close=()=>{ if(gone) return; gone=true; document.removeEventListener('pointerdown',close,true);
+    const tgt=(pi===ME && document.querySelector(`#tickets .vticket[data-id="${t.id}"]`)) || null, r=tgt?tgt.getBoundingClientRect():chipRect(pi), b=el.getBoundingClientRect();
+    if(r&&r.width&&FXMODE!=='off'){ el.animate([{transform:'translate(-50%,0) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${(r.left+r.width/2)-(b.left+b.width/2)}px),${(r.top+r.height/2)-(b.top+b.height/2)}px) scale(.18)`,opacity:.15}],{duration:520,easing:'cubic-bezier(.5,0,.6,1)',fill:'forwards'}).onfinish=()=>{ el.remove(); if(tgt){ tgt.classList.remove('drop'); void tgt.offsetWidth; tgt.classList.add('drop'); } }; }
+    else el.remove(); setTimeout(()=>{ if(el.isConnected) el.remove(); }, 900); };
+  setTimeout(()=>document.addEventListener('pointerdown',close,true), 150);
+  setTimeout(close, 1300); }
 
 /* ----- Hộp thoại ----- */
 function showModal(title, bodyHTML, buttons, opts){
