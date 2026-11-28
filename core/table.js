@@ -387,7 +387,7 @@ const Table = (()=>{
     const who=CFG.whoActs(S)||[];
     for (const seat of who){ const p=S.seats[seat]; if(!p) continue;
       const away = MODE==='host' && !p.bot && p.peer!==MYPEER && (!p.peer || !fresh(p.peer));
-      if ((p.bot || away) && t-lastBot>(CFG.botDelay||900)){ const a=CFG.botAction(S,seat,t); if(a && CFG.apply(S,seat,a,t)){ ch=true; lastBot=t; break; } }
+      if ((p.bot || away) && t-lastBot>(CFG.botDelay||900)){ let a=CFG.botAction(S,seat,t); if(!(a && CFG.apply(S,seat,a,t)) && away && CFG.timeoutAction){ a=CFG.timeoutAction(S,seat,t); if(!(a && CFG.apply(S,seat,a,t))) a=null; } if(a){ ch=true; lastBot=t; break; } }
       else if (CFG.turnLimit && S.turnAt && t-S.turnAt>CFG.turnLimit*1000 && CFG.timeoutAction){ const a=CFG.timeoutAction(S,seat,t); if(a && CFG.apply(S,seat,a,t)){ ch=true; toast(esc(p.name)+' hết giờ — tự động đi'); break; } }
     }
     if (ch) commit(); else CFG.tickView && CFG.tickView(S,ME,API);
@@ -414,7 +414,7 @@ const Table = (()=>{
     if(S.turnAt) S.turnAt=now(); ME=S.seats.indexOf(mine);
     ROOM.presence({act:null}).catch(()=>{}); toast('Chủ phòng đã thoát — bạn được chọn làm chủ phòng mới'); commit(); }
   function migrateChk(){
-    if(MODE!=='client'||!S||LOBBY||!ROOM||S.phase==='over'||S.winner!=null||ME<0){ goneSince=0; return; }
+    if(MODE!=='client'||!S||LOBBY||!ROOM||S.phase==='over'||S.winner>=0||ME<0){ goneSince=0; return; }
     const h=hostPeer(); if(h&&fresh(h.peer)&&!h.presence.lobby){ goneSince=0; return; }
     if(typeof ROOM.connected==='function'&&!ROOM.connected()){ goneSince=0; return; }
     if(!goneSince) goneSince=Date.now(); if(Date.now()-goneSince<2500) return;
