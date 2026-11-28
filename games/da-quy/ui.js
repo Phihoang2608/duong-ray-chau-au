@@ -109,6 +109,120 @@ ${ticks}${rn}
     if(SFX.ok&&SFX.ok()){ [523,659,784,1047].forEach((f,i)=>SFX.tone(f,.35,{vol:.12,at:i*.13,type:'triangle'})); } }
   function logH(l,api){ let h=api.esc(l); DQ_COL.forEach((n,c)=>{ h=h.split(n).join(`<span class="lg">${A.gemSVG(c,18,c)}<b class="lg${c}">${n}</b></span>`); }); return h; }
   function showHist(){ const api=Table.API, S=window.__S; if(!S) return; const L=S.log; api.modal('📜 Lịch sử ván chơi', `<div class="dqhist">${L.map((l,i)=>`<div><i>${L.length-i}</i>${logH(l,api)}</div>`).join('')}</div>`, [{t:'Đóng',pri:1}]); }
+
+  /* ===================== TỔNG KẾT VÁN: bảng xếp hạng + xem lại chi tiết ===================== */
+  let VSHOWN='', ME_=0;
+  const GEMN=['Lục bảo','Lam ngọc','Hồng ngọc','Kim cương','Hắc ngọc','Vàng'];
+  function fmtT(ms){ ms=Math.max(0,ms|0); const s=Math.round(ms/1000), m=Math.floor(s/60); return m? m+' phút '+(s%60)+' giây' : s+' giây'; }
+  function dqvCSS(){ if(document.getElementById('dqv-css')) return; const st=document.createElement('style'); st.id='dqv-css'; st.textContent=`
+#dqv,#dqr{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(18,4,10,.72);backdrop-filter:blur(3px);animation:dqvIn .35s both}
+@keyframes dqvIn{from{opacity:0}}
+.dqvp{position:relative;width:min(560px,100%);max-height:100%;overflow:auto;border-radius:20px;padding:20px 20px 16px;color:#fbe9c8;
+  background:linear-gradient(170deg,rgba(122,26,54,.95),rgba(70,9,31,.97) 75%),url(assets/damask.svg) center/110px repeat,#5a0f25;
+  border:2px solid #d9b25a;box-shadow:inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 0 6px rgba(246,214,128,.4),0 24px 60px rgba(0,0,0,.7);animation:dqvPop .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes dqvPop{from{transform:scale(.7) translateY(30px);opacity:0}}
+.dqvp h2{margin:0;text-align:center;font-size:34px;color:#f6d680;text-shadow:0 3px 0 #2a0610,0 0 18px rgba(246,214,128,.35)}
+.dqvp .crown{text-align:center;font-size:44px;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.dqvp .wsub{text-align:center;margin:4px 0 12px;font-style:italic;color:#f3dcb4}
+.dqvp .rk{display:flex;align-items:center;gap:10px;margin:7px 0;padding:8px 12px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(217,178,90,.45)}
+.dqvp .rk.w{background:linear-gradient(90deg,rgba(246,214,128,.35),rgba(246,214,128,.08));border-color:#f6d680;box-shadow:0 0 18px rgba(246,214,128,.25)}
+.dqvp .rk .n{flex:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;background:#3a0a18;border:2px solid #d9b25a;color:#f6d680}
+.dqvp .rk.w .n{background:linear-gradient(180deg,#fbe7a8,#c9922e);color:#3a1a08}
+.dqvp .rk .nm{flex:1;font-weight:bold;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dqvp .rk .nm small{display:block;font-weight:normal;font-size:12.5px;color:#e9cf98}
+.dqvp .rk .p{font-size:26px;font-weight:bold;color:#f6d680;min-width:44px;text-align:right}
+.dqvp .rk .p small{font-size:12px;color:#e9cf98;font-weight:normal}
+.dqvp .bts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.dqvp .bts button{font:bold 15.5px "Times New Roman",serif;padding:9px 18px;border-radius:999px;cursor:pointer;color:#fbe9b8;background:linear-gradient(180deg,#8b2340,#5a0f25);border:1.5px solid #d9b25a}
+.dqvp .bts button.pri{background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);color:#3a1a08;border-color:#7a5310;box-shadow:inset 0 1px 0 #fff6cf,0 3px 0 #4a2a0c}
+.dqvp .x{position:absolute;right:10px;top:8px;width:34px;height:34px;border-radius:50%;border:1.5px solid #d9b25a;background:#3a0a18;color:#f6d680;font-size:18px;cursor:pointer}
+#dqr .dqvp{width:min(980px,100%);height:min(720px,100%);display:flex;flex-direction:column;padding:16px}
+#dqr h2{font-size:26px}
+.dqtabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.dqtabs button{font:bold 14.5px "Times New Roman",serif;padding:6px 14px;border-radius:999px;cursor:pointer;color:#fbe9b8;background:rgba(0,0,0,.25);border:1.5px solid rgba(217,178,90,.6)}
+.dqtabs button.on{background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);color:#3a1a08;border-color:#7a5310}
+.dqbody{flex:1;overflow:auto;background:#fbf3df;color:#2b2116;border-radius:12px;padding:12px;border:2px solid #b98a3a}
+.dqbody table{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px}
+.dqbody th{position:sticky;top:-12px;background:#7a1a36;color:#f6d680;padding:7px 8px;text-align:center;font-weight:bold}
+.dqbody th:first-child,.dqbody td:first-child{text-align:left}
+.dqbody td{padding:6px 8px;border-top:1px solid #ead2a2;text-align:center}
+.dqbody tr:nth-child(even) td{background:#f6ead0}
+.dqbody .sec{font-weight:bold;color:#7a1a36;background:#f3e3bf!important;text-align:left!important}
+.dqbody .gm{display:inline-flex;align-items:center;gap:2px;margin:0 3px}
+.dqbody .gm svg{width:18px;height:18px;vertical-align:middle}
+.dqbody .who{font-weight:bold}
+.dqbody .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:0}
+.dqbody .lg svg{width:16px;height:16px;vertical-align:-3px}
+.dqhrow{display:flex;gap:6px;padding:4px 2px;border-bottom:1px dashed #e0c896;font-size:14.5px}
+.dqhrow i{flex:none;width:32px;color:#8a6a3a;font-style:normal;text-align:right}
+.dqpl{margin:0 0 14px}
+.dqpl h4{margin:0 0 6px;font-size:17px;color:#7a1a36}
+.dqcards{display:flex;flex-wrap:wrap;gap:6px}
+.dqcards .c{width:66px;height:92px;border-radius:6px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,.35);background:#5a0f25}
+.dqcards .c svg{width:100%;height:100%;display:block}
+.dqcards .nb{width:70px;height:70px}
+.dqchart{width:100%;height:auto;background:#fffaf0;border-radius:10px;border:1px solid #e0c896}
+.dqleg{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px;font-weight:bold}
+.dqbody td:first-child{min-width:120px}
+@media (max-width:600px){.dqbody td:first-child{min-width:96px}.dqbody .gm svg{width:14px;height:14px}.dqbody .gm{margin:0 1px}.dqvp h2{font-size:27px}.dqvp .rk .p{font-size:22px}.dqbody{padding:8px}.dqbody table{font-size:13px}.dqbody td,.dqbody th{padding:5px 4px}.dqcards .c{width:52px;height:72px}}
+`; document.head.appendChild(st); }
+  function showVictory(S,ME,api,force){ if(!S||S.phase!=='over') return; dqvCSS(); const old=document.getElementById('dqv'); if(old) old.remove();
+    const order=S.order||S.seats.map((_,i)=>i).sort((a,b)=>S.P[b].pts-S.P[a].pts); const w=S.winner, esc=api.esc;
+    const rows=order.map((i,k)=>{ const P=S.P[i]; return `<div class="rk ${i===w?'w':''}"><span class="n">${k+1}</span><span class="nm">${esc(S.seats[i].name)}${i===ME?' (bạn)':''}<small>${P.cards.length} thẻ · ${P.nobles.length} quý tộc${P.res.length?' · '+P.res.length+' thẻ giữ chỗ':''}</small></span><span class="p">${P.pts}<small> điểm</small></span></div>`; }).join('');
+    const dur=S.tEnd&&S.t0?fmtT(S.tEnd-S.t0):'';
+    const v=document.createElement('div'); v.id='dqv';
+    v.innerHTML=`<div class="dqvp"><button class="x" data-v="close" title="Đóng">✕</button><div class="crown">👑</div><h2>${w===ME?'Chúc mừng bạn!':esc(S.seats[w].name)+' chiến thắng!'}</h2>
+      <p class="wsub">${w===ME?'Bạn':esc(S.seats[w].name)} trở thành thương nhân đá quý danh tiếng nhất với ${S.P[w].pts} điểm uy tín${dur?' · ván dài '+dur:''}${S.round?' · '+S.round+' vòng':''}.</p>
+      ${rows}<div class="bts">${api.mode()!=='client'?'<button class="pri" data-v="again">▶ Chơi ván mới</button>':''}<button data-v="review">📊 Kết quả ván</button><button data-v="close">Xem bàn chơi</button></div></div>`;
+    document.body.appendChild(v);
+    v.addEventListener('click',e=>{ const b=e.target.closest('[data-v]'); if(!b){ if(e.target===v) v.remove(); return; } const k=b.dataset.v; v.remove(); if(k==='again') api.rematch(); else if(k==='review') showReview(S,api); });
+  }
+  function gm(c,n){ return `<span class="gm">${A.gemSVG(c,18,c)}${n}</span>`; }
+  function showReview(S,api){ if(!S) return; dqvCSS(); const old=document.getElementById('dqr'); if(old) old.remove(); const esc=api.esc, n=S.seats.length;
+    const order=S.order||S.seats.map((_,i)=>i); const COL=['#c0392b','#2e86de','#27ae60','#e67e22','#8e44ad'];
+    const st=S.st||S.seats.map(()=>null);
+    const nm=i=>`<span class="who"><span class="dot" style="background:${COL[i%5]}"></span>${esc(S.seats[i].name)}</span>`;
+    const tot=a=>a.reduce((s,x)=>s+x,0);
+    function tabPlayers(){ const row=(lbl,f)=>`<tr><td>${lbl}</td>${order.map(i=>`<td>${st[i]?f(st[i],S.P[i],i):'–'}</td>`).join('')}</tr>`;
+      return `<table><tr><th>Chỉ số</th>${order.map(i=>`<th>${esc(S.seats[i].name)}</th>`).join('')}</tr>
+      <tr><td class="sec" colspan="${n+1}">Kết quả</td></tr>
+      ${row('Hạng',(q,P,i)=>'#'+(order.indexOf(i)+1))}${row('Điểm uy tín',(q,P)=>'<b>'+P.pts+'</b>')}${row('Điểm từ thẻ',(q)=>q.cardPts)}${row('Điểm từ quý tộc',(q,P)=>P.nobles.length*3)}
+      ${row('Vòng đạt 15 điểm',q=>q.first15||'–')}
+      <tr><td class="sec" colspan="${n+1}">Hành động</td></tr>
+      ${row('Số lượt đã đi',q=>q.turns)}${row('Lần lấy đá',q=>q.takeAct)}${row('Lần lấy 2 viên cùng màu',q=>q.take2)}${row('Thẻ giữ chỗ',q=>q.res+(q.resDeck?' ('+q.resDeck+' úp)':''))}
+      ${row('Thời gian suy nghĩ',q=>fmtT(q.tt))}
+      <tr><td class="sec" colspan="${n+1}">Thẻ đã mua</td></tr>
+      ${row('Tổng số thẻ',(q,P)=>'<b>'+P.cards.length+'</b>')}${row('Cấp I',q=>q.buy[1])}${row('Cấp II',q=>q.buy[2])}${row('Cấp III',q=>q.buy[3])}${row('Mua từ thẻ giữ chỗ',q=>q.buyRes)}
+      ${row('Thẻ giảm giá theo màu',(q,P)=>P.bonus.map((b,c)=>b?gm(c,b):'').join('')||'–')}
+      <tr><td class="sec" colspan="${n+1}">Đá quý</td></tr>
+      ${row('Tổng đá đã lấy',q=>'<b>'+tot(q.take)+'</b>')}${row('Đá đã lấy theo màu',q=>q.take.map((x,c)=>x?gm(c,x):'').join('')||'–')}
+      ${row('Đá đã trả để mua thẻ',q=>q.spent.map((x,c)=>x?gm(c,x):'').join('')||'–')}${row('Vàng đã dùng',q=>q.spent[5])}
+      ${row('Đá phải bỏ vì quá 10',q=>tot(q.ret))}${row('Đá còn cuối ván',(q,P)=>tot(P.tok))}
+      </table>`; }
+    function tabChart(){ const pt=S.pt||[]; if(pt.length<2) return '<p>Chưa đủ dữ liệu để vẽ biểu đồ.</p>';
+      const nar=innerWidth<600, W=nar?520:900,H=nar?520:380,L=nar?34:44,B=34,T=16,Rr=nar?10:16, mx=Math.max(15,...pt.flat()), R=pt.length-1;
+      const X=k=>L+(W-L-Rr)*k/R, Y=v=>H-B-(H-B-T)*v/mx;
+      let s=`<svg class="dqchart" viewBox="0 0 ${W} ${H}">`;
+      for(let v=0;v<=mx;v+=5){ s+=`<line x1="${L}" x2="${W-Rr}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v===15?'#c0392b':'#e8d6b0'}" stroke-width="${v===15?2:1}" ${v===15?'stroke-dasharray="6 4"':''}/><text x="${L-8}" y="${Y(v)+5}" text-anchor="end" font-size="14" fill="#7a5a2b">${v}</text>`; }
+      s+=`<text x="${W-Rr}" y="${Y(15)-6}" text-anchor="end" font-size="13" fill="#c0392b" font-weight="bold">Mốc 15 điểm</text>`;
+      const step=Math.max(1,Math.ceil(R/12)); for(let k=0;k<=R;k+=step) s+=`<text x="${X(k)}" y="${H-10}" text-anchor="middle" font-size="13" fill="#7a5a2b">${k}</text>`;
+      s+=`<text x="${W/2}" y="${H}" text-anchor="middle" font-size="12" fill="#7a5a2b">Vòng chơi</text>`;
+      S.seats.forEach((_,i)=>{ s+=`<polyline fill="none" stroke="${COL[i%5]}" stroke-width="3.5" stroke-linejoin="round" points="${pt.map((r,k)=>X(k)+','+Y(r[i])).join(' ')}"/><circle cx="${X(R)}" cy="${Y(pt[R][i])}" r="5" fill="${COL[i%5]}"/>`; });
+      s+='</svg>'; return s+`<div class="dqleg">${S.seats.map((_,i)=>nm(i)+' '+S.P[i].pts).join('')}</div>`; }
+    function tabCards(){ return order.map(i=>{ const P=S.P[i]; return `<div class="dqpl"><h4>${nm(i)} — ${P.cards.length} thẻ, ${P.nobles.length} quý tộc</h4><div class="dqcards">${P.nobles.map(id=>`<div class="c nb">${A.noble(id)}</div>`).join('')}${P.cards.slice().sort((a,b)=>DQ.CARDS[a].col-DQ.CARDS[b].col||DQ.CARDS[b].pts-DQ.CARDS[a].pts).map(id=>`<div class="c">${A.card(id)}</div>`).join('')||'<i>Chưa mua thẻ nào</i>'}</div></div>`; }).join(''); }
+    function tabLog(){ const L=S.log; return L.map((l,k)=>`<div class="dqhrow"><i>${L.length-k}</i><span>${logH(l,api)}</span></div>`).join(''); }
+    const TABS=[['p','Người chơi',tabPlayers],['c','Diễn biến điểm',tabChart],['k','Thẻ & quý tộc',tabCards],['l','Nhật ký',tabLog]];
+    const r=document.createElement('div'); r.id='dqr';
+    r.innerHTML=`<div class="dqvp"><button class="x" data-v="close">✕</button><h2>📊 Kết quả ván</h2>
+      <p class="wsub" style="margin:2px 0 0">${S.winner>=0?esc(S.seats[S.winner].name)+' thắng · ':''}${S.round||''} vòng${S.tEnd&&S.t0?' · '+fmtT(S.tEnd-S.t0):''}</p>
+      <div class="dqtabs">${TABS.map((t,k)=>`<button data-t="${t[0]}" class="${k?'':'on'}">${t[1]}</button>`).join('')}</div><div class="dqbody">${TABS[0][2]()}</div>
+      <div class="bts" style="margin-top:10px">${S.phase==='over'&&api.mode()!=='client'?'<button class="pri" data-v="again">▶ Chơi ván mới</button>':''}<button data-v="close">Đóng</button></div></div>`;
+    document.body.appendChild(r);
+    r.addEventListener('click',e=>{ const t=e.target.closest('[data-t]'); if(t){ r.querySelectorAll('[data-t]').forEach(b=>b.classList.toggle('on',b===t)); r.querySelector('.dqbody').innerHTML=TABS.find(x=>x[0]===t.dataset.t)[2](); r.querySelector('.dqbody').scrollTop=0; return; }
+      const b=e.target.closest('[data-v]'); if(!b){ if(e.target===r) r.remove(); return; } r.remove(); if(b.dataset.v==='again') api.rematch(); });
+  }
+  function checkVictory(S,ME,api){ ME_=ME; if(S.phase!=='over'){ VSHOWN=''; ['dqv','dqr'].forEach(id=>{ const e=document.getElementById(id); if(e&&S.phase==='play'&&e.id==='dqv') e.remove(); }); return; }
+    const key=(S.t0||0)+':'+S.winner; if(VSHOWN===key) return; VSHOWN=key; setTimeout(()=>showVictory(window.__S||S,ME,api),1800); }
   let ZM=1;
   function setZ(z){ ZM=Math.max(1,Math.min(2.6,z)); if(Math.abs(ZM-1)<.04) ZM=1; const w=root&&root.querySelector('.dqwrap'); if(w) w.style.zoom=ZM===1?'':ZM; root&&root.classList.toggle('zoomed',ZM>1); }
   (function pinch(){ let d0=0,z0=1; const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
@@ -150,7 +264,7 @@ ${ticks}${rn}
       <small>3 màu khác nhau, hoặc 2 viên cùng màu (còn từ 4).</small>
       <div class="goldbox"><div class="bt">Vàng</div>${gemTok(5)}<small>Nhận khi giữ chỗ thẻ</small></div></div>`;
     let act='';
-    if (S.phase==='over') act=`<b class="big">${api.esc(S.seats[S.winner].name)} thắng với ${S.P[S.winner].pts} điểm!</b> ${api.mode()!=='client'?'<button class="tbtn pri" data-a="again">Chơi ván mới</button>':''}`;
+    if (S.phase==='over') act=`<b class="big">${api.esc(S.seats[S.winner].name)} thắng với ${S.P[S.winner].pts} điểm!</b> ${api.mode()!=='client'?'<button class="tbtn pri" data-a="again">Chơi ván mới</button>':''} <button class="tbtn" data-a="review">📊 Kết quả ván</button> <button class="tbtn" data-a="victory">🏆 Bảng xếp hạng</button>`;
     else if (my && S.step==='discard') act=`<b class="warn blink">⚠️ Túi quá tải (${DQ.tot(P.tok)}/10)!</b> <span>Hết lượt phải trả bớt cho còn 10 viên — bấm viên đá đang nhấp nháy trong khung của bạn để trả <b>${DQ.tot(P.tok)-10}</b> viên tùy chọn.</span>`;
     else if (pick) act=`<span>Đã chọn thẻ — bấm <b>Mua</b> hoặc <b>Giữ chỗ</b> ở khung cạnh lá bài.</span>`;
     else act = (!my&&S.phase==='play'&&S.step==='discard')?`<span>⚠️ Túi của ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')} quá tải (${DQ.tot(S.P[S.turn].tok)}/10) — đang trả bớt cho còn 10 viên…</span>`:my?'<b class="me blink">Đến lượt bạn!</b> lấy đá ở ngân khố, hoặc bấm 1 lá để mua / giữ chỗ.':`<span>Đang chờ ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')}…</span>`;
@@ -219,8 +333,10 @@ ${ticks}${rn}
     if (a==='clrsel'){ sel=[]; render(S,ME,api); return; }
     if (a==='cancel'){ pick=null; render(S,ME,api); return; }
     if (a==='again'){ api.rematch(); return; }
+    if (a==='review'){ showReview(window.__S,api); return; }
+    if (a==='victory'){ showVictory(window.__S,ME_,api,true); return; }
     if (a==='take'){ api.act({t:'take',g:sel.slice()}); sel=[]; return; }
     if (a==='buy'&&pick){ api.act(pick.res!=null?{t:'buy',res:pick.res}:{t:'buy',lv:pick.lv,i:pick.i}); pick=null; return; }
     if (a==='reserve'&&pick){ api.act(pick.deck?{t:'reserve',deck:pick.deck}:{t:'reserve',lv:pick.lv,i:pick.i}); pick=null; return; } }
-  return { render:(S,ME,api)=>{ window.__S=S; render(S,ME,api); }, tickView };
+  return { render:(S,ME,api)=>{ window.__S=S; render(S,ME,api); try{ checkVictory(S,ME,api); }catch(e){ console.error(e); } }, tickView };
 })();

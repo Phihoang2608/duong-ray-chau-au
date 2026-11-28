@@ -17,7 +17,8 @@ const DQ = (()=>{
     const S={seats:seats.map(s=>({name:s.name,bot:!!s.bot,lvl:s.lvl||null,peer:s.peer||null,pid:s.pid||null,color:s.color})),
       bank:[k,k,k,k,k,5], decks:{1:[],2:[],3:[]}, board:{1:[],2:[],3:[]}, nobles:shuffle(NOBLES.map(x=>x.id)).slice(0,n+1),
       P:seats.map(()=>({tok:[0,0,0,0,0,0], bonus:[0,0,0,0,0], cards:[], res:[], nobles:[], pts:0})),
-      turn:0, first:0, step:'main', turnAt:t, phase:'play', last:false, log:[], evN:0, ev:null, winner:-1, round:1};
+      turn:0, first:0, step:'main', turnAt:t, phase:'play', last:false, log:[], evN:0, ev:null, winner:-1, round:1,
+      st:seats.map(()=>({turns:0,take:[0,0,0,0,0,0],takeAct:0,take2:0,ret:[0,0,0,0,0,0],res:0,resDeck:0,buy:[0,0,0,0],buyRes:0,spent:[0,0,0,0,0,0],nob:0,cardPts:0,first15:0,tt:0})), pt:[seats.map(()=>0)], t0:t, tEnd:0, lastAt:t};
     S.first=S.turn=Math.floor(Math.random()*n); CARDS.forEach(c=>S.decks[c.lv].push(c.id)); [1,2,3].forEach(lv=>{ shuffle(S.decks[lv]); for(let i=0;i<4;i++) S.board[lv].push(S.decks[lv].pop()); });
     S.log.unshift('Bắt đầu! Ai đạt '+DQ_WIN+' điểm uy tín trước sẽ kết thúc vòng chơi.'); return S; }
   const tot=a=>a.reduce((s,x)=>s+x,0);
@@ -26,24 +27,24 @@ const DQ = (()=>{
   function refill(S,lv,idx){ const d=S.decks[lv]; if(d.length) S.board[lv][idx]=d.pop(); else S.board[lv][idx]=null; }
   function apply(S,seat,a,t){
     if (!a||S.phase!=='play'||seat!==S.turn) return false; const P=S.P[seat], name=S.seats[seat].name;
-    if (S.step==='discard'){ if(a.t!=='ret') return false; const c=a.c; if(!(c>=0&&c<6)||!P.tok[c]) return false; P.tok[c]--; S.bank[c]++; S.log.unshift(S.seats[seat].name+' trả 1 '+DQ_COL[c]+'.'); ev(S,{k:'ret',seat,c});
+    if (S.step==='discard'){ if(a.t!=='ret') return false; const c=a.c; if(!(c>=0&&c<6)||!P.tok[c]) return false; P.tok[c]--; S.bank[c]++; if(S.st) S.st[seat].ret[c]++; S.log.unshift(S.seats[seat].name+' trả 1 '+DQ_COL[c]+'.'); ev(S,{k:'ret',seat,c});
       if (tot(P.tok)<=DQ_MAXTOK) endTurn(S,t); return true; }
     if (a.t==='take'){ const g=a.g||[]; if(!g.length||g.some(c=>!(c>=0&&c<5))) return false;
       if (g.length===2 && g[0]===g[1]){ if(S.bank[g[0]]<4) return false; }
       else { if(new Set(g).size!==g.length||g.length>3||g.some(c=>S.bank[c]<1)) return false;
         const avail=[0,1,2,3,4].filter(c=>S.bank[c]>0).length; if(g.length<Math.min(3,avail)) return false; }
-      g.forEach(c=>{ S.bank[c]--; P.tok[c]++; }); S.log.unshift(name+' lấy '+g.map(c=>DQ_COL[c]).join(', ')+'.'); ev(S,{k:'take',seat,g}); return after(S,seat,t); }
+      g.forEach(c=>{ S.bank[c]--; P.tok[c]++; }); if(S.st){ const Q=S.st[seat]; Q.takeAct++; if(g.length===2&&g[0]===g[1]) Q.take2++; g.forEach(c=>Q.take[c]++); } S.log.unshift(name+' lấy '+g.map(c=>DQ_COL[c]).join(', ')+'.'); ev(S,{k:'take',seat,g}); return after(S,seat,t); }
     if (a.t==='reserve'){ if(P.res.length>=DQ_MAXRES) return false; let id;
       if (a.deck){ const d=S.decks[a.deck]; if(!d||!d.length) return false; id=d.pop(); }
       else { const lv=a.lv, i=a.i; if(!S.board[lv]||S.board[lv][i]==null) return false; id=S.board[lv][i]; refill(S,lv,i); }
-      P.res.push(id); let g=0; if(S.bank[5]>0){ S.bank[5]--; P.tok[5]++; g=1; }
+      P.res.push(id); let g=0; if(S.bank[5]>0){ S.bank[5]--; P.tok[5]++; g=1; } if(S.st){ S.st[seat].res++; if(a.deck) S.st[seat].resDeck++; if(g) S.st[seat].take[5]++; }
       S.log.unshift(name+' giữ chỗ 1 thẻ cấp '+CARDS[id].lv+(g?' và nhận 1 Vàng':'')+'.'); ev(S,{k:'reserve',seat,gold:!!g,id:a.deck?null:id,lv:a.lv,i:a.i,deck:a.deck||0}); return after(S,seat,t); }
     if (a.t==='buy'){ let id, from;
       if (a.res!=null){ id=P.res[a.res]; if(id==null) return false; from='res'; } else { if(!S.board[a.lv]||S.board[a.lv][a.i]==null) return false; id=S.board[a.lv][a.i]; from='board'; }
       const card=CARDS[id], plan=payPlan(P,card); if(!plan) return false;
       for(let c=0;c<5;c++){ P.tok[c]-=plan.pay[c]; S.bank[c]+=plan.pay[c]; } P.tok[5]-=plan.gold; S.bank[5]+=plan.gold;
       if (from==='res') P.res.splice(a.res,1); else refill(S,a.lv,a.i);
-      P.cards.push(id); P.bonus[card.col]++; P.pts+=card.pts;
+      P.cards.push(id); P.bonus[card.col]++; P.pts+=card.pts; if(S.st){ const Q=S.st[seat]; Q.buy[card.lv]++; if(from==='res') Q.buyRes++; for(let c=0;c<5;c++) Q.spent[c]+=plan.pay[c]; Q.spent[5]+=plan.gold; Q.cardPts+=card.pts; }
       S.log.unshift(name+' mua thẻ cấp '+['','I','II','III'][card.lv]+' '+DQ_COL[card.col]+(card.pts?' — ghi +'+card.pts+' điểm (tổng '+P.pts+')':'')+'.'); ev(S,{k:'buy',seat,id,lv:a.lv,i:a.i,res:a.res}); return after(S,seat,t); }
     return false; }
   function after(S,seat,t){ const P=S.P[seat];
@@ -51,16 +52,17 @@ const DQ = (()=>{
     endTurn(S,t); return true; }
   function endTurn(S,t){ const seat=S.turn, P=S.P[seat], n=S.seats.length;
     const ok=S.nobles.filter(id=>NOBLES[id].req.every((r,c)=>P.bonus[c]>=r));
-    if (ok.length){ const id=ok[0]; S.nobles=S.nobles.filter(x=>x!==id); P.nobles.push(id); P.pts+=3; S.log.unshift(NOBLE_NAMES[id]+' ghé thăm '+S.seats[seat].name+' (+3 điểm).'); ev(S,{k:'noble',seat,id,from:S.nobles.length}); }
+    if (ok.length){ const id=ok[0]; S.nobles=S.nobles.filter(x=>x!==id); P.nobles.push(id); P.pts+=3; if(S.st) S.st[seat].nob++; S.log.unshift(NOBLE_NAMES[id]+' ghé thăm '+S.seats[seat].name+' (+3 điểm).'); ev(S,{k:'noble',seat,id,from:S.nobles.length}); }
     if (P.pts>=DQ_WIN && !S.last){ S.last=true; S.lastBy=seat; S.log.unshift('⚠️ VÒNG CUỐI: '+S.seats[seat].name+' đạt '+P.pts+' điểm — những người còn lại đi nốt vòng này!'); ev(S,{k:'last',seat,pts:P.pts}); }
-    S.step='main';
+    S.step='main'; if(S.st){ const Q=S.st[seat]; Q.turns++; Q.tt+=Math.max(0,t-(S.lastAt||t)); if(!Q.first15&&P.pts>=DQ_WIN) Q.first15=S.round; } S.lastAt=t;
+    if (S.pt && (seat+1)%n===(S.first||0)) S.pt.push(S.P.map(q=>q.pts));
     if ((S.last || S.round>=60) && (seat+1)%n===(S.first||0)){ finish(S,t); return; }
     S.turn=(seat+1)%n; if(S.turn===(S.first||0)) S.round++; S.turnAt=t;
     if (!canDoAnything(S,S.turn)){ S.log.unshift(S.seats[S.turn].name+' không còn nước đi, bỏ lượt.'); endTurn(S,t); } }
   function canDoAnything(S,seat){ const P=S.P[seat]; if(P.res.length<DQ_MAXRES) return true; if([0,1,2,3,4].some(c=>S.bank[c]>0)) return true;
     return P.res.some(id=>payPlan(P,CARDS[id])) || [1,2,3].some(lv=>S.board[lv].some(id=>id!=null&&payPlan(P,CARDS[id]))); }
   function finish(S,t){ const order=S.seats.map((_,i)=>i).sort((a,b)=>S.P[b].pts-S.P[a].pts||S.P[a].cards.length-S.P[b].cards.length);
-    S.winner=order[0]; S.order=order; S.phase='over'; S.turn=-1; S.log.unshift(S.seats[S.winner].name+' thắng với '+S.P[S.winner].pts+' điểm uy tín!'); ev(S,{k:'over'}); }
+    S.winner=order[0]; S.order=order; S.phase='over'; S.tEnd=t; if(S.pt){ const last=S.pt[S.pt.length-1], cur=S.P.map(q=>q.pts); if(!last||last.join()!==cur.join()) S.pt.push(cur); } S.turn=-1; S.log.unshift(S.seats[S.winner].name+' thắng với '+S.P[S.winner].pts+' điểm uy tín!'); ev(S,{k:'over'}); }
   function tick(){ return false; }
   function whoActs(S){ return S.phase==='play'?[S.turn]:[]; }
   // ---------- bot ----------
