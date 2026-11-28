@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Luật chơi Đường Ray Bắc Mỹ</title>
-<meta name="description" content="Hướng dẫn chơi chi tiết Đường Ray Bắc Mỹ: bài toa tàu, chiếm tuyến, đường hầm, phà, vé hành trình và cách tính điểm.">
+<meta name="description" content="Hướng dẫn chơi chi tiết Đường Ray Bắc Mỹ: bài toa tàu, chiếm tuyến, vé hành trình và cách tính điểm.">
 <style>
 :root{--wine:#6b1630;--wine2:#3e0c1b;--gold:#d6a83e;--goldl:#f6d680;--cream:#fbf1d8;--ink:#2b2116;--paper:#fbf3df}
 *{box-sizing:border-box}
@@ -116,13 +116,13 @@ footer{text-align:center;color:#e9d6ae;font-size:14px;margin-top:10px}
   <img class="cover" src="assets/cover.jpg" alt="Đường Ray Bắc Mỹ">
 </div>
 <nav class="toc">
-  <a href="#gioi-thieu">1. Giới thiệu</a><a href="#thanh-phan">2. Thành phần</a><a href="#chuan-bi">3. Chuẩn bị</a><a href="#luot-choi">4. Lượt chơi</a><a href="#rut-bai">Rút bài</a><a href="#chiem-tuyen">Chiếm tuyến</a><a href="#duong-ham">Đường hầm</a><a href="#pha">Phà</a><a href="#ve">5. Vé hành trình</a><a href="#ket-thuc">6. Kết thúc và tính điểm</a><a href="#trong-game">7. Trong game</a><a href="#meo">8. Mẹo</a>
+  <a href="#gioi-thieu">1. Giới thiệu</a><a href="#thanh-phan">2. Thành phần</a><a href="#chuan-bi">3. Chuẩn bị</a><a href="#luot-choi">4. Lượt chơi</a><a href="#rut-bai">Rút bài</a><a href="#chiem-tuyen">Chiếm tuyến</a><a href="#ve">5. Vé hành trình</a><a href="#ket-thuc">6. Kết thúc và tính điểm</a><a href="#trong-game">7. Trong game</a><a href="#meo">8. Mẹo</a>
 </nav>
 <section class="box" id="gioi-thieu"><h2><span class="no">1</span>Giới thiệu</h2>
 <p>Bạn và các đối thủ thi nhau xây mạng lưới đường sắt khắp Bắc Mỹ. Mỗi lượt bạn gom bài toa tàu cùng màu để chiếm các tuyến nối giữa hai thành phố, ghi điểm ngay khi chiếm. Bạn còn giữ các <b>vé hành trình</b>: nối được hai thành phố trên vé bằng tàu của mình thì cộng điểm, không nối được thì bị trừ.</p>
-<p>Bản đồ Bắc Mỹ có <b>39 thành phố</b>, 104 làn tuyến (trong đó 21 cặp đường đôi), <b>9 đường hầm</b> và <b>2 tuyến phà</b>. Tuyến dài nhất dài 7 ô.</p>
-<div class="note"><b>Khác với hộp Ticket to Ride USA gốc:</b> bản Bắc Mỹ trên web dùng chung bộ luật đầy đủ với bản Châu Âu, nên vẫn có đường hầm và phà (sang La Habana), nhưng <b>không có nhà ga</b>. Mỗi người nhận 1 vé dài và 3 vé thường lúc đầu.</div>
-<img class="shot" src="assets/rules/ui.webp?v=9" alt="Màn hình chơi Đường Ray Bắc Mỹ" loading="lazy">
+<p>Bản đồ Bắc Mỹ có <b>39 thành phố</b>, 104 làn tuyến (trong đó 21 cặp đường đôi). Tuyến dài nhất dài 7 ô.</p>
+<div class="note"><b>Bản Bắc Mỹ chơi theo luật gốc USA:</b> không có đường hầm, không có phà, không có nhà ga. Mọi tuyến (kể cả tuyến sang La Habana) chiếm như tuyến thường. Mỗi người nhận 1 vé dài và 3 vé thường lúc đầu.</div>
+<img class="shot" src="assets/rules/ui.webp?v=10" alt="Màn hình chơi Đường Ray Bắc Mỹ" loading="lazy">
 <p class="cap">Màn hình chơi: người chơi ở trên, bản đồ ở giữa, bên phải là chỗ lấy bài, vé của bạn và nhật ký.</p></section><section class="box" id="thanh-phan"><h2><span class="no">2</span>Thành phần</h2>
 <div class="tw"><table class="t">
 <tr><th>Thành phần</th><th>Số lượng và công dụng</th></tr>
@@ -166,56 +166,24 @@ footer{text-align:center;color:#e9d6ae;font-size:14px;margin-top:10px}
 </ul>
 <div class="pts" style="--n:7"><div><span class="len"><i></i></span><b>1 ô</b><strong>1</strong><b>điểm</b></div><div><span class="len"><i></i><i></i></span><b>2 ô</b><strong>2</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i></span><b>3 ô</b><strong>4</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i><i></i></span><b>4 ô</b><strong>7</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i></span><b>5 ô</b><strong>10</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i><i></i></span><b>6 ô</b><strong>15</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><b>7 ô</b><strong>18</strong><b>điểm</b></div></div>
 <div class="fig">
-  <div><img class="shot" src="assets/rules/claim.webp?v=9" alt="" loading="lazy"><p class="cap">Tuyến El Paso–Dallas (Vàng, 4 ô) đã bị chiếm: đoàn tàu của người chơi Đỏ nằm đè lên tuyến.</p></div>
-  <div class="vd" style="margin:0">Để chiếm tuyến El Paso–Dallas màu Vàng dài 4 ô, bạn đánh 3 lá Vàng và 1 Đầu máy. Bạn đặt 4 toa, ghi ngay 7 điểm và còn 41 toa.
-  <div class="hand"><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure></div></div>
+  <div><img class="shot" src="assets/rules/claim.webp?v=10" alt="" loading="lazy"><p class="cap">Tuyến Seattle–Helena (Xanh dương, 4 ô) đã bị chiếm: đoàn tàu của người chơi Đỏ nằm đè lên tuyến.</p></div>
+  <div class="vd" style="margin:0">Để chiếm tuyến Seattle–Helena màu Xanh dương dài 4 ô, bạn đánh 3 lá Xanh dương và 1 Đầu máy. Bạn đặt 4 toa, ghi ngay 7 điểm và còn 41 toa.
+  <div class="hand"><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure></div></div>
 </div>
 <div class="fig">
-  <div><img class="shot" src="assets/rules/gray.webp?v=9" alt="" loading="lazy"><p class="cap">Tuyến xám Phoenix–Santa Fe dài 3 ô.</p></div>
+  <div><img class="shot" src="assets/rules/gray.webp?v=10" alt="" loading="lazy"><p class="cap">Tuyến xám Phoenix–Santa Fe dài 3 ô.</p></div>
   <div class="vd" style="margin:0">Tuyến xám Phoenix–Santa Fe dài 3 ô trả bằng 3 lá Vàng, hoặc 3 lá Đen… miễn cùng một màu. Không được trả 2 lá Vàng + 1 lá Đen.
   <div class="hand"><span class="lbl">Được:</span><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure></div></div>
 </div>
 <h4 style="margin:14px 0 4px;color:#7a1a36;font-size:19px">Đường đôi</h4>
 <div class="fig">
-  <div><img class="shot" src="assets/rules/dbl.webp?v=9" alt="" loading="lazy"><p class="cap">Đường đôi San Francisco–Los Angeles: hai làn song song, làn Trắng và làn Đỏ.</p></div>
+  <div><img class="shot" src="assets/rules/dbl.webp?v=10" alt="" loading="lazy"><p class="cap">Đường đôi San Francisco–Los Angeles: hai làn song song, làn Trắng và làn Đỏ.</p></div>
   <div><ul>
    <li>Một người <b>không được chiếm cả hai làn</b> của cùng một đường đôi.</li>
    <li>Chơi <b>2 hoặc 3 người</b>: một làn đã bị chiếm thì làn còn lại đóng với mọi người.</li>
    <li>Chơi <b>4 hoặc 5 người</b>: hai người khác nhau mỗi người chiếm một làn.</li>
   </ul></div>
 </div>
-
-<h3 id="duong-ham">Đường hầm</h3>
-<div class="fig">
-  <div><img class="shot" src="assets/rules/tunnel.webp?v=9" alt="" loading="lazy"><p class="cap">Đường hầm có viền <b>nét đứt</b>, ví dụ tuyến Vancouver–Calgary (Cam, 3 ô).</p></div>
-  <div><ol>
-   <li>Đánh bộ bài như chiếm tuyến thường.</li>
-   <li>Máy lật <b>3 lá</b> trên cùng chồng bài úp.</li>
-   <li>Mỗi lá lật ra <b>trùng màu</b> bạn vừa đánh, hoặc là <b>Đầu máy</b>, bạn phải trả thêm 1 lá cùng màu (hoặc Đầu máy).</li>
-   <li>Đủ và muốn trả thì trả thêm, đặt toa, ghi điểm. Không đủ hoặc không muốn thì bỏ: lấy lại hết bài đã đánh, không mất gì, nhưng hết lượt.</li>
-   <li>3 lá lật ra luôn vào chồng bỏ.</li>
-  </ol></div>
-</div>
-<ul>
-<li>Trả thêm ít nhất 0 lá, nhiều nhất 3 lá.</li>
-<li>Nếu bạn đánh toàn Đầu máy, chỉ Đầu máy lật ra mới bắt trả thêm.</li>
-</ul>
-<div class="vd">Thành công: bạn chiếm hầm Vancouver–Calgary bằng 3 lá Cam. Lật ra Cam, Vàng, Đen: trùng 1 lá, bạn trả thêm 1 lá Cam, đặt 3 toa, ghi 4 điểm.
-<div class="hand"><span class="lbl">Lật ra:</span><figure class="tc sm"><img src="../../railart/cards/orange.webp" alt="Cam" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/black.webp" alt="Đen" loading="lazy"></figure><span class="op">→ trả thêm 1</span><figure class="tc sm"><img src="../../railart/cards/orange.webp" alt="Cam" loading="lazy"></figure></div></div>
-<div class="vd">Bỏ cuộc: lật ra Cam, Đầu máy, Cam: phải trả thêm 3 lá nhưng bạn chỉ còn 1 lá Cam. Bạn bỏ, lấy lại cả 3 lá đã đánh. Lượt sau có thể thử lại.
-<div class="hand"><span class="lbl">Lật ra:</span><figure class="tc sm"><img src="../../railart/cards/orange.webp" alt="Cam" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/orange.webp" alt="Cam" loading="lazy"></figure><span class="op">→ cần thêm 3</span></div></div>
-
-<h3 id="pha">Phà</h3>
-<div class="fig">
-  <div><img class="shot" src="assets/rules/ferry.webp?v=9" alt="" loading="lazy"><p class="cap">Tuyến phà New Orleans–La Habana dài 4 ô, có 2 ô in <b>ngôi sao Đầu máy</b>.</p></div>
-  <div><ul>
-   <li>Phà là tuyến vượt biển. Mỗi ô có ngôi sao cần <b>1 lá Đầu máy</b>.</li>
-   <li>Các ô còn lại trả bằng bài cùng một màu (phà luôn là tuyến xám).</li>
-   <li>Tổng số lá vẫn bằng số ô. Điểm tính như tuyến thường.</li>
-  </ul></div>
-</div>
-<div class="vd">Phà New Orleans–La Habana dài 4 ô, có 2 ngôi sao: bạn trả 2 Đầu máy và 2 lá Đỏ, ghi 7 điểm. Nếu chỉ có 1 Đầu máy thì chưa chiếm được.
-<div class="hand"><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/red.webp" alt="Đỏ" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/red.webp" alt="Đỏ" loading="lazy"></figure></div></div>
 
 <h3>Việc 3: rút vé hành trình</h3>
 <p>Rút <b>3 vé</b> từ chồng vé, giữ <b>ít nhất 1</b> (có thể giữ cả 3). Vé không giữ trả về đáy chồng. Vé giữ rồi thì không được bỏ nữa, kể cả khi không làm được.</p>
@@ -264,8 +232,8 @@ footer{text-align:center;color:#e9d6ae;font-size:14px;margin-top:10px}
 <li>Tuyến dài lợi hơn nhiều: 1 tuyến 7 ô cho 18 điểm, còn 7 tuyến 1 ô chỉ cho 7 điểm.</li>
 <li>Chiếm sớm các tuyến then chốt vé bạn cần, nhất là chỗ chỉ có một đường đi qua.</li>
 <li>Đừng ôm quá nhiều vé khó: vé hỏng bị trừ đúng bằng số điểm của nó.</li>
-<li>Giữ vài Đầu máy cho phà và cho màu hiếm. Đừng lấy Đầu máy ngửa nếu bạn cần đủ 2 lá.</li>
-<li>Đường hầm có rủi ro: mang dư 1 đến 2 lá cùng màu trước khi thử.</li>
+<li>Giữ Đầu máy cho các màu hiếm.</li>
+
 <li>Theo dõi số toa của đối thủ. Ai còn khoảng 3 đến 5 toa là sắp tới vòng cuối.</li>
 <li>Bản này không có nhà ga, bị chặn đường là phải đi vòng: hãy chiếm sớm các tuyến chỉ có một lối đi qua.</li>
 </ul></div></section><div class="cta"><a class="btn wine" href="Luat-choi-Duong-Ray-Bac-My.pdf" download>⬇ Tải luật bản PDF (đen trắng)</a><a class="btn" href="index.html">▶ Chơi Đường Ray Bắc Mỹ ngay</a><a class="btn wine" href="tom-tat.html">Xem bản tóm tắt</a><a class="btn wine" href="../duong-ray-chau-au/luat.html">Luật Đường Ray Châu Âu</a></div>

@@ -1178,6 +1178,27 @@ html body .vticket.imgt .vt-done{font-size:11cqw!important;border-width:2px!impo
 body.portphone .clabel{font-size:20px;stroke-width:6px}
 body.landphone .clabel{font-size:18px;stroke-width:5.5px}
 body.portphone #mapScroll{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+/* ===== Sảnh tĩnh theo phong cách game (gỗ tối, đỏ rượu, viền vàng) ===== */
+#menu{background:#1c120a url(assets/cover.jpg) center/cover no-repeat}
+#menu::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(42,22,10,.55),rgba(20,10,4,.9) 75%);pointer-events:none}
+#menu .scene{display:none}
+.mtrain{animation:none}
+.mpanel{background:linear-gradient(170deg,#7a1a36,#4a0e22 75%);border:2px solid #d6a83e;border-radius:18px;color:#fbe9c8;
+  box-shadow:inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 0 6px rgba(246,214,128,.35),0 22px 60px rgba(0,0,0,.65)}
+.mpanel h1{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#f6d680;animation:none;text-shadow:0 3px 0 #2a0610,0 0 16px rgba(246,214,128,.25);font-size:42px;line-height:1.1}
+.mpanel .sub{color:#f3dcb4;font-style:italic}
+.mpanel label{color:#f6d680;font-weight:bold}
+.mpanel input,.mpanel select{background:#fbf1d8;border:1.5px solid #d6a83e;color:#2b2116}
+.mtrainrow{display:flex;justify-content:center;align-items:flex-end;gap:3px;margin:0 0 8px}
+.mtrainrow img{height:30px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.mgrid .sep{color:#e9cf98!important}
+.mgrid .sep::before,.mgrid .sep::after{background:rgba(214,168,62,.5)!important}
+.mgrid button,.mgrid #hubBtn{background:linear-gradient(180deg,#8b2340,#5a0f25)!important;color:#fbe9b8!important;border:1.5px solid #d6a83e!important;border-radius:999px!important;font-weight:bold}
+.mgrid button.primary{background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522)!important;color:#3a1a08!important;border-color:#7a5310!important;box-shadow:inset 0 1px 0 #fff6cf,0 3px 0 #4a2a0c}
+.mgrid button:hover,.mgrid #hubBtn:hover{filter:brightness(1.12)}
+body.landphone .mtrainrow{display:none}
+@media (max-width:480px){.mpanel h1{font-size:31px}.mtrainrow img{height:22px}}
 </style>
 </head>
 <body>
@@ -1233,7 +1254,7 @@ body.portphone #mapScroll{-webkit-overflow-scrolling:touch;overscroll-behavior:c
     <g class="mtrain"><g transform="translate(0,664) scale(2.3)">__TRAIN__</g></g>
   </svg>
   <div class="mpanel">
-    <div style="font-size:46px"></div>
+    <div class="mtrainrow"><img src="../../railart/wagons/loco.png" alt=""><img src="../../railart/wagons/red.png" alt=""><img src="../../railart/wagons/yellow.png" alt=""><img src="../../railart/wagons/blue.png" alt=""><img src="../../railart/wagons/green.png" alt=""><img src="../../railart/wagons/orange.png" alt=""></div>
     <h1>Đường Ray Bắc Mỹ</h1>
     <p class="sub">Xây mạng đường sắt khắp Bắc Mỹ, hoàn thành vé hành trình và trở thành ông trùm đường sắt!</p>
     <label for="pname">Tên của bạn</label>
@@ -1356,7 +1377,7 @@ function buildRoutes(){
         used[color] += len; cityColors[A].add(color); cityColors[B].add(color);
       }
       const id = routes.length;
-      routes.push({id, a:A, b:B, len, color, tunnel, ferry, lane: dbl ? (l===0?-1:1) : 0, pair:null});
+      routes.push({id, a:A, b:B, len, color, tunnel:false, ferry:0, /* bản Bắc Mỹ: không có hầm và phà */ lane: dbl ? (l===0?-1:1) : 0, pair:null});
       ids.push(id);
     }
     if (dbl){ routes[ids[0]].pair = ids[1]; routes[ids[1]].pair = ids[0]; }
@@ -1410,7 +1431,8 @@ function rname(r){ return CITIES[r.a].name+' – '+CITIES[r.b].name; }
 function log(msg, cls){ G.log.unshift({msg, cls:cls||''}); if (G.log.length>60) G.log.pop(); }
 function pushFx(o){ G.fxN=(G.fxN||0)+1; o.n=G.fxN; G.fx.push(o); if (G.fx.length>10) G.fx.shift(); }
 
-const HAS_ST = (typeof MAP_ID==='undefined' || MAP_ID!=='na'); /* Bản Bắc Mỹ không có nhà ga */
+const HAS_ST = (typeof MAP_ID==='undefined' || MAP_ID!=='na');
+const HAS_TF = HAS_ST; /* Bắc Mỹ: không nhà ga, không hầm, không phà */ /* Bản Bắc Mỹ không có nhà ga */
 /* seats: [{name, bot:true|false, peer:null|string}] */
 function newGame(seats){
   UNDO_USED={};
@@ -2776,11 +2798,11 @@ function showEndModal(){
 }
 function showRules(){
   showModal('Luật chơi', `<div class="rules">
-  <p><b>Mục tiêu:</b> ghi nhiều điểm nhất bằng cách chiếm các tuyến đường sắt giữa các thành phố Bắc Mỹ và hoàn thành vé hành trình.</p>
+  <p><b>Mục tiêu:</b> ghi nhiều điểm nhất bằng cách chiếm các tuyến đường sắt giữa các thành phố ${MAP_ID==='na'?'Bắc Mỹ':'châu Âu'} và hoàn thành vé hành trình.</p>
   <p><b>Mỗi lượt chọn 1 trong ${HAS_ST?4:3} việc:</b></p>
   <p>1. <b>Rút 2 lá bài toa tàu</b> — từ 5 lá đang lộ hoặc chồng úp. Lấy lá Đầu máy (cầu vồng) đang lộ thì chỉ được lấy 1 lá đó. Đầu máy thay được mọi màu.</p>
   <p>2. <b>Chiếm 1 tuyến</b> — bấm vào tuyến trên bản đồ (sẽ hiện chú thích và nút chiếm), trả số lá cùng màu bằng số ô. Tuyến xám trả 1 màu bất kỳ. Tuyến viền vàng là tuyến bạn đang đủ bài.</p>
-  <p>&nbsp;&nbsp;• <b>Đường hầm</b> (viền nét đứt): lật 3 lá, lá nào trùng màu bạn dùng (hoặc Đầu máy) phải trả thêm 1 lá.<br>&nbsp;&nbsp;• <b>Phà</b> (chấm cầu vồng): mỗi chấm cần 1 Đầu máy.<br>&nbsp;&nbsp;• <b>Đường đôi</b>: 2–3 người chơi chỉ dùng được 1 làn; 4–5 người thì mỗi làn 1 người.</p>
+${HAS_TF?`  <p>&nbsp;&nbsp;• <b>Đường hầm</b> (viền nét đứt): lật 3 lá, lá nào trùng màu bạn dùng (hoặc Đầu máy) phải trả thêm 1 lá.<br>&nbsp;&nbsp;• <b>Phà</b> (chấm cầu vồng): mỗi chấm cần 1 Đầu máy.<br>&nbsp;&nbsp;• <b>Đường đôi</b>: 2–3 người chơi chỉ dùng được 1 làn; 4–5 người thì mỗi làn 1 người.</p>`:''}
   <p>3. <b>Rút vé</b> — rút 3 vé, giữ ít nhất 1.</p>
 ${HAS_ST?`  <p>4. <b>Xây nhà ga</b> — ga 1 tốn 1 lá, ga 2 tốn 2, ga 3 tốn 3 lá cùng màu. Cuối ván mỗi ga mượn 1 tuyến của đối thủ để nối vé. Ga không xây: +4 điểm/ga.</p>`:''}
   <p><b>Điểm tuyến:</b> ${[...new Set(ROUTES.map(r=>r.len))].sort((a,b)=>a-b).map(l=>l+' ô='+POINTS[l]).join(', ')} điểm.</p>
