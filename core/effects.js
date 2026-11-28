@@ -91,14 +91,21 @@ const Ticker = {
   q:[], busy:false,
   push(html, cls){ this.q.push({html, cls:cls||'info'}); if (this.q.length>6) this.q.splice(0, this.q.length-6); if(!this.busy) this.next(); },
   next(){
+    const m0=this.q[0], ph=document.body.classList.contains('portphone')||document.body.classList.contains('landphone');
+    if (ph && m0){ this.q.shift(); this.busy=true; const host=document.getElementById('mapWrap');
+      if(host){ host.querySelectorAll('.clmsg.tk').forEach(e=>e.remove()); const el=document.createElement('div'); el.className='clmsg tk '+m0.cls; el.innerHTML=m0.html; host.appendChild(el); setTimeout(()=>el.remove(),1750); }
+      setTimeout(()=>this.next(), this.q.length?1250:1750); return; }
     const box=document.querySelector('#tmsg'); if(!box){ this.q=[]; return; }
     const m=this.q.shift(); if(!m){ this.busy=false; return; } this.busy=true;
     const old=box.querySelector('.tm.cur'); if(old){ old.classList.remove('cur'); old.classList.add('leave'); setTimeout(()=>old.remove(),450); }
     const el=document.createElement('div'); el.className='tm cur '+m.cls; el.innerHTML=`<span class="tmi">${m.html}</span>`; box.appendChild(el);
     box.classList.remove('flash-'+'win','flash-final','flash-me'); void box.offsetWidth; if(['win','final','me'].includes(m.cls)) box.classList.add('flash-'+m.cls);
     let hold=this.q.length ? 1300 : 2200;
-    requestAnimationFrame(()=>{ const inner=el.querySelector('.tmi'); const over=inner.scrollWidth-box.clientWidth+30;
-      if (over>0){ const dur=Math.max(3, over/60); inner.style.setProperty('--dx', -over+'px'); inner.style.animation=`tscroll ${dur}s linear .8s 1 forwards`; hold=Math.max(hold, dur*1000+1600); }
+    requestAnimationFrame(()=>{ const inner=el.querySelector('.tmi'); const room=el.clientWidth-parseFloat(getComputedStyle(el).paddingLeft)*2;
+      if (inner.scrollWidth>room){ const fs=parseFloat(getComputedStyle(el).fontSize), k=room/inner.scrollWidth, n=Math.max(11, Math.floor(fs*k*10)/10);
+        el.style.fontSize=n+'px';
+        if (inner.scrollWidth>room+1){ const lh=el.clientHeight; el.classList.add('wrap'); el.style.fontSize=Math.max(10, Math.min(n+1, lh/2.3))+'px'; }
+        hold=Math.max(hold, 3000); }
       setTimeout(()=>this.next(), hold); });
   }
 };

@@ -1141,11 +1141,39 @@ body.portphone .mkbar .deckslot .dlab,body.portphone .mkbar .tkdeck .dlab{font-s
 .tkdone .tkp{margin-top:8px;font:600 14px/1.2 Georgia,serif;color:#ffd770}
 body.fx-lite .tkdone .tkc i{filter:none}
 @media (max-height:520px){.tkdone{top:6%;width:min(52vw,300px);padding:6px 8px 8px}.tkdone .tkh{font-size:15px;margin-bottom:4px}.clmsg{font-size:13px;top:6px}}
+
+/* không cắt/tách chữ: chữ tự thu nhỏ cho vừa, tối đa 2 dòng, không chạy ngang */
+.tm{white-space:nowrap;overflow:hidden}
+.tm .tmi{max-width:100%;word-break:keep-all;overflow-wrap:normal;hyphens:none}
+.tm.wrap{white-space:normal;line-height:1.08}
+.tm.wrap .tmi{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:left}
+body.portphone .tm.me,body.landphone .tm.me{font-size:14px!important;letter-spacing:0!important}
+.clmsg{white-space:normal!important;text-overflow:clip!important;text-align:center;line-height:1.25;width:max-content;max-width:min(92%,520px)}
+.clmsg::before{flex:none}
+.sealabel{display:none}
+
+/* vé đã hoàn thành: tách xuống nhóm riêng bên dưới, tối đi, nhãn nằm gọn trong vé */
+#tickets .tkdonehd{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin:6px 0 0;font:bold 13px "Times New Roman",serif;color:#15803d;white-space:nowrap}
+#tickets .tkdonehd::before,#tickets .tkdonehd::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#15803d88,transparent)}
+#tickets .tkall{grid-column:1/-1}
+.vticket.imgt.ok{overflow:hidden;opacity:.72;box-shadow:0 0 0 2px #15803d!important}
+.vticket.imgt.ok img{filter:grayscale(.55) brightness(.62)!important}
+.vticket.imgt .vt-done{left:50%!important;right:auto!important;top:50%!important;transform:translate(-50%,-50%) rotate(-6deg)!important;max-width:86%;overflow:hidden;text-overflow:clip;font-size:clamp(8px,2.6vw,13px)!important;padding:2px 8px!important;line-height:1.2}
+body.landphone .vticket.imgt .vt-done,body.portphone .vticket.imgt .vt-done{font-size:9px!important;padding:1px 5px!important;border-width:1px!important}
+
+/* điện thoại: thông báo hiện trên bản đồ, bỏ ô chữ chạy chật */
+body.portphone #tmsg,body.landphone #tmsg{display:none!important}
+body.portphone #ticker:has(#tmsg),body.landphone #ticker:has(#tmsg){flex:0 0 auto!important;min-width:0!important}
+.clmsg.tk::before{display:none}.clmsg.tk{font-size:14px}
+.clmsg.tk.me{color:#bbf7d0;border-color:#4ade80}.clmsg.tk.final{color:#fecaca}.clmsg.tk.win{color:#fde68a}
+.clmsg .tsub{opacity:.85;font-weight:normal}
+/* nhãn ĐÃ HOÀN THÀNH luôn vừa trong vé */
+.vticket.imgt{container-type:inline-size}
+html body .vticket.imgt .vt-done{font-size:11cqw!important;border-width:2px!important;letter-spacing:0!important;max-width:90%!important;padding:.25em .6em!important;white-space:nowrap}
 </style>
 </head>
 <body>
 <header>
-  <h1>Đường Ray Bắc Mỹ</h1>
   <div id="players"></div>
   <div class="hbtns"><button id="chatBtn" title="Trò chuyện"><svg class="ico" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="badge"></span></button><button id="fsBtn" title="Toàn màn hình">⛶</button><button id="fxBtn" title="Hiệu ứng"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor"/></svg><span>Đơn giản</span></button><button id="musicBtn" title="Tắt nhạc nền"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="17" cy="16" r="3" fill="currentColor"/></svg></button><button id="soundBtn" title="Bật/tắt âm thanh"><svg class="ico" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button id="rulesBtn"><svg class="ico" viewBox="0 0 24 24"><path d="M3 5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0zM21 5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Luật</button><button id="leaveBtn" title="Rời phòng online"><svg class="ico" viewBox="0 0 24 24"><path d="M14 4H6v16h8M10 12h11M18 8l3 4-3 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Rời phòng</button><button id="menuBtn">☰ Menu</button></div>
   <div id="ticker"><div id="turnPill" style="display:none"><span class="tdot"></span><span id="turnName"></span></div><div id="tmsg"></div></div>
@@ -1891,8 +1919,6 @@ function bgSVG(){
   s+=SXT(mountainsSVG([[470,640,1],[500,625,1.2],[535,640,1.1],[575,628,1.3],[610,640,1],[648,628,.9],[300,800,.9],[330,792,1.1],[360,800,.9],[872,598,.9],[895,580,1],[925,592,.9],[955,620,.8],[965,660,.8],[830,790,.8],[870,800,.9],[540,60,.9],[565,40,1],[600,50,.8],[250,860,.7]]));
   s+=SXT(treesSVG([[1150,380],[1170,395],[1190,378],[1210,400],[1130,410],[1230,380],[1180,430],[1000,140],[1020,155],[880,170],[700,250],[720,265],[590,540],[1150,600],[1170,585]]));
   s+=SXT(shipSVG(150,690,1.1,0)+shipSVG(380,250,.9,1.2)+shipSVG(805,215,.8,.6)+shipSVG(600,920,.9,2)+shipSVG(1185,770,.9,1.5)+shipSVG(430,980,.8,.3));
-  s+=SXT(`<g class="sealabel"><text x="120" y="770" transform="rotate(-70 120 770)">Đ Ạ I  T Â Y  D Ư Ơ N G</text><text x="400" y="300">Biển Bắc</text><text x="825" y="262">Biển Baltic</text>
-     <text x="250" y="990">Đ Ị A  T R U N G  H Ả I</text><text x="1180" y="725">Biển Đen</text><text x="690" y="780" transform="rotate(40 690 780)">Biển Adriatic</text></g>`);
   s+=SXT(compassSVG(85,200));
   s+=`<g transform="translate(195,52)" class="cartouche"><path d="M-150,-26 L150,-26 L165,0 L150,26 L-150,26 L-165,0Z" fill="#f7ecd2" stroke="${INK}" stroke-width="2"/><path d="M-144,-20 L144,-20 L157,0 L144,20 L-144,20 L-157,0Z" fill="none" stroke="${INK}" stroke-width=".8"/>
      <text y="8" text-anchor="middle">ĐƯỜNG RAY CHÂU ÂU</text></g>`;
@@ -1925,8 +1951,6 @@ function decorNA(){
   s+=SXT(mountainsSVG([[300,240,1.1],[330,280,1.2],[360,250,1],[300,330,1],[340,350,1.2],[380,320,1],[400,380,1.1],[360,410,1],[420,440,.9],[250,180,1],[220,330,.9],[180,400,.9],[440,500,.8],[1010,500,.8],[1040,470,.9],[1070,440,.8],[230,250,.9]]));
   s+=SXT(treesSVG([[700,170],[730,185],[760,165],[850,160],[880,175],[910,190],[1000,250],[1030,235],[1120,230],[1150,250],[1180,215],[920,520],[950,540],[880,560],[150,120],[180,140],[205,110]]));
   s+=SXT(shipSVG(60,500,1.1,0)+shipSVG(110,820,1,1.3)+shipSVG(1260,520,1,.6)+shipSVG(1230,780,.9,1.8)+shipSVG(780,830,.9,1)+shipSVG(1010,880,.8,.4));
-  s+=SXT(`<g class="sealabel"><text x="60" y="700" transform="rotate(-75 60 700)">T H Á I  B Ì N H  D Ư Ơ N G</text><text x="1265" y="700" transform="rotate(-75 1265 700)">Đ Ạ I  T Â Y  D Ư Ơ N G</text>
-     <text x="760" y="895">Vịnh Mexico</text><text x="900" y="215">Hồ Lớn</text><text x="1130" y="960">Biển Caribe</text></g>`);
   s+=SXT(compassSVG(150,650));
   s+=`<g transform="translate(570,52)" class="cartouche"><path d="M-150,-26 L150,-26 L165,0 L150,26 L-150,26 L-165,0Z" fill="#f7ecd2" stroke="${INK}" stroke-width="2"/><path d="M-144,-20 L144,-20 L157,0 L144,20 L-144,20 L-157,0Z" fill="none" stroke="${INK}" stroke-width=".8"/>
      <text y="8" text-anchor="middle">ĐƯỜNG RAY BẮC MỸ</text></g>`;
@@ -2199,8 +2223,9 @@ function renderSide(){
     const nT=$('#tkCnt'); if(nT) nT.textContent=me.tickets.length?`(${me.tickets.filter(id=>ticketDone(me,id)).length}/${me.tickets.length})`:'';
     UIS.prevHand=Object.assign({}, me.hand);
     const tk = me.tickets.slice().sort((a,b)=>ticketDone(me,a)-ticketDone(me,b));
-    const th = tk.length ? tk.map(id=>{ const t=TK[id]; const ok=ticketDone(me,id); const hue=TK_HUES[me.tickets.indexOf(id)%TK_HUES.length];
-        return ticketHTML(t, ok, ok?'#15803d':hue, UIS.focus&&UIS.focus.id===id?'focus':''); }).join('') : '<div class="muted">—</div>';
+    const one=id=>{ const t=TK[id]; const ok=ticketDone(me,id); const hue=TK_HUES[me.tickets.indexOf(id)%TK_HUES.length]; return ticketHTML(t, ok, ok?'#15803d':hue, UIS.focus&&UIS.focus.id===id?'focus':''); };
+    const open=tk.filter(id=>!ticketDone(me,id)), fin=tk.filter(id=>ticketDone(me,id));
+    const th = tk.length ? (open.length?open.map(one).join(''):'<div class="muted tkall">Đã hoàn thành hết vé!</div>')+(fin.length?`<div class="tkdonehd">Đã hoàn thành (${fin.length}) · +${fin.reduce((s,id)=>s+TK[id].pts,0)} điểm</div>`+fin.map(one).join(''):'') : '<div class="muted">—</div>';
     if (th!==UIS.tkHTML){ $('#tickets').innerHTML=th; UIS.tkHTML=th; }
   } else { $('#hand').innerHTML='<div class="muted">Bạn đang xem.</div>'; $('#tickets').innerHTML=''; }
   $('#log').innerHTML = G.log.slice(0,30).map(l=>`<div class="lg ${l.cls}">${esc(l.msg)}</div>`).join('');
@@ -2229,7 +2254,7 @@ function ticketHTML(t, ok, hue, extra){
   hue = hue || (t.long ? '#b45309' : '#8b2e16');
   if (typeof RA_BASE!=='undefined') return `<div class="vticket imgt ${ok?'ok':''} ${t.long?'long':''} ${extra||''}" data-id="${t.id}" data-a="${t.a}" data-b="${t.b}" data-hue="${hue}" style="--hue:${hue}" title="${esc(CITIES[t.a].name)} → ${esc(CITIES[t.b].name)} · ${t.pts} điểm">
     <img src="${RA_BASE}tickets/${RA_REG}/${t.id}.webp?v=9" alt="${esc(CITIES[t.a].name)} – ${esc(CITIES[t.b].name)} ${t.pts} điểm" draggable="false" decoding="async">
-    ${t.long?'<span class="vt-longtag">★ Đường dài</span>':''}${ok?'<div class="vt-done">✔ ĐÃ HOÀN THÀNH</div>':''}</div>`;
+    ${t.long?'<span class="vt-longtag">★ Đường dài</span>':''}${ok?'<div class="vt-done">✔ ĐÃ XONG</div>':''}</div>`;
   return `<div class="vticket ${ok?'ok':''} ${t.long?'long':''} ${extra||''}" data-id="${t.id}" data-a="${t.a}" data-b="${t.b}" data-hue="${hue}" style="--hue:${hue}">
     <div class="vt-stub">${miniMapSVG(t, hue)}</div>
     <div class="vt-main">
@@ -2351,7 +2376,7 @@ function playFx(f){
       const r=ROUTES[f.r]; const col=G.players[f.p].color; UIS.claimAt[f.r]=performance.now(); renderMap();
       trainRun(r, col); SFX.clack(r.len); Ticker.push(`${esc(who(f.p))} chiếm tuyến <b>${esc(rname(r))}</b> (+${POINTS[r.len]} điểm)`, 'claim'); if (r.len>=3) setTimeout(()=>SFX.whistle(), 350);
       const g=routeGeom(r); const mx=g.ax+g.ux*g.d/2, my=g.ay+g.uy*g.d/2;
-      claimMsg(`<b>${esc(who(f.p))}</b> chiếm tuyến ${esc(rname(r))}`, col);
+      if (!document.body.classList.contains('portphone') && !document.body.classList.contains('landphone')) claimMsg(`<b>${esc(who(f.p))}</b> chiếm tuyến ${esc(rname(r))}`, col);
       setTimeout(()=>{ const p=FX.svgPoint(mx,my); if (p){ ptsFly(p.x,p.y,POINTS[r.len],f.p,col); if (FXMODE!=='off' && (r.len>=4 || f.p===ME)) FX.confetti(p.x,p.y, r.len>=4?50:20, [col,'#ffd36b','#fff']); } else releaseScore(f.p); }, TRAIN_RUN_MS-150);
       break; }
     case 'tun': SFX.rumble(); FX.shake($('#mapWrap'));
