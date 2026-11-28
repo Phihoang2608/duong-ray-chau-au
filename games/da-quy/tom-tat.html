@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tóm tắt luật Thương Nhân Đá Quý</title>
+<meta name="description" content="Hướng dẫn chơi chi tiết Thương Nhân Đá Quý: lấy đá, giữ chỗ, mua thẻ, quý tộc, kết thúc ván, có ví dụ.">
+<link rel="icon" href="assets/icon-192.png">
+<style>
+:root{--bur:#5a1424;--bur2:#3d0c19;--bur3:#7a1d33;--gold:#e8c36a;--goldl:#ffe6a3;--goldd:#a87d2c;--cream:#fbefd6;--ink:#2b0f15}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.6;color:var(--cream);
+ background:var(--bur2) url(assets/damask.svg) repeat;background-size:110px auto;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0,rgba(90,20,36,.55),rgba(30,6,12,.92) 75%);pointer-events:none;z-index:-1}
+a{color:var(--goldl)}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 16px;background:linear-gradient(180deg,#5a1424,#3d0c19);border-bottom:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.45)}
+header.top .ttl{font-size:21px;font-weight:bold;color:var(--goldl);letter-spacing:.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:12px;border:2px solid var(--gold);background:linear-gradient(180deg,#7a1d33,#4a0f1d);color:var(--goldl);font:bold 16px "Times New Roman",serif;text-decoration:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,230,163,.35),0 3px 8px rgba(0,0,0,.35)}
+.btn.pri{background:linear-gradient(180deg,#ffe6a3,#e8c36a 55%,#b88a32);color:var(--ink);border-color:#fff3cc}
+main{max-width:980px;margin:0 auto;padding:18px 14px 60px}
+.hero{position:relative;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:center;padding:24px;border-radius:22px;border:3px solid var(--gold);background:linear-gradient(160deg,rgba(122,29,51,.92),rgba(45,8,18,.95));box-shadow:inset 0 0 0 6px rgba(232,195,106,.18),0 14px 36px rgba(0,0,0,.5)}
+.hero h1{margin:0 0 4px;font-size:42px;line-height:1.1;color:var(--goldl);text-shadow:0 3px 0 #2a0610,0 0 18px rgba(232,195,106,.35)}
+.hero .sub{margin:0 0 14px;font-style:italic;color:#f1d9a6}
+.hero img.cv{width:100%;border-radius:14px;border:2px solid var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.55)}
+.gemrow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
+.gemrow img{width:46px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fact{padding:8px 12px;border-radius:12px;background:rgba(0,0,0,.28);border:1px solid rgba(232,195,106,.45)}
+.fact b{display:block;color:var(--gold);font-size:14px;letter-spacing:.3px}
+.fact span{font-size:17px}
+nav.toc{margin:18px 0 6px;padding:12px 14px;border-radius:16px;background:rgba(0,0,0,.3);border:1px dashed rgba(232,195,106,.55);display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{padding:4px 12px;border-radius:999px;background:rgba(122,29,51,.75);border:1px solid rgba(232,195,106,.6);text-decoration:none;font-size:15px;white-space:nowrap}
+section.box{margin:22px 0;padding:20px 22px;border-radius:20px;background:linear-gradient(180deg,rgba(251,239,214,.97),rgba(240,222,186,.97));color:var(--ink);border:3px solid var(--goldd);box-shadow:inset 0 0 0 5px rgba(255,255,255,.35),0 10px 28px rgba(0,0,0,.45);scroll-margin-top:70px}
+section.box h2{display:flex;align-items:center;gap:10px;margin:-4px 0 12px;font-size:28px;color:var(--bur)}
+section.box h2 .no{flex:none;width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:21px;color:var(--goldl);background:radial-gradient(circle at 35% 30%,#a12a46,#4a0f1d);border:2px solid var(--gold);box-shadow:0 3px 6px rgba(0,0,0,.35)}
+section.box h3{margin:18px 0 6px;font-size:21px;color:var(--bur3)}
+section.box p{margin:6px 0}
+section.box ul,section.box ol{margin:6px 0;padding-left:22px}
+section.box li{margin:4px 0}
+.g{display:inline-block;width:26px;height:26px;vertical-align:-7px;margin:0 1px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.gn{display:inline-flex;align-items:center;gap:1px;padding:0 6px 0 2px;margin:0 2px;border-radius:999px;background:rgba(90,20,36,.08);border:1px solid rgba(90,20,36,.25);white-space:nowrap;font-weight:bold}
+.vd{margin:12px 0;padding:12px 14px 12px 50px;border-radius:14px;background:#fff8e6;border:2px solid #e0c27a;position:relative;font-style:italic}
+.vd::before{content:"Ví dụ";position:absolute;left:-2px;top:-2px;bottom:-2px;width:40px;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font:bold 14px "Times New Roman",serif;font-style:normal;color:var(--goldl);background:linear-gradient(180deg,#7a1d33,#4a0f1d);border-radius:0 14px 14px 0;letter-spacing:1px}
+.note{margin:12px 0;padding:10px 14px;border-radius:12px;background:#fde9e9;border-left:6px solid #b1233f}
+.tip{margin:12px 0;padding:10px 14px;border-radius:12px;background:#eaf6ea;border-left:6px solid #2f8a4c}
+table.t{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border:2px solid var(--goldd);border-radius:12px;overflow:hidden;background:#fffaf0}
+table.t th{background:linear-gradient(180deg,#7a1d33,#5a1424);color:var(--goldl);text-align:left;padding:8px 10px;font-size:16px}
+table.t td{padding:8px 10px;border-top:1px solid #ead7ad;vertical-align:middle}
+table.t tr:nth-child(even) td{background:#fbf1dc}
+.gemtab td:first-child{white-space:nowrap}
+.fig{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center;margin:12px 0}
+.fig figure{margin:0;text-align:center}
+.fig figcaption{font-size:14px;color:#6b3b22;margin-top:4px;font-style:italic}
+.cardimg{width:160px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+.nobimg{width:130px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+.deckimg{width:110px;border-radius:12px}
+.anat{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.anat .lst{margin:0;padding:0;list-style:none}
+.anat .lst li{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+.anat .lst .k{flex:none;width:28px;height:28px;border-radius:50%;background:var(--bur);color:var(--goldl);display:inline-flex;align-items:center;justify-content:center;font-weight:bold;border:2px solid var(--gold);font-size:15px}
+.cardwrap{position:relative;width:200px}
+.cardwrap img{width:200px;border-radius:14px;box-shadow:0 10px 22px rgba(0,0,0,.45);display:block}
+.pin{position:absolute;width:28px;height:28px;border-radius:50%;background:var(--bur);color:var(--goldl);display:flex;align-items:center;justify-content:center;font-weight:bold;border:2px solid var(--gold);font-size:15px;box-shadow:0 2px 6px rgba(0,0,0,.5);animation:pin 2s ease-in-out infinite}
+@keyframes pin{50%{transform:scale(1.15)}}
+.acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.act{padding:14px;border-radius:16px;background:#fffaf0;border:2px solid #e0c27a;box-shadow:0 4px 10px rgba(90,20,36,.12)}
+.act h3{margin:0 0 6px!important;display:flex;align-items:center;gap:8px}
+.act .ic{display:flex;gap:2px;margin:6px 0}
+.act .ic img{width:38px;height:38px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+.calc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.calc div{padding:8px;border-radius:12px;background:#fffaf0;border:2px solid #e0c27a;text-align:center;font-size:15px}
+.calc b{display:block;color:var(--bur);margin-bottom:4px;font-size:15px}
+.calc .arrow{display:none}
+.boardshot{width:100%;border-radius:14px;border:2px solid var(--goldd);box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.turns{counter-reset:t;list-style:none;padding:0!important}
+.turns li{counter-increment:t;position:relative;padding:10px 12px 10px 56px!important;margin:8px 0!important;border-radius:12px;background:#fffaf0;border:1px solid #e0c27a}
+.turns li::before{content:"Lượt " counter(t);position:absolute;left:8px;top:10px;font-weight:bold;font-size:12px;color:var(--goldl);background:var(--bur);border-radius:8px;padding:2px 5px;width:40px;text-align:center}
+.cta{text-align:center;margin:28px 0 10px}
+.cta .btn{font-size:19px;padding:12px 26px}
+footer{text-align:center;font-size:14px;opacity:.8;margin-top:20px}
+@media (max-width:760px){
+ body{font-size:16px}
+ .hero{grid-template-columns:1fr;padding:16px}
+ .hero h1{font-size:32px}
+ .facts{grid-template-columns:1fr 1fr}
+ section.box{padding:16px 14px;border-radius:16px}
+ section.box h2{font-size:23px}
+ .acts{grid-template-columns:1fr}
+ .anat{grid-template-columns:1fr;justify-items:center}
+ .calc{grid-template-columns:1fr 1fr}
+ .vd{padding-left:44px}
+ header.top .ttl{font-size:18px}
+ .btn{padding:7px 12px;font-size:15px}
+ .cardimg{width:130px}.nobimg{width:110px}.deckimg{width:90px}
+}
+@media (prefers-reduced-motion:reduce){.pin{animation:none}}
+
+/* phủ gần kín chiều ngang */
+main{max-width:none;padding:12px 18px 50px}
+.hero{grid-template-columns:1.3fr 1fr}
+.acts{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+@media (min-width:1300px){ .acts{grid-template-columns:repeat(4,minmax(0,1fr))} }
+.boardshot{max-width:1000px;display:block;margin:10px auto 0}
+@media (max-width:760px){
+ main{padding:8px 6px 40px}
+ .hero{padding:12px;border-width:2px;border-radius:16px}
+ section.box{margin:12px 0;padding:14px 10px;border-width:2px;border-radius:14px}
+ nav.toc{margin:10px 0 4px;padding:8px}
+ table.t td,table.t th{padding:7px 6px}
+ .act{padding:10px}
+}
+
+/* ô thẻ giảm giá: giống ô yêu cầu trên thẻ quý tộc trong game */
+.sq{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font:bold 14px "Times New Roman",serif;font-style:normal;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.25),0 1px 2px rgba(0,0,0,.5);vertical-align:-4px;margin:0 2px}
+.sq0{background:linear-gradient(135deg,#6ee7b7,#059669 55%,#065f46)}
+.sq1{background:linear-gradient(135deg,#93c5fd,#2563eb 55%,#1e3a8a)}
+.sq2{background:linear-gradient(135deg,#fca5a5,#dc2626 55%,#7f1d1d)}
+.sq3{background:linear-gradient(135deg,#ffffff,#e2e8f0 55%,#94a3b8);color:#1f2937;text-shadow:none}
+.sq4{background:linear-gradient(135deg,#6b7280,#27272a 55%,#000)}
+.sqlbl{white-space:nowrap}
+</style><style>
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.sum section.box{margin:0}
+.sum section.box h2{font-size:22px;margin-bottom:8px}
+.sum section.box h2 .no{width:34px;height:34px;font-size:17px}
+.sum .wide2{grid-column:span 2}
+.goal{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.goal .big{font-size:46px;font-weight:bold;color:var(--bur);line-height:1}
+.mini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mini .act{padding:10px}
+.mini .act h3{font-size:18px!important}
+.mini .act p{font-size:15.5px;margin:4px 0}
+.chk{list-style:none;padding:0!important;margin:0}
+.chk li{position:relative;padding-left:26px!important}
+.chk li::before{content:"✦";position:absolute;left:4px;top:0;color:var(--bur3)}
+.hero.sm{grid-template-columns:1fr auto;padding:14px 20px}
+.hero.sm h1{font-size:34px}
+.hero.sm .gemrow{margin:4px 0 0}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-weight:bold;color:var(--bur)}
+.flow span{padding:4px 10px;border-radius:10px;background:#fffaf0;border:1px solid #e0c27a}
+@media (max-width:1100px){.sum{grid-template-columns:1fr 1fr}.mini{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.sum{grid-template-columns:1fr}.sum .wide2{grid-column:auto}.mini{grid-template-columns:1fr}.hero.sm{grid-template-columns:1fr}.hero.sm h1{font-size:27px}.goal .big{font-size:38px}}
+@media print{header.top,.cta{display:none}body{background:#fff}section.box{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top"><a class="btn" href="index.html">← Vào game</a><span class="ttl">Tóm tắt luật Thương Nhân Đá Quý</span><a class="btn" href="luat.html">Luật chi tiết</a></header>
+<main>
+<div class="hero sm">
+  <div><h1>Tóm tắt luật chơi</h1><p class="sub" style="margin:0">Thương Nhân Đá Quý · 2–4 người · khoảng 30 phút</p></div>
+  <div class="gemrow"><img src="assets/gem-0.webp" alt=""><img src="assets/gem-1.webp" alt=""><img src="assets/gem-2.webp" alt=""><img src="assets/gem-3.webp" alt=""><img src="assets/gem-4.webp" alt=""><img src="assets/gem-5.webp" alt=""></div>
+</div>
+
+<div class="sum" style="margin-top:14px">
+<section class="box">
+  <h2><span class="no">★</span>Mục tiêu</h2>
+  <div class="goal"><span class="big">15</span><span>điểm uy tín trở lên.<br>Có người đạt thì chơi nốt vòng, ai nhiều điểm nhất thắng.</span></div>
+</section>
+
+<section class="box wide2">
+  <h2><span class="no">↻</span>Mỗi lượt chọn đúng 1 việc</h2>
+  <div class="mini">
+    <div class="act"><h3>① Lấy 3 khác màu</h3><div class="ic"><img src="assets/gem-3.webp" alt=""><img src="assets/gem-1.webp" alt=""><img src="assets/gem-2.webp" alt=""></div><p>3 viên, mỗi viên 1 màu. Không lấy vàng.</p></div>
+    <div class="act"><h3>② Lấy 2 cùng màu</h3><div class="ic"><img src="assets/gem-4.webp" alt=""><img src="assets/gem-4.webp" alt=""></div><p>Chỉ khi Ngân khố còn từ 4 viên màu đó.</p></div>
+    <div class="act"><h3>③ Giữ chỗ 1 thẻ</h3><div class="ic"><img src="assets/gem-5.webp" alt=""></div><p>Cất vào Thẻ dự trữ (tối đa 3), nhận 1 <img class="g" src="assets/gem-5.webp" alt="">.</p></div>
+    <div class="act"><h3>④ Mua 1 thẻ</h3><div class="ic"><img src="assets/gem-0.webp" alt=""><img src="assets/gem-2.webp" alt=""><img src="assets/gem-5.webp" alt=""></div><p>Trên bàn hoặc thẻ đang giữ chỗ.</p></div>
+  </div>
+</section>
+
+<section class="box">
+  <h2><span class="no">%</span>Thẻ giảm giá</h2>
+  <ul class="chk">
+    <li>Mỗi thẻ đã mua là 1 thẻ giảm giá <span class="sq sq1">1</span>: bớt 1 viên màu đó, mãi mãi.</li>
+    <li>Thiếu màu nào thì trả bằng <img class="g" src="assets/gem-5.webp" alt=""> vàng.</li>
+  </ul>
+  <div class="flow" style="margin-top:8px"><span>Giá thẻ</span>−<span>Thẻ giảm giá</span>=<span>Phải trả</span></div>
+</section>
+
+<section class="box">
+  <h2><span class="no">10</span>Giới hạn 10 viên</h2>
+  <p>Trong lượt được giữ hơn 10. Cuối lượt còn hơn 10 viên (tính cả vàng) thì trả bớt cho còn đúng 10.</p>
+</section>
+
+<section class="box">
+  <h2><span class="no">♛</span>Quý tộc · 3 điểm</h2>
+  <div style="display:flex;gap:12px;align-items:center">
+    <img src="assets/rules/quy-toc-1.webp" alt="Quý tộc" style="width:84px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.35)">
+    <p style="margin:0">Cuối lượt, đủ thẻ giảm giá như ô màu (ví dụ <span class="sq sq1">4</span><span class="sq sq2">4</span>) thì quý tộc tự đến. Không tính đá trên tay. Tối đa 1 quý tộc mỗi lượt.</p>
+  </div>
+</section>
+
+<section class="box">
+  <h2><span class="no">⚑</span>Kết thúc ván</h2>
+  <ul class="chk">
+    <li>Ai đạt 15 điểm: mọi người chơi nốt vòng đó.</li>
+    <li>Nhiều điểm nhất thắng. Bằng điểm: ai ít thẻ hơn thắng.</li>
+  </ul>
+</section>
+
+<section class="box">
+  <h2><span class="no">⚙</span>Chuẩn bị (máy tự làm)</h2>
+  <table class="t"><tr><th>Người</th><th>Mỗi màu</th><th>Vàng</th><th>Quý tộc</th></tr>
+  <tr><td>2</td><td>4</td><td>5</td><td>3</td></tr><tr><td>3</td><td>5</td><td>5</td><td>4</td></tr><tr><td>4</td><td>7</td><td>5</td><td>5</td></tr></table>
+</section>
+
+<section class="box">
+  <h2><span class="no">!</span>Mẹo nhanh</h2>
+  <ul class="chk">
+    <li>Đầu ván mua thẻ cấp I rẻ để có thẻ giảm giá.</li>
+    <li>Tập trung 2–3 màu để mời quý tộc.</li>
+    <li>Giữ chỗ chặn thẻ đối thủ cần, kiếm thêm vàng.</li>
+  </ul>
+</section>
+</div>
+
+<div class="cta"><a class="btn pri" href="index.html">▶ Chơi ngay</a> <a class="btn" href="luat.html" style="margin-left:8px">Đọc luật chi tiết</a></div>
+<footer>Thương Nhân Đá Quý · Phi Board Games</footer>
+</main>
+</body>
+</html>
