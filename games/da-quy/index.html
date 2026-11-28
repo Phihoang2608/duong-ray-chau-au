@@ -914,5 +914,19 @@ Table.init({ diceOrder:true, id:'da-quy', prefix:'dq', title:'Thương Nhân Đ�
   <p><b>Giới hạn 10 viên:</b> trong lượt bạn được phép có hơn 10 viên. Chỉ khi kết thúc lượt mới kiểm tra: nếu túi quá tải (hơn 10 viên), bạn chọn trả bớt những viên tùy ý cho đến khi còn đúng 10 viên, rồi lượt chuyển sang người tiếp theo. Mỗi lượt có 60 giây.</p>
   <p style="text-align:center;margin-top:10px"><a href="luat.html" target="_blank" rel="noopener" style="display:inline-block;padding:8px 16px;border-radius:12px;background:linear-gradient(180deg,#ffe6a3,#e8c36a 55%,#b88a32);color:#2b0f15;font-weight:bold;text-decoration:none;border:2px solid #fff3cc">Xem luật chơi chi tiết, có hình minh họa →</a> <a href="tom-tat.html" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;padding:8px 16px;border-radius:12px;background:linear-gradient(180deg,#7a1d33,#4a0f1d);color:#ffe6a3;font-weight:bold;text-decoration:none;border:2px solid #e8c36a">Bản tóm tắt 1 trang</a> <a href="Luat-choi-Thuong-Nhan-Da-Quy.pdf" download style="display:inline-block;margin-top:6px;padding:8px 16px;border-radius:12px;background:#fff;color:#2b0f15;font-weight:bold;text-decoration:none;border:2px solid #e8c36a">⬇ Tải PDF</a></p>` });
 </script>
+<script id="dq-demo">
+/* Xem mẫu bảng kết quả: index.html?demo=ketqua — máy tự chơi hết 1 ván rồi hiện bảng chiến thắng */
+(function(){ if(!/[?&]demo=ketqua/.test(location.search)) return;
+  function go(){ const b=document.getElementById('m-local'); if(!b){ return setTimeout(go,300); }
+    const sel=document.getElementById('m-bots'); if(sel&&sel.querySelector('option[value="2"]')) sel.value='2';
+    const nm=document.getElementById('m-name'); if(nm&&!nm.value) nm.value='Bạn';
+    b.click();
+    setTimeout(function(){ const ov=document.getElementById('dice-ov'); if(ov) ov.remove();
+      const S=window.__S; if(!S) return; let t=Math.max(S.turnAt||0,S.diceUntil||0), n=0;
+      while(S.phase==='play'&&n++<4000){ t+=2500+Math.random()*4000; const a=DQ.botAction(S,S.turn,t); if(!a||!DQ.apply(S,S.turn,a,t)) break; }
+      DQUI.render(S,Table.API.me(),Table.API); },1200); }
+  if(document.readyState==='loading') addEventListener('DOMContentLoaded',()=>setTimeout(go,500)); else setTimeout(go,500);
+})();
+</script>
 </body>
 </html>
