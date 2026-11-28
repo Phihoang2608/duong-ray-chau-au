@@ -57,7 +57,7 @@ const FX = {
 function svgEl(tag, attrs){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
 function routeGeom(r){
   const A=CITIES[r.a], B=CITIES[r.b]; const dx=B.x-A.x, dy=B.y-A.y; const d=Math.hypot(dx,dy);
-  const ux=dx/d, uy=dy/d, nx=-uy, ny=ux, off=r.lane*10.5; return {ax:A.x+nx*off, ay:A.y+ny*off, ux, uy, d, ang:Math.atan2(dy,dx)*180/Math.PI};
+  const ux=dx/d, uy=dy/d, nx=-uy, ny=ux, off=r.lane*7.5; return {ax:A.x+nx*off, ay:A.y+ny*off, ux, uy, d, ang:Math.atan2(dy,dx)*180/Math.PI};
 }
 const TRAIN_RUN_MS = 1300;
 function trainRun(r, color){ if (FXMODE==='off') return;

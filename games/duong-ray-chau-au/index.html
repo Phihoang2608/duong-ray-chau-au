@@ -1901,7 +1901,7 @@ let LM_POS={}, LM_KEY='';
 function lmFree(cx,cy,R,placed){
   if (cx<R+4||cy<R+4||cx>MAP_W-R-4||cy>MAP_H-R-4) return false;
   const segD=(px,py,ax,ay,bx,by)=>{const dx=bx-ax,dy=by-ay,L=dx*dx+dy*dy;let t=L?((px-ax)*dx+(py-ay)*dy)/L:0;t=Math.max(0,Math.min(1,t));return Math.hypot(px-ax-t*dx,py-ay-t*dy);};
-  for (const r of ROUTES){ const A=CITIES[r.a],B=CITIES[r.b]; const d=Math.hypot(B.x-A.x,B.y-A.y)||1; const nx=-(B.y-A.y)/d, ny=(B.x-A.x)/d, o=(r.lane||0)*10.5;
+  for (const r of ROUTES){ const A=CITIES[r.a],B=CITIES[r.b]; const d=Math.hypot(B.x-A.x,B.y-A.y)||1; const nx=-(B.y-A.y)/d, ny=(B.x-A.x)/d, o=(r.lane||0)*7.5;
     if (segD(cx,cy,A.x+nx*o,A.y+ny*o,B.x+nx*o,B.y+ny*o) < R+19) return false; }
   for (const C of CITIES){ if (Math.hypot(cx-C.x,cy-C.y) < R+16) return false;
     const w=C.name.length*8.2, lx=C.anchor==='start'?C.x+C.dx:C.anchor==='end'?C.x+C.dx-w:C.x+C.dx-w/2, ly=C.y+C.dy-13;
@@ -2113,9 +2113,9 @@ function routeSVG(r, afford, now){
   const t=UIS.claimAt[r.id]; const el = t!=null ? now-t : 1e9; const fresh = el<2600 && G.owner[r.id]!=null;
   let s=`<g class="route ${canClick?'clickable':''} ${afford.has(r.id)?'afford':''} ${fresh?'glow':''}" data-id="${r.id}" ${fresh?`style="--gc:${G.players[owner].color};animation-delay:${-el}ms"`:''}>`;
   s+=`<line x1="${g.ax+g.ux*pad}" y1="${g.ay+g.uy*pad}" x2="${g.ax+g.ux*(g.d-pad)}" y2="${g.ay+g.uy*(g.d-pad)}" stroke="transparent" stroke-width="${HIT_W}"/>`;
-  const DK = .78; /* mọi đoàn tàu cùng cỡ, vừa làn đường đôi */
+  const DK = .68; /* mọi đoàn tàu cùng cỡ, vừa làn đường đôi */
   if (owner!=null){ const x1=(g.ax+g.ux*(pad+2)).toFixed(1), y1=(g.ay+g.uy*(pad+2)).toFixed(1), x2=(g.ax+g.ux*(g.d-pad-2)).toFixed(1), y2=(g.ay+g.uy*(g.d-pad-2)).toFixed(1);
-    s+=`<g class="${fresh?'pop':''}" pointer-events="none"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="21" stroke-linecap="round" opacity=".95"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="${(24*DK).toFixed(1)}" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
+    s+=`<g class="${fresh?'pop':''}" pointer-events="none"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="17" stroke-linecap="round" opacity=".95"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="${(24*DK).toFixed(1)}" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
   for (let i=0;i<r.len;i++){
     const tt=pad+seg*(i+0.5); const cx=(g.ax+g.ux*tt).toFixed(1), cy=(g.ay+g.uy*tt).toFixed(1);
     s+=`<g transform="translate(${cx},${cy}) rotate(${g.ang.toFixed(1)})">`;
