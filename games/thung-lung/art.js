@@ -14,7 +14,7 @@ const TLART=(()=>{
   /* ---- token 3D (ảnh) — thêm ?art=old vào địa chỉ để quay lại hình lục giác cũ ---- */
   const NEWART=!/[?&]art=old/.test(location.search);
   const IMGN={rung:3,nui:3,dong:1,nha:1,ho:1};
-  const K=1.5, UW=512, TIER=102.4; // ảnh rộng 512px; mỗi tầng cao 102.4px ảnh; tâm thân token ở y=217
+  const K=1.3, UW=512, TIER=102.4; // ảnh rộng 512px; mỗi tầng cao 102.4px ảnh; tâm thân token ở y=217
   const tkImg=(t,h)=>{ h=Math.min(h||1,IMGN[t]); return 'assets/tk-'+t+'-'+h+'.webp'; };
   const tkGeom=(r,h)=>{ const E=r*K, k=E/384; h=Math.min(h||1,3); return {k, w:UW*k, ht:(217+(h-1)*TIER)*k, tier:TIER*k, tf:(217-166)*k}; };
   function discImg(t,cx,cy,r,h){ h=Math.min(h||1,IMGN[t]); const g=tkGeom(r,h), hh=(h===1?435:h===2?538:640)*g.k;
@@ -46,13 +46,24 @@ const TLART=(()=>{
    meo:()=>SH+P('24,50 28,18 44,34 56,34 72,18 76,50 70,78 50,88 30,78','#9aa3b2')+P('24,50 28,18 44,34 50,62','#adb5c4')+P('28,24 36,34 30,40','#f2a8b8')+P('72,24 64,34 70,40','#f2a8b8')+'<ellipse cx="38" cy="52" rx="6" ry="7" fill="#9be07a"/><ellipse cx="62" cy="52" rx="6" ry="7" fill="#9be07a"/><ellipse cx="38" cy="52" rx="2" ry="6" fill="#2b2118"/><ellipse cx="62" cy="52" rx="2" ry="6" fill="#2b2118"/>'+P('46,64 54,64 50,69','#f08aa0')+'<path d="M26 66 l16 2 M26 72 l16 -2 M74 66 l-16 2 M74 72 l-16 -2 M50 69 v6" stroke="#fff" stroke-width="1.6" fill="none"/><path d="M44 28 l2 8 M56 28 l-2 8" stroke="#6f7888" stroke-width="3"/>'};
   const animal=(k,px)=>`<svg viewBox="0 0 100 100" width="${px}" height="${px}" aria-hidden="true">${AN[k]()}</svg>`;
   /* ----- bảng lục giác ----- */
-  function boardSvg(B,o){ o=o||{}; const s=o.s||40, pad=s*.5, W=s*8+pad*2, oy=pad+s*S3*.5, H=s*S3*5+pad*2+(NEWART?s*.9:0); const ox=pad+s, dy=NEWART?s*.9:0;
+  const TINT={rung:'#d6f0c8',nui:'#e0e3ea',dong:'#fff0af',nha:'#fad6cd',ho:'#cde8fa'};
+  const escx=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function boardSvg(B,o){ o=o||{}; const s=o.s||40, pad=s*.5, mini=!!o.mini;
+    const m=NEWART?s*.6:0, rb=NEWART&&!mini&&o.name!=null?s*1.15:0, dy0=NEWART?s*.6:0;   // m: lề khung gỗ, rb: chiều cao thanh tên
+    const W0=s*8+pad*2, H0=s*S3*5+pad*2, W=W0+m*2, H=H0+dy0+m*2+rb;
+    const ox=pad+s+m, oy=pad+s*S3*.5+dy0+m+rb;
     const hl=o.hl||{}, cubeSz=s*1.05; let g='', up='';
-    TL.KEYS.forEach(k=>{ const [q,r]=k.split(',').map(Number), x=ox+s*1.5*q, y=dy+oy+s*S3*(r+q/2), c=B[k]; const cl=hl[k]?' hl':'';
-      g+=`<g class="hx${cl}" data-hex="${k}"><polygon points="${hexPts(x,y+s*.1,s-1)}" fill="#c9b48a"/><polygon points="${hexPts(x,y,s-1)}" fill="${hl[k]?'#fff3c8':'#eadcb8'}" stroke="${hl[k]?'#ffb703':'#cdb78a'}" stroke-width="${hl[k]?3.2:1.2}"/>`;
+    if(NEWART){ const fb=s*.38, rr=s*1.7;
+      g+=`<rect x="${(fb*.2).toFixed(1)}" y="${(rb*.5+fb*.2).toFixed(1)}" width="${(W-fb*.4).toFixed(1)}" height="${(H-rb*.5-fb*.4).toFixed(1)}" rx="${rr.toFixed(1)}" fill="#b07d50"/><rect x="${fb.toFixed(1)}" y="${(rb*.5+fb).toFixed(1)}" width="${(W-fb*2).toFixed(1)}" height="${(H-rb*.5-fb*2).toFixed(1)}" rx="${(rr-fb*.8).toFixed(1)}" fill="#f0d5a0"/>`;
+      if(!mini) [[1,1],[W-1,1],[1,H-1],[W-1,H-1]].forEach(c=>{ const cx=c[0]<W/2?fb+s*.55:W-fb-s*.55, cy=c[1]<H/2?rb*.5+fb+s*.55:H-fb-s*.55; g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(s*.13).toFixed(1)}" fill="#966640"/><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(s*.07).toFixed(1)}" fill="#d6aa78"/>`; });
+      if(rb){ const nm=escx(o.name), fz=s*.5, w=Math.min(W*.8,Math.max(s*5,nm.length*fz*.62+s*1.6)), x0=(W-w)/2;
+        g+=`<rect x="${(x0+2).toFixed(1)}" y="${(s*.1+4).toFixed(1)}" width="${w.toFixed(1)}" height="${(rb*.9).toFixed(1)}" rx="${(rb*.45).toFixed(1)}" fill="#785029"/><rect x="${x0.toFixed(1)}" y="${(s*.1).toFixed(1)}" width="${w.toFixed(1)}" height="${(rb*.9).toFixed(1)}" rx="${(rb*.45).toFixed(1)}" fill="#fce296" stroke="#b07d50" stroke-width="${(s*.1).toFixed(1)}"/><text x="${(W/2).toFixed(1)}" y="${(s*.1+rb*.45+fz*.36).toFixed(1)}" text-anchor="middle" font-size="${fz.toFixed(1)}" font-weight="700" fill="#603c1e" font-family="system-ui,Arial,sans-serif">${nm}</text>`; } }
+    TL.KEYS.forEach(k=>{ const [q,r]=k.split(',').map(Number), x=ox+s*1.5*q, y=oy+s*S3*(r+q/2), c=B[k]; const cl=hl[k]?' hl':'';
+      const base=hl[k]?'#fff3c8':(NEWART&&c?TINT[c.t]:'#eadcb8'), edge=NEWART&&c&&!hl[k]?'#c9b48a':'#c9b48a';
+      g+=`<g class="hx${cl}" data-hex="${k}"><polygon points="${hexPts(x,y+s*.1,s-1)}" fill="${edge}"/><polygon points="${hexPts(x,y,s-1)}" fill="${base}" stroke="${hl[k]?'#ffb703':'#cdb78a'}" stroke-width="${hl[k]?3.2:1.2}"/>`;
       let top='';
       if(c){ top+=disc(c.t,x,y,s*.86,c.h);
-        if(c.cube!=null){ const gm=NEWART?tkGeom(s*.86,Math.min(c.h,IMGN[c.t])):null, cy2=NEWART?(y-gm.ht+gm.tf*1.0-cubeSz*.72):(y-cubeSz*.86);
+        if(c.cube!=null){ const gm=NEWART?tkGeom(s*.86,Math.min(c.h,IMGN[c.t])):null, cy2=NEWART?(y-gm.ht+gm.tf-cubeSz*.72):(y-cubeSz*.86);
           top+=`<g transform="translate(${x-cubeSz/2} ${cy2})"><rect x="${cubeSz*.08}" y="${cubeSz*.08}" width="${cubeSz*.84}" height="${cubeSz*.84}" rx="${cubeSz*.2}" fill="#fff" stroke="#8a5a2f" stroke-width="2"/>${animal(TL.A[c.cube].k,cubeSz).replace('<svg ','<svg x="0" y="0" ')}</g>`; } }
       if(hl[k]) top+=`<polygon points="${hexPts(x,y,s*.5)}" fill="#ffb703" opacity=".25"/>`;
       if(NEWART){ g+='</g>'; up+=`<g class="hx${cl}" data-hex="${k}" data-y="${y}">${top}</g>`; } else { g+=top+'</g>'; } });

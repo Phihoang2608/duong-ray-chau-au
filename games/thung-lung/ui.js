@@ -23,8 +23,8 @@ const TLUI=(()=>{
     h+=`<section class="mk"><div class="slots">${S.slots.map((s,i)=>`<div class="slot ${my&&S.step==='take'&&s.length?'go':''}" data-slot="${i}"><div class="tk">${s.map(t=>A.token(t,34,1)).join('')}</div>${my&&S.step==='take'&&s.length?'<button class="tb gold" data-slot="'+i+'">Lấy</button>':'<span class="ph">&nbsp;</span>'}</div>`).join('')}</div>`;
     h+=`<div class="arow">${S.row.map(id=>`<div class="ac">${A.card(TL.A[id],{cls:'sm'})}${my&&S.step==='animal'&&TL.canCard(S,P)?`<button class="tb gold" data-card="${id}">Lấy thẻ</button>`:'<span class="ph">&nbsp;</span>'}</div>`).join('')}</div></section>`;
     // thung lũng của tôi
-    if(P){ h+=`<section class="mine ${my?'turn':''}"><div class="mh"><b>${esc(S.seats[ME].name)}</b><span class="sc">${sc[ME].total} điểm</span><small>Đất ${sc[ME].terrain} · Vật ${sc[ME].animals}</small></div>
-      <div class="hint">${hint(S,ME,my)}</div><div class="bd">${A.boardSvg(P.board,{s:40,hl})}</div>`;
+    if(P){ h+=`<section class="mine ${my?'turn':''}"><div class="mh"><span class="sc">${sc[ME].total} điểm</span><small>Đất ${sc[ME].terrain} · Vật ${sc[ME].animals}</small></div>
+      <div class="hint">${hint(S,ME,my)}</div><div class="bd">${A.boardSvg(P.board,{s:40,hl,name:S.seats[ME].name})}</div>`;
       if(my&&S.step==='place') h+=`<div class="tray">${S.tray.map((t,i)=>`<div class="tr ${i===selT?'on':''}" data-tray="${i}">${A.token(t,56,1)}<small>${TN[t]}</small></div>`).join('')}</div>`;
       if(my&&S.step==='animal') h+=`<div class="acts"><button class="tb pri" data-end="1">Kết thúc lượt</button></div>`;
       h+=`<div class="hand">${P.hand.length?P.hand.map(id=>{ const can=my&&S.step==='animal'&&TL.spots(P,id).length>0; return A.card(TL.A[id],{cubes:P.cubes[id]||0,cls:(can?'can ':'')+(selCard===id?'sel':''),attr:`data-hand="${id}"`}); }).join(''):'<span class="mute">Chưa có thẻ con vật — lấy thẻ ở hàng trên mỗi lượt</span>'}</div></section>`; }
