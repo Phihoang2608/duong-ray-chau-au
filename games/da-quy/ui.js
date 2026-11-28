@@ -173,7 +173,7 @@ ${ticks}${rn}
     const v=document.createElement('div'); v.id='dqv';
     v.innerHTML=`<div class="dqvp"><button class="x" data-v="close" title="Đóng">✕</button><div class="crown">👑</div><h2>${w===ME?'Chúc mừng bạn!':esc(S.seats[w].name)+' chiến thắng!'}</h2>
       <p class="wsub">${w===ME?'Bạn':esc(S.seats[w].name)} trở thành thương nhân đá quý danh tiếng nhất với ${S.P[w].pts} điểm uy tín${dur?' · ván dài '+dur:''}${S.round?' · '+S.round+' vòng':''}.</p>
-      ${rows}<div class="bts">${api.mode()!=='client'?'<button class="pri" data-v="again">▶ Chơi ván mới</button>':''}<button data-v="review">📊 Kết quả ván</button><button data-v="close">Xem bàn chơi</button></div></div>`;
+      ${rows}<div class="bts">${api.mode()!=='client'?'<button class="pri" data-v="again">▶ Chơi ván mới</button>':''}<button data-v="review">Kết quả ván</button><button data-v="close">Xem bàn chơi</button></div></div>`;
     document.body.appendChild(v);
     v.addEventListener('click',e=>{ const b=e.target.closest('[data-v]'); if(!b){ if(e.target===v) v.remove(); return; } const k=b.dataset.v; v.remove(); if(k==='again') api.rematch(); else if(k==='review') showReview(S,api); });
   }
@@ -213,7 +213,7 @@ ${ticks}${rn}
     function tabLog(){ const L=S.log; return L.map((l,k)=>`<div class="dqhrow"><i>${L.length-k}</i><span>${logH(l,api)}</span></div>`).join(''); }
     const TABS=[['p','Người chơi',tabPlayers],['c','Diễn biến điểm',tabChart],['k','Thẻ & quý tộc',tabCards],['l','Nhật ký',tabLog]];
     const r=document.createElement('div'); r.id='dqr';
-    r.innerHTML=`<div class="dqvp"><button class="x" data-v="close">✕</button><h2>📊 Kết quả ván</h2>
+    r.innerHTML=`<div class="dqvp"><button class="x" data-v="close">✕</button><h2>Kết quả ván</h2>
       <p class="wsub" style="margin:2px 0 0">${S.winner>=0?esc(S.seats[S.winner].name)+' thắng · ':''}${S.round||''} vòng${S.tEnd&&S.t0?' · '+fmtT(S.tEnd-S.t0):''}</p>
       <div class="dqtabs">${TABS.map((t,k)=>`<button data-t="${t[0]}" class="${k?'':'on'}">${t[1]}</button>`).join('')}</div><div class="dqbody">${TABS[0][2]()}</div>
       <div class="bts" style="margin-top:10px">${S.phase==='over'&&api.mode()!=='client'?'<button class="pri" data-v="again">▶ Chơi ván mới</button>':''}<button data-v="close">Đóng</button></div></div>`;
@@ -264,7 +264,7 @@ ${ticks}${rn}
       <small>3 màu khác nhau, hoặc 2 viên cùng màu (còn từ 4).</small>
       <div class="goldbox"><div class="bt">Vàng</div>${gemTok(5)}<small>Nhận khi giữ chỗ thẻ</small></div></div>`;
     let act='';
-    if (S.phase==='over') act=`<b class="big">${api.esc(S.seats[S.winner].name)} thắng với ${S.P[S.winner].pts} điểm!</b> ${api.mode()!=='client'?'<button class="tbtn pri" data-a="again">Chơi ván mới</button>':''} <button class="tbtn" data-a="review">📊 Kết quả ván</button> <button class="tbtn" data-a="victory">🏆 Bảng xếp hạng</button>`;
+    if (S.phase==='over') act=`<b class="big">${api.esc(S.seats[S.winner].name)} thắng với ${S.P[S.winner].pts} điểm!</b> ${api.mode()!=='client'?'<button class="tbtn pri" data-a="again">Chơi ván mới</button>':''} <button class="tbtn" data-a="review">Kết quả ván</button> <button class="tbtn" data-a="victory">🏆 Bảng xếp hạng</button>`;
     else if (my && S.step==='discard') act=`<b class="warn blink">⚠️ Túi quá tải (${DQ.tot(P.tok)}/10)!</b> <span>Hết lượt phải trả bớt cho còn 10 viên — bấm viên đá đang nhấp nháy trong khung của bạn để trả <b>${DQ.tot(P.tok)-10}</b> viên tùy chọn.</span>`;
     else if (pick) act=`<span>Đã chọn thẻ — bấm <b>Mua</b> hoặc <b>Giữ chỗ</b> ở khung cạnh lá bài.</span>`;
     else act = (!my&&S.phase==='play'&&S.step==='discard')?`<span>⚠️ Túi của ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')} quá tải (${DQ.tot(S.P[S.turn].tok)}/10) — đang trả bớt cho còn 10 viên…</span>`:my?'<b class="me blink">Đến lượt bạn!</b> lấy đá ở ngân khố, hoặc bấm 1 lá để mua / giữ chỗ.':`<span>Đang chờ ${api.esc(S.seats[S.turn]?S.seats[S.turn].name:'')}…</span>`;
