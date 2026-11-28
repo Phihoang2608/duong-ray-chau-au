@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f5a3d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Thung Lũng Hòa Sắc">
+<link rel="manifest" href="../../manifest.json">
+<link rel="apple-touch-icon" href="../../pwa/apple-icon.png">
+<link rel="stylesheet" href="style.css">
+<title>Thung Lũng Hòa Sắc | Phi Board Games</title>
+</head>
+<body>
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="../../core/room.js"></script>
+<script src="../../core/audio.js"></script>
+<script src="../../core/effects.js"></script>
+<script src="../../core/table.js?v=20261128dice"></script>
+<script src="game.js"></script>
+<script src="art.js"></script>
+<script src="ui.js"></script>
+<script>
+Table.init({ diceOrder:true, id:'thung-lung', prefix:'tl', title:'Thung Lũng Hòa Sắc', tagline:'Xếp đất, nuôi thú, tạo nên thung lũng hài hòa',
+  minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:90, botDelay:800, difficulty:true,
+  newGame:TL.newGame, apply:TL.apply, tick:TL.tick, whoActs:TL.whoActs, botAction:TL.botAction, timeoutAction:TL.timeoutAction,
+  render:TLUI.render, tickView:TLUI.tickView,
+  rules:`<p><b>Mục tiêu:</b> xây thung lũng đẹp nhất. Ai nhiều điểm nhất khi ván kết thúc sẽ thắng.</p>
+  <p><b>Mỗi người</b> có một thung lũng gồm <b>23 ô lục giác</b>. Có 5 loại đất: <b>Rừng, Núi, Đồng, Nhà, Hồ</b>.</p>
+  <p><b>Mỗi lượt:</b></p>
+  <p>1. <b>Lấy đất:</b> chọn 1 trong 4 nhóm ở chợ, lấy cả 3 mảnh trong nhóm.</p>
+  <p>2. <b>Đặt đất:</b> đặt từng mảnh vào thung lũng của bạn. Ô trống nhận mảnh nào cũng được. Rừng và Núi được xếp chồng cùng loại, cao tối đa 3 tầng. Ô đã có con vật thì không đặt thêm được.</p>
+  <p>3. <b>Con vật</b> (tùy chọn): nhận tối đa 1 thẻ con vật mỗi lượt (giữ được 4 thẻ). Khi thung lũng có ô đúng điều kiện trên thẻ, đặt 1 con vật vào ô đó. Mỗi con vật ghi điểm theo vòng tròn trên thẻ (con đầu tiên ít, con cuối nhiều nhất).</p>
+  <p><b>Điểm đất:</b></p>
+  <p>• Rừng: ô cao 1 / 2 / 3 tầng được 1 / 3 / 7 điểm.</p>
+  <p>• Núi: như Rừng, nhưng chỉ tính khi ô núi nằm kề một ô Núi khác.</p>
+  <p>• Đồng: mỗi vùng từ 2 ô Đồng liền nhau được 5 điểm.</p>
+  <p>• Nhà: mỗi ô Nhà kề ít nhất 3 loại đất khác nhau được 5 điểm.</p>
+  <p>• Hồ: tính dải Hồ liền nhau dài nhất: 2 ô = 2, 3 = 5, 4 = 8, 5 = 11, 6 trở lên = 15 điểm.</p>
+  <p><b>Điều kiện con vật:</b> con vật đứng trên ô có loại đất ghi bên trái (và độ cao ▲ nếu có), cạnh nó phải có đủ số ô đất ghi sau dấu +.</p>
+  <p><b>Kết thúc:</b> khi thung lũng của ai đó sắp kín (còn tối đa 1 ô trống) hoặc kho đất gần hết, mọi người chơi hết vòng đó rồi tính điểm.</p>` });
+</script>
+</body>
+</html>
