@@ -1175,6 +1175,9 @@ html body .vticket.imgt .vt-done{font-size:11cqw!important;border-width:2px!impo
 #tickets .vticket.drop{animation:tkdrop .6s cubic-bezier(.2,1.4,.4,1)}
 @keyframes tkdrop{0%{transform:translateY(-70px) scale(1.1);opacity:.3}60%{transform:translateY(6px)}100%{transform:none;opacity:.72}}
 .rules a.rlink{display:inline-block;margin:3px;padding:6px 14px;border-radius:999px;background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);border:1.5px solid #7a5310;color:#3a1a08;font-weight:bold;text-decoration:none}
+body.portphone .clabel{font-size:20px;stroke-width:6px}
+body.landphone .clabel{font-size:18px;stroke-width:5.5px}
+body.portphone #mapScroll{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 </style>
 </head>
 <body>
@@ -2296,8 +2299,18 @@ function fitZoom(){
   fitLayout();
   const sc=$('#mapScroll'); if(!sc) return; const w=sc.clientWidth, h=sc.clientHeight; if(!w||!h) return;
   if (applyMapStretch()){ BG_DONE=false; if (G) renderMap(); else { $('#bg').innerHTML=bgSVG(); BG_DONE=true; } }
-  const z = UIS.fitMode==='all' ? Math.floor(Math.min(100, h*(MAP_W/MAP_H)/w*100)) : 100;
+  const port=document.body.classList.contains('portphone');
+  const z = port && !UIS.portWhole ? (innerWidth<600?210:150) : UIS.fitMode==='all' ? Math.floor(Math.min(100, h*(MAP_W/MAP_H)/w*100)) : 100;
   setZoom(z, null, true);
+  if (port && !UIS.portWhole) requestAnimationFrame(centerMapOnMe);
+}
+/* Điện thoại dọc: phóng to bản đồ cho dễ đọc, đưa vùng vé của mình vào giữa khung */
+function centerMapOnMe(){
+  const sc=$('#mapScroll'); if(!sc) return; const svg=$('#map'); const k=svg.getBoundingClientRect().width/MAP_W; if(!k) return;
+  let pts=[]; try{ const me=G&&G.players[ME]; if(me) me.tickets.forEach(id=>{ const t=TK[id]; if(t){ pts.push(CITIES[t.a],CITIES[t.b]); } }); }catch(e){}
+  if(!pts.length) pts=[{x:MAP_W/2,y:MAP_H/2}];
+  const cx=pts.reduce((s,c)=>s+c.x,0)/pts.length, cy=pts.reduce((s,c)=>s+c.y,0)/pts.length;
+  sc.scrollLeft=Math.max(0,cx*k-sc.clientWidth/2); sc.scrollTop=Math.max(0,cy*k-sc.clientHeight/2);
 }
 addEventListener('resize', ()=>{ fixStickyTop(); if (UIS.autoFit) fitZoom(); else fitLayout(); });
 function renderScoreboard(){
@@ -2462,7 +2475,7 @@ function showDice(S){
   ov.querySelector('.go').onclick=close; setTimeout(close, Math.max(tDone+1800, left-200));
 }
 
-function render(){ if(!G) return; MUSIC.sync((G.phase==='play'||G.phase==='pick') && $('#menu').classList.contains('hidden')); if (UIS.focus && (ME<0 || !G.players[ME] || !G.players[ME].tickets.includes(UIS.focus.id))) UIS.focus=null; updateTurnClock(); renderPlayers(); renderMap(); renderSide(); ensureModal(); processFx(); checkTickets(); try{ showDice(G); }catch(e){} }
+function render(){ if(!G) return; MUSIC.sync((G.phase==='play'||G.phase==='pick') && $('#menu').classList.contains('hidden')); if (UIS.focus && (ME<0 || !G.players[ME] || !G.players[ME].tickets.includes(UIS.focus.id))) UIS.focus=null; updateTurnClock(); renderPlayers(); renderMap(); renderSide(); ensureModal(); processFx(); checkTickets(); try{ showDice(G); }catch(e){} try{ const ck=(G.ordDice&&G.ordDice.id)+':'+(G.players[ME]?G.players[ME].tickets.length:0); if(G.phase==='play'&&document.body.classList.contains('portphone')&&!UIS.portWhole&&UIS.centerKey!==ck){ UIS.centerKey=ck; requestAnimationFrame(centerMapOnMe); } }catch(e){} }
 
 /* ----- Thu phóng bản đồ ----- */
 UIS.zoom=100;
@@ -3083,7 +3096,7 @@ function bind(){
     UIS.hl=null; UIS.tkHTML=null; renderSide(); renderMap(); });
   $('#tickets').addEventListener('mouseleave', ()=>{ UIS.hl=null; renderMap(); });
   $('#zoom').oninput=e=>setZoom(+e.target.value);
-  $('#zoomIn').onclick=()=>setZoom(UIS.zoom+25); $('#zoomOut').onclick=()=>setZoom(UIS.zoom-25); $('#zoomFit').onclick=()=>{ if (UIS.autoFit) UIS.fitMode = UIS.fitMode==='w' ? 'all' : 'w'; UIS.autoFit=true; fitZoom(); $('#zoomFit').title = UIS.fitMode==='w' ? 'Đang: rộng hết khung — bấm để thấy trọn bản đồ' : 'Đang: thấy trọn bản đồ — bấm để rộng hết khung'; toast(UIS.fitMode==='w'?'Bản đồ rộng hết khung (kéo lên xuống để xem)':'Thu nhỏ để thấy trọn bản đồ'); };
+  $('#zoomIn').onclick=()=>setZoom(UIS.zoom+25); $('#zoomOut').onclick=()=>setZoom(UIS.zoom-25); $('#zoomFit').onclick=()=>{ if (document.body.classList.contains('portphone')){ UIS.portWhole=!UIS.portWhole; UIS.autoFit=true; UIS.fitMode='all'; fitZoom(); toast(UIS.portWhole?'Thu nhỏ để thấy trọn bản đồ':'Phóng to — kéo để di chuyển bản đồ'); return; } if (UIS.autoFit) UIS.fitMode = UIS.fitMode==='w' ? 'all' : 'w'; UIS.autoFit=true; fitZoom(); $('#zoomFit').title = UIS.fitMode==='w' ? 'Đang: rộng hết khung — bấm để thấy trọn bản đồ' : 'Đang: thấy trọn bản đồ — bấm để rộng hết khung'; toast(UIS.fitMode==='w'?'Bản đồ rộng hết khung (kéo lên xuống để xem)':'Thu nhỏ để thấy trọn bản đồ'); };
   $('#bigBtn').onclick=()=>{ document.body.classList.toggle('bigmap'); const on=document.body.classList.contains('bigmap'); $('#bigBtn').textContent='⛶'; $('#bigBtn').title=on?'Thu bản đồ':'Bản đồ lớn'; try{ localStorage.setItem('dr-big', on?'1':'0'); }catch(e){} requestAnimationFrame(()=>{ if (UIS.autoFit) fitZoom(); else fitLayout(); }); };
   $('#mapScroll').addEventListener('wheel', e=>{ if(!e.ctrlKey && !e.metaKey) return; e.preventDefault(); setZoom(UIS.zoom + (e.deltaY<0?15:-15), e); }, {passive:false});
   // Chụm 2 ngón để phóng to/thu nhỏ bản đồ trên điện thoại
