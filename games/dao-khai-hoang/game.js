@@ -144,7 +144,7 @@ const KH = (()=>{
       case 'buydev': me.devB++; me.spent+=neg(d[seat]); break;
       case 'town': case 'city': case 'road': if(ph0==='setup') me.start+=pos(d[seat]); else me.spent+=neg(d[seat]); break;
       case 'end': me.turns++; break; } }
-  let UND=null; const UNDOABLE=['town','road','city','trade'];
+  let UND=null; const UNDOABLE=['town','road','city','trade','knight','roaddev','plenty','mono'];
   function apply(S,seat,a,t){
     if (a&&a.t==='undo'){ if(!UND||UND.seat!==seat||S.phase==='over'||S.offer) return false; const sn=JSON.parse(JSON.stringify(UND.snap)), n=(S.evN||0)+1; UND=null;
       Object.keys(S).forEach(k=>{ delete S[k]; }); Object.assign(S,sn); S.undo=-1; S.evN=n; S.ev={n,k:'undo',seat}; S.log.unshift(S.seats[seat].name+' hoàn tác nước vừa đi.'); S.turnAt=t; return true; }
