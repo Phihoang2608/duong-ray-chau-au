@@ -1903,7 +1903,7 @@ const LANDMARKS = MAP_ID==='na' ? LANDMARKS_NA : LANDMARKS_EU;
 
 /* ===== Hình học tuyến: mọi ô cùng cỡ; tuyến ngắn hoặc đi xuyên qua thành phố khác sẽ uốn cong ===== */
 const RG_BOX=34, RG_PITCH=37, RG_PAD=11;
-function rgPitch(g,len){ return Math.max(RG_PITCH, Math.min((g.d-2*RG_PAD)/len, RG_PITCH+12)); }
+function rgPitch(g,len){ return Math.max(RG_PITCH, (g.d-2*RG_PAD)/len); }
 let RG_CACHE={}, RG_KEY='';
 function rgBase(a,b,h){ /* đường cong bậc 2 từ a sang b, lệch vuông góc h tại giữa */
   const A=CITIES[a],B=CITIES[b]; const dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||1; const nx=-dy/d, ny=dx/d;
@@ -2169,8 +2169,9 @@ function routeSVG(r, afford, now){
   const t=UIS.claimAt[r.id]; const el = t!=null ? now-t : 1e9; const fresh = el<2600 && G.owner[r.id]!=null;
   let s=`<g class="route ${canClick?'clickable':''} ${afford.has(r.id)?'afford':''} ${fresh?'glow':''}" data-id="${r.id}" ${fresh?`style="--gc:${G.players[owner].color};animation-delay:${-el}ms"`:''}>`;
   s+=`<path d="${g.path(pad,g.d-pad)}" fill="none" stroke="transparent" stroke-width="${HIT_W}"/>`;
+  if (owner==null){ const tp=g.path(pad-2,g.d-pad+2); s+=`<path d="${tp}" fill="none" stroke="#5b4327" stroke-width="9" stroke-dasharray="2 5" opacity=".55" pointer-events="none"/><path d="${tp}" fill="none" stroke="#5b4327" stroke-width="2.2" opacity=".7" pointer-events="none" transform="translate(0,0)"/>`; }
   const DK = .68; /* mọi đoàn tàu cùng cỡ, vừa làn đường đôi */
-  if (owner!=null){ const PT=rgPitch(g,r.len); const pd=g.path(g.d/2-(r.len*PT)/2+2, g.d/2+(r.len*PT)/2-2);
+  if (owner!=null){ const pd=g.path(pad+1, g.d-pad-1);
     s+=`<g class="${fresh?'pop':''}" pointer-events="none"><path d="${pd}" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round" opacity=".95"/><path d="${pd}" fill="none" stroke="#111" stroke-width="${(24*DK).toFixed(1)}" stroke-linecap="round"/><path d="${pd}" fill="none" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
   for (let i=0;i<r.len;i++){
     const tt=g.d/2+(i+0.5-r.len/2)*rgPitch(g,r.len); const q=g.at(tt); const cx=q.x.toFixed(1), cy=q.y.toFixed(1); let ga=q.ang; if(ga>90) ga-=180; if(ga<-90) ga+=180;
