@@ -48,24 +48,25 @@ const TLART=(()=>{
   /* ----- bảng lục giác ----- */
   const TINT={rung:'#d6f0c8',nui:'#e0e3ea',dong:'#fff0af',nha:'#fad6cd',ho:'#cde8fa'};
   const escx=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const hexPtsP=(cx,cy,r)=>[0,1,2,3,4,5].map(i=>{ const a=(60*i+30)*Math.PI/180; return (cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1); }).join(' ');
   function boardSvg(B,o){ o=o||{}; const s=o.s||40, pad=s*.5, mini=!!o.mini;
-    const m=NEWART?s*.6:0, rb=NEWART&&!mini&&o.name!=null?s*1.15:0, dy0=NEWART?s*.6:0;   // m: lề khung gỗ, rb: chiều cao thanh tên
-    const W0=s*8+pad*2, H0=s*S3*5+pad*2, W=W0+m*2, H=H0+dy0+m*2+rb;
-    const ox=pad+s+m, oy=pad+s*S3*.5+dy0+m+rb;
-    const hl=o.hl||{}, cubeSz=s*1.05; let g='', up='';
+    const PT=NEWART, SQ3=Math.sqrt(3), m=NEWART?s*.6:0, rb=NEWART&&!mini&&o.name!=null?s*1.15:0, dy0=NEWART?s*.6:0;   // m: lề khung gỗ, rb: chiều cao thanh tên
+    const W0=PT?s*SQ3*5+pad*2:s*8+pad*2, H0=PT?s*(2+6)+pad*2:s*S3*5+pad*2, W=W0+m*2, H=H0+dy0+m*2+rb;
+    const ox=PT?pad+s*SQ3/2+m:pad+s+m, oy=PT?pad+s+dy0+m+rb:pad+s*S3*.5+dy0+m+rb;
+    const hl=o.hl||{}, cubeSz=s*1.05; let g='', up=''; const HP=PT?hexPtsP:hexPts;
     if(NEWART){ const fb=s*.38, rr=s*1.7;
       g+=`<rect x="${(fb*.2).toFixed(1)}" y="${(rb*.5+fb*.2).toFixed(1)}" width="${(W-fb*.4).toFixed(1)}" height="${(H-rb*.5-fb*.4).toFixed(1)}" rx="${rr.toFixed(1)}" fill="#b07d50"/><rect x="${fb.toFixed(1)}" y="${(rb*.5+fb).toFixed(1)}" width="${(W-fb*2).toFixed(1)}" height="${(H-rb*.5-fb*2).toFixed(1)}" rx="${(rr-fb*.8).toFixed(1)}" fill="#f0d5a0"/>`;
       if(!mini) [[1,1],[W-1,1],[1,H-1],[W-1,H-1]].forEach(c=>{ const cx=c[0]<W/2?fb+s*.55:W-fb-s*.55, cy=c[1]<H/2?rb*.5+fb+s*.55:H-fb-s*.55; g+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(s*.13).toFixed(1)}" fill="#966640"/><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${(s*.07).toFixed(1)}" fill="#d6aa78"/>`; });
       if(rb){ const nm=escx(o.name), fz=s*.5, w=Math.min(W*.8,Math.max(s*5,nm.length*fz*.62+s*1.6)), x0=(W-w)/2;
         g+=`<rect x="${(x0+2).toFixed(1)}" y="${(s*.1+4).toFixed(1)}" width="${w.toFixed(1)}" height="${(rb*.9).toFixed(1)}" rx="${(rb*.45).toFixed(1)}" fill="#785029"/><rect x="${x0.toFixed(1)}" y="${(s*.1).toFixed(1)}" width="${w.toFixed(1)}" height="${(rb*.9).toFixed(1)}" rx="${(rb*.45).toFixed(1)}" fill="#fce296" stroke="#b07d50" stroke-width="${(s*.1).toFixed(1)}"/><text x="${(W/2).toFixed(1)}" y="${(s*.1+rb*.45+fz*.36).toFixed(1)}" text-anchor="middle" font-size="${fz.toFixed(1)}" font-weight="700" fill="#603c1e" font-family="system-ui,Arial,sans-serif">${nm}</text>`; } }
-    TL.KEYS.forEach(k=>{ const [q,r]=k.split(',').map(Number), x=ox+s*1.5*q, y=oy+s*S3*(r+q/2), c=B[k]; const cl=hl[k]?' hl':'';
+    TL.KEYS.forEach(k=>{ const [q,r]=k.split(',').map(Number), x=PT?ox+s*SQ3*(r+q/2):ox+s*1.5*q, y=PT?oy+s*1.5*q:oy+s*S3*(r+q/2), c=B[k]; const cl=hl[k]?' hl':'';
       const base=hl[k]?'#fff3c8':(NEWART&&c?TINT[c.t]:'#eadcb8'), edge=NEWART&&c&&!hl[k]?'#c9b48a':'#c9b48a';
-      g+=`<g class="hx${cl}" data-hex="${k}"><polygon points="${hexPts(x,y+s*.1,s-1)}" fill="${edge}"/><polygon points="${hexPts(x,y,s-1)}" fill="${base}" stroke="${hl[k]?'#ffb703':'#cdb78a'}" stroke-width="${hl[k]?3.2:1.2}"/>`;
+      g+=`<g class="hx${cl}" data-hex="${k}"><polygon points="${HP(x,y+s*.1,s-1)}" fill="${edge}"/><polygon points="${HP(x,y,s-1)}" fill="${base}" stroke="${hl[k]?'#ffb703':'#cdb78a'}" stroke-width="${hl[k]?3.2:1.2}"/>`;
       let top='';
       if(c){ top+=disc(c.t,x,y,s*.86,c.h);
         if(c.cube!=null){ const gm=NEWART?tkGeom(s*.86,Math.min(c.h,IMGN[c.t])):null, cy2=NEWART?(y-gm.ht+gm.tf-cubeSz*.72):(y-cubeSz*.86);
           top+=`<g transform="translate(${x-cubeSz/2} ${cy2})"><rect x="${cubeSz*.08}" y="${cubeSz*.08}" width="${cubeSz*.84}" height="${cubeSz*.84}" rx="${cubeSz*.2}" fill="#fff" stroke="#8a5a2f" stroke-width="2"/>${animal(TL.A[c.cube].k,cubeSz).replace('<svg ','<svg x="0" y="0" ')}</g>`; } }
-      if(hl[k]) top+=`<polygon points="${hexPts(x,y,s*.5)}" fill="#ffb703" opacity=".25"/>`;
+      if(hl[k]) top+=`<polygon points="${HP(x,y,s*.5)}" fill="#ffb703" opacity=".25"/>`;
       if(NEWART){ g+='</g>'; up+=`<g class="hx${cl}" data-hex="${k}" data-y="${y}">${top}</g>`; } else { g+=top+'</g>'; } });
     if(NEWART){ const arr=up.split('<g class="hx').filter(Boolean).map(x=>'<g class="hx'+x).sort((a,b)=>(+/data-y="([\d.]+)"/.exec(a)[1])-(+/data-y="([\d.]+)"/.exec(b)[1])); g+=arr.join(''); }
     return `<svg class="thb" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`; }
