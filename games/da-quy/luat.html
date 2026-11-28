@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Luật chơi Thương Nhân Đá Quý</title>
+<meta name="description" content="Hướng dẫn chơi chi tiết Thương Nhân Đá Quý: lấy đá, giữ chỗ, mua thẻ, quý tộc, kết thúc ván, có ví dụ.">
+<link rel="icon" href="assets/icon-192.png">
+<style>
+:root{--bur:#5a1424;--bur2:#3d0c19;--bur3:#7a1d33;--gold:#e8c36a;--goldl:#ffe6a3;--goldd:#a87d2c;--cream:#fbefd6;--ink:#2b0f15}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.6;color:var(--cream);
+ background:var(--bur2) url(assets/damask.svg) repeat;background-size:110px auto;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0,rgba(90,20,36,.55),rgba(30,6,12,.92) 75%);pointer-events:none;z-index:-1}
+a{color:var(--goldl)}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 16px;background:linear-gradient(180deg,#5a1424,#3d0c19);border-bottom:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.45)}
+header.top .ttl{font-size:21px;font-weight:bold;color:var(--goldl);letter-spacing:.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:12px;border:2px solid var(--gold);background:linear-gradient(180deg,#7a1d33,#4a0f1d);color:var(--goldl);font:bold 16px "Times New Roman",serif;text-decoration:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,230,163,.35),0 3px 8px rgba(0,0,0,.35)}
+.btn.pri{background:linear-gradient(180deg,#ffe6a3,#e8c36a 55%,#b88a32);color:var(--ink);border-color:#fff3cc}
+main{max-width:980px;margin:0 auto;padding:18px 14px 60px}
+.hero{position:relative;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:center;padding:24px;border-radius:22px;border:3px solid var(--gold);background:linear-gradient(160deg,rgba(122,29,51,.92),rgba(45,8,18,.95));box-shadow:inset 0 0 0 6px rgba(232,195,106,.18),0 14px 36px rgba(0,0,0,.5)}
+.hero h1{margin:0 0 4px;font-size:42px;line-height:1.1;color:var(--goldl);text-shadow:0 3px 0 #2a0610,0 0 18px rgba(232,195,106,.35)}
+.hero .sub{margin:0 0 14px;font-style:italic;color:#f1d9a6}
+.hero img.cv{width:100%;border-radius:14px;border:2px solid var(--gold);box-shadow:0 10px 26px rgba(0,0,0,.55)}
+.gemrow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
+.gemrow img{width:46px;height:46px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fact{padding:8px 12px;border-radius:12px;background:rgba(0,0,0,.28);border:1px solid rgba(232,195,106,.45)}
+.fact b{display:block;color:var(--gold);font-size:14px;letter-spacing:.3px}
+.fact span{font-size:17px}
+nav.toc{margin:18px 0 6px;padding:12px 14px;border-radius:16px;background:rgba(0,0,0,.3);border:1px dashed rgba(232,195,106,.55);display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{padding:4px 12px;border-radius:999px;background:rgba(122,29,51,.75);border:1px solid rgba(232,195,106,.6);text-decoration:none;font-size:15px;white-space:nowrap}
+section.box{margin:22px 0;padding:20px 22px;border-radius:20px;background:linear-gradient(180deg,rgba(251,239,214,.97),rgba(240,222,186,.97));color:var(--ink);border:3px solid var(--goldd);box-shadow:inset 0 0 0 5px rgba(255,255,255,.35),0 10px 28px rgba(0,0,0,.45);scroll-margin-top:70px}
+section.box h2{display:flex;align-items:center;gap:10px;margin:-4px 0 12px;font-size:28px;color:var(--bur)}
+section.box h2 .no{flex:none;width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:21px;color:var(--goldl);background:radial-gradient(circle at 35% 30%,#a12a46,#4a0f1d);border:2px solid var(--gold);box-shadow:0 3px 6px rgba(0,0,0,.35)}
+section.box h3{margin:18px 0 6px;font-size:21px;color:var(--bur3)}
+section.box p{margin:6px 0}
+section.box ul,section.box ol{margin:6px 0;padding-left:22px}
+section.box li{margin:4px 0}
+.g{display:inline-block;width:26px;height:26px;vertical-align:-7px;margin:0 1px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.gn{display:inline-flex;align-items:center;gap:1px;padding:0 6px 0 2px;margin:0 2px;border-radius:999px;background:rgba(90,20,36,.08);border:1px solid rgba(90,20,36,.25);white-space:nowrap;font-weight:bold}
+.vd{margin:12px 0;padding:12px 14px 12px 50px;border-radius:14px;background:#fff8e6;border:2px solid #e0c27a;position:relative;font-style:italic}
+.vd::before{content:"Ví dụ";position:absolute;left:-2px;top:-2px;bottom:-2px;width:40px;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font:bold 14px "Times New Roman",serif;font-style:normal;color:var(--goldl);background:linear-gradient(180deg,#7a1d33,#4a0f1d);border-radius:0 14px 14px 0;letter-spacing:1px}
+.note{margin:12px 0;padding:10px 14px;border-radius:12px;background:#fde9e9;border-left:6px solid #b1233f}
+.tip{margin:12px 0;padding:10px 14px;border-radius:12px;background:#eaf6ea;border-left:6px solid #2f8a4c}
+table.t{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border:2px solid var(--goldd);border-radius:12px;overflow:hidden;background:#fffaf0}
+table.t th{background:linear-gradient(180deg,#7a1d33,#5a1424);color:var(--goldl);text-align:left;padding:8px 10px;font-size:16px}
+table.t td{padding:8px 10px;border-top:1px solid #ead7ad;vertical-align:middle}
+table.t tr:nth-child(even) td{background:#fbf1dc}
+.gemtab td:first-child{white-space:nowrap}
+.fig{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:center;margin:12px 0}
+.fig figure{margin:0;text-align:center}
+.fig figcaption{font-size:14px;color:#6b3b22;margin-top:4px;font-style:italic}
+.cardimg{width:160px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+.nobimg{width:130px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+.deckimg{width:110px;border-radius:12px}
+.anat{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.anat .lst{margin:0;padding:0;list-style:none}
+.anat .lst li{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+.anat .lst .k{flex:none;width:28px;height:28px;border-radius:50%;background:var(--bur);color:var(--goldl);display:inline-flex;align-items:center;justify-content:center;font-weight:bold;border:2px solid var(--gold);font-size:15px}
+.cardwrap{position:relative;width:200px}
+.cardwrap img{width:200px;border-radius:14px;box-shadow:0 10px 22px rgba(0,0,0,.45);display:block}
+.pin{position:absolute;width:28px;height:28px;border-radius:50%;background:var(--bur);color:var(--goldl);display:flex;align-items:center;justify-content:center;font-weight:bold;border:2px solid var(--gold);font-size:15px;box-shadow:0 2px 6px rgba(0,0,0,.5);animation:pin 2s ease-in-out infinite}
+@keyframes pin{50%{transform:scale(1.15)}}
+.acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.act{padding:14px;border-radius:16px;background:#fffaf0;border:2px solid #e0c27a;box-shadow:0 4px 10px rgba(90,20,36,.12)}
+.act h3{margin:0 0 6px!important;display:flex;align-items:center;gap:8px}
+.act .ic{display:flex;gap:2px;margin:6px 0}
+.act .ic img{width:38px;height:38px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+.calc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.calc div{padding:8px;border-radius:12px;background:#fffaf0;border:2px solid #e0c27a;text-align:center;font-size:15px}
+.calc b{display:block;color:var(--bur);margin-bottom:4px;font-size:15px}
+.calc .arrow{display:none}
+.boardshot{width:100%;border-radius:14px;border:2px solid var(--goldd);box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.turns{counter-reset:t;list-style:none;padding:0!important}
+.turns li{counter-increment:t;position:relative;padding:10px 12px 10px 56px!important;margin:8px 0!important;border-radius:12px;background:#fffaf0;border:1px solid #e0c27a}
+.turns li::before{content:"Lượt " counter(t);position:absolute;left:8px;top:10px;font-weight:bold;font-size:12px;color:var(--goldl);background:var(--bur);border-radius:8px;padding:2px 5px;width:40px;text-align:center}
+.cta{text-align:center;margin:28px 0 10px}
+.cta .btn{font-size:19px;padding:12px 26px}
+footer{text-align:center;font-size:14px;opacity:.8;margin-top:20px}
+@media (max-width:760px){
+ body{font-size:16px}
+ .hero{grid-template-columns:1fr;padding:16px}
+ .hero h1{font-size:32px}
+ .facts{grid-template-columns:1fr 1fr}
+ section.box{padding:16px 14px;border-radius:16px}
+ section.box h2{font-size:23px}
+ .acts{grid-template-columns:1fr}
+ .anat{grid-template-columns:1fr;justify-items:center}
+ .calc{grid-template-columns:1fr 1fr}
+ .vd{padding-left:44px}
+ header.top .ttl{font-size:18px}
+ .btn{padding:7px 12px;font-size:15px}
+ .cardimg{width:130px}.nobimg{width:110px}.deckimg{width:90px}
+}
+@media (prefers-reduced-motion:reduce){.pin{animation:none}}
+</style>
+</head>
+<body>
+<header class="top"><a class="btn" href="index.html">← Vào game</a><span class="ttl">Luật chơi Thương Nhân Đá Quý</span><a class="btn" href="../../index.html">Trang chủ</a></header>
+<main>
+
+<div class="hero">
+  <div>
+    <h1>Thương Nhân Đá Quý</h1>
+    <p class="sub">Hướng dẫn chơi chi tiết, có ví dụ</p>
+    <div class="gemrow"><img class="g" src="assets/gem-0.webp" alt=""><img class="g" src="assets/gem-1.webp" alt=""><img class="g" src="assets/gem-2.webp" alt=""><img class="g" src="assets/gem-3.webp" alt=""><img class="g" src="assets/gem-4.webp" alt=""><img class="g" src="assets/gem-5.webp" alt=""></div>
+    <div class="facts">
+      <div class="fact"><b>Số người chơi</b><span>2 đến 4 (chơi với máy hoặc bạn bè)</span></div>
+      <div class="fact"><b>Độ tuổi</b><span>10+</span></div>
+      <div class="fact"><b>Thời gian</b><span>Khoảng 30 phút</span></div>
+      <div class="fact"><b>Mục tiêu</b><span>Đạt 15 điểm uy tín trở lên</span></div>
+    </div>
+  </div>
+  <img class="cv" src="assets/cover.jpg" alt="Thương Nhân Đá Quý">
+</div>
+
+<nav class="toc">
+  <a href="#gioi-thieu">1. Giới thiệu</a><a href="#thanh-phan">2. Thành phần</a><a href="#chuan-bi">3. Chuẩn bị</a><a href="#luot-choi">4. Lượt chơi</a><a href="#gioi-han">5. Giới hạn & quý tộc</a><a href="#ket-thuc">6. Kết thúc ván</a><a href="#vi-du">7. Ví dụ ba lượt đầu</a><a href="#chien-thuat">8. Chiến thuật</a><a href="#loi">9. Lỗi hay gặp</a>
+</nav>
+
+<section class="box" id="gioi-thieu">
+  <h2><span class="no">1</span>Giới thiệu</h2>
+  <p>Bạn là một thương nhân thời Phục hưng. Bạn gom đá quý để mua các bảo vật quý giá (thẻ). Mỗi thẻ vừa cho điểm uy tín, vừa là một viên đá quý vĩnh viễn giúp bạn mua thẻ sau rẻ hơn.</p>
+  <p>Xây "động cơ kinh tế" càng sớm thì về sau càng mua được thẻ đắt và nhiều điểm. Khi đủ thẻ của một màu, các quý tộc sẽ ghé thăm và tặng thêm điểm.</p>
+  <img class="boardshot" src="assets/rules/ban-choi.webp" alt="Bàn chơi Thương Nhân Đá Quý" loading="lazy">
+</section>
+
+<section class="box" id="thanh-phan">
+  <h2><span class="no">2</span>Thành phần</h2>
+  <table class="t">
+    <tr><th>Thành phần</th><th>Số lượng</th></tr>
+    <tr><td>Thẻ bảo vật</td><td>90 thẻ: 40 thẻ cấp I (chồng xanh lá), 30 thẻ cấp II (chồng vàng), 20 thẻ cấp III (chồng xanh dương)</td></tr>
+    <tr><td>Thẻ quý tộc</td><td>10 thẻ, mỗi thẻ 3 điểm uy tín</td></tr>
+    <tr><td>Đá quý</td><td>35 viên, 7 viên mỗi màu</td></tr>
+    <tr><td>Vàng</td><td>5 đồng, thay được cho bất kỳ màu nào</td></tr>
+  </table>
+  <h3>Năm loại đá quý và vàng</h3>
+  <table class="t gemtab">
+    <tr><th>Đá</th><th>Tên</th><th>Ghi chú</th></tr>
+    <tr><td><img class="g" src="assets/gem-0.webp" alt=""></td><td>Ngọc lục bảo (xanh lá)</td><td>Đá quý thường</td></tr>
+    <tr><td><img class="g" src="assets/gem-1.webp" alt=""></td><td>Ngọc bích Sapphire (xanh dương)</td><td>Đá quý thường</td></tr>
+    <tr><td><img class="g" src="assets/gem-2.webp" alt=""></td><td>Hồng ngọc (đỏ)</td><td>Đá quý thường</td></tr>
+    <tr><td><img class="g" src="assets/gem-3.webp" alt=""></td><td>Kim cương (trắng)</td><td>Đá quý thường</td></tr>
+    <tr><td><img class="g" src="assets/gem-4.webp" alt=""></td><td>Mã não Onyx (đen)</td><td>Đá quý thường</td></tr>
+    <tr><td><img class="g" src="assets/gem-5.webp" alt=""></td><td>Vàng</td><td>Thay cho mọi màu. Chỉ nhận được khi giữ chỗ 1 thẻ</td></tr>
+  </table>
+  <div class="fig">
+    <figure><img class="deckimg" src="assets/rules/chong-1.webp" alt="Chồng thẻ cấp I"><figcaption>Cấp I – rẻ, ít điểm</figcaption></figure>
+    <figure><img class="deckimg" src="assets/rules/chong-2.webp" alt="Chồng thẻ cấp II"><figcaption>Cấp II – vừa</figcaption></figure>
+    <figure><img class="deckimg" src="assets/rules/chong-3.webp" alt="Chồng thẻ cấp III"><figcaption>Cấp III – đắt, nhiều điểm</figcaption></figure>
+  </div>
+
+  <h3>Cách đọc một thẻ bảo vật</h3>
+  <div class="anat">
+    <div class="cardwrap"><img src="assets/rules/the-cap3.webp" alt="Thẻ Sư tử vàng"><span class="pin" style="left:-10px;top:-10px">1</span><span class="pin" style="right:-10px;top:-10px">2</span><span class="pin" style="left:-10px;top:150px">3</span><span class="pin" style="right:-10px;bottom:-10px">4</span></div>
+    <ul class="lst">
+      <li><span class="k">1</span><span>Góc trên trái: <b>điểm uy tín</b> của thẻ (thẻ rẻ có thể không có điểm).</span></li>
+      <li><span class="k">2</span><span>Góc trên phải: <b>viên đá thưởng</b>. Mua thẻ này, bạn được giảm giá vĩnh viễn 1 viên màu đó cho mọi lần mua sau. Ví dụ thẻ này cho <img class="g" src="assets/gem-2.webp" alt="">.</span></li>
+      <li><span class="k">3</span><span>Cạnh trái: <b>giá mua</b>, tính bằng đá quý. Thẻ này giá <span class="gn"><img class="g" src="assets/gem-4.webp" alt="">7</span> <span class="gn"><img class="g" src="assets/gem-0.webp" alt="">3</span>.</span></li>
+      <li><span class="k">4</span><span>Dưới cùng: tên bảo vật, chỉ để trang trí.</span></li>
+    </ul>
+  </div>
+  <div class="fig">
+    <figure><img class="cardimg" src="assets/rules/the-cap1.webp" alt="Thẻ cấp I"><figcaption>Thẻ cấp I: 0 điểm, giá rẻ</figcaption></figure>
+    <figure><img class="cardimg" src="assets/rules/the-cap2.webp" alt="Thẻ cấp II"><figcaption>Thẻ cấp II: có điểm</figcaption></figure>
+    <figure><img class="nobimg" src="assets/rules/quy-toc-1.webp" alt="Thẻ quý tộc"><figcaption>Quý tộc: 3 điểm, ghé thăm khi đủ thẻ theo yêu cầu</figcaption></figure>
+  </div>
+</section>
+
+<section class="box" id="chuan-bi">
+  <h2><span class="no">3</span>Chuẩn bị</h2>
+  <p>Trong game, phần chuẩn bị được làm tự động. Bạn chỉ cần bấm <b>Chơi ngay</b>. Dưới đây là những gì máy làm cho bạn:</p>
+  <ol>
+    <li>Xáo riêng 3 chồng thẻ theo cấp, úp xuống. Xếp thành 3 hàng: cấp III trên cùng, cấp I dưới cùng. Mỗi hàng lật ngửa 4 thẻ.</li>
+    <li>Xáo thẻ quý tộc, lật ngửa số thẻ bằng số người chơi cộng 1 (2 người: 3 thẻ, 3 người: 4 thẻ, 4 người: 5 thẻ).</li>
+    <li>Đặt đá quý vào <b>Ngân khố</b> theo số người (vàng luôn là 5 đồng):</li>
+  </ol>
+  <table class="t">
+    <tr><th>Số người</th><th>Mỗi màu đá quý</th><th>Vàng</th></tr>
+    <tr><td>2 người</td><td>4 viên</td><td>5 đồng</td></tr>
+    <tr><td>3 người</td><td>5 viên</td><td>5 đồng</td></tr>
+    <tr><td>4 người</td><td>7 viên</td><td>5 đồng</td></tr>
+  </table>
+  <ol start="4"><li>Bốc thăm ngẫu nhiên người đi trước, sau đó đi lần lượt theo vòng.</li></ol>
+</section>
+
+<section class="box" id="luot-choi">
+  <h2><span class="no">4</span>Lượt chơi</h2>
+  <p>Mỗi lượt bạn chọn <b>đúng một</b> trong bốn hành động dưới đây. Trong game, mỗi lượt có 60 giây. Hết giờ, máy sẽ tự làm một hành động thay bạn.</p>
+  <div class="acts">
+    <div class="act">
+      <h3>① Lấy 3 đá khác màu</h3>
+      <div class="ic"><img src="assets/gem-3.webp" alt=""><img src="assets/gem-1.webp" alt=""><img src="assets/gem-2.webp" alt=""></div>
+      <p>Lấy 3 viên, mỗi viên một màu khác nhau. Không được lấy vàng.</p>
+      <div class="vd">Bạn lấy 1 <img class="g" src="assets/gem-3.webp" alt="">, 1 <img class="g" src="assets/gem-1.webp" alt="">, 1 <img class="g" src="assets/gem-2.webp" alt="">.</div>
+    </div>
+    <div class="act">
+      <h3>② Lấy 2 đá cùng màu</h3>
+      <div class="ic"><img src="assets/gem-4.webp" alt=""><img src="assets/gem-4.webp" alt=""></div>
+      <p>Lấy 2 viên cùng một màu. Chỉ được làm khi Ngân khố còn <b>từ 4 viên</b> màu đó trở lên (trước khi lấy).</p>
+      <div class="vd">Ván 4 người, <img class="g" src="assets/gem-4.webp" alt=""> còn 7 viên nên bạn được lấy 2 <img class="g" src="assets/gem-4.webp" alt="">. Ván 2 người, <img class="g" src="assets/gem-4.webp" alt=""> chỉ còn 3 viên thì không được lấy 2.</div>
+    </div>
+    <div class="act">
+      <h3>③ Giữ chỗ 1 thẻ</h3>
+      <div class="ic"><img src="assets/gem-5.webp" alt=""></div>
+      <ul>
+        <li>Chọn 1 thẻ ngửa trên bàn, hoặc rút 1 thẻ úp trên đầu bất kỳ chồng nào (chỉ mình bạn xem).</li>
+        <li>Đặt thẻ vào ô <b>Thẻ dự trữ</b> và nhận 1 <img class="g" src="assets/gem-5.webp" alt=""> vàng (nếu còn). Hết vàng vẫn giữ chỗ được nhưng không nhận gì.</li>
+        <li>Giữ tối đa <b>3 thẻ</b> cùng lúc. Thẻ giữ chỗ chỉ bạn mua được.</li>
+        <li>Nếu lấy thẻ ngửa, máy lật thẻ mới cùng cấp lên thế chỗ.</li>
+      </ul>
+      <p>Đây là cách duy nhất để có vàng, và để giành thẻ đối thủ đang nhắm.</p>
+    </div>
+    <div class="act">
+      <h3>④ Mua 1 thẻ</h3>
+      <div class="ic"><img src="assets/gem-0.webp" alt=""><img src="assets/gem-2.webp" alt=""><img src="assets/gem-5.webp" alt=""></div>
+      <ul>
+        <li>Mua 1 thẻ ngửa trên bàn hoặc 1 thẻ đang giữ chỗ.</li>
+        <li>Trả giá thẻ bằng đá quý, đã <b>trừ đi số thẻ cùng màu</b> bạn đang có (mỗi thẻ giảm 1 viên màu đó). Giá sau giảm không âm.</li>
+        <li>Thiếu màu nào thì dùng vàng thay (1 <img class="g" src="assets/gem-5.webp" alt=""> thay 1 viên bất kỳ).</li>
+        <li>Đá đã trả về lại Ngân khố. Trong game, thẻ bạn mua được hiện viền sáng.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Ví dụ tính giá khi mua thẻ</h3>
+  <div class="calc">
+    <div><b>Giá trên thẻ</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">3</span> <span class="gn"><img class="g" src="assets/gem-1.webp" alt="">2</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">2</span></div>
+    <div><b>Thẻ giảm giá đang có</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">2</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">1</span></div>
+    <div><b>Còn phải trả</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-1.webp" alt="">2</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">1</span></div>
+    <div><b>Bạn trả</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-1.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-5.webp" alt="">1</span></div>
+  </div>
+  <div class="vd">Thẻ giá 3 <img class="g" src="assets/gem-3.webp" alt=""> + 2 <img class="g" src="assets/gem-1.webp" alt=""> + 2 <img class="g" src="assets/gem-2.webp" alt="">. Bạn đã có 2 thẻ trắng và 1 thẻ đỏ, nên giá còn 1 <img class="g" src="assets/gem-3.webp" alt=""> + 2 <img class="g" src="assets/gem-1.webp" alt=""> + 1 <img class="g" src="assets/gem-2.webp" alt="">. Bạn chỉ có 1 <img class="g" src="assets/gem-1.webp" alt="">, nên dùng 1 <img class="g" src="assets/gem-5.webp" alt=""> vàng thay cho viên <img class="g" src="assets/gem-1.webp" alt=""> còn thiếu.</div>
+</section>
+
+<section class="box" id="gioi-han">
+  <h2><span class="no">5</span>Giới hạn đá quý và quý tộc</h2>
+  <h3>Giới hạn 10 viên</h3>
+  <p>Trong lượt bạn được phép có hơn 10 viên. Khi <b>kết thúc lượt</b>, nếu bạn đang có hơn 10 viên (tính cả vàng), bạn chọn trả bớt những viên tùy ý về Ngân khố cho đến khi còn đúng 10 viên. Túi đá của bạn hiện số viên đang có, ví dụ "8/10".</p>
+  <h3>Quý tộc ghé thăm</h3>
+  <div class="fig">
+    <figure><img class="nobimg" src="assets/rules/quy-toc-1.webp" alt="Quý tộc"></figure>
+    <figure><img class="nobimg" src="assets/rules/quy-toc-2.webp" alt="Quý tộc"></figure>
+    <figure><img class="nobimg" src="assets/rules/quy-toc-3.webp" alt="Quý tộc"></figure>
+  </div>
+  <p>Cuối lượt của bạn, nếu các thẻ bạn đã mua đủ điều kiện ghi trên một thẻ quý tộc (ví dụ 3 thẻ đỏ và 3 thẻ đen), quý tộc đó tự đến thăm: bạn nhận thẻ quý tộc và được <b>3 điểm uy tín</b>.</p>
+  <ul>
+    <li>Điều kiện chỉ tính <b>thẻ đã mua</b>, không tính đá quý đang cầm.</li>
+    <li>Đủ điều kiện nhiều quý tộc cùng lúc thì chỉ nhận 1. Mỗi lượt nhận tối đa 1 quý tộc.</li>
+    <li>Bạn không cần làm gì thêm, quý tộc đến miễn phí.</li>
+  </ul>
+  <div class="vd">Quý tộc cần 4 thẻ <img class="g" src="assets/gem-3.webp" alt=""> + 4 thẻ <img class="g" src="assets/gem-1.webp" alt="">. Cuối lượt bạn vừa mua thẻ <img class="g" src="assets/gem-3.webp" alt=""> thứ 4 và đã có 4 thẻ <img class="g" src="assets/gem-1.webp" alt="">, nên quý tộc ghé thăm ngay, bạn được +3 điểm.</div>
+</section>
+
+<section class="box" id="ket-thuc">
+  <h2><span class="no">6</span>Kết thúc ván</h2>
+  <ol>
+    <li>Khi có người đạt <b>15 điểm uy tín</b> trở lên (tính cả quý tộc), vòng cuối bắt đầu. Mọi người chơi nốt vòng hiện tại để ai cũng có số lượt bằng nhau.</li>
+    <li>Người nhiều điểm nhất thắng.</li>
+    <li>Bằng điểm thì ai mua ít thẻ hơn thắng. Vẫn bằng thì cùng thắng.</li>
+  </ol>
+  <div class="vd">Ván 4 người, người thứ hai đạt 15 điểm. Người thứ ba và thứ tư vẫn chơi nốt lượt của họ. Người thứ nhất không chơi thêm, vì đã có số lượt bằng mọi người khi vòng kết thúc.</div>
+</section>
+
+<section class="box" id="vi-du">
+  <h2><span class="no">7</span>Ví dụ ba lượt đầu</h2>
+  <ol class="turns">
+    <li>Bạn lấy 3 đá khác màu: <img class="g" src="assets/gem-4.webp" alt=""> <img class="g" src="assets/gem-2.webp" alt=""> <img class="g" src="assets/gem-0.webp" alt="">. Mục tiêu là mua sớm một thẻ cấp I rẻ để có đá thưởng.</li>
+    <li>Một thẻ cấp I giá 1 <img class="g" src="assets/gem-4.webp" alt=""> + 1 <img class="g" src="assets/gem-2.webp" alt=""> + 1 <img class="g" src="assets/gem-0.webp" alt=""> vừa đủ. Bạn mua thẻ đó, nhận đá thưởng <img class="g" src="assets/gem-1.webp" alt=""> và 0 điểm. Từ giờ mọi thẻ cần <img class="g" src="assets/gem-1.webp" alt=""> rẻ hơn 1 viên.</li>
+    <li>Bạn lấy 2 <img class="g" src="assets/gem-1.webp" alt=""> cùng màu (Ngân khố còn từ 4 viên) để chuẩn bị mua thẻ cấp II có điểm.</li>
+  </ol>
+</section>
+
+<section class="box" id="chien-thuat">
+  <h2><span class="no">8</span>Chiến thuật cho người mới</h2>
+  <div class="tip">
+  <ul>
+    <li>Đầu ván tập trung mua thẻ cấp I rẻ để có đá thưởng, tạo giảm giá lâu dài.</li>
+    <li>Chọn 2 đến 3 màu chính, mua thẻ cùng màu để dễ đủ điều kiện quý tộc.</li>
+    <li>Giữ chỗ thẻ điểm cao hoặc thẻ đối thủ đang cần, đồng thời lấy vàng.</li>
+    <li>Đừng ôm quá 10 viên. Khi gần đủ 10, nên mua thẻ thay vì lấy thêm đá.</li>
+    <li>Theo dõi điểm đối thủ. Khi ai đó gần 15 điểm, hãy giữ chỗ chặn thẻ họ cần hoặc về đích nhanh hơn.</li>
+  </ul>
+  </div>
+</section>
+
+<section class="box" id="loi">
+  <h2><span class="no">9</span>Lỗi hay gặp</h2>
+  <div class="note">
+  <ul>
+    <li>Lấy 2 đá cùng màu khi Ngân khố còn dưới 4 viên màu đó.</li>
+    <li>Quên trả bớt đá khi vượt 10 viên lúc kết thúc lượt.</li>
+    <li>Tính điều kiện quý tộc bằng đá đang cầm. Thực ra chỉ tính thẻ đã mua.</li>
+    <li>Nghĩ rằng ván kết thúc ngay khi có người đạt 15 điểm, quên cho những người sau chơi nốt vòng.</li>
+  </ul>
+  </div>
+  <p>Trong game, máy kiểm tra luật giúp bạn: những nước đi sai sẽ không bấm được, nên bạn cứ yên tâm chơi thử.</p>
+</section>
+
+<div class="cta"><a class="btn pri" href="index.html">▶ Chơi Thương Nhân Đá Quý ngay</a></div>
+<footer>Thương Nhân Đá Quý · Phi Board Games</footer>
+</main>
+</body>
+</html>
