@@ -222,7 +222,7 @@ const BMUI=(()=>{
     const pd=e.target.closest('[data-pend]'); if(pd&&my&&S.step==='keep'){ sel=+pd.dataset.pend; SND.pop(); render(S,ME,api); return; }
     const tk=e.target.closest('[data-take]'); if(tk&&my&&S.step==='draw'){ SND.pop(); const p=+tk.dataset.take; pileSel=-1; api.act({t:'take',pile:p}); return; }
     const pl=e.target.closest('[data-pile]'); if(pl&&!pl.closest('#bmcrab')&&my){ const p=+pl.dataset.pile;
-      if(S.step==='crab'&&crabP<0){ if(S.disc[p].length){ crabP=p; SND.pop(); render(S,ME,api); } return; } if(S.step==='draw'){ if(S.disc[p].length){ pileSel=pileSel===p?-1:p; SND.pop(); render(S,ME,api); } return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
+      if(S.step==='crab'&&crabP<0){ if(S.disc[p].length){ crabP=p; SND.pop(); render(S,ME,api); } return; } if(S.step==='draw'){ if(S.disc[p].length){ if(pileSel===p){ SND.pop(); pileSel=-1; api.act({t:'take',pile:p}); } else { pileSel=p; SND.pop(); render(S,ME,api); } } return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
     const dk=e.target.closest('[data-deck]'); if(dk&&my&&S.step==='draw'){ api.act({t:'deck'}); return; }
     const hc=e.target.closest('.me .bmhand [data-cid],.bmopb:not(.bk) [data-cid],.bmtabl [data-cid],.pile .bmc[data-cid],#bmres [data-cid]'); if(hc){ zoomCard(+hc.dataset.cid); return; } }
   /* ---------- kéo lá: lá giữ -> tay, lá bỏ -> chồng bỏ ---------- */
