@@ -11,11 +11,20 @@ const TLART=(()=>{
     if(t==='nha') return `<rect x="-19" y="-2" width="38" height="25" fill="#fff1de"/><polygon points="0,-24 -26,-2 26,-2" fill="${c[1]}"/><polygon points="0,-24 26,-2 0,-2" fill="#8f3320"/><rect x="-5" y="9" width="10" height="14" fill="${c[1]}"/><rect x="-16" y="3" width="8" height="8" fill="#9fd4f5"/><rect x="8" y="3" width="8" height="8" fill="#9fd4f5"/>`;
     return [-12,0,12].map(y=>`<path d="M-26 ${y} q6.5 -9 13 0 t13 0 t13 0 t13 0" fill="none" stroke="#fff" stroke-opacity="${y?0.75:1}" stroke-width="4" stroke-linecap="round" transform="translate(0 ${y===0?2:0})"/>`).join('');
   }
+  /* ---- token 3D (ảnh) — thêm ?art=old vào địa chỉ để quay lại hình lục giác cũ ---- */
+  const NEWART=!/[?&]art=old/.test(location.search);
+  const IMGN={rung:3,nui:3,dong:1,nha:1,ho:1};
+  const K=1.5, UW=512, TIER=102.4; // ảnh rộng 512px; mỗi tầng cao 102.4px ảnh; tâm thân token ở y=217
+  const tkImg=(t,h)=>{ h=Math.min(h||1,IMGN[t]); return 'assets/tk-'+t+'-'+h+'.webp'; };
+  const tkGeom=(r,h)=>{ const E=r*K, k=E/384; h=Math.min(h||1,3); return {k, w:UW*k, ht:(217+(h-1)*TIER)*k, tier:TIER*k, tf:(217-166)*k}; };
+  function discImg(t,cx,cy,r,h){ h=Math.min(h||1,IMGN[t]); const g=tkGeom(r,h), hh=(h===1?435:h===2?538:640)*g.k;
+    return `<image href="${tkImg(t,h)}" x="${(cx-g.w/2).toFixed(1)}" y="${(cy-g.ht).toFixed(1)}" width="${g.w.toFixed(1)}" height="${hh.toFixed(1)}"/>`; }
   /* một đĩa đất (cao h) tại tâm (cx,cy) bán kính r */
-  function disc(t,cx,cy,r,h){ h=h||1; const c=COL[t]; let s='';
+  function discOld(t,cx,cy,r,h){ h=h||1; const c=COL[t]; let s='';
     for(let i=0;i<h;i++){ const y=cy-i*r*.22; s+=`<polygon points="${hexPts(cx,y+r*.2,r)}" fill="${c[1]}"/><polygon points="${hexPts(cx,y,r)}" fill="${c[0]}" stroke="${c[2]}" stroke-width="${(r*.05).toFixed(1)}"/>`; }
     const y=cy-(h-1)*r*.22; s+=`<g transform="translate(${cx} ${y}) scale(${(r/46).toFixed(3)})">${glyph(t)}</g>`; return s; }
-  const token=(t,px,h)=>`<svg viewBox="-52 -56 104 112" width="${px}" height="${px*1.08}" aria-hidden="true">${disc(t,0,0,46,h)}</svg>`;
+  const disc=(t,cx,cy,r,h)=>NEWART?discImg(t,cx,cy,r,h):discOld(t,cx,cy,r,h);
+  const token=(t,px,h)=>NEWART?`<svg viewBox="-56 -52 112 112" width="${px}" height="${px}" aria-hidden="true">${discImg(t,0,0,40,h)}</svg>`:`<svg viewBox="-52 -56 104 112" width="${px}" height="${px*1.08}" aria-hidden="true">${discOld(t,0,0,46,h)}</svg>`;
   /* ----- con vật (viewBox 0 0 100 100) ----- */
   const P=(pts,f,x)=>`<polygon points="${pts}" fill="${f}"${x||''}/>`, C=(cx,cy,r,f,x)=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}"${x||''}/>`;
   const eye=(x,y,r)=>C(x,y,r||2.6,'#2b2118');
@@ -37,13 +46,17 @@ const TLART=(()=>{
    meo:()=>SH+P('24,50 28,18 44,34 56,34 72,18 76,50 70,78 50,88 30,78','#9aa3b2')+P('24,50 28,18 44,34 50,62','#adb5c4')+P('28,24 36,34 30,40','#f2a8b8')+P('72,24 64,34 70,40','#f2a8b8')+'<ellipse cx="38" cy="52" rx="6" ry="7" fill="#9be07a"/><ellipse cx="62" cy="52" rx="6" ry="7" fill="#9be07a"/><ellipse cx="38" cy="52" rx="2" ry="6" fill="#2b2118"/><ellipse cx="62" cy="52" rx="2" ry="6" fill="#2b2118"/>'+P('46,64 54,64 50,69','#f08aa0')+'<path d="M26 66 l16 2 M26 72 l16 -2 M74 66 l-16 2 M74 72 l-16 -2 M50 69 v6" stroke="#fff" stroke-width="1.6" fill="none"/><path d="M44 28 l2 8 M56 28 l-2 8" stroke="#6f7888" stroke-width="3"/>'};
   const animal=(k,px)=>`<svg viewBox="0 0 100 100" width="${px}" height="${px}" aria-hidden="true">${AN[k]()}</svg>`;
   /* ----- bảng lục giác ----- */
-  function boardSvg(B,o){ o=o||{}; const s=o.s||40, pad=s*.5, W=s*8+pad*2, oy=pad+s*S3*.5, H=s*S3*5+pad*2; const ox=pad+s;
-    const hl=o.hl||{}, cubeSz=s*1.05; let g='';
-    TL.KEYS.forEach(k=>{ const [q,r]=k.split(',').map(Number), x=ox+s*1.5*q, y=oy+s*S3*(r+q/2), c=B[k]; const cl=hl[k]?' hl':'';
+  function boardSvg(B,o){ o=o||{}; const s=o.s||40, pad=s*.5, W=s*8+pad*2, oy=pad+s*S3*.5, H=s*S3*5+pad*2+(NEWART?s*.9:0); const ox=pad+s, dy=NEWART?s*.9:0;
+    const hl=o.hl||{}, cubeSz=s*1.05; let g='', up='';
+    TL.KEYS.forEach(k=>{ const [q,r]=k.split(',').map(Number), x=ox+s*1.5*q, y=dy+oy+s*S3*(r+q/2), c=B[k]; const cl=hl[k]?' hl':'';
       g+=`<g class="hx${cl}" data-hex="${k}"><polygon points="${hexPts(x,y+s*.1,s-1)}" fill="#c9b48a"/><polygon points="${hexPts(x,y,s-1)}" fill="${hl[k]?'#fff3c8':'#eadcb8'}" stroke="${hl[k]?'#ffb703':'#cdb78a'}" stroke-width="${hl[k]?3.2:1.2}"/>`;
-      if(c){ g+=disc(c.t,x,y,s*.86,c.h); if(c.cube!=null) g+=`<g transform="translate(${x-cubeSz/2} ${y-cubeSz*.86})"><rect x="${cubeSz*.08}" y="${cubeSz*.08}" width="${cubeSz*.84}" height="${cubeSz*.84}" rx="${cubeSz*.2}" fill="#fff" stroke="#8a5a2f" stroke-width="2"/>${animal(TL.A[c.cube].k,cubeSz).replace('<svg ','<svg x="0" y="0" ')}</g>`; }
-      if(hl[k]) g+=`<polygon points="${hexPts(x,y,s*.5)}" fill="#ffb703" opacity=".25"/>`;
-      g+='</g>'; });
+      let top='';
+      if(c){ top+=disc(c.t,x,y,s*.86,c.h);
+        if(c.cube!=null){ const gm=NEWART?tkGeom(s*.86,Math.min(c.h,IMGN[c.t])):null, cy2=NEWART?(y-gm.ht+gm.tf*1.0-cubeSz*.72):(y-cubeSz*.86);
+          top+=`<g transform="translate(${x-cubeSz/2} ${cy2})"><rect x="${cubeSz*.08}" y="${cubeSz*.08}" width="${cubeSz*.84}" height="${cubeSz*.84}" rx="${cubeSz*.2}" fill="#fff" stroke="#8a5a2f" stroke-width="2"/>${animal(TL.A[c.cube].k,cubeSz).replace('<svg ','<svg x="0" y="0" ')}</g>`; } }
+      if(hl[k]) top+=`<polygon points="${hexPts(x,y,s*.5)}" fill="#ffb703" opacity=".25"/>`;
+      if(NEWART){ g+='</g>'; up+=`<g class="hx${cl}" data-hex="${k}" data-y="${y}">${top}</g>`; } else { g+=top+'</g>'; } });
+    if(NEWART){ const arr=up.split('<g class="hx').filter(Boolean).map(x=>'<g class="hx'+x).sort((a,b)=>(+/data-y="([\d.]+)"/.exec(a)[1])-(+/data-y="([\d.]+)"/.exec(b)[1])); g+=arr.join(''); }
     return `<svg class="thb" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`; }
   /* ----- thẻ con vật ----- */
   const cond=a=>{ let s=`<span class="cd on">${token(a.on,26,1)}${a.h>1?`<b class="hh">▲${a.h}</b>`:''}</span>`; const ks=Object.keys(a.adj);
