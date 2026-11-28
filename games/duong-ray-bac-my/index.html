@@ -2164,12 +2164,11 @@ function routeSym(k,col){
   return k==='loco' ? `<g fill="${f}" stroke="#2a1200" stroke-width=".9" stroke-linejoin="round" pointer-events="none" transform="scale(1.95)">${d}</g>` : `<g fill="${f}" opacity="${o}" pointer-events="none">${d}</g>`;
 }
 function routeSVG(r, afford, now){
-  const g=routeGeom(r); const pad=13; const seg=(g.d-2*pad)/r.len; const w=RG_BOX;
+  const g=routeGeom(r); const pad=13; const seg=(g.d-2*pad)/r.len; const w=rgPitch(g,r.len)-3;
   const owner=G.owner[r.id]; const canClick = owner==null && isMyTurn() && !UIS.stationMode;
   const t=UIS.claimAt[r.id]; const el = t!=null ? now-t : 1e9; const fresh = el<2600 && G.owner[r.id]!=null;
   let s=`<g class="route ${canClick?'clickable':''} ${afford.has(r.id)?'afford':''} ${fresh?'glow':''}" data-id="${r.id}" ${fresh?`style="--gc:${G.players[owner].color};animation-delay:${-el}ms"`:''}>`;
   s+=`<path d="${g.path(pad,g.d-pad)}" fill="none" stroke="transparent" stroke-width="${HIT_W}"/>`;
-  if (owner==null){ const tp=g.path(pad-2,g.d-pad+2); s+=`<path d="${tp}" fill="none" stroke="#5b4327" stroke-width="9" stroke-dasharray="2 5" opacity=".55" pointer-events="none"/><path d="${tp}" fill="none" stroke="#5b4327" stroke-width="2.2" opacity=".7" pointer-events="none" transform="translate(0,0)"/>`; }
   const DK = .68; /* mọi đoàn tàu cùng cỡ, vừa làn đường đôi */
   if (owner!=null){ const pd=g.path(pad+1, g.d-pad-1);
     s+=`<g class="${fresh?'pop':''}" pointer-events="none"><path d="${pd}" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round" opacity=".95"/><path d="${pd}" fill="none" stroke="#111" stroke-width="${(24*DK).toFixed(1)}" stroke-linecap="round"/><path d="${pd}" fill="none" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
@@ -2177,7 +2176,7 @@ function routeSVG(r, afford, now){
     const tt=g.d/2+(i+0.5-r.len/2)*rgPitch(g,r.len); const q=g.at(tt); const cx=q.x.toFixed(1), cy=q.y.toFixed(1); let ga=q.ang; if(ga>90) ga-=180; if(ga<-90) ga+=180;
     s+=`<g transform="translate(${cx},${cy}) rotate(${ga.toFixed(1)})">`;
     if (owner!=null){
-      const col=G.players[owner].color, h=19*DK, W=RG_BOX+1, win=Math.min(6,W/4.5)*(DK<1?.8:1);
+      const col=G.players[owner].color, h=19*DK, W=rgPitch(g,r.len)-1.5, win=Math.min(6,W/4.5)*(DK<1?.8:1);
       const delay = fresh ? ((i+.5)/r.len*TRAIN_RUN_MS - el) : 0;
       s+=`<g class="${fresh?'pop':''}" ${fresh?`style="animation-delay:${delay.toFixed(0)}ms"`:''}>
         <rect x="${-W/2}" y="${-h/2}" width="${W}" height="${h}" rx="3.5" fill="${col}" stroke="#0b0b0b" stroke-width="2.6"/>
