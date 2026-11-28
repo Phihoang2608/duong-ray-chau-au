@@ -32,7 +32,7 @@ body{font-family:"Times New Roman",Times,serif;background:radial-gradient(120% 9
 .bmmain{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:4px;padding:0 4px 4px}
 .bmtab{flex:0 0 auto;min-height:0;display:flex;flex-direction:column;gap:3px;padding:4px 6px;border-radius:12px;background:linear-gradient(180deg,rgba(9,52,86,.78),rgba(5,30,52,.82));border:1px solid rgba(233,196,106,.55);box-shadow:inset 0 0 18px rgba(0,0,0,.35);overflow:hidden}
 .bminfo{flex:0 0 auto;font-size:12px;color:#bfe3ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bminfo b{color:var(--gold2)}
-.bmbody{flex:0 0 auto;height:calc(var(--pw)*1.4 + 22px);display:flex;gap:8px;overflow:hidden}
+.bmbody{flex:0 0 auto;height:calc(var(--pw)*1.4 + 30px);display:flex;gap:8px;overflow:hidden}
 .bmpiles{flex:0 0 auto;display:flex;gap:calc(var(--pw)*.12);align-items:flex-start}
 .bmside{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;overflow:hidden}
 .bmstat{flex:0 1 auto;font-size:13px;color:#f4fbff;overflow:hidden}
@@ -164,4 +164,5 @@ body{font-family:"Times New Roman",Times,serif;background:radial-gradient(120% 9
 .pile small{font-size:12px;font-weight:bold;color:#ffe9a8}
 #bmcrab .cpb{display:flex;gap:12px;justify-content:center;margin:8px 0}#bmcrab .cpb .tbtn{font-size:16px;padding:10px 18px}
 #bm .bmnote{background:linear-gradient(180deg,#0e4a73,#082f4d);border:1px solid var(--gold);color:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
-.bmtake{position:absolute;left:50%;top:72%;transform:translate(-50%,-50%);z-index:5;font-size:15px!important;padding:6px 14px!important;white-space:nowrap}
+
+#bm .bmtake{position:static;font-size:12px;line-height:16px;padding:1px 4px;min-height:0;margin-top:1px;max-width:100%}

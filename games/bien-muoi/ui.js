@@ -102,7 +102,7 @@ const BMUI=(()=>{
     const who='…';
     return lc+`Chờ <b>${nm}</b>${who}`; }
   function pileHtml(S,p,ME,my){ const d=S.disc[p], top=d.length?d[d.length-1]:null; const go=my&&(S.step==='draw'||(S.step==='crab'&&crabP<0))&&top!=null, dropT=my&&S.step==='keep'&&sel>=0;
-    return `<div class="pile ${go?'go':''} ${dropT?'drop':''}" data-pile="${p}">${top!=null?card(top,'big'):'<div class="bmc empty"><div class="art"></div></div>'}<small>${dropT?'Thả vào đây':'Bỏ '+(p+1)}</small>${go&&S.step==='draw'&&pileSel===p?`<button class="tbtn pri bmtake" data-take="${p}">Lấy</button>`:''}</div>`; }
+    return `<div class="pile ${go?'go':''} ${dropT?'drop':''}" data-pile="${p}">${top!=null?card(top,'big'):'<div class="bmc empty"><div class="art"></div></div>'}${my&&S.step==='draw'&&top!=null?`<button class="tbtn pri bmtake" data-take="${p}">Lấy ${p+1}</button>`:`<small>${dropT?'Thả vào đây':'Bỏ '+(p+1)}</small>`}</div>`; }
   function render(S,ME,api){ window.__S=S; document.documentElement.classList.add('bmingame'); applyFx();
     if(!root){ document.getElementById('tb-game').innerHTML='<div id="bm"></div>'; root=$('#bm'); root.addEventListener('click',onClick);
       root.addEventListener('contextmenu',e=>{ const el=e.target.closest('[data-cid]'); if(el){ e.preventDefault(); zoomCard(+el.dataset.cid); } });
