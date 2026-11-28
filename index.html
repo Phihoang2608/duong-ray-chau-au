@@ -564,7 +564,7 @@ button,input{font-family:inherit;font-size:15px}
 .g-act.rl{padding:7px 0}
 .g-card .g-cover,.g-card .g-body h3{cursor:pointer}
 .fav-sec{margin-bottom:22px}
-.fav-sec .sec-head h2::before{content:"❤ ";color:#ff4d6d}
+.fav-sec .sec-head h2::before{content:"";color:#ff4d6d}
 @media (max-width:420px){.g-act{font-size:11px}.g-acts{grid-template-columns:1fr 1fr 1fr 30px}}
 
 .g-card{min-width:0}.g-act{min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -617,7 +617,7 @@ button,input{font-family:inherit;font-size:15px}
     <section class="hero-row">
       <div class="hero-banner">
         <div class="hero-text" id="heroText">
-          <span class="hero-badge" id="heroBadge">🔥 Nổi bật nhất</span>
+          <span class="hero-badge" id="heroBadge">Nổi bật nhất</span>
           <h2 class="hero-title" id="heroTitle">Thương Nhân Đá Quý</h2>
           <p class="hero-desc" id="heroDesc">Thu thập đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm. Đạt 15 điểm uy tín để giành chiến thắng!</p>
           <div class="hero-foot">
@@ -671,7 +671,7 @@ button,input{font-family:inherit;font-size:15px}
           <div class="s-badge"><i>📈</i><b id="stRate">0%</b><span>Tỉ lệ thắng</span></div>
           <div class="s-badge"><i>⏱️</i><b id="stTime">0p</b><span>Thời gian</span></div>
         </div>
-        <button class="btn-pill stat-cta" id="statAccountBtn">👤 Đăng nhập để lưu thành tích</button>
+        <button class="btn-pill stat-cta" id="statAccountBtn">Đăng nhập để lưu thành tích</button>
       </aside>
     </section>
 
@@ -758,7 +758,7 @@ function heroList(){
   function show(i){
     if(i===cur) return; const first=cur<0; cur=i; const it=items[i], g=GAMES.find(x=>x.id===it.id);
     sl.forEach((e,k)=>e.classList.toggle('on',k===i)); dt.forEach((e,k)=>e.classList.toggle('on',k===i));
-    const apply=()=>{ $('#heroBadge').textContent=it.recent?'🕘 Chơi gần đây':'🔥 Nổi bật nhất'; $('#heroTitle').textContent=g.title; $('#heroDesc').textContent=g.desc; const a=$('#heroPlay'); a.href=gameUrl(g.id); a.dataset.go=g.id; $('#heroMeta').textContent=g.players+' người · Online & Máy'; tx.classList.remove('out'); };
+    const apply=()=>{ $('#heroBadge').textContent=it.recent?'Chơi gần đây':'Nổi bật nhất'; $('#heroTitle').textContent=g.title; $('#heroDesc').textContent=g.desc; const a=$('#heroPlay'); a.href=gameUrl(g.id); a.dataset.go=g.id; $('#heroMeta').textContent=g.players+' người · Online & Máy'; tx.classList.remove('out'); };
     if(first) apply(); else { tx.classList.add('out'); setTimeout(apply,300); }
   }
   function next(){ show((cur+1)%items.length); }
@@ -788,10 +788,10 @@ function syncIdentity(){
     $('#stWins').textContent=w;
     $('#stRate').textContent=(g?Math.round(w*100/g):0)+'%';
     $('#stTime').textContent=m>=60?(Math.floor(m/60)+'g'+(m%60)+'p'):(m+'p');
-    $('#statAccountBtn').textContent='👤 Xem hồ sơ & Lịch sử';
+    $('#statAccountBtn').textContent='Xem hồ sơ & Lịch sử';
     $('#statAccountBtn').onclick=()=>P.open('me');
   } else {
-    $('#statAccountBtn').textContent='👤 Đăng nhập để lưu thành tích';
+    $('#statAccountBtn').textContent='Đăng nhập để lưu thành tích';
     $('#statAccountBtn').onclick=()=>P&&P.login();
   }
 }

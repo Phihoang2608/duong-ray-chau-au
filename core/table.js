@@ -108,7 +108,7 @@ const Table = (()=>{
   function shell(){
     const st=document.createElement('style'); st.textContent=CSS+(CFG.css||''); document.head.appendChild(st);
     document.body.insertAdjacentHTML('afterbegin',`<div class="tb-bg"><i></i><i></i><i></i><i></i></div>
-    <header class="tb-top"><a class="tbtn home" href="../../index.html" title="Quay về danh sách các trò chơi">🏠 Menu trò chơi</a><h1>${esc(CFG.title)}</h1><span class="sp"></span>
+    <header class="tb-top"><a class="tbtn home" href="../../index.html" title="Quay về danh sách các trò chơi">Menu trò chơi</a><h1>${esc(CFG.title)}</h1><span class="sp"></span>
       <span class="code" id="tb-code"></span><button class="tbtn" id="tb-chatbtn" style="display:none">Trò chuyện<span class="bd" id="tb-unread" style="display:none"></span></button>
       <button class="tbtn" id="tb-sound">Âm thanh: bật</button><button class="tbtn" id="tb-rules">Luật chơi</button><button class="tbtn" id="tb-leave" style="display:none">Rời phòng</button></header>
     <div class="tb-wrap"><div id="tb-screen" class="tb-screen"><div class="tb-panel" id="tb-box"></div></div><div id="tb-game"></div></div>
@@ -158,8 +158,8 @@ const Table = (()=>{
       <label>Số máy chơi cùng (khi chơi với máy)</label><select id="m-bots">${bots.map(n=>`<option value="${n}" ${n===(CFG.defaultBots||bots[Math.min(1,bots.length-1)])?'selected':''}>${n} máy</option>`).join('')}</select>${CFG.difficulty?`<label>Độ khó của máy</label><select id="m-diff">${[['easy','Dễ — chơi bừa, không để ý quý tộc'],['med','Trung bình — như người mới chơi'],['hard','Khó — máy chơi giỏi']].map(([v,t])=>`<option value="${v}" ${(ls.get('bg-diff')||'med')===v?'selected':''}>${t}</option>`).join('')}</select>`:''}
       <div class="tb-grid"><button class="tbtn pri full" id="m-local">▶ Chơi ngay với máy</button>
         <div class="tb-or">Chơi online cùng bạn bè</div>
-        <button class="tbtn" id="m-create">🌐 Tạo phòng</button><button class="tbtn" id="m-join">🔑 Vào phòng bằng mã</button>
-        ${lr?`<button class="tbtn pri full" id="m-resume">↩ Vào lại phòng ${esc(lr.code)}</button>`:''}</div>`);
+        <button class="tbtn" id="m-create">Tạo phòng</button><button class="tbtn" id="m-join">Vào phòng bằng mã</button>
+        ${lr?`<button class="tbtn pri full" id="m-resume">Vào lại phòng ${esc(lr.code)}</button>`:''}</div>`);
     const nm=()=>{
       let v=clean($('#m-name').value) || myName();
       if(!v) v='Khách'+Math.floor(100+Math.random()*900);
@@ -232,11 +232,11 @@ const Table = (()=>{
     const people = MODE==='host' ? [Object.assign({name:myName(),host:1,me:1},A0), ...guests().map(g=>Object.assign({name:clean(g.presence.name)},pv(g.presence)))]
       : (hostPeer()?[Object.assign({name:clean(hostPeer().presence.name),host:1},pv(hostPeer().presence))]:[]).concat(PEERS.filter(p=>p.presence&&p.presence.role==='guest'&&fresh(p.peer)).map(p=>Object.assign({name:clean(p.presence.name),me:p.sameTab},p.sameTab?A0:pv(p.presence))));
     const relBtn=p=>{ if(p.me) return '<span class="tag me">Bạn</span>'; if(!p.uid) return '<span class="tag">Khách</span>'; if(!P||!P.user) return `<button class="tbtn sm" data-plogin>Đăng nhập để kết bạn</button>`;
-      const r=P.rel(p.uid); return (r==='friend'?'<span class="tag fr">👥 Bạn bè</span>':r==='outgoing'?'<span class="tag">Đã gửi</span>':r==='incoming'?`<button class="tbtn sm pri" data-pacc="${esc(p.uid)}">Đồng ý kết bạn</button>`:`<button class="tbtn sm" data-padd="${esc(p.uid)}" data-pn="${esc(p.name)}" data-pa="${esc(p.av||'')}">+ Kết bạn</button>`)+`<button class="tbtn sm" data-pprof="${esc(p.uid)}" data-pn="${esc(p.name)}" data-pa="${esc(p.av||'')}">Hồ sơ</button>`; };
-    const ppl=people.map((p,i)=>`<div class="tb-pc ${p.me?'me':''}">${avHTML(p.av,p.name,i)}<div class="nm"><b>${esc(p.name)}</b>${p.host?'<i>👑 Chủ phòng</i>':''}</div><div class="ac">${relBtn(p)}</div></div>`).join('');
+      const r=P.rel(p.uid); return (r==='friend'?'<span class="tag fr">Bạn bè</span>':r==='outgoing'?'<span class="tag">Đã gửi</span>':r==='incoming'?`<button class="tbtn sm pri" data-pacc="${esc(p.uid)}">Đồng ý kết bạn</button>`:`<button class="tbtn sm" data-padd="${esc(p.uid)}" data-pn="${esc(p.name)}" data-pa="${esc(p.av||'')}">+ Kết bạn</button>`)+`<button class="tbtn sm" data-pprof="${esc(p.uid)}" data-pn="${esc(p.name)}" data-pa="${esc(p.av||'')}">Hồ sơ</button>`; };
+    const ppl=people.map((p,i)=>`<div class="tb-pc ${p.me?'me':''}">${avHTML(p.av,p.name,i)}<div class="nm"><b>${esc(p.name)}</b>${p.host?'<i>Chủ phòng</i>':''}</div><div class="ac">${relBtn(p)}</div></div>`).join('');
     const ci=$('#l-chatf input'), cv=ci?ci.value:'', cf=ci&&document.activeElement===ci;
-    const chatBlock=`<label>💬 Trò chuyện trong phòng</label><div class="tb-lchat"><div class="ls" id="l-chatls"></div><div class="qk">${['Chào cả nhà!','Sẵn sàng!','Chờ chút nhé','Vào nhanh nào'].map(q=>`<button data-q="${q}">${q}</button>`).join('')}</div><form id="l-chatf" autocomplete="off"><input maxlength="80" placeholder="Nhắn cho cả phòng…"><button class="tbtn pri" type="submit">Gửi</button></form></div>`;
-    const inviteBlock=`<label>📨 Mời bạn bè vào phòng</label><div class="tb-inv" id="l-inv"></div>`;
+    const chatBlock=`<label>Trò chuyện trong phòng</label><div class="tb-lchat"><div class="ls" id="l-chatls"></div><div class="qk">${['Chào cả nhà!','Sẵn sàng!','Chờ chút nhé','Vào nhanh nào'].map(q=>`<button data-q="${q}">${q}</button>`).join('')}</div><form id="l-chatf" autocomplete="off"><input maxlength="80" placeholder="Nhắn cho cả phòng…"><button class="tbtn pri" type="submit">Gửi</button></form></div>`;
+    const inviteBlock=`<label>Mời bạn bè vào phòng</label><div class="tb-inv" id="l-inv"></div>`;
     if (MODE==='host'){
       const free=Math.max(0, CFG.maxPlayers-people.length), def=people.length>=CFG.minPlayers?0:Math.min(free,Math.max(1,CFG.minPlayers-people.length));
       const prev=$('#l-bots')?+$('#l-bots').value:null;
@@ -275,7 +275,7 @@ const Table = (()=>{
     if (CFG.shuffleSeats!==false){ for(let i=seats.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [seats[i],seats[j]]=[seats[j],seats[i]]; } }
     const DL=ls.get('bg-diff')||'med'; seats.forEach(s=>{ if(s.bot&&!s.lvl) s.lvl=DL; });
     MODE=mode; S=CFG.newGame(seats.map((s,i)=>Object.assign({color:COLORS[i%COLORS.length]},s)), now()); S.v=1; ME=Math.max(0,S.seats.findIndex(p=>!p.bot&&p.pid===PID)); if(S.seats[ME]&&S.seats[ME].bot) ME=S.seats.findIndex(p=>!p.bot);
-    if (S.seats&&S.seats[0]&&S.seats[0].name&&S.log&&Array.isArray(S.log)) S.log.unshift('🎲 Bốc thăm thứ tự: '+S.seats.map(p=>p.name).join(' → ')+'. '+S.seats[S.turn>=0?S.turn:0].name+' đi trước.');
+    if (S.seats&&S.seats[0]&&S.seats[0].name&&S.log&&Array.isArray(S.log)) S.log.unshift('Bốc thăm thứ tự: '+S.seats.map(p=>p.name).join(' → ')+'. '+S.seats[S.turn>=0?S.turn:0].name+' đi trước.');
     document.body.classList.add('ingame'); setTop(); commit(); CFG.onStart && CFG.onStart();
   }
   function commit(){ S.v=(S.v||0)+1; if (MODE==='host'){ ROOM.presence(Object.assign({role:'host', name:myName(), pid:PID, lobby:false, st:S, now:Date.now()},acct())).catch(()=>{}); announce(); } draw(); }
