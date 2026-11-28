@@ -174,10 +174,10 @@ const BMUI=(()=>{
     if(!from||!tos[0]){ if(sv) sv.remove(); return; }
     if(!sv){ sv=document.createElementNS('http://www.w3.org/2000/svg','svg'); sv.id='bmarrow'; document.body.appendChild(sv); }
     sv.setAttribute('width',innerWidth); sv.setAttribute('height',innerHeight);
-    let g='<defs><marker id="bmah" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="14" refY="11" orient="auto"><path d="M0 0 L22 11 L0 22 z" fill="#ffe08a"/></marker></defs>';
+    let g='<defs><marker id="bmah" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="8" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11" fill="none" stroke="#ffe08a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>';
     tos.forEach((t,i)=>{ if(!t) return; const x0=from.left+from.width/2, y0=sel<0?from.top+from.height:from.top+from.height*.5, x1=t.left+t.width/2, y1=sel<0?t.top+Math.min(30,t.height*.3):t.top+t.height*.5+(y0<t.top?-t.height*.5:t.height*.5);
-      const mx=(x0+x1)/2+(sel<0?0:(i?30:-30)), my2=Math.min(y0,y1)-Math.max(36,Math.abs(x1-x0)*.25);
-      g+=`<path d="M${x0.toFixed(0)} ${y0.toFixed(0)} Q${mx.toFixed(0)} ${my2.toFixed(0)} ${x1.toFixed(0)} ${y1.toFixed(0)}" fill="none" stroke="#ffe08a" stroke-width="5" stroke-linecap="round" stroke-dasharray="3 12" marker-end="url(#bmah)" class="bmarc"/>`; });
+      const mx=(x0+x1)/2+(sel<0?26:(i?34:-34)), my2=(y0+y1)/2-Math.max(20,Math.abs(x1-x0)*.18);
+      g+=`<path d="M${x0.toFixed(0)} ${y0.toFixed(0)} Q${mx.toFixed(0)} ${my2.toFixed(0)} ${x1.toFixed(0)} ${y1.toFixed(0)}" fill="none" stroke="#ffe08a" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9" opacity=".85" marker-end="url(#bmah)" class="bmarc"/>`; });
     sv.innerHTML=g; }
   function frameRect(seat,mine){ return rectOf(`.pl[data-p="${seat}"] ${seat===window.__ME?'.bmhand':'.bmopb'}`)||rectOf(`.pl[data-p="${seat}"]`); }
   function runEvent(S,ME,api,ev,pre){ window.__ME=ME; const k=ev.k, tgt=s=>rectOf(`.pl[data-p="${s}"] ${s===ME?'.bmhand':'.bmopb'}`)||rectOf(`.pl[data-p="${s}"]`), w=Math.max(34,cw('[data-deck] .bmc')*.8), h=w*1.4, pw=cw('[data-deck] .bmc');
@@ -230,11 +230,15 @@ const BMUI=(()=>{
   (function drag(){ let el=null,clone=null,x0=0,y0=0,mv=false,hot=null,hotKind='';
     const at=(x,y)=>{ const l=document.elementsFromPoint(x,y); let hand=null; for(const n of l){ if(!n.closest) continue; const p=n.closest('#bm [data-pile]'); if(p&&!p.closest('#bmcrab')) return {pile:p}; if(!hand&&n.closest('#bm .pl.me')) hand=n.closest('#bm .pl.me'); } return hand?{hand}:{}; };
     const mark=t=>{ const k=t.pile||t.hand||null; if(hot!==k){ hot&&hot.classList.remove('hot'); hot=k; hot&&hot.classList.add('hot'); } };
-    document.addEventListener('pointerdown',e=>{ const S=window.__S, api=Table.API; if(!S||S.phase!=='play'||S.turn!==api.me()||S.step!=='keep') return; const c=e.target.closest&&e.target.closest('#bm [data-pend]'); if(!c) return; el=c; x0=e.clientX; y0=e.clientY; mv=false; });
+    document.addEventListener('pointerdown',e=>{ const S=window.__S, api=Table.API; if(!S||S.phase!=='play'||S.turn!==api.me()) return; let c=null;
+      if(S.step==='keep') c=e.target.closest&&e.target.closest('#bm [data-pend]');
+      else if(S.step==='draw'){ const pc=e.target.closest&&e.target.closest('#bm .pile[data-pile] .bmc[data-cid]'); if(pc&&S.disc[+pc.closest('.pile').dataset.pile].length) c=pc; }
+      if(!c) return; el=c; x0=e.clientX; y0=e.clientY; mv=false; });
     document.addEventListener('pointermove',e=>{ if(!el) return; if(!mv){ if(Math.hypot(e.clientX-x0,e.clientY-y0)<8) return; mv=true; const r=el.getBoundingClientRect(); clone=el.cloneNode(true); clone.classList.add('bmdragc'); clone.style.cssText=`position:fixed;z-index:9995;pointer-events:none;width:${r.width}px;height:${r.height}px;left:${r.left}px;top:${r.top}px;--w:${r.width}px;transform:scale(1.12) rotate(4deg);box-shadow:0 10px 24px rgba(0,0,0,.6)`; document.body.appendChild(clone); el.style.opacity='.3'; document.documentElement.classList.add('bmdragging'); const ar=document.getElementById('bmarrow'); if(ar) ar.style.opacity='.25'; }
       e.preventDefault&&e.cancelable&&e.preventDefault(); const r=clone.getBoundingClientRect(); clone.style.left=(e.clientX-r.width/2)+'px'; clone.style.top=(e.clientY-r.height/2)+'px'; mark(at(e.clientX,e.clientY)); },{passive:false});
-    const end=e=>{ if(!el) return; const S=window.__S, api=Table.API; if(mv){ dragT=Date.now(); const t=at(e.clientX,e.clientY), idx=+el.dataset.pend; if(clone) clone.remove(); el.style.opacity=''; if(hot) hot.classList.remove('hot'); document.documentElement.classList.remove('bmdragging'); const ar=document.getElementById('bmarrow'); if(ar) ar.style.opacity='';
-        if(S&&S.step==='keep'&&S.turn===api.me()){
+    const end=e=>{ if(!el) return; const S=window.__S, api=Table.API; if(mv){ dragT=Date.now(); const t=at(e.clientX,e.clientY), idx=+el.dataset.pend, fromPile=el.closest('.pile[data-pile]'); if(clone) clone.remove(); el.style.opacity=''; if(hot) hot.classList.remove('hot'); document.documentElement.classList.remove('bmdragging'); const ar=document.getElementById('bmarrow'); if(ar) ar.style.opacity='';
+        if(S&&S.step==='draw'&&S.turn===api.me()&&fromPile){ if(t.hand){ SND.pop(); api.act({t:'take',pile:+fromPile.dataset.pile}); } else api.toast('Kéo lá vào khu bài của bạn để lấy'); }
+        else if(S&&S.step==='keep'&&S.turn===api.me()){
           if(t.hand){ if(sel>=0&&sel!==idx){ api.toast('Chỉ được giữ 1 lá — lá này phải bỏ vào chồng bỏ'); }
             else { if(sel!==idx){ sel=idx; SND.pop(); render(S,api.me(),api); } api.toast('Đã giữ lá này — giờ kéo lá còn lại vào chồng bỏ'); } }
           else if(t.pile){ if(sel>=0&&sel===idx){ api.toast('Đây là lá bạn giữ — hãy kéo lá kia vào chồng bỏ'); }

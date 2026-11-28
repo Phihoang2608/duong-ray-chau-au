@@ -188,5 +188,6 @@ body:not(.ingame) #tb-box .tb-or{color:#cfe8f7!important}
 @keyframes bmdisglow{0%,100%{box-shadow:0 0 0 3px #fff,0 0 18px 4px rgba(255,236,150,.95),0 0 36px 10px rgba(255,200,60,.6)}50%{box-shadow:0 0 0 4px #fff,0 0 30px 8px #fff3b0,0 0 56px 18px rgba(255,190,40,.85)}}
 .pl.me.hot{outline:3px dashed #7dffb0;outline-offset:-3px;background:rgba(125,255,176,.1)}
 #bmarrow{position:fixed;left:0;top:0;z-index:9990;pointer-events:none;transition:opacity .2s}
-.bmarc{animation:bmdash 1s linear infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.bmarc{animation:bmdash 1.6s linear infinite;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
 @keyframes bmdash{to{stroke-dashoffset:-30}}
+.pile.go .bmc[data-cid]{cursor:grab;touch-action:none}
