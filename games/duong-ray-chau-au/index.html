@@ -2207,7 +2207,7 @@ function miniMapSVG(t, hue){
 function ticketHTML(t, ok, hue, extra){
   hue = hue || (t.long ? '#b45309' : '#8b2e16');
   if (typeof RA_BASE!=='undefined') return `<div class="vticket imgt ${ok?'ok':''} ${t.long?'long':''} ${extra||''}" data-id="${t.id}" data-a="${t.a}" data-b="${t.b}" data-hue="${hue}" style="--hue:${hue}" title="${esc(CITIES[t.a].name)} → ${esc(CITIES[t.b].name)} · ${t.pts} điểm">
-    <img src="${RA_BASE}tickets/${RA_REG}/${t.id}.webp" alt="${esc(CITIES[t.a].name)} – ${esc(CITIES[t.b].name)} ${t.pts} điểm" draggable="false" decoding="async">
+    <img src="${RA_BASE}tickets/${RA_REG}/${t.id}.webp?v=9" alt="${esc(CITIES[t.a].name)} – ${esc(CITIES[t.b].name)} ${t.pts} điểm" draggable="false" decoding="async">
     ${t.long?'<span class="vt-longtag">★ Đường dài</span>':''}${ok?'<div class="vt-done">✔ ĐÃ HOÀN THÀNH</div>':''}</div>`;
   return `<div class="vticket ${ok?'ok':''} ${t.long?'long':''} ${extra||''}" data-id="${t.id}" data-a="${t.a}" data-b="${t.b}" data-hue="${hue}" style="--hue:${hue}">
     <div class="vt-stub">${miniMapSVG(t, hue)}</div>
