@@ -122,7 +122,7 @@ ${ticks}${rn}
   border:2px solid #d9b25a;box-shadow:inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 0 6px rgba(246,214,128,.4),0 24px 60px rgba(0,0,0,.7);animation:dqvPop .5s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes dqvPop{from{transform:scale(.7) translateY(30px);opacity:0}}
 .dqvp h2{margin:0;text-align:center;font-size:34px;color:#f6d680;text-shadow:0 3px 0 #2a0610,0 0 18px rgba(246,214,128,.35)}
-.dqvp .crown{text-align:center;font-size:44px;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+.dqvp .crown{pointer-events:none;text-align:center;font-size:44px;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
 .dqvp .wsub{text-align:center;margin:4px 0 12px;font-style:italic;color:#f3dcb4}
 .dqvp .rk{display:flex;align-items:center;gap:10px;margin:7px 0;padding:8px 12px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(217,178,90,.45)}
 .dqvp .rk.w{background:linear-gradient(90deg,rgba(246,214,128,.35),rgba(246,214,128,.08));border-color:#f6d680;box-shadow:0 0 18px rgba(246,214,128,.25)}
@@ -135,7 +135,7 @@ ${ticks}${rn}
 .dqvp .bts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
 .dqvp .bts button{font:bold 15.5px "Times New Roman",serif;padding:9px 18px;border-radius:999px;cursor:pointer;color:#fbe9b8;background:linear-gradient(180deg,#8b2340,#5a0f25);border:1.5px solid #d9b25a}
 .dqvp .bts button.pri{background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);color:#3a1a08;border-color:#7a5310;box-shadow:inset 0 1px 0 #fff6cf,0 3px 0 #4a2a0c}
-.dqvp .x{position:absolute;right:10px;top:8px;width:34px;height:34px;border-radius:50%;border:1.5px solid #d9b25a;background:#3a0a18;color:#f6d680;font-size:18px;cursor:pointer}
+.dqvp .x{position:absolute;z-index:5;right:10px;top:8px;width:34px;height:34px;border-radius:50%;border:1.5px solid #d9b25a;background:#3a0a18;color:#f6d680;font-size:18px;cursor:pointer}
 #dqr .dqvp{width:min(980px,100%);height:min(720px,100%);display:flex;flex-direction:column;padding:16px}
 #dqr h2{font-size:26px}
 .dqtabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0}
