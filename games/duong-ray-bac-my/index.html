@@ -1761,44 +1761,37 @@ function shade(hex, amt){
   const f=x=>Math.max(0,Math.min(255,Math.round(amt>=0? x+(255-x)*amt : x*(1+amt))));
   return '#'+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,'0')).join('');
 }
-/* Nhà ga 3D: khung nhìn "-4 -8 38 42" — gốc toạ độ ở góc trái-trên mặt tiền */
+/* Nhà ga dạng tháp chuông (cao, hẹp): gốc (0,0) là tâm đế, khung nhìn "-12 -46 24 50" */
 function stationSVG(col, id){
-  const k=id||col.slice(1), lt=shade(col,.35), dk=shade(col,-.38), dk2=shade(col,-.55), O='#141010';
-  const roof='#5b2a1c', roofL='#8a4630', roofD='#3a170e';
-
-  return `<defs><linearGradient id="sf${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lt}"/><stop offset=".6" stop-color="${col}"/><stop offset="1" stop-color="${shade(col,-.18)}"/></linearGradient>
-   <linearGradient id="ss${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${dk}"/><stop offset="1" stop-color="${dk2}"/></linearGradient>
-   <radialGradient id="sb${k}" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff7e0"/><stop offset=".45" stop-color="${lt}"/><stop offset="1" stop-color="${col}"/></radialGradient>
-   <linearGradient id="sr${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${roofL}"/><stop offset="1" stop-color="${roof}"/></linearGradient></defs>
-  <ellipse cx="15.5" cy="31" rx="17" ry="5.6" fill="#000" opacity=".3"/>
-  <ellipse cx="15" cy="29.6" rx="16" ry="5.4" fill="${dk2}" stroke="${O}" stroke-width="1.2"/>
-  <ellipse cx="15" cy="28.6" rx="16" ry="5.2" fill="url(#sb${k})" stroke="${O}" stroke-width="1.2"/>
-  <ellipse cx="15" cy="28.4" rx="12.5" ry="3.7" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".8"/>
-  <!-- tường hông -->
-  <path d="M20.5 13 L28 8.5 L28 23.8 L20.5 28.4 Z" fill="url(#ss${k})" stroke="${O}" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M22.8 18 L25.8 16.2 L25.8 20.8 L22.8 22.6 Z" fill="#ffd877" stroke="${O}" stroke-width=".7" stroke-linejoin="round"/>
-  <!-- mặt tiền -->
-  <rect x="1.5" y="13" width="19" height="15.4" fill="url(#sf${k})" stroke="${O}" stroke-width="1.3"/>
-  <rect x="1.5" y="13" width="19" height="2" fill="#fff" opacity=".28"/>
-  <rect x="1.5" y="25.6" width="19" height="2.8" fill="${dk}" opacity=".55"/>
-  <!-- cửa vòm + cửa sổ -->
-  <path d="M8 28.4 V21.5 a3 3 0 0 1 6 0 V28.4 Z" fill="#3a2414" stroke="${O}" stroke-width="1"/>
-  <path d="M9.2 28.4 V21.8 a1.8 1.8 0 0 1 3.6 0 V28.4" fill="#ffe7a0" opacity=".85"/>
-  <rect x="3.4" y="18" width="3.2" height="4.4" rx="1.4" fill="#ffd877" stroke="${O}" stroke-width=".8"/>
-  <rect x="15.4" y="18" width="3.2" height="4.4" rx="1.4" fill="#ffd877" stroke="${O}" stroke-width=".8"/>
-  <path d="M3.4 20.2 h3.2 M15.4 20.2 h3.2" stroke="${O}" stroke-width=".5"/>
-  <!-- mái hông -->
-  <path d="M11 2.5 L18.5 -1.5 L29.2 8.6 L21.3 13.4 Z" fill="${roofD}" stroke="${O}" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M12.6 2.6 L18.4 -.2 L27.4 8.4" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1"/>
-  <!-- mái trước (đầu hồi) -->
-  <path d="M0 13.6 L11 2.5 L22 13.6 Z" fill="url(#sr${k})" stroke="${O}" stroke-width="1.3" stroke-linejoin="round"/>
-  <path d="M2.4 12.6 L11 4 L19.6 12.6" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1"/>
-  <!-- đồng hồ -->
-  <circle cx="11" cy="9.3" r="3" fill="#fff7dc" stroke="#b8860b" stroke-width="1.1"/>
-  <path d="M11 9.3 V7.4 M11 9.3 L12.4 10" stroke="${O}" stroke-width=".7" stroke-linecap="round"/>
-  <!-- cờ màu người chơi -->
-  <path d="M18.5 -1.5 V-7" stroke="${O}" stroke-width="1"/>
-  <path d="M18.6 -7 L24 -5.6 L18.6 -4.2 Z" fill="${col}" stroke="${O}" stroke-width=".7" stroke-linejoin="round"/>`;
+  const k=id||col.slice(1), lt=shade(col,.38), dk=shade(col,-.38), dk2=shade(col,-.58), O='#141010';
+  return `<defs><linearGradient id="sf${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lt}"/><stop offset="1" stop-color="${shade(col,-.12)}"/></linearGradient>
+   <radialGradient id="sb${k}" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff7e0"/><stop offset=".5" stop-color="${lt}"/><stop offset="1" stop-color="${col}"/></radialGradient>
+   <linearGradient id="sr${k}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9a5236"/><stop offset="1" stop-color="#5b2a1c"/></linearGradient></defs>
+  <ellipse cx="1" cy="1.6" rx="9.5" ry="3.4" fill="#000" opacity=".3"/>
+  <ellipse cx="0" cy=".9" rx="8.6" ry="3.2" fill="${dk2}" stroke="${O}" stroke-width=".9"/>
+  <ellipse cx="0" cy="0" rx="8.6" ry="3.1" fill="url(#sb${k})" stroke="${O}" stroke-width=".9"/>
+  <!-- thân -->
+  <path d="M2.6 -15.5 L6 -17.6 L6 -2 L2.6 0 Z" fill="${dk}" stroke="${O}" stroke-width="1" stroke-linejoin="round"/>
+  <rect x="-5.4" y="-15.5" width="8" height="15.5" fill="url(#sf${k})" stroke="${O}" stroke-width="1"/>
+  <path d="M-3.2 0 V-5.2 a2.2 2.2 0 0 1 4.4 0 V0 Z" fill="#ffe08a" stroke="${O}" stroke-width=".8"/>
+  <rect x="-3.4" y="-12.6" width="1.7" height="3.4" rx=".8" fill="#ffd877" stroke="${O}" stroke-width=".5"/>
+  <rect x="-.3" y="-12.6" width="1.7" height="3.4" rx=".8" fill="#ffd877" stroke="${O}" stroke-width=".5"/>
+  <path d="M3.6 -11 L5 -11.8 L5 -8.6 L3.6 -7.8 Z" fill="#ffd877" stroke="${O}" stroke-width=".45"/>
+  <!-- mái thân -->
+  <path d="M-6.2 -15.2 L-1.4 -19.4 L3.4 -15.2 Z" fill="#8a4630" stroke="${O}" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M-1.4 -19.4 L2 -21.4 L6.8 -17.4 L3.4 -15.2 Z" fill="#4a1f12" stroke="${O}" stroke-width="1" stroke-linejoin="round"/>
+  <!-- tháp đồng hồ -->
+  <path d="M1.4 -19 L3.6 -20.3 L3.6 -29.6 L1.4 -28.4 Z" fill="${dk2}" stroke="${O}" stroke-width=".9" stroke-linejoin="round"/>
+  <rect x="-4.2" y="-28.4" width="5.6" height="9.6" fill="url(#sf${k})" stroke="${O}" stroke-width=".9"/>
+  <circle cx="-1.4" cy="-24.4" r="2.1" fill="#fff7dc" stroke="#b8860b" stroke-width=".7"/>
+  <path d="M-1.4 -24.4 V-25.8 M-1.4 -24.4 L-.4 -23.9" stroke="${O}" stroke-width=".5" stroke-linecap="round"/>
+  <!-- mái nhọn -->
+  <path d="M-4.9 -28 L-1.4 -40 L2.1 -28 Z" fill="url(#sr${k})" stroke="${O}" stroke-width=".9" stroke-linejoin="round"/>
+  <path d="M-1.4 -40 L4.3 -29.3 L2.1 -28 Z" fill="#3a170e" stroke="${O}" stroke-width=".9" stroke-linejoin="round"/>
+  <path d="M-3.6 -29 L-1.6 -36.6" stroke="#fff" stroke-opacity=".35" stroke-width=".6"/>
+  <!-- cờ -->
+  <path d="M-1.4 -40 V-44.6" stroke="${O}" stroke-width=".7"/>
+  <path d="M-1.3 -44.6 L3.4 -43.4 L-1.3 -42.2 Z" fill="${col}" stroke="${O}" stroke-width=".5" stroke-linejoin="round"/>`;
 }
 /* Định nghĩa gradient dùng chung (chèn 1 lần vào trang) */
 function globalDefsSVG(){
@@ -2130,7 +2123,7 @@ function renderMap(){
     const st=G.stations[C.id]; const big = !!LANDMARKS[C.name];
     s+=`<g class="city ${stMode && st==null ? 'pick':''}" data-city="${C.id}"><circle cx="${C.x}" cy="${C.y}" r="14" fill="transparent"/>
       <circle cx="${C.x}" cy="${C.y}" r="${big?10:8.5}" fill="url(#cityg)" stroke="#5b4326" stroke-width="2.4"/><circle cx="${C.x}" cy="${C.y}" r="${big?4:3}" fill="#8b2e16"/>`;
-    if (st!=null) s+=`<g transform="translate(${C.x-21.8},${C.y-41.5}) scale(1.45)"><g class="station">${stationSVG(G.players[st].color,'p'+st)}</g></g>`;
+    if (st!=null) s+=`<g transform="translate(${C.x},${C.y+1}) scale(1.4)"><g class="station">${stationSVG(G.players[st].color,'p'+st)}</g></g>`;
     s+=`<text x="${C.x+C.dx}" y="${C.y+C.dy}" text-anchor="${C.anchor}" class="clabel">${esc(C.name)}</text></g>`;
   });
   s+=beaconSVG();
@@ -2249,7 +2242,7 @@ function renderSide(){
   if (me){
     $('#stationBtn').style.display = HAS_ST?'':'none';
     $('#stationBtn').disabled = !my || G.drawn>0 || me.stations<=0 || !stationOptions(ME).length;
-    $('#stationBtn').innerHTML = UIS.stationMode ? '<span class="stico">✖</span><span class="dlab">Huỷ</span>' : `<span class="stico"><svg viewBox="-4 -8 38 42" style="display:block;margin:0 auto;width:1.6em;height:1.75em">${stationSVG(me.color,'btn')}</svg></span><span class="dlab">Xây ga</span><small>tốn ${Math.min(3,stationCost(me))} lá</small>`;
+    $('#stationBtn').innerHTML = UIS.stationMode ? '<span class="stico">✖</span><span class="dlab">Huỷ</span>' : `<span class="stico"><svg viewBox="-12 -46 24 50" style="display:block;margin:0 auto;width:1em;height:2.1em">${stationSVG(me.color,'btn')}</svg></span><span class="dlab">Xây ga</span><small>tốn ${Math.min(3,stationCost(me))} lá</small>`;
     const hasMove = canDrawMore() || G.ticketDeck.length || ROUTES.some(r=>claimOptions(ME,r).length) || stationOptions(ME).length;
     $('#passBtn').style.display = (my && G.drawn===0 && !hasMove) ? '' : 'none';
   } else { $('#stationBtn').disabled=true; $('#passBtn').style.display='none'; }
