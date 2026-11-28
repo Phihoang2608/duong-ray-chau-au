@@ -75,7 +75,7 @@ table.t tr:nth-child(even) td{background:#fbf0d8}
 .cost td:first-child img{height:40px;vertical-align:middle;margin-right:8px;object-fit:contain}
 .cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:10px 0}
 .cd{border-radius:14px;background:#fffaf0;border:2px solid #e0b264;overflow:hidden;display:flex;flex-direction:column}
-.cd img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;border-bottom:2px solid #e0b264}
+.kcard{width:78%;max-width:170px;display:block;margin:12px auto 2px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45));transition:transform .2s}.cd:hover .kcard{transform:translateY(-4px) rotate(-1.5deg)}.kcard .rn{font:800 14px "KhFont","Baloo 2","Arial Black",sans-serif;fill:#fff;text-anchor:middle;stroke:#1b0f06;stroke-width:2.6px;paint-order:stroke;stroke-linejoin:round}.cd{background:radial-gradient(ellipse at 50% 30%,#fff6dc,#f3dfae)!important}
 .cd div{padding:8px 10px 10px;font-size:15.5px;line-height:1.4}
 .cd b{display:block;font:800 18px "KhFont",sans-serif;color:#5a330f}
 .cd i{font-style:normal;color:#8a5a2b;font-size:14px}
@@ -103,7 +103,7 @@ footer{text-align:center;color:#fff;text-shadow:0 1px 3px #000;font-size:14px}
  header.top .ttl{display:none} header.top{justify-content:space-between}
  .hero{grid-template-columns:1fr;padding:16px 14px;border-radius:16px} .hero h1{font-size:38px}
  section.box{padding:16px 11px;border-radius:15px;margin:12px 0} section.box h2{font-size:24px} section.box h2 .no{width:36px;height:36px;font-size:18px}
- .steps{grid-template-columns:1fr} .cards{grid-template-columns:1fr 1fr} .hexgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .steps{grid-template-columns:1fr} .cards{grid-template-columns:1fr 1fr} .cards .cd:last-child{grid-column:1/-1;width:calc(50% - 6px);justify-self:center} .hexgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
  .prob{height:150px;gap:3px;padding:8px 6px} .prob i{font-size:10px} .prob b{font-size:13px}
  .robber{flex-direction:column;align-items:center} .vd{padding-left:46px} .turns li{padding-left:12px!important;padding-top:36px!important}
  table.t th,table.t td{padding:7px 6px} .btn{padding:6px 10px;font-size:14.5px}
@@ -265,11 +265,11 @@ footer{text-align:center;color:#fff;text-shadow:0 1px 3px #000;font-size:14px}
   <h2><span class="no">5</span>Thẻ phát triển</h2>
   <p>Rút ngẫu nhiên và giữ kín. Mỗi lượt dùng tối đa 1 thẻ (thẻ Điểm thưởng không tính), và không được dùng thẻ vừa mua trong cùng lượt.</p>
   <div class="cards">
-    <div class="cd"><img src="assets/card-knight-full.webp" alt=""><div><b>Hiệp sĩ</b><i>14 thẻ</i><br>Dời kẻ cướp như khi đổ 7 và lấy 1 lá của người chạm ô mới. Tính vào Quân đội mạnh nhất.</div></div>
-    <div class="cd"><img src="assets/card-road-full.webp" alt=""><div><b>Làm đường</b><i>2 thẻ</i><br>Xây ngay 2 đường miễn phí.</div></div>
-    <div class="cd"><img src="assets/card-plenty-full.webp" alt=""><div><b>Được mùa</b><i>2 thẻ</i><br>Lấy 2 lá tài nguyên bất kỳ từ ngân hàng.</div></div>
-    <div class="cd"><img src="assets/card-mono-full.webp" alt=""><div><b>Độc quyền</b><i>2 thẻ</i><br>Gọi tên 1 loại tài nguyên, mọi người phải đưa bạn hết lá loại đó.</div></div>
-    <div class="cd"><img src="assets/card-vp-full.webp" alt=""><div><b>Điểm thưởng</b><i>5 thẻ</i><br>Mỗi thẻ 1 điểm. Giữ kín, tự cộng khi bạn đủ điểm thắng.</div></div>
+    <div class="cd"><svg class="kcard" viewBox="0 0 70 94.7" role="img" aria-label="HIỆP SĨ"><defs><clipPath id="cc0"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-knight-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#cc0)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="86.1" class="rn" style="font-size:9.6px">HIỆP SĨ</text></svg><div><b>Hiệp sĩ</b><i>14 thẻ</i><br>Dời kẻ cướp như khi đổ 7 và lấy 1 lá của người chạm ô mới. Tính vào Quân đội mạnh nhất.</div></div>
+    <div class="cd"><svg class="kcard" viewBox="0 0 70 94.7" role="img" aria-label="LÀM ĐƯỜNG"><defs><clipPath id="cc1"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-road-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#cc1)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="85.8" class="rn" style="font-size:7.5px">LÀM ĐƯỜNG</text></svg><div><b>Làm đường</b><i>2 thẻ</i><br>Xây ngay 2 đường miễn phí.</div></div>
+    <div class="cd"><svg class="kcard" viewBox="0 0 70 94.7" role="img" aria-label="ĐƯỢC MÙA"><defs><clipPath id="cc2"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-plenty-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#cc2)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="85.9" class="rn" style="font-size:8.5px">ĐƯỢC MÙA</text></svg><div><b>Được mùa</b><i>2 thẻ</i><br>Lấy 2 lá tài nguyên bất kỳ từ ngân hàng.</div></div>
+    <div class="cd"><svg class="kcard" viewBox="0 0 70 94.7" role="img" aria-label="ĐỘC QUYỀN"><defs><clipPath id="cc3"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-mono-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#cc3)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="85.8" class="rn" style="font-size:7.5px">ĐỘC QUYỀN</text></svg><div><b>Độc quyền</b><i>2 thẻ</i><br>Gọi tên 1 loại tài nguyên, mọi người phải đưa bạn hết lá loại đó.</div></div>
+    <div class="cd"><svg class="kcard" viewBox="0 0 70 94.7" role="img" aria-label="+1 ĐIỂM"><defs><clipPath id="cc4"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-vp-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#cc4)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="86.1" class="rn" style="font-size:9.6px">+1 ĐIỂM</text></svg><div><b>Điểm thưởng</b><i>5 thẻ</i><br>Mỗi thẻ 1 điểm. Giữ kín, tự cộng khi bạn đủ điểm thắng.</div></div>
   </div>
   <div class="vd">Độc quyền: bạn gọi "Lúa". Ba người kia có 2, 0 và 3 <img class="r" src="assets/ic-3.webp" alt="">, nên bạn nhận 5 lúa.</div>
 </section>
