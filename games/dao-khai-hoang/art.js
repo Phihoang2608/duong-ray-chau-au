@@ -89,7 +89,7 @@ const KHART=(()=>{
     [[ax,ay],[bx,by]].forEach(([x,y])=>{ const L=Math.hypot(px-x,py-y), ux=(px-x)/L, uy=(py-y)/L; const nx=-uy*3.2, ny=ux*3.2;
       o+=`<polygon points="${f(x+nx)},${f(y+ny)} ${f(px+nx*.6)},${f(py+ny*.6)} ${f(px-nx*.6)},${f(py-ny*.6)} ${f(x-nx)},${f(y-ny)}" fill="#d9b27a" stroke="#8a5a2c" stroke-width="1.4"/>`;
       for(let k=1;k<6;k++){ const q=k/6; o+=`<line x1="${f(x+(px-x)*q+nx)}" y1="${f(y+(py-y)*q+ny)}" x2="${f(x+(px-x)*q-nx)}" y2="${f(y+(py-y)*q-ny)}" stroke="#8a5a2c" stroke-width="1"/>`; } });
-    o+=`<g transform="translate(${f(px)},${f(py)}) scale(1.25)"><path d="M-25 10 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".9"/><path d="M-20 14 q5 -3 10 0 t10 0 t10 0 t10 0" stroke="#bff3fb" stroke-width="1.6" fill="none" opacity=".8"/><g class="boat"><image href="assets/boat.webp?v=2026112823y" x="-20" y="-36.8" width="40" height="47.7" preserveAspectRatio="none"/></g></g>`;
+    o+=`<g transform="translate(${f(px)},${f(py)}) scale(1.25)"><path d="M-25 10 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".9"/><path d="M-20 14 q5 -3 10 0 t10 0 t10 0 t10 0" stroke="#bff3fb" stroke-width="1.6" fill="none" opacity=".8"/><g class="boat"><image href="assets/boat.webp?v=20261128g" x="-20" y="-36.8" width="40" height="47.7" preserveAspectRatio="none"/></g></g>`;
     const bx2=px+Math.cos(ang)*55, by2=py+Math.sin(ang)*55;
     o+=`<g transform="translate(${f(bx2)},${f(by2)}) scale(1.75)"><circle r="15.5" fill="#f7ebcd" stroke="#9a6b36" stroke-width="2.4"/><circle r="12.5" fill="none" stroke="#c9a26a" stroke-width=".9"/>${t>=0?resMini(t,0,-4.5,1):''}<text y="${t>=0?9:5}" class="pt">${t<0?'3:1':'2:1'}</text></g>`;
     return o; }
