@@ -72,7 +72,7 @@ const Table = (()=>{
   .tb-modal.show{display:flex}.tb-modal .tb-panel{max-width:520px;max-height:90vh;overflow:auto;animation:tbpop .3s}
   #fxcanvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:65}
   #tmsg{display:none}
-  @media (max-width:640px){ .tb-top h1{font-size:16px} .tb-top .code{display:none} }
+  @media (max-width:640px){ .tb-top{flex-wrap:wrap;gap:6px;padding:6px 8px} .tb-top h1{font-size:16px;white-space:normal;flex:1 1 100%;order:5;text-align:center} .tb-top .sp{display:none} .tb-top .tbtn{font-size:13px;padding:6px 9px} .tb-top .code{display:none} }
   /* ===== giao diện quý tộc (đỏ rượu + vàng) cho sảnh, phòng chờ, hộp thoại ===== */
   .tb-panel{background:radial-gradient(ellipse at 50% 0,rgba(255,230,160,.12),transparent 60%),linear-gradient(180deg,#4a1426,#250812)!important;border:1.5px solid #c9a24e!important;color:#f6ead0!important;box-shadow:0 0 0 1px #5e1730,0 20px 50px rgba(0,0,0,.55)!important;font-family:"Times New Roman",serif}
   .tb-panel::before{display:none!important}
