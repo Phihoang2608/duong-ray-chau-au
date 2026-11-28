@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tóm tắt luật Đường Ray Bắc Mỹ</title>
+<meta name="description" content="Tóm tắt luật Đường Ray Bắc Mỹ trên một trang.">
+<style>
+:root{--wine:#6b1630;--wine2:#3e0c1b;--gold:#d6a83e;--goldl:#f6d680;--cream:#fbf1d8;--ink:#2b2116;--paper:#fbf3df}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.6;color:var(--ink);background:#2a1d12 radial-gradient(ellipse at top,#5a3b20 0%,#2a1d12 70%) fixed;min-height:100vh}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:8px 14px;background:linear-gradient(180deg,#3a2414,#24160c);border-bottom:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+header.top .ttl{flex:1;color:var(--goldl);font-size:21px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font:bold 15.5px "Times New Roman",serif;text-decoration:none;white-space:nowrap;color:#3a1a08;background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);border:1.5px solid #7a5310;box-shadow:inset 0 1px 0 #fff6cf,0 2px 0 #4a2a0c}
+.btn.wine{color:#fbe9b8;background:linear-gradient(180deg,#8b2340,#5a0f25);border-color:var(--gold)}
+main{padding:14px 18px 50px;max-width:1500px;margin:0 auto}
+.hero{display:grid;grid-template-columns:1fr 1.15fr;gap:22px;align-items:center;padding:24px;border-radius:18px;background:linear-gradient(160deg,#7a1a36,#4a0e22 70%);border:2px solid var(--gold);box-shadow:inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 0 6px rgba(246,214,128,.35),0 14px 34px rgba(0,0,0,.55);color:#fbe9c8}
+.hero h1{margin:0;font-size:50px;line-height:1.05;color:var(--goldl);text-shadow:0 3px 0 #2a0610,0 0 18px rgba(246,214,128,.25)}
+.hero .sub{margin:6px 0 12px;font-style:italic;font-size:18px}
+.hero .cover{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;border:3px solid var(--gold);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.trainrow{display:flex;gap:4px;align-items:flex-end;margin:4px 0 12px;flex-wrap:wrap}
+.trainrow img{height:30px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fact{padding:8px 12px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid rgba(246,214,128,.45)}
+.fact b{display:block;color:var(--goldl);font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+nav.toc{margin:14px 0 4px;padding:10px 12px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid rgba(214,168,62,.5);display:flex;flex-wrap:wrap;gap:7px}
+nav.toc a{padding:4px 12px;border-radius:999px;background:linear-gradient(180deg,#8b2340,#5a0f25);color:#fbe9b8;border:1px solid var(--gold);text-decoration:none;font-weight:bold;font-size:15px;white-space:nowrap}
+section.box{margin:18px 0;padding:22px 24px 20px;border-radius:16px;background:var(--paper);border:2px solid #b98a3a;box-shadow:inset 0 0 0 4px #fbf3df,inset 0 0 0 5px rgba(139,46,22,.35),0 12px 28px rgba(0,0,0,.5);scroll-margin-top:66px}
+section.box>h2{display:flex;align-items:center;gap:12px;margin:-4px 0 12px;font-size:30px;line-height:1.15;color:var(--wine)}
+section.box>h2 .no{flex:none;width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:22px;color:#fbe9b8;background:radial-gradient(circle at 35% 30%,#a8304e,#5a0f25);border:2px solid var(--gold);box-shadow:0 0 0 3px rgba(214,168,62,.25)}
+section.box h3{margin:18px 0 6px;font-size:22px;color:#5a2a0f;border-bottom:1px dashed #c9a35a;padding-bottom:3px}
+section.box p{margin:6px 0}
+section.box ul,section.box ol{margin:6px 0;padding-left:24px}
+section.box li{margin:4px 0}
+.vd{margin:12px 0;padding:12px 14px 12px 56px;border-radius:12px;background:#fffaf0;border:1.5px solid #d9b878;position:relative;font-style:italic}
+.vd::before{content:"Ví dụ";position:absolute;left:-1px;top:-1px;bottom:-1px;width:42px;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font-weight:bold;font-style:normal;font-size:14px;color:#fbe9b8;background:linear-gradient(180deg,#8b2340,#5a0f25);border-radius:0 12px 12px 0;letter-spacing:1px}
+.note{margin:12px 0;padding:10px 14px;border-radius:10px;background:#fbe3dc;border-left:6px solid #a8304e}
+.tip{margin:12px 0;padding:10px 14px;border-radius:10px;background:#eaf5e3;border-left:6px solid #3f9b46}
+.game{margin:10px 0;padding:8px 14px;border-radius:10px;background:#f3ead2;border-left:6px solid var(--gold);font-size:16px}
+.game b.lbl{color:var(--wine)}
+table.t{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border:2px solid #8b5a2b;border-radius:10px;overflow:hidden;background:#fffaf0}
+table.t th{background:linear-gradient(180deg,#7a1a36,#4a0e22);color:var(--goldl);text-align:left;padding:8px 10px;font-size:16px}
+table.t td{padding:7px 10px;border-top:1px solid #ead2a2;vertical-align:middle}
+table.t tr:nth-child(even) td{background:#fbf0d8}
+.tw{overflow-x:auto}
+.chip{display:inline-block;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-weight:bold;font-size:14px;text-shadow:0 1px 1px rgba(0,0,0,.6);border:1px solid rgba(0,0,0,.35);vertical-align:1px}
+.bx{display:inline-flex;gap:2px;vertical-align:middle}.bx i{display:inline-block;width:16px;height:10px;border:1px solid #6b4a22;border-radius:2px}
+.deck{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px;margin:10px 0}
+.tc{margin:0;text-align:center}
+.tc img{width:100%;display:block;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.tc figcaption{font-size:14px;font-weight:bold;margin-top:3px}
+.hand{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0;align-items:center}
+.hand .tc.sm{width:66px}
+.hand .op{font-weight:bold;font-size:22px;color:var(--wine);margin:0 4px}
+.hand .lbl{font-style:normal;font-weight:bold;color:#5a2a0f;margin-right:6px}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:10px 0}
+.st{padding:12px 14px;border-radius:12px;background:#fffaf0;border:1.5px solid #d9b878;box-shadow:0 3px 8px rgba(90,42,15,.12)}
+.st h4{margin:0 0 6px;font-size:18px;color:var(--wine);display:flex;align-items:center;gap:8px}
+.st h4 span{flex:none;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fbe9b8;background:#7a1a36;border:1.5px solid var(--gold);font-size:15px}
+.st img.ill{height:58px;display:block;margin:4px auto 6px;border-radius:6px}
+.fig{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:20px;align-items:center;margin:12px 0}
+.fig.r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.shot{width:100%;display:block;border-radius:12px;border:2px solid #8b5a2b;box-shadow:0 8px 18px rgba(0,0,0,.3)}
+.cap{font-size:14.5px;color:#6b4a22;font-style:italic;text-align:center;margin-top:4px}
+.pts{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px;margin:10px 0}
+.pts div{text-align:center;padding:8px 4px;border-radius:10px;background:#fffaf0;border:1.5px solid #d9b878}
+.pts .len{display:flex;justify-content:center;gap:2px;height:16px;align-items:center}
+.pts .len i{width:10px;height:12px;background:#7a1a36;border-radius:2px;border:1px solid #3e0c1b}
+.pts b{display:block;font-size:13px;color:#6b4a22}
+.pts strong{display:block;font-size:26px;color:var(--wine);line-height:1.1}
+.tk{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin:10px 0}
+.tk figure{margin:0;position:relative}
+.tk img{width:100%;display:block;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.tk figcaption{font-size:13.5px;text-align:center;color:#5a2a0f;margin-top:2px}
+.tk.long{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tkbig{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:center}
+.tkwrap{position:relative}
+.tkwrap .pin{position:absolute;width:30px;height:30px;border-radius:50%;background:#7a1a36;color:#fbe9b8;border:2px solid #fff;font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4);font-size:15px}
+.legend li{list-style:none;position:relative;padding-left:38px;margin:8px 0!important}
+.legend li b.n{position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:#7a1a36;color:#fbe9b8;display:flex;align-items:center;justify-content:center;font-size:14px}
+.legend{padding-left:0!important}
+details.more{margin:10px 0}
+details.more summary{cursor:pointer;font-weight:bold;color:var(--wine);padding:8px 12px;border-radius:10px;background:#f3ead2;border:1px solid #d9b878}
+.calc{font-family:"Times New Roman",serif;background:#fffaf0;border:1.5px dashed #b98a3a;border-radius:10px;padding:10px 14px;margin:8px 0}
+.cta{text-align:center;margin:26px 0 10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.cta .btn{font-size:18px;padding:10px 22px}
+footer{text-align:center;color:#e9d6ae;font-size:14px;margin-top:10px}
+@media (max-width:1100px){.steps{grid-template-columns:1fr 1fr}.deck{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:760px){
+ body{font-size:16px} main{padding:8px 6px 40px}
+ header.top .ttl{display:none} header.top{justify-content:space-between} .btn{padding:6px 10px;font-size:14px}
+ .hero{grid-template-columns:1fr;padding:16px 14px}.hero h1{font-size:36px}
+ section.box{padding:16px 12px}section.box>h2{font-size:24px}section.box>h2 .no{width:36px;height:36px;font-size:18px}
+ .fig,.fig.r,.tkbig{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.deck{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .tk{grid-template-columns:1fr 1fr}.tk.long{grid-template-columns:1fr 1fr}.hand .tc.sm{width:50px}
+ .pts{grid-template-columns:repeat(4,minmax(0,1fr))}.vd{padding-left:48px}.facts{grid-template-columns:1fr 1fr}
+}
+
+.sumg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.sumg section.box{margin:0;padding:18px 18px 14px}
+.sumg section.box>h2{font-size:23px}
+.sumg section.box>h2 .no{width:36px;height:36px;font-size:17px}
+.sumg .wide{grid-column:span 2}
+.sumg ul,.sumg ol{padding-left:20px}
+.mini{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.mini img{width:54px;border-radius:5px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+@media (max-width:1100px){.sumg{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.sumg{grid-template-columns:1fr}.sumg .wide{grid-column:auto}}
+</style>
+</head>
+<body><header class="top"><a class="btn" href="index.html">← Vào game</a><span class="ttl">Tóm tắt luật Đường Ray Bắc Mỹ</span><a class="btn" href="luat.html">Luật chi tiết</a><a class="btn" href="Luat-choi-Duong-Ray-Bac-My.pdf" download>⬇ PDF</a></header>
+<main>
+<div class="hero" style="grid-template-columns:1fr;padding:18px 22px"><div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><h1 style="font-size:40px">Tóm tắt luật</h1><div class="trainrow" style="margin:0"><img class="wg" src="../../railart/wagons/red.png" alt=""><img class="wg" src="../../railart/wagons/orange.png" alt=""><img class="wg" src="../../railart/wagons/yellow.png" alt=""><img class="wg" src="../../railart/wagons/green.png" alt=""><img class="wg" src="../../railart/wagons/blue.png" alt=""><img class="wg" src="../../railart/wagons/purple.png" alt=""><img class="wg" src="../../railart/wagons/black.png" alt=""><img class="wg" src="../../railart/wagons/white.png" alt=""><img class="wg" src="../../railart/wagons/loco.png" alt=""></div></div>
+<p class="sub" style="margin:4px 0 0">Đường Ray Bắc Mỹ · 2 đến 5 người · 45 toa và 3 nhà ga mỗi người · nhiều điểm nhất thắng</p></div>
+<div class="sumg">
+<section class="box"><h2><span class="no">1</span>Bắt đầu</h2><ul><li>Mỗi người 4 lá bài, lật ngửa 5 lá.</li><li>Chia 1 vé dài + 3 vé thường, giữ ít nhất 2.</li><li>Máy bốc thăm người đi trước. Mỗi lượt 60 giây.</li></ul></section>
+<section class="box"><h2><span class="no">2</span>Mỗi lượt làm 1 việc</h2><ol><li><b>Rút 2 lá bài</b> (Đầu máy ngửa: chỉ 1 lá).</li><li><b>Chiếm 1 tuyến</b>: trả đủ lá cùng màu.</li><li><b>Rút 3 vé</b>, giữ ít nhất 1.</li><li><b>Xây nhà ga</b>: 1, 2 rồi 3 lá cùng màu.</li></ol></section>
+<section class="box"><h2><span class="no">★</span>Đầu máy</h2><div class="mini"><img src="../../railart/cards/loco.webp" alt=""></div><ul><li>Thay được mọi màu.</li><li>3 Đầu máy ngửa cùng lúc: bỏ cả 5 lá, lật lại.</li></ul></section>
+<section class="box wide"><h2><span class="no">⚑</span>Điểm khi chiếm tuyến</h2><div class="pts" style="--n:7"><div><span class="len"><i></i></span><b>1 ô</b><strong>1</strong></div><div><span class="len"><i></i><i></i></span><b>2 ô</b><strong>2</strong></div><div><span class="len"><i></i><i></i><i></i></span><b>3 ô</b><strong>4</strong></div><div><span class="len"><i></i><i></i><i></i><i></i></span><b>4 ô</b><strong>7</strong></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i></span><b>5 ô</b><strong>10</strong></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i><i></i></span><b>6 ô</b><strong>15</strong></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><b>7 ô</b><strong>18</strong></div></div>
+<ul><li>Tuyến xám: một màu bất kỳ. Đường đôi: không chiếm cả 2 làn; 2 đến 3 người chỉ dùng 1 làn.</li></ul></section>
+<section class="box"><h2><span class="no">⛰</span>Hầm và phà</h2><ul><li><b>Hầm</b> (viền nét đứt): lật 3 lá, mỗi lá trùng màu hoặc Đầu máy phải trả thêm 1 lá. Không trả được thì lấy lại bài, mất lượt.</li><li><b>Phà</b> (ngôi sao): mỗi ngôi sao cần 1 Đầu máy.</li></ul></section>
+<section class="box"><h2><span class="no">⌂</span>Nhà ga</h2><ul><li>Đặt ở thành phố chưa có ga.</li><li>Cuối ván mượn 1 tuyến đối thủ vào thành phố đó để nối vé.</li><li>Ga không xây: +4 điểm.</li></ul></section>
+<section class="box"><h2><span class="no">✉</span>Vé hành trình</h2><img src="../../railart/tickets/na/L0.webp?v=9" alt="" style="width:100%;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.3)"><p>Nối được 2 thành phố: cộng điểm. Không nối được: trừ điểm.</p></section>
+<section class="box"><h2><span class="no">⌛</span>Kết thúc</h2><ul><li>Ai còn ≤ 2 toa: mọi người đi thêm đúng 1 lượt.</li><li>Cộng/trừ vé, +10 đường liên tục dài nhất (hòa thì cùng nhận), +4 mỗi ga chưa xây.</li><li>Bằng điểm: ai xong nhiều vé hơn thắng.</li></ul></section>
+</div>
+<div class="cta"><a class="btn wine" href="Luat-choi-Duong-Ray-Bac-My.pdf" download>⬇ Tải luật bản PDF (đen trắng)</a><a class="btn" href="index.html">▶ Chơi ngay</a><a class="btn wine" href="luat.html">Xem luật chi tiết</a></div>
+<footer>Đường Ray Bắc Mỹ · Phi Board Games</footer>
+</main></body></html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Luật chơi Đường Ray Châu Âu</title>
+<meta name="description" content="Hướng dẫn chơi chi tiết Đường Ray Châu Âu: bài toa tàu, chiếm tuyến, đường hầm, phà, nhà ga, vé hành trình và cách tính điểm.">
+<style>
+:root{--wine:#6b1630;--wine2:#3e0c1b;--gold:#d6a83e;--goldl:#f6d680;--cream:#fbf1d8;--ink:#2b2116;--paper:#fbf3df}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.6;color:var(--ink);background:#2a1d12 radial-gradient(ellipse at top,#5a3b20 0%,#2a1d12 70%) fixed;min-height:100vh}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:8px 14px;background:linear-gradient(180deg,#3a2414,#24160c);border-bottom:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+header.top .ttl{flex:1;color:var(--goldl);font-size:21px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font:bold 15.5px "Times New Roman",serif;text-decoration:none;white-space:nowrap;color:#3a1a08;background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);border:1.5px solid #7a5310;box-shadow:inset 0 1px 0 #fff6cf,0 2px 0 #4a2a0c}
+.btn.wine{color:#fbe9b8;background:linear-gradient(180deg,#8b2340,#5a0f25);border-color:var(--gold)}
+main{padding:14px 18px 50px;max-width:1500px;margin:0 auto}
+.hero{display:grid;grid-template-columns:1fr 1.15fr;gap:22px;align-items:center;padding:24px;border-radius:18px;background:linear-gradient(160deg,#7a1a36,#4a0e22 70%);border:2px solid var(--gold);box-shadow:inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 0 6px rgba(246,214,128,.35),0 14px 34px rgba(0,0,0,.55);color:#fbe9c8}
+.hero h1{margin:0;font-size:50px;line-height:1.05;color:var(--goldl);text-shadow:0 3px 0 #2a0610,0 0 18px rgba(246,214,128,.25)}
+.hero .sub{margin:6px 0 12px;font-style:italic;font-size:18px}
+.hero .cover{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;border:3px solid var(--gold);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.trainrow{display:flex;gap:4px;align-items:flex-end;margin:4px 0 12px;flex-wrap:wrap}
+.trainrow img{height:30px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fact{padding:8px 12px;border-radius:10px;background:rgba(0,0,0,.25);border:1px solid rgba(246,214,128,.45)}
+.fact b{display:block;color:var(--goldl);font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+nav.toc{margin:14px 0 4px;padding:10px 12px;border-radius:14px;background:rgba(0,0,0,.3);border:1px solid rgba(214,168,62,.5);display:flex;flex-wrap:wrap;gap:7px}
+nav.toc a{padding:4px 12px;border-radius:999px;background:linear-gradient(180deg,#8b2340,#5a0f25);color:#fbe9b8;border:1px solid var(--gold);text-decoration:none;font-weight:bold;font-size:15px;white-space:nowrap}
+section.box{margin:18px 0;padding:22px 24px 20px;border-radius:16px;background:var(--paper);border:2px solid #b98a3a;box-shadow:inset 0 0 0 4px #fbf3df,inset 0 0 0 5px rgba(139,46,22,.35),0 12px 28px rgba(0,0,0,.5);scroll-margin-top:66px}
+section.box>h2{display:flex;align-items:center;gap:12px;margin:-4px 0 12px;font-size:30px;line-height:1.15;color:var(--wine)}
+section.box>h2 .no{flex:none;width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:22px;color:#fbe9b8;background:radial-gradient(circle at 35% 30%,#a8304e,#5a0f25);border:2px solid var(--gold);box-shadow:0 0 0 3px rgba(214,168,62,.25)}
+section.box h3{margin:18px 0 6px;font-size:22px;color:#5a2a0f;border-bottom:1px dashed #c9a35a;padding-bottom:3px}
+section.box p{margin:6px 0}
+section.box ul,section.box ol{margin:6px 0;padding-left:24px}
+section.box li{margin:4px 0}
+.vd{margin:12px 0;padding:12px 14px 12px 56px;border-radius:12px;background:#fffaf0;border:1.5px solid #d9b878;position:relative;font-style:italic}
+.vd::before{content:"Ví dụ";position:absolute;left:-1px;top:-1px;bottom:-1px;width:42px;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font-weight:bold;font-style:normal;font-size:14px;color:#fbe9b8;background:linear-gradient(180deg,#8b2340,#5a0f25);border-radius:0 12px 12px 0;letter-spacing:1px}
+.note{margin:12px 0;padding:10px 14px;border-radius:10px;background:#fbe3dc;border-left:6px solid #a8304e}
+.tip{margin:12px 0;padding:10px 14px;border-radius:10px;background:#eaf5e3;border-left:6px solid #3f9b46}
+.game{margin:10px 0;padding:8px 14px;border-radius:10px;background:#f3ead2;border-left:6px solid var(--gold);font-size:16px}
+.game b.lbl{color:var(--wine)}
+table.t{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border:2px solid #8b5a2b;border-radius:10px;overflow:hidden;background:#fffaf0}
+table.t th{background:linear-gradient(180deg,#7a1a36,#4a0e22);color:var(--goldl);text-align:left;padding:8px 10px;font-size:16px}
+table.t td{padding:7px 10px;border-top:1px solid #ead2a2;vertical-align:middle}
+table.t tr:nth-child(even) td{background:#fbf0d8}
+.tw{overflow-x:auto}
+.chip{display:inline-block;padding:0 8px;border-radius:999px;background:var(--c);color:#fff;font-weight:bold;font-size:14px;text-shadow:0 1px 1px rgba(0,0,0,.6);border:1px solid rgba(0,0,0,.35);vertical-align:1px}
+.bx{display:inline-flex;gap:2px;vertical-align:middle}.bx i{display:inline-block;width:16px;height:10px;border:1px solid #6b4a22;border-radius:2px}
+.deck{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px;margin:10px 0}
+.tc{margin:0;text-align:center}
+.tc img{width:100%;display:block;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.tc figcaption{font-size:14px;font-weight:bold;margin-top:3px}
+.hand{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0;align-items:center}
+.hand .tc.sm{width:66px}
+.hand .op{font-weight:bold;font-size:22px;color:var(--wine);margin:0 4px}
+.hand .lbl{font-style:normal;font-weight:bold;color:#5a2a0f;margin-right:6px}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:10px 0}
+.st{padding:12px 14px;border-radius:12px;background:#fffaf0;border:1.5px solid #d9b878;box-shadow:0 3px 8px rgba(90,42,15,.12)}
+.st h4{margin:0 0 6px;font-size:18px;color:var(--wine);display:flex;align-items:center;gap:8px}
+.st h4 span{flex:none;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fbe9b8;background:#7a1a36;border:1.5px solid var(--gold);font-size:15px}
+.st img.ill{height:58px;display:block;margin:4px auto 6px;border-radius:6px}
+.fig{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:20px;align-items:center;margin:12px 0}
+.fig.r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.shot{width:100%;display:block;border-radius:12px;border:2px solid #8b5a2b;box-shadow:0 8px 18px rgba(0,0,0,.3)}
+.cap{font-size:14.5px;color:#6b4a22;font-style:italic;text-align:center;margin-top:4px}
+.pts{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px;margin:10px 0}
+.pts div{text-align:center;padding:8px 4px;border-radius:10px;background:#fffaf0;border:1.5px solid #d9b878}
+.pts .len{display:flex;justify-content:center;gap:2px;height:16px;align-items:center}
+.pts .len i{width:10px;height:12px;background:#7a1a36;border-radius:2px;border:1px solid #3e0c1b}
+.pts b{display:block;font-size:13px;color:#6b4a22}
+.pts strong{display:block;font-size:26px;color:var(--wine);line-height:1.1}
+.tk{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin:10px 0}
+.tk figure{margin:0;position:relative}
+.tk img{width:100%;display:block;border-radius:8px;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.tk figcaption{font-size:13.5px;text-align:center;color:#5a2a0f;margin-top:2px}
+.tk.long{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tkbig{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:center}
+.tkwrap{position:relative}
+.tkwrap .pin{position:absolute;width:30px;height:30px;border-radius:50%;background:#7a1a36;color:#fbe9b8;border:2px solid #fff;font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4);font-size:15px}
+.legend li{list-style:none;position:relative;padding-left:38px;margin:8px 0!important}
+.legend li b.n{position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:#7a1a36;color:#fbe9b8;display:flex;align-items:center;justify-content:center;font-size:14px}
+.legend{padding-left:0!important}
+details.more{margin:10px 0}
+details.more summary{cursor:pointer;font-weight:bold;color:var(--wine);padding:8px 12px;border-radius:10px;background:#f3ead2;border:1px solid #d9b878}
+.calc{font-family:"Times New Roman",serif;background:#fffaf0;border:1.5px dashed #b98a3a;border-radius:10px;padding:10px 14px;margin:8px 0}
+.cta{text-align:center;margin:26px 0 10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.cta .btn{font-size:18px;padding:10px 22px}
+footer{text-align:center;color:#e9d6ae;font-size:14px;margin-top:10px}
+@media (max-width:1100px){.steps{grid-template-columns:1fr 1fr}.deck{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:760px){
+ body{font-size:16px} main{padding:8px 6px 40px}
+ header.top .ttl{display:none} header.top{justify-content:space-between} .btn{padding:6px 10px;font-size:14px}
+ .hero{grid-template-columns:1fr;padding:16px 14px}.hero h1{font-size:36px}
+ section.box{padding:16px 12px}section.box>h2{font-size:24px}section.box>h2 .no{width:36px;height:36px;font-size:18px}
+ .fig,.fig.r,.tkbig{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.deck{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .tk{grid-template-columns:1fr 1fr}.tk.long{grid-template-columns:1fr 1fr}.hand .tc.sm{width:50px}
+ .pts{grid-template-columns:repeat(4,minmax(0,1fr))}.vd{padding-left:48px}.facts{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body><header class="top"><a class="btn" href="index.html">← Vào game</a><span class="ttl">Luật chơi Đường Ray Châu Âu</span><a class="btn" href="tom-tat.html">Tóm tắt</a><a class="btn" href="Luat-choi-Duong-Ray-Chau-Au.pdf" download>⬇ PDF</a></header>
+<main>
+<div class="hero">
+  <div>
+    <h1>Đường Ray Châu Âu</h1>
+    <p class="sub">Hướng dẫn chơi chi tiết, có ví dụ và toàn bộ vé hành trình</p>
+    <div class="trainrow"><img class="wg" src="../../railart/wagons/red.png" alt=""><img class="wg" src="../../railart/wagons/orange.png" alt=""><img class="wg" src="../../railart/wagons/yellow.png" alt=""><img class="wg" src="../../railart/wagons/green.png" alt=""><img class="wg" src="../../railart/wagons/blue.png" alt=""><img class="wg" src="../../railart/wagons/purple.png" alt=""><img class="wg" src="../../railart/wagons/black.png" alt=""><img class="wg" src="../../railart/wagons/white.png" alt=""><img class="wg" src="../../railart/wagons/loco.png" alt=""></div>
+    <div class="facts">
+      <div class="fact"><b>Số người chơi</b>2 đến 5 (chơi với máy hoặc bạn bè)</div>
+      <div class="fact"><b>Thời gian</b>Khoảng 30 đến 60 phút</div>
+      <div class="fact"><b>Mỗi người có</b>45 toa tàu và 3 nhà ga</div>
+      <div class="fact"><b>Mục tiêu</b>Nhiều điểm nhất khi hết ván</div>
+    </div>
+  </div>
+  <img class="cover" src="assets/cover.jpg" alt="Đường Ray Châu Âu">
+</div>
+<nav class="toc">
+  <a href="#gioi-thieu">1. Giới thiệu</a><a href="#thanh-phan">2. Thành phần</a><a href="#chuan-bi">3. Chuẩn bị</a><a href="#luot-choi">4. Lượt chơi</a><a href="#rut-bai">Rút bài</a><a href="#chiem-tuyen">Chiếm tuyến</a><a href="#duong-ham">Đường hầm</a><a href="#pha">Phà</a><a href="#nha-ga">Nhà ga</a><a href="#ve">5. Vé hành trình</a><a href="#ket-thuc">6. Kết thúc và tính điểm</a><a href="#trong-game">7. Trong game</a><a href="#meo">8. Mẹo</a>
+</nav>
+<section class="box" id="gioi-thieu"><h2><span class="no">1</span>Giới thiệu</h2>
+<p>Bạn và các đối thủ thi nhau xây mạng lưới đường sắt khắp châu Âu. Mỗi lượt bạn gom bài toa tàu cùng màu để chiếm các tuyến nối giữa hai thành phố, ghi điểm ngay khi chiếm. Bạn còn giữ các <b>vé hành trình</b>: nối được hai thành phố trên vé bằng tàu của mình thì cộng điểm, không nối được thì bị trừ.</p>
+<p>Bản đồ châu Âu có <b>49 thành phố</b>, 106 làn tuyến (trong đó 12 cặp đường đôi), <b>10 đường hầm</b> và <b>15 tuyến phà</b>. Tuyến dài nhất dài 5 ô.</p>
+
+<img class="shot" src="assets/rules/ui.webp?v=1" alt="Màn hình chơi Đường Ray Châu Âu" loading="lazy">
+<p class="cap">Màn hình chơi: người chơi ở trên, bản đồ ở giữa, bên phải là chỗ lấy bài, vé của bạn và nhật ký.</p></section><section class="box" id="thanh-phan"><h2><span class="no">2</span>Thành phần</h2>
+<div class="tw"><table class="t">
+<tr><th>Thành phần</th><th>Số lượng và công dụng</th></tr>
+<tr><td>Bài toa tàu</td><td>110 lá: 12 lá cho mỗi màu × 8 màu, cộng 14 lá <b>Đầu máy</b> (lá vạn năng, thay được mọi màu)</td></tr>
+<tr><td>Vé hành trình</td><td>50 vé: <b>6 vé dài</b> (17 đến 21 điểm) và <b>44 vé thường</b> (5 đến 12 điểm)</td></tr>
+<tr><td>Toa tàu</td><td>45 toa mỗi người, mỗi người một màu</td></tr>
+<tr><td>Nhà ga</td><td>3 nhà ga mỗi người</td></tr>
+<tr><td>Thưởng</td><td>Đường liên tục dài nhất: +10 điểm cuối ván</td></tr>
+</table></div>
+<h3>9 loại bài toa tàu</h3>
+<div class="deck"><figure class="tc"><img src="../../railart/cards/red.webp" alt="Đỏ" loading="lazy"><figcaption>Đỏ</figcaption></figure><figure class="tc"><img src="../../railart/cards/orange.webp" alt="Cam" loading="lazy"><figcaption>Cam</figcaption></figure><figure class="tc"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"><figcaption>Vàng</figcaption></figure><figure class="tc"><img src="../../railart/cards/green.webp" alt="Xanh lá" loading="lazy"><figcaption>Xanh lá</figcaption></figure><figure class="tc"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"><figcaption>Xanh dương</figcaption></figure><figure class="tc"><img src="../../railart/cards/purple.webp" alt="Tím" loading="lazy"><figcaption>Tím</figcaption></figure><figure class="tc"><img src="../../railart/cards/black.webp" alt="Đen" loading="lazy"><figcaption>Đen</figcaption></figure><figure class="tc"><img src="../../railart/cards/white.webp" alt="Trắng" loading="lazy"><figcaption>Trắng</figcaption></figure><figure class="tc"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"><figcaption>Đầu máy</figcaption></figure></div>
+<p>Mỗi màu có biểu tượng riêng ở góc lá (hình vuông, tròn, tam giác…) để dễ phân biệt. Lá <b>Đầu máy</b> nền cầu vồng, góc có ngôi sao.</p></section><section class="box" id="chuan-bi"><h2><span class="no">3</span>Chuẩn bị</h2>
+<div class="game"><b class="lbl">Trong game:</b> máy tự xáo bài, chia bài và bốc thăm người đi trước. Bạn chỉ cần chọn vé để giữ.</div>
+<ol>
+<li>Mỗi người nhận <b>4 lá bài toa tàu</b>. Lật ngửa <b>5 lá</b> cạnh chồng bài úp để mọi người cùng chọn.</li>
+<li>Mỗi người được chia <b>1 vé dài và 3 vé thường</b>, phải giữ <b>ít nhất 2 vé</b> (giữ cả 4 cũng được). Vé không giữ trả về đáy chồng vé.</li>
+<li>Người đi trước được bốc ngẫu nhiên, sau đó đi lần lượt theo vòng.</li>
+</ol>
+<div class="vd">Bạn được chia vé dài Paris–Moskva (17 điểm) và 3 vé thường. Nếu các vé thường nằm gần đường đi của vé dài, hãy giữ cả 4. Nếu có vé ở góc bản đồ ngược hướng, bỏ nó đi và giữ 3 vé.</div>
+<div class="hand"><span class="lbl">Tay bài mở đầu, ví dụ:</span><figure class="tc sm"><img src="../../railart/cards/red.webp" alt="Đỏ" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/red.webp" alt="Đỏ" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure></div></section><section class="box" id="luot-choi"><h2><span class="no">4</span>Lượt chơi</h2>
+<p>Đến lượt, bạn làm <b>đúng một</b> trong 4 việc dưới đây. Không được vừa rút bài vừa chiếm tuyến trong cùng một lượt.</p>
+<div class="steps"><div class="st"><h4><span>1</span>Rút bài toa tàu</h4><img class="ill" src="../../railart/cards/back.webp" alt=""><p>Lấy 2 lá, từ 5 lá ngửa hoặc chồng úp.</p></div><div class="st"><h4><span>2</span>Chiếm 1 tuyến</h4><img class="ill" src="../../railart/wagons/red.png" alt=""><p>Đánh đủ lá cùng màu, đặt toa lên tuyến, ghi điểm ngay.</p></div><div class="st"><h4><span>3</span>Rút vé hành trình</h4><img class="ill" src="../../railart/ticket-back.webp" alt=""><p>Rút 3 vé, giữ ít nhất 1.</p></div><div class="st"><h4><span>4</span>Xây nhà ga</h4><svg class="ill" viewBox="-2 -3 23 25" height="58" style="display:block;margin:4px auto 6px"><path d="M0,9 L9,0 L18,9 L18,20 L0,20Z" fill="#c1121f" stroke="#111" stroke-width="1.5"/><rect x="6.5" y="12" width="5" height="8" fill="#ffe9a8" stroke="#111" stroke-width=".8"/><path d="M-1,9.5 L9,-0.8 L19,9.5" fill="none" stroke="#111" stroke-width="2"/></svg><p>Trả 1, 2 rồi 3 lá cùng màu, đặt ga lên một thành phố trống.</p></div></div>
+
+<h3 id="rut-bai">Việc 1: rút bài toa tàu</h3>
+<ul>
+<li>Lấy <b>2 lá</b>. Mỗi lá chọn một trong 5 lá đang ngửa, hoặc lá trên cùng chồng úp. Lấy lá ngửa xong, lá mới được lật bổ sung ngay.</li>
+<li>Lấy một lá <b>Đầu máy đang ngửa</b> thì chỉ được lấy đúng lá đó, hết lượt. Lá thứ hai không được là Đầu máy ngửa.</li>
+<li>Rút trúng Đầu máy từ chồng úp thì vẫn tính 1 lá, bạn được lấy tiếp lá thứ hai.</li>
+<li>Nếu 3 trong 5 lá ngửa là Đầu máy, cả 5 lá bị bỏ và lật 5 lá mới.</li>
+<li>Không giới hạn số bài trên tay. Hết chồng úp thì xáo chồng bài bỏ làm chồng mới.</li>
+</ul>
+<div class="vd">5 lá ngửa là: Xanh lá, Trắng, Đầu máy, Đỏ, Xanh lá. Bạn lấy lá Xanh lá, lá mới lật ra là Vàng, rồi lấy tiếp lá Xanh lá thứ hai: bạn có thêm 2 lá Xanh lá. Nếu bạn lấy lá Đầu máy thì lượt kết thúc ngay với 1 lá.
+<div class="hand"><span class="lbl">5 lá ngửa:</span><figure class="tc sm"><img src="../../railart/cards/green.webp" alt="Xanh lá" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/white.webp" alt="Trắng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/red.webp" alt="Đỏ" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/green.webp" alt="Xanh lá" loading="lazy"></figure></div></div>
+
+<h3 id="chiem-tuyen">Việc 2: chiếm một tuyến</h3>
+<ul>
+<li>Đánh ra số lá <b>bằng số ô</b> của tuyến, tất cả <b>cùng màu với tuyến</b>. Đầu máy thay được bất kỳ lá nào.</li>
+<li><b>Tuyến xám</b> trả bằng một màu bất kỳ, miễn cả bộ cùng một màu.</li>
+<li>Đặt toa của bạn lên tuyến và <b>ghi điểm ngay</b> theo bảng dưới. Mỗi lượt chiếm tối đa 1 tuyến. Tuyến không cần nối với tuyến cũ của bạn.</li>
+<li>Bạn phải còn đủ toa trong kho để đặt lên tuyến.</li>
+</ul>
+<div class="pts" style="--n:5"><div><span class="len"><i></i></span><b>1 ô</b><strong>1</strong><b>điểm</b></div><div><span class="len"><i></i><i></i></span><b>2 ô</b><strong>2</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i></span><b>3 ô</b><strong>4</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i><i></i></span><b>4 ô</b><strong>7</strong><b>điểm</b></div><div><span class="len"><i></i><i></i><i></i><i></i><i></i></span><b>5 ô</b><strong>10</strong><b>điểm</b></div></div>
+<div class="fig">
+  <div><img class="shot" src="assets/rules/claim.webp?v=1" alt="" loading="lazy"><p class="cap">Tuyến Paris–Marseille (Tím, 4 ô) đã bị chiếm: đoàn tàu của người chơi Đỏ nằm đè lên tuyến.</p></div>
+  <div class="vd" style="margin:0">Để chiếm tuyến Paris–Marseille màu Tím dài 4 ô, bạn đánh 3 lá Tím và 1 Đầu máy. Bạn đặt 4 toa, ghi ngay 7 điểm và còn 41 toa.
+  <div class="hand"><figure class="tc sm"><img src="../../railart/cards/purple.webp" alt="Tím" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/purple.webp" alt="Tím" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/purple.webp" alt="Tím" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure></div></div>
+</div>
+<div class="fig">
+  <div><img class="shot" src="assets/rules/gray.webp?v=1" alt="" loading="lazy"><p class="cap">Tuyến xám Amsterdam–Frankfurt dài 2 ô.</p></div>
+  <div class="vd" style="margin:0">Tuyến xám Amsterdam–Frankfurt dài 2 ô trả bằng 2 lá Vàng, hoặc 2 lá Đen… miễn cùng một màu. Không được trả 1 lá Vàng + 1 lá Đen.
+  <div class="hand"><span class="lbl">Được:</span><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure></div></div>
+</div>
+<h4 style="margin:14px 0 4px;color:#7a1a36;font-size:19px">Đường đôi</h4>
+<div class="fig">
+  <div><img class="shot" src="assets/rules/dbl.webp?v=1" alt="" loading="lazy"><p class="cap">Đường đôi Madrid–Barcelona: hai làn song song, làn Trắng và làn Đỏ.</p></div>
+  <div><ul>
+   <li>Một người <b>không được chiếm cả hai làn</b> của cùng một đường đôi.</li>
+   <li>Chơi <b>2 hoặc 3 người</b>: một làn đã bị chiếm thì làn còn lại đóng với mọi người.</li>
+   <li>Chơi <b>4 hoặc 5 người</b>: hai người khác nhau mỗi người chiếm một làn.</li>
+  </ul></div>
+</div>
+
+<h3 id="duong-ham">Đường hầm</h3>
+<div class="fig">
+  <div><img class="shot" src="assets/rules/tunnel.webp?v=1" alt="" loading="lazy"><p class="cap">Đường hầm có viền <b>nét đứt</b>, ví dụ tuyến Barcelona–Bordeaux (Xanh dương, 3 ô).</p></div>
+  <div><ol>
+   <li>Đánh bộ bài như chiếm tuyến thường.</li>
+   <li>Máy lật <b>3 lá</b> trên cùng chồng bài úp.</li>
+   <li>Mỗi lá lật ra <b>trùng màu</b> bạn vừa đánh, hoặc là <b>Đầu máy</b>, bạn phải trả thêm 1 lá cùng màu (hoặc Đầu máy).</li>
+   <li>Đủ và muốn trả thì trả thêm, đặt toa, ghi điểm. Không đủ hoặc không muốn thì bỏ: lấy lại hết bài đã đánh, không mất gì, nhưng hết lượt.</li>
+   <li>3 lá lật ra luôn vào chồng bỏ.</li>
+  </ol></div>
+</div>
+<ul>
+<li>Trả thêm ít nhất 0 lá, nhiều nhất 3 lá.</li>
+<li>Nếu bạn đánh toàn Đầu máy, chỉ Đầu máy lật ra mới bắt trả thêm.</li>
+</ul>
+<div class="vd">Thành công: bạn chiếm hầm Barcelona–Bordeaux bằng 3 lá Xanh dương. Lật ra Xanh dương, Vàng, Đen: trùng 1 lá, bạn trả thêm 1 lá Xanh dương, đặt 3 toa, ghi 4 điểm.
+<div class="hand"><span class="lbl">Lật ra:</span><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/black.webp" alt="Đen" loading="lazy"></figure><span class="op">→ trả thêm 1</span><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure></div></div>
+<div class="vd">Bỏ cuộc: lật ra Xanh dương, Đầu máy, Xanh dương: phải trả thêm 3 lá nhưng bạn chỉ còn 1 lá Xanh dương. Bạn bỏ, lấy lại cả 3 lá đã đánh. Lượt sau có thể thử lại.
+<div class="hand"><span class="lbl">Lật ra:</span><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><span class="op">→ cần thêm 3</span></div></div>
+
+<h3 id="pha">Phà</h3>
+<div class="fig">
+  <div><img class="shot" src="assets/rules/ferry.webp?v=1" alt="" loading="lazy"><p class="cap">Tuyến phà London–Amsterdam dài 2 ô, có 2 ô in <b>ngôi sao Đầu máy</b>.</p></div>
+  <div><ul>
+   <li>Phà là tuyến vượt biển. Mỗi ô có ngôi sao cần <b>1 lá Đầu máy</b>.</li>
+   <li>Các ô còn lại trả bằng bài cùng một màu (phà luôn là tuyến xám).</li>
+   <li>Tổng số lá vẫn bằng số ô. Điểm tính như tuyến thường.</li>
+  </ul></div>
+</div>
+<div class="vd">Phà London–Amsterdam dài 2 ô, có 2 ngôi sao: bạn trả 2 Đầu máy, ghi 2 điểm. Nếu chỉ có 1 Đầu máy thì chưa chiếm được.
+<div class="hand"><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure></div></div>
+<div class="vd">Phà Brest–London dài 3 ô, có 1 ngôi sao: bạn trả 1 Đầu máy và 2 lá Xanh dương, ghi 4 điểm.
+<div class="hand"><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/blue.webp" alt="Xanh dương" loading="lazy"></figure></div></div>
+<h3>Việc 3: rút vé hành trình</h3>
+<p>Rút <b>3 vé</b> từ chồng vé, giữ <b>ít nhất 1</b> (có thể giữ cả 3). Vé không giữ trả về đáy chồng. Vé giữ rồi thì không được bỏ nữa, kể cả khi không làm được.</p>
+
+<h3 id="nha-ga">Việc 4: xây nhà ga</h3>
+<div class="fig">
+  <div><img class="shot" src="assets/rules/station.webp?v=1" alt="" loading="lazy"><p class="cap">Nhà ga Đỏ ở Lisboa. Tuyến Lisboa–Madrid là của người Xanh, hai tuyến Đỏ nằm hai bên.</p></div>
+  <div><ul>
+   <li>Đặt nhà ga lên một thành phố <b>chưa có ga</b> nào. Không cần có tuyến của bạn ở đó.</li>
+   <li>Giá tăng dần: ga thứ 1 tốn <b>1 lá</b>, ga thứ 2 tốn <b>2 lá cùng màu</b>, ga thứ 3 tốn <b>3 lá cùng màu</b>. Đầu máy thay được.</li>
+   <li>Cuối ván, mỗi ga cho bạn <b>mượn 1 tuyến của đối thủ</b> đi vào thành phố đó để nối vé. Máy tự chọn tuyến mượn có lợi nhất.</li>
+   <li>Tuyến mượn không cho điểm và không tính vào đường dài nhất.</li>
+   <li>Ga nào không xây được <b>+4 điểm</b> cuối ván.</li>
+  </ul></div>
+</div>
+<div class="vd">Bạn có vé Sevilla–Bordeaux. Bạn có tuyến Sevilla–Lisboa và Madrid–Bordeaux, nhưng tuyến Lisboa–Madrid đã bị người Xanh chiếm. Bạn xây ga ở Lisboa (tốn 1 lá). Cuối ván bạn mượn tuyến Lisboa–Madrid, nối liền Sevilla với Bordeaux: vé được cộng điểm thay vì bị trừ. Điểm tuyến Lisboa–Madrid vẫn là của người Xanh.</div>
+<div class="vd">Ga thứ hai tốn 2 lá cùng màu. Bạn có 1 lá Vàng, 1 lá Đen và 1 Đầu máy: bạn trả Vàng + Đầu máy. Nếu cả ván chỉ xây 2 ga thì ga còn lại cho bạn +4 điểm.
+<div class="hand"><figure class="tc sm"><img src="../../railart/cards/yellow.webp" alt="Vàng" loading="lazy"></figure><figure class="tc sm"><img src="../../railart/cards/loco.webp" alt="Đầu máy" loading="lazy"></figure></div></div>
+</section><section class="box" id="ve"><h2><span class="no">5</span>Vé hành trình</h2>
+<div class="tkbig">
+  <div class="tkwrap"><img class="shot" src="../../railart/tickets/eu/L0.webp?v=9" alt="">
+    <span class="pin" style="left:44%;top:-6px">1</span><span class="pin" style="right:2%;top:8%">2</span><span class="pin" style="left:18%;top:52%">3</span></div>
+  <ul class="legend">
+    <li><b class="n">1</b>Tên hai thành phố cần nối: <b>Paris – Moskva</b>.</li>
+    <li><b class="n">2</b>Số điểm của vé: <b>17</b>. Hoàn thành được cộng, không hoàn thành bị trừ đúng số này.</li>
+    <li><b class="n">3</b>Bản đồ nhỏ chỉ vị trí hai thành phố để bạn dễ tìm.</li>
+    <li>Vé hoàn thành khi có một chuỗi tuyến <b>liền nhau của bạn</b> (cộng tuyến mượn qua nhà ga) nối hai thành phố. Đi vòng xa cũng được.</li>
+  </ul>
+</div>
+<div class="game"><b class="lbl">Trong game:</b> vé của bạn hiện ở khung "Vé của bạn". Bấm vào vé để làm sáng hai thành phố trên bản đồ. Vé hoàn thành sẽ hiện lên cho mọi người thấy, rồi chuyển xuống nhóm "Đã hoàn thành".</div>
+<h3>6 vé dài (17 đến 21 điểm)</h3>
+<p>Mỗi người được chia 1 vé dài lúc đầu. Vé dài không xuất hiện khi rút vé giữa ván.</p>
+<div class="tk long"><figure><img src="../../railart/tickets/eu/L0.webp?v=9" alt="Paris – Moskva" loading="lazy"><figcaption><b>Paris – Moskva</b> · 17 điểm</figcaption></figure><figure><img src="../../railart/tickets/eu/L1.webp?v=9" alt="Dublin – Kyiv" loading="lazy"><figcaption><b>Dublin – Kyiv</b> · 18 điểm</figcaption></figure><figure><img src="../../railart/tickets/eu/L2.webp?v=9" alt="Edinburgh – Istanbul" loading="lazy"><figcaption><b>Edinburgh – Istanbul</b> · 19 điểm</figcaption></figure><figure><img src="../../railart/tickets/eu/L3.webp?v=9" alt="Napoli – Helsinki" loading="lazy"><figcaption><b>Napoli – Helsinki</b> · 17 điểm</figcaption></figure><figure><img src="../../railart/tickets/eu/L4.webp?v=9" alt="Lisboa – Riga" loading="lazy"><figcaption><b>Lisboa – Riga</b> · 21 điểm</figcaption></figure><figure><img src="../../railart/tickets/eu/L5.webp?v=9" alt="Sevilla – Bucuresti" loading="lazy"><figcaption><b>Sevilla – Bucuresti</b> · 18 điểm</figcaption></figure></div>
+<h3>44 vé thường (5 đến 12 điểm)</h3>
+<details class="more" open><summary>Xem toàn bộ 44 vé thường của bản đồ châu Âu</summary><div class="tk"><figure><img src="../../railart/tickets/eu/S6.webp?v=9" alt="Beograd – Istanbul" loading="lazy"><figcaption>Beograd – Istanbul · 5</figcaption></figure><figure><img src="../../railart/tickets/eu/S24.webp?v=9" alt="Bruxelles – Zürich" loading="lazy"><figcaption>Bruxelles – Zürich · 5</figcaption></figure><figure><img src="../../railart/tickets/eu/S40.webp?v=9" alt="Bucuresti – Kyiv" loading="lazy"><figcaption>Bucuresti – Kyiv · 5</figcaption></figure><figure><img src="../../railart/tickets/eu/S4.webp?v=9" alt="Helsinki – Gdańsk" loading="lazy"><figcaption>Helsinki – Gdańsk · 5</figcaption></figure><figure><img src="../../railart/tickets/eu/S29.webp?v=9" alt="Sevilla – Bordeaux" loading="lazy"><figcaption>Sevilla – Bordeaux · 5</figcaption></figure><figure><img src="../../railart/tickets/eu/S38.webp?v=9" alt="Stockholm – Riga" loading="lazy"><figcaption>Stockholm – Riga · 5</figcaption></figure><figure><img src="../../railart/tickets/eu/S32.webp?v=9" alt="Frankfurt – Gdańsk" loading="lazy"><figcaption>Frankfurt – Gdańsk · 6</figcaption></figure><figure><img src="../../railart/tickets/eu/S36.webp?v=9" alt="Hamburg – Kraków" loading="lazy"><figcaption>Hamburg – Kraków · 6</figcaption></figure><figure><img src="../../railart/tickets/eu/S1.webp?v=9" alt="Milano – Palermo" loading="lazy"><figcaption>Milano – Palermo · 6</figcaption></figure><figure><img src="../../railart/tickets/eu/S39.webp?v=9" alt="Roma – Sarajevo" loading="lazy"><figcaption>Roma – Sarajevo · 6</figcaption></figure><figure><img src="../../railart/tickets/eu/S10.webp?v=9" alt="Venezia – Sofia" loading="lazy"><figcaption>Venezia – Sofia · 6</figcaption></figure><figure><img src="../../railart/tickets/eu/S20.webp?v=9" alt="London – Venezia" loading="lazy"><figcaption>London – Venezia · 7</figcaption></figure><figure><img src="../../railart/tickets/eu/S27.webp?v=9" alt="Minsk – Wien" loading="lazy"><figcaption>Minsk – Wien · 7</figcaption></figure><figure><img src="../../railart/tickets/eu/S35.webp?v=9" alt="Moskva – Odesa" loading="lazy"><figcaption>Moskva – Odesa · 7</figcaption></figure><figure><img src="../../railart/tickets/eu/S7.webp?v=9" alt="München – Palermo" loading="lazy"><figcaption>München – Palermo · 7</figcaption></figure><figure><img src="../../railart/tickets/eu/S13.webp?v=9" alt="Napoli – Wien" loading="lazy"><figcaption>Napoli – Wien · 7</figcaption></figure><figure><img src="../../railart/tickets/eu/S16.webp?v=9" alt="Zagreb – Athina" loading="lazy"><figcaption>Zagreb – Athina · 7</figcaption></figure><figure><img src="../../railart/tickets/eu/S23.webp?v=9" alt="Amsterdam – Roma" loading="lazy"><figcaption>Amsterdam – Roma · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S25.webp?v=9" alt="Bordeaux – Dublin" loading="lazy"><figcaption>Bordeaux – Dublin · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S11.webp?v=9" alt="Bruxelles – Gdańsk" loading="lazy"><figcaption>Bruxelles – Gdańsk · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S17.webp?v=9" alt="Bruxelles – Zagreb" loading="lazy"><figcaption>Bruxelles – Zagreb · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S33.webp?v=9" alt="København – Sankt Peterburg" loading="lazy"><figcaption>København – Sankt Peterburg · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S3.webp?v=9" alt="Lisboa – Marseille" loading="lazy"><figcaption>Lisboa – Marseille · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S26.webp?v=9" alt="Madrid – London" loading="lazy"><figcaption>Madrid – London · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S28.webp?v=9" alt="Madrid – Roma" loading="lazy"><figcaption>Madrid – Roma · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S14.webp?v=9" alt="Milano – Warszawa" loading="lazy"><figcaption>Milano – Warszawa · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S0.webp?v=9" alt="Paris – Napoli" loading="lazy"><figcaption>Paris – Napoli · 8</figcaption></figure><figure><img src="../../railart/tickets/eu/S21.webp?v=9" alt="Dublin – München" loading="lazy"><figcaption>Dublin – München · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S8.webp?v=9" alt="Edinburgh – Milano" loading="lazy"><figcaption>Edinburgh – Milano · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S2.webp?v=9" alt="Frankfurt – Palermo" loading="lazy"><figcaption>Frankfurt – Palermo · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S9.webp?v=9" alt="London – Warszawa" loading="lazy"><figcaption>London – Warszawa · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S18.webp?v=9" alt="Madrid – München" loading="lazy"><figcaption>Madrid – München · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S22.webp?v=9" alt="Paris – Sarajevo" loading="lazy"><figcaption>Paris – Sarajevo · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S34.webp?v=9" alt="Sarajevo – Kyiv" loading="lazy"><figcaption>Sarajevo – Kyiv · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S30.webp?v=9" alt="Vilnius – Zagreb" loading="lazy"><figcaption>Vilnius – Zagreb · 9</figcaption></figure><figure><img src="../../railart/tickets/eu/S37.webp?v=9" alt="Amsterdam – Helsinki" loading="lazy"><figcaption>Amsterdam – Helsinki · 10</figcaption></figure><figure><img src="../../railart/tickets/eu/S43.webp?v=9" alt="Bordeaux – Budapest" loading="lazy"><figcaption>Bordeaux – Budapest · 10</figcaption></figure><figure><img src="../../railart/tickets/eu/S15.webp?v=9" alt="Oslo – Warszawa" loading="lazy"><figcaption>Oslo – Warszawa · 10</figcaption></figure><figure><img src="../../railart/tickets/eu/S42.webp?v=9" alt="Zürich – Stockholm" loading="lazy"><figcaption>Zürich – Stockholm · 10</figcaption></figure><figure><img src="../../railart/tickets/eu/S12.webp?v=9" alt="Stockholm – Wien" loading="lazy"><figcaption>Stockholm – Wien · 11</figcaption></figure><figure><img src="../../railart/tickets/eu/S31.webp?v=9" alt="Venezia – Vilnius" loading="lazy"><figcaption>Venezia – Vilnius · 11</figcaption></figure><figure><img src="../../railart/tickets/eu/S19.webp?v=9" alt="Vilnius – Istanbul" loading="lazy"><figcaption>Vilnius – Istanbul · 11</figcaption></figure><figure><img src="../../railart/tickets/eu/S5.webp?v=9" alt="Edinburgh – Oslo" loading="lazy"><figcaption>Edinburgh – Oslo · 12</figcaption></figure><figure><img src="../../railart/tickets/eu/S41.webp?v=9" alt="København – Moskva" loading="lazy"><figcaption>København – Moskva · 12</figcaption></figure></div></details></section><section class="box" id="ket-thuc"><h2><span class="no">6</span>Kết thúc và tính điểm</h2>
+<h3>Vòng cuối</h3>
+<p>Khi một người kết thúc lượt mà chỉ còn <b>0, 1 hoặc 2 toa</b>, mọi người (kể cả người đó) được đi thêm <b>đúng 1 lượt</b>. Sau đó ván kết thúc.</p>
+<h3>Cách tính điểm</h3>
+<ol>
+<li><b>Điểm tuyến:</b> đã cộng dần trong ván khi chiếm tuyến.</li>
+<li><b>Vé hành trình:</b> vé hoàn thành cộng điểm, vé chưa hoàn thành trừ điểm.</li>
+<li><b>Đường liên tục dài nhất +10:</b> chuỗi tuyến liền nhau của bạn có tổng số toa nhiều nhất. Được đi vòng, nhưng mỗi tuyến chỉ tính 1 lần. Bằng nhau thì tất cả đều được +10. Tuyến mượn qua ga không tính.</li>
+<li><b>Nhà ga chưa xây:</b> +4 điểm mỗi ga.</li>
+</ol>
+<p>Ai nhiều điểm nhất thắng. Bằng điểm thì ai hoàn thành nhiều vé hơn thắng.</p>
+<div class="vd">Lan có 62 điểm tuyến. Lan hoàn thành 3 vé (20, 13 và 7 điểm), hỏng 1 vé 9 điểm, có đường dài nhất và đã xây 1 ga.
+<div class="calc">62 + (20 + 13 + 7) − 9 = 93<br>93 + 10 (đường dài nhất) = 103<br>103 + 2 × 4 (2 ga chưa xây) = <b>111 điểm</b></div></div>
+<div class="vd">Minh có 100 điểm sau tuyến và vé, không có đường dài nhất, đã xây cả 3 ga. Hòa có 92 điểm, có đường dài nhất (+10), không xây ga nào (+12). Hòa 114 điểm thắng Minh 100 điểm. Chỉ nên xây ga khi nó cứu được vé đáng hơn 4 điểm.</div>
+<div class="game"><b class="lbl">Trong game:</b> máy tự tính tất cả, tự chọn tuyến mượn qua nhà ga có lợi nhất cho bạn, rồi hiện bảng kết quả từng phần.</div></section><section class="box" id="trong-game"><h2><span class="no">7</span>Mẹo dùng trong game</h2>
+<ul>
+<li>Mỗi lượt có <b>60 giây</b>, vòng đồng hồ ở góc bản đồ đếm ngược. Hết giờ máy tự chuyển lượt (đang chọn vé thì máy giữ vé giúp bạn).</li>
+<li>Bấm vào một tuyến để xem chú thích và nút chiếm. <b>Tuyến viền vàng</b> là tuyến bạn đang đủ bài để chiếm.</li>
+<li>Bấm vào thành phố để xây nhà ga (nút "Xây ga" ở khung lấy bài cho biết giá).</li>
+<li>Đi nhầm? Nút <b>Đi lại</b> cho phép hoàn tác tối đa 2 lần trong lượt của bạn.</li>
+<li>Khi chiếm tuyến, điểm "+N" bay lên khung người chơi. Ai hoàn thành vé, vé hiện ra lấp lánh cho mọi người cùng thấy.</li>
+</ul></section><section class="box" id="meo"><h2><span class="no">8</span>Mẹo cho người mới</h2>
+<div class="tip"><ul>
+<li>Tuyến dài lợi hơn nhiều: 1 tuyến 5 ô cho 10 điểm, còn 5 tuyến 1 ô chỉ cho 5 điểm.</li>
+<li>Chiếm sớm các tuyến then chốt vé bạn cần, nhất là chỗ chỉ có một đường đi qua.</li>
+<li>Đừng ôm quá nhiều vé khó: vé hỏng bị trừ đúng bằng số điểm của nó.</li>
+<li>Giữ vài Đầu máy cho phà và cho màu hiếm. Đừng lấy Đầu máy ngửa nếu bạn cần đủ 2 lá.</li>
+<li>Đường hầm có rủi ro: mang dư 1 đến 2 lá cùng màu trước khi thử.</li>
+<li>Theo dõi số toa của đối thủ. Ai còn khoảng 3 đến 5 toa là sắp tới vòng cuối.</li>
+<li>Nhà ga là cứu cánh khi bị chặn đường, nhưng mỗi ga không xây là 4 điểm.</li>
+</ul></div></section><div class="cta"><a class="btn wine" href="Luat-choi-Duong-Ray-Chau-Au.pdf" download>⬇ Tải luật bản PDF (đen trắng)</a><a class="btn" href="index.html">▶ Chơi Đường Ray Châu Âu ngay</a><a class="btn wine" href="tom-tat.html">Xem bản tóm tắt</a><a class="btn wine" href="../duong-ray-bac-my/luat.html">Luật Đường Ray Bắc Mỹ</a></div>
+<footer>Đường Ray Châu Âu · Phi Board Games</footer>
+</main>
+</body>
+</html>

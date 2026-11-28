@@ -1174,6 +1174,7 @@ html body .vticket.imgt .vt-done{font-size:11cqw!important;border-width:2px!impo
 /* vé vừa xong rơi xuống nhóm Đã hoàn thành */
 #tickets .vticket.drop{animation:tkdrop .6s cubic-bezier(.2,1.4,.4,1)}
 @keyframes tkdrop{0%{transform:translateY(-70px) scale(1.1);opacity:.3}60%{transform:translateY(6px)}100%{transform:none;opacity:.72}}
+.rules a.rlink{display:inline-block;margin:3px;padding:6px 14px;border-radius:999px;background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522);border:1.5px solid #7a5310;color:#3a1a08;font-weight:bold;text-decoration:none}
 </style>
 </head>
 <body>
@@ -2089,7 +2090,7 @@ function renderMap(){
     const st=G.stations[C.id]; const big = !!LANDMARKS[C.name];
     s+=`<g class="city ${stMode && st==null ? 'pick':''}" data-city="${C.id}"><circle cx="${C.x}" cy="${C.y}" r="14" fill="transparent"/>
       <circle cx="${C.x}" cy="${C.y}" r="${big?10:8.5}" fill="url(#cityg)" stroke="#5b4326" stroke-width="2.4"/><circle cx="${C.x}" cy="${C.y}" r="${big?4:3}" fill="#8b2e16"/>`;
-    if (st!=null) s+=`<g transform="translate(${C.x+8},${C.y-24})" class="station"><path d="M0,9 L9,0 L18,9 L18,20 L0,20Z" fill="${G.players[st].color}" stroke="#111" stroke-width="1.5"/><rect x="6.5" y="12" width="5" height="8" fill="#ffe9a8" stroke="#111" stroke-width=".8"/><path d="M-1,9.5 L9,-0.8 L19,9.5" fill="none" stroke="#111" stroke-width="2"/></g>`;
+    if (st!=null) s+=`<g transform="translate(${C.x+8},${C.y-24})"><g class="station"><path d="M0,9 L9,0 L18,9 L18,20 L0,20Z" fill="${G.players[st].color}" stroke="#111" stroke-width="1.5"/><rect x="6.5" y="12" width="5" height="8" fill="#ffe9a8" stroke="#111" stroke-width=".8"/><path d="M-1,9.5 L9,-0.8 L19,9.5" fill="none" stroke="#111" stroke-width="2"/></g></g>`;
     s+=`<text x="${C.x+C.dx}" y="${C.y+C.dy}" text-anchor="${C.anchor}" class="clabel">${esc(C.name)}</text></g>`;
   });
   s+=beaconSVG();
@@ -2599,8 +2600,9 @@ function showRules(){
   <p>&nbsp;&nbsp;• <b>Đường hầm</b> (viền nét đứt): lật 3 lá, lá nào trùng màu bạn dùng (hoặc Đầu máy) phải trả thêm 1 lá.<br>&nbsp;&nbsp;• <b>Phà</b> (chấm cầu vồng): mỗi chấm cần 1 Đầu máy.<br>&nbsp;&nbsp;• <b>Đường đôi</b>: 2–3 người chơi chỉ dùng được 1 làn; 4–5 người thì mỗi làn 1 người.</p>
   <p>3. <b>Rút vé</b> — rút 3 vé, giữ ít nhất 1.</p>
   <p>4. <b>Xây nhà ga</b> — ga 1 tốn 1 lá, ga 2 tốn 2, ga 3 tốn 3 lá cùng màu. Cuối ván mỗi ga mượn 1 tuyến của đối thủ để nối vé. Ga không xây: +4 điểm/ga.</p>
-  <p><b>Điểm tuyến:</b> 1 ô=1, 2=2, 3=4, 4=7, 5=10, 6=15 điểm.</p>
-  <p><b>Kết thúc:</b> khi ai đó còn ≤ 2 toa, mọi người (kể cả người đó) đi thêm đúng 1 lượt. Vé xong được cộng, vé hỏng bị trừ. Đường liên tục dài nhất +10 điểm.</p></div>`,
+  <p><b>Điểm tuyến:</b> ${[...new Set(ROUTES.map(r=>r.len))].sort((a,b)=>a-b).map(l=>l+' ô='+POINTS[l]).join(', ')} điểm.</p>
+  <p><b>Kết thúc:</b> khi ai đó còn ≤ 2 toa, mọi người (kể cả người đó) đi thêm đúng 1 lượt. Vé xong được cộng, vé hỏng bị trừ. Đường liên tục dài nhất +10 điểm.</p>
+  <p style="text-align:center;margin-top:12px"><a href="luat.html" target="_blank" class="rlink">📖 Luật chi tiết</a> <a href="tom-tat.html" target="_blank" class="rlink">📋 Tóm tắt</a> <a href="${MAP_ID==='na'?'Luat-choi-Duong-Ray-Bac-My.pdf':'Luat-choi-Duong-Ray-Chau-Au.pdf'}" download class="rlink">⬇ Tải PDF</a></p></div>`,
   [{label:'Đã hiểu', cls:'primary', onClick:()=>hideModal()}], {center:true});
 }
 
