@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tóm tắt luật Đảo Khai Hoang</title>
+<meta name="description" content="Hướng dẫn chơi chi tiết Đảo Khai Hoang: chuẩn bị, đổ xúc xắc, kẻ cướp, trao đổi, xây dựng, thẻ phát triển, điểm và mẹo chơi.">
+<style>
+@font-face{font-family:"KhFont";font-weight:800;src:url(assets/fonts/baloo-2-vietnamese-800-normal.woff2) format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"KhFont";font-weight:800;src:url(assets/fonts/baloo-2-latin-ext-800-normal.woff2) format("woff2");unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"KhFont";font-weight:800;src:url(assets/fonts/baloo-2-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{--w1:#a26b37;--w2:#7a4a20;--w3:#5c3414;--w4:#2e1809;--gold:#ffd54a;--goldl:#ffe9a0;--paper:#f8e7c0;--paper2:#ecd29c;--ink:#3a210c;--red:#c2361f;--green:#2f9a2b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.6;color:var(--ink);background:#1e9fd0 url(assets/sea.webp) center/cover fixed}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(120,220,255,.2),rgba(0,40,70,.45));pointer-events:none;z-index:-1}
+.kf{font-family:"KhFont","Baloo 2","Arial Black",sans-serif;font-weight:800}
+.wood{background:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 3px,transparent 3px 46px),linear-gradient(180deg,var(--w1),var(--w2) 45%,var(--w3));border:4px solid var(--w4);box-shadow:inset 0 0 0 3px #e0b264,inset 0 0 0 7px #4a2a0c,0 14px 34px rgba(0,0,0,.5);color:#fff3d6;position:relative}
+.nail{position:absolute;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c0,#b8862f 60%,#5a3a10);box-shadow:0 1px 2px rgba(0,0,0,.6)}
+.n1{left:11px;top:11px}.n2{right:11px;top:11px}.n3{left:11px;bottom:11px}.n4{right:11px;bottom:11px}
+header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 14px;background:linear-gradient(180deg,#7a4a20,#5c3414);border-bottom:3px solid var(--w4);box-shadow:0 4px 12px rgba(0,0,0,.45)}
+header.top .ttl{flex:1;font-size:21px;color:var(--gold);-webkit-text-stroke:3px #3a1505;paint-order:stroke fill;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:12px;font:800 16px "KhFont","Baloo 2",sans-serif;text-decoration:none;white-space:nowrap;color:#3a210c;background:linear-gradient(180deg,#fbe3a0,#e0a645 55%,#c98b2c);border:2px solid #5a330f;box-shadow:inset 0 1.5px 0 #fff3cf,0 3px 0 #4a2a0c}
+.btn.green{background:linear-gradient(180deg,#d9ffd0,#5fd35a 55%,#2f9a2b);color:#fff;text-shadow:0 1px 0 #1d5a1a}
+main{padding:14px 18px 50px}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:center;padding:26px 26px 22px;border-radius:22px}
+.hero h1{margin:0;font-size:52px;line-height:1.05;color:var(--gold);-webkit-text-stroke:7px #4a1a05;paint-order:stroke fill;text-shadow:0 4px 0 #2a0c02}
+.hero .sub{margin:4px 0 12px;font-size:18px;font-style:italic;color:#fbe8c4}
+.hero .map{width:100%;border-radius:16px;border:3px solid #e0b264;box-shadow:0 10px 24px rgba(0,0,0,.5);background:#22a6d6}
+.resrow{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px}
+.resrow img{width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5))}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fact{padding:8px 12px;border-radius:12px;background:rgba(30,14,3,.45);border:2px solid rgba(224,178,100,.5)}
+.fact b{display:block;font:800 14px "KhFont",sans-serif;color:var(--gold)}
+nav.toc{margin:16px 0 4px;padding:10px 12px;border-radius:16px;display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{padding:5px 12px;border-radius:999px;background:linear-gradient(180deg,#fbe3a0,#e0a645);color:#3a210c;border:2px solid #5a330f;text-decoration:none;font:800 14.5px "KhFont",sans-serif;white-space:nowrap}
+section.box{margin:18px 0;padding:22px 22px 20px;border-radius:20px;background:repeating-linear-gradient(0deg,rgba(120,80,30,.035) 0 2px,transparent 2px 6px),linear-gradient(180deg,var(--paper),var(--paper2));border:4px solid var(--w3);box-shadow:inset 0 0 0 3px #fff2cf,inset 0 0 0 6px #c89b55,0 12px 30px rgba(0,0,0,.45);scroll-margin-top:66px;position:relative}
+section.box h2{display:flex;align-items:center;gap:10px;margin:-4px 0 12px;font:800 30px/1.15 "KhFont","Baloo 2",sans-serif;color:#7a1f10}
+section.box h2 .no{flex:none;width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:22px;color:#3a210c;background:radial-gradient(circle at 35% 30%,#fff3b0,#ffd54a 50%,#d9901c);border:3px solid #5a330f;box-shadow:0 3px 0 #3a1f08}
+section.box h3{margin:16px 0 6px;font:800 21px "KhFont",sans-serif;color:#5a330f}
+section.box p{margin:6px 0}
+section.box ul,section.box ol{margin:6px 0;padding-left:24px}
+section.box li{margin:4px 0}
+.r{display:inline-block;width:28px;height:28px;object-fit:contain;vertical-align:-8px;margin:0 1px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.rn{display:inline-flex;align-items:center;gap:1px;padding:0 7px 0 2px;margin:0 2px;border-radius:999px;background:#fff3d6;border:2px solid #c89b55;font:800 15px "KhFont",sans-serif;white-space:nowrap;vertical-align:-2px}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#fbefd0;border:2px solid #8a5a2b;font:800 15px "KhFont",sans-serif;color:#3a210c;vertical-align:-6px;margin:0 2px;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.num.hot{color:#c2361f}
+.port{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:28px;padding:0 8px;border-radius:14px;background:#fbefd0;border:2px solid #8a5a2b;font:800 14px "KhFont",sans-serif;vertical-align:-6px;margin:0 2px}
+.vd{margin:12px 0;padding:12px 14px 12px 54px;border-radius:14px;background:#fffaf0;border:2px solid #e0b264;position:relative;font-style:italic}
+.vd::before{content:"Ví dụ";position:absolute;left:-2px;top:-2px;bottom:-2px;width:42px;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font:800 14px "KhFont",sans-serif;font-style:normal;color:#fff3d6;background:linear-gradient(180deg,#7a4a20,#5c3414);border-radius:0 14px 14px 0;letter-spacing:1px}
+.note{margin:12px 0;padding:10px 14px;border-radius:12px;background:#ffe7df;border-left:7px solid var(--red)}
+.tip{margin:12px 0;padding:10px 14px;border-radius:12px;background:#e8f7e4;border-left:7px solid var(--green)}
+.game{margin:10px 0;padding:8px 14px;border-radius:12px;background:#e3f4fb;border-left:7px solid #1689bd;font-size:16px}
+.game b.kf{color:#0f5f85}
+table.t{width:100%;border-collapse:separate;border-spacing:0;margin:8px 0;border:3px solid #8a5a2b;border-radius:12px;overflow:hidden;background:#fffaf0}
+table.t th{background:linear-gradient(180deg,#8a5a2b,#5c3414);color:var(--goldl);text-align:left;padding:8px 10px;font:800 16px "KhFont",sans-serif}
+table.t td{padding:8px 10px;border-top:1px solid #ead2a2;vertical-align:middle}
+table.t tr:nth-child(even) td{background:#fbf0d8}
+.tw{overflow-x:auto}
+.hexgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:10px 0}
+.hx{text-align:center;padding:8px 6px 10px;border-radius:14px;background:#fffaf0;border:2px solid #e0b264}
+.hx img.h{width:100%;max-width:120px;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(0,0,0,.35))}
+.hx b{display:block;font:800 17px "KhFont",sans-serif;color:#5a330f}
+.hx span{font-size:15px}
+.pieces{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.pc{text-align:center;padding:10px 14px;border-radius:14px;background:#fffaf0;border:2px solid #e0b264;min-width:130px}
+.pc img{height:70px;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(0,0,0,.35))}
+.pc b{display:block;font:800 17px "KhFont",sans-serif;color:#5a330f}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0}
+.st{padding:14px;border-radius:16px;background:#fffaf0;border:2px solid #e0b264;box-shadow:0 4px 10px rgba(90,51,15,.12)}
+.st h3{margin:0 0 6px!important;display:flex;align-items:center;gap:8px}
+.st .ic{display:flex;gap:4px;align-items:center;margin:4px 0 6px}
+.st .ic img{height:44px;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+.cost td:first-child{white-space:nowrap}
+.cost td:first-child img{height:40px;vertical-align:middle;margin-right:8px;object-fit:contain}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:10px 0}
+.cd{border-radius:14px;background:#fffaf0;border:2px solid #e0b264;overflow:hidden;display:flex;flex-direction:column}
+.kcard{width:78%;max-width:170px;display:block;margin:12px auto 2px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45));transition:transform .2s}.cd:hover .kcard{transform:translateY(-4px) rotate(-1.5deg)}.kcard .rn{font:800 14px "KhFont","Baloo 2","Arial Black",sans-serif;fill:#fff;text-anchor:middle;stroke:#1b0f06;stroke-width:2.6px;paint-order:stroke;stroke-linejoin:round}.cd{background:radial-gradient(ellipse at 50% 30%,#fff6dc,#f3dfae)!important}
+.cd div{padding:8px 10px 10px;font-size:15.5px;line-height:1.4}
+.cd b{display:block;font:800 18px "KhFont",sans-serif;color:#5a330f}
+.cd i{font-style:normal;color:#8a5a2b;font-size:14px}
+.awards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.aw{display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:14px;background:#fffaf0;border:2px solid #e0b264;max-width:460px}
+.aw img{width:96px;flex:none}
+.prob{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:6px;align-items:end;height:180px;padding:10px;border-radius:14px;background:#5c3414;border:3px solid #2e1809}
+.prob div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.prob span{width:70%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#ffe066,#e0962a)}
+.prob .s7 span{background:linear-gradient(180deg,#ff8a70,#c2361f)}
+.prob b{font:800 16px "KhFont",sans-serif;color:#fff3d6}
+.prob i{font-style:normal;font-size:12px;color:#ffe9b8}
+.robber{display:flex;gap:16px;align-items:flex-start}
+.robber img{width:110px;flex:none;filter:drop-shadow(0 6px 6px rgba(0,0,0,.4))}
+.turns{list-style:none;padding:0!important}
+.turns li{position:relative;padding:10px 12px 10px 92px!important;margin:8px 0!important;border-radius:12px;background:#fffaf0;border:1px solid #e0b264;font-style:italic}
+.turns li b.kf{position:absolute;left:10px;top:10px;font-style:normal;font-size:14px;color:#fff3d6;background:#7a4a20;border-radius:8px;padding:2px 8px;width:72px;text-align:center}
+.shot{width:100%;max-width:1100px;display:block;margin:10px auto 0;border-radius:14px;border:3px solid #8a5a2b;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+.cta{text-align:center;margin:26px 0 8px}
+.cta .btn{font-size:20px;padding:12px 26px}
+.port{padding-left:30px!important;position:relative;background:#fbefd0 url(assets/boat.webp) 3px 50%/22px auto no-repeat!important}
+.ports{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:12px 0}
+.pt{text-align:center;padding:10px 6px 10px;border-radius:14px;background:linear-gradient(180deg,#bfeefc,#5cc6ea);border:2px solid #1f7fa8;box-shadow:inset 0 -10px 18px rgba(255,255,255,.35)}
+.pt .pw{position:relative;width:96px;height:96px;margin:0 auto}
+.pt .pw .bt{position:absolute;left:4px;bottom:0;width:66px;filter:drop-shadow(0 4px 3px rgba(0,40,70,.35))}
+.pt .pw .md{position:absolute;right:0;top:0;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fffdf3,#f3e1b6);border:3px solid #8a5a2b;box-shadow:0 3px 0 rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 14px/1 "KhFont",sans-serif;color:#3a210c}
+.pt .pw .md img{width:24px;height:24px;object-fit:contain;margin-bottom:1px}
+.pt b{display:block;font:800 15px "KhFont",sans-serif;color:#0b4a69}
+.pt span{font-size:14px;color:#0b3a52}
+@media (max-width:1100px){.ports{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.pt .pw{width:80px;height:80px}.pt .pw .bt{width:56px}.pt .pw .md{width:44px;height:44px;font-size:12px}.pt .pw .md img{width:20px;height:20px}}
+footer{text-align:center;color:#fff;text-shadow:0 1px 3px #000;font-size:14px}
+@media (max-width:1100px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}.hexgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){
+ body{font-size:16px} main{padding:8px 6px 40px}
+ header.top .ttl{display:none} header.top{justify-content:space-between}
+ .hero{grid-template-columns:1fr;padding:16px 14px;border-radius:16px} .hero h1{font-size:38px}
+ section.box{padding:16px 11px;border-radius:15px;margin:12px 0} section.box h2{font-size:24px} section.box h2 .no{width:36px;height:36px;font-size:18px}
+ .steps{grid-template-columns:1fr} .cards{grid-template-columns:1fr 1fr} .cards .cd:last-child{grid-column:1/-1;width:calc(50% - 6px);justify-self:center} .hexgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .prob{height:150px;gap:3px;padding:8px 6px} .prob i{font-size:10px} .prob b{font-size:13px}
+ .robber{flex-direction:column;align-items:center} .vd{padding-left:46px} .turns li{padding-left:12px!important;padding-top:36px!important}
+ table.t th,table.t td{padding:7px 6px} .btn{padding:6px 10px;font-size:14.5px}
+}
+
+.sumg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.sumg section.box{margin:0}
+.sumg section.box h2{font-size:23px}
+.sumg section.box h2 .no{width:36px;height:36px;font-size:17px}
+.sumg .wide{grid-column:span 2}
+.mini{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0}
+.mini .kcard{width:84px;margin:0}
+.ln{display:flex;align-items:center;gap:8px;margin:5px 0;flex-wrap:wrap}
+.ln>img{height:34px;width:46px;object-fit:contain}
+.ln b{min-width:86px}
+@media (max-width:1100px){.sumg{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.sumg{grid-template-columns:1fr}.sumg .wide{grid-column:auto}.mini .kcard{width:62px}}
+</style></head>
+<body>
+<header class="top"><a class="btn" href="index.html">← Vào game</a><span class="ttl kf">Tóm tắt luật Đảo Khai Hoang</span><a class="btn" href="luat.html">Luật chi tiết</a><a class="btn" href="Luat-choi-Dao-Khai-Hoang.pdf" download>⬇ PDF</a></header>
+<main>
+<div class="hero wood" style="grid-template-columns:1fr;padding:18px 22px"><i class="nail n1"></i><i class="nail n2"></i><i class="nail n3"></i><i class="nail n4"></i>
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><h1 class="kf" style="font-size:42px">Tóm tắt luật</h1><div class="resrow" style="margin:0"><img src="assets/ic-0.webp" alt=""><img src="assets/ic-1.webp" alt=""><img src="assets/ic-2.webp" alt=""><img src="assets/ic-3.webp" alt=""><img src="assets/ic-4.webp" alt=""></div></div>
+<p class="sub" style="margin:4px 0 0">2 đến 4 người · Ai đạt <b>10 điểm</b> trong lượt của mình trước thì thắng</p></div>
+<div class="sumg">
+<section class="box"><h2><span class="no">1</span>Bắt đầu</h2><ul><li>Mỗi người đặt 1 nhà + 1 đường, rồi đi ngược lại đặt thêm 1 nhà + 1 đường.</li><li>Nhà thứ hai nhận ngay tài nguyên các ô quanh nó.</li><li>Hai nhà phải cách nhau ít nhất 2 cạnh.</li></ul></section>
+<section class="box"><h2><span class="no">2</span>Mỗi lượt</h2><ol><li><b>Đổ xúc xắc</b>: ô mang số đó cho tài nguyên. Nhà nhận 1, thành phố nhận 2.</li><li><b>Trao đổi</b> với người chơi, ngân hàng, cảng.</li><li><b>Xây dựng</b> hoặc mua thẻ.</li></ol><p>Dùng tối đa 1 thẻ phát triển mỗi lượt. Lượt dài 60 giây.</p></section>
+<section class="box"><h2><span class="no">!</span>Ra số 7</h2><div class="robber"><img src="assets/robber.webp" alt="" style="width:70px"><ul><li>Không ai nhận tài nguyên.</li><li>Ai có hơn 7 lá bỏ một nửa.</li><li>Dời kẻ cướp, ô đó ngừng cho tài nguyên, lấy 1 lá của người chạm ô.</li></ul></div></section>
+<section class="box wide"><h2><span class="no">⚒</span>Chi phí xây dựng</h2>
+<div class="ln"><img src="assets/road-red.webp" alt=""><b class="kf">Đường</b><span class="rn"><img class="r" src="assets/ic-0.webp" alt="">1</span><span class="rn"><img class="r" src="assets/ic-1.webp" alt="">1</span><span>0 điểm</span></div>
+<div class="ln"><img src="assets/house-red.webp" alt=""><b class="kf">Nhà</b><span class="rn"><img class="r" src="assets/ic-0.webp" alt="">1</span><span class="rn"><img class="r" src="assets/ic-1.webp" alt="">1</span><span class="rn"><img class="r" src="assets/ic-2.webp" alt="">1</span><span class="rn"><img class="r" src="assets/ic-3.webp" alt="">1</span><span>1 điểm</span></div>
+<div class="ln"><img src="assets/city-red.webp" alt=""><b class="kf">Thành phố</b><span class="rn"><img class="r" src="assets/ic-3.webp" alt="">2</span><span class="rn"><img class="r" src="assets/ic-4.webp" alt="">3</span><span>2 điểm, nâng từ nhà</span></div>
+<div class="ln"><img src="assets/card-back.webp" alt=""><b class="kf">Thẻ</b><span class="rn"><img class="r" src="assets/ic-2.webp" alt="">1</span><span class="rn"><img class="r" src="assets/ic-3.webp" alt="">1</span><span class="rn"><img class="r" src="assets/ic-4.webp" alt="">1</span><span>rút 1 thẻ phát triển</span></div>
+<p>Giới hạn: 5 nhà, 4 thành phố, 15 đường.</p></section>
+<section class="box"><h2><span class="no">⇄</span>Đổi hàng</h2>
+<div class="ln"><img src="assets/bank.webp" alt=""><b class="kf">Ngân hàng</b>4 lá cùng loại → 1</div>
+<div class="ln"><img src="assets/boat.webp" alt=""><b class="kf">Cảng 3:1</b>3 lá cùng loại → 1</div>
+<div class="ln"><img src="assets/boat.webp" alt=""><b class="kf">Cảng 2:1</b>2 lá đúng loại cảng → 1</div>
+<div class="ln"><img src="assets/market.webp" alt=""><b class="kf">Người chơi</b>tự thỏa thuận, trong lượt bạn</div></section>
+<section class="box wide"><h2><span class="no">5</span>Thẻ phát triển</h2><div class="mini"><svg class="kcard" viewBox="0 0 70 94.7"><defs><clipPath id="sc0"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-knight-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#sc0)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="86.1" class="rn" style="font-size:9.6px">HIỆP SĨ</text></svg><svg class="kcard" viewBox="0 0 70 94.7"><defs><clipPath id="sc1"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-road-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#sc1)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="85.8" class="rn" style="font-size:7.5px">LÀM ĐƯỜNG</text></svg><svg class="kcard" viewBox="0 0 70 94.7"><defs><clipPath id="sc2"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-plenty-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#sc2)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="85.9" class="rn" style="font-size:8.5px">ĐƯỢC MÙA</text></svg><svg class="kcard" viewBox="0 0 70 94.7"><defs><clipPath id="sc3"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-mono-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#sc3)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="85.8" class="rn" style="font-size:7.5px">ĐỘC QUYỀN</text></svg><svg class="kcard" viewBox="0 0 70 94.7"><defs><clipPath id="sc4"><rect x="7" y="5" width="56" height="73"/></clipPath></defs><image href="assets/card-vp-full.webp" x="7" y="5" width="56" height="73" preserveAspectRatio="xMidYMid slice" clip-path="url(#sc4)"/><image href="assets/card-frame.webp" x="0" y="0" width="70" height="94.7"/><text x="35" y="86.1" class="rn" style="font-size:9.6px">+1 ĐIỂM</text></svg></div>
+<p>Hiệp sĩ (14): dời kẻ cướp. Làm đường (2): 2 đường miễn phí. Được mùa (2): lấy 2 lá bất kỳ. Độc quyền (2): gom hết 1 loại của mọi người. Điểm thưởng (5): +1 điểm. Không dùng thẻ vừa mua trong lượt đó.</p></section>
+<section class="box"><h2><span class="no">★</span>Điểm</h2>
+<div class="ln"><img src="assets/house-red.webp" alt=""><b class="kf">Nhà</b>1 điểm</div>
+<div class="ln"><img src="assets/city-red.webp" alt=""><b class="kf">Thành phố</b>2 điểm</div>
+<div class="ln"><img src="assets/award-road.webp" alt=""><b class="kf">Đường dài</b>2 điểm, từ 5 đoạn</div>
+<div class="ln"><img src="assets/award-army.webp" alt=""><b class="kf">Quân đội</b>2 điểm, từ 3 hiệp sĩ</div>
+<div class="ln"><img src="assets/vp-coin.webp" alt=""><b class="kf">Điểm thưởng</b>1 điểm mỗi thẻ</div></section>
+</div>
+<div class="cta"><a class="btn" href="Luat-choi-Dao-Khai-Hoang.pdf" download style="margin:4px">⬇ Tải luật bản PDF (đen trắng)</a><a class="btn green" href="index.html" style="margin:4px">▶ Chơi ngay</a><a class="btn" href="luat.html" style="margin:4px">Xem luật chi tiết</a></div>
+<footer>Đảo Khai Hoang · Phi Board Games</footer>
+</main></body></html>
