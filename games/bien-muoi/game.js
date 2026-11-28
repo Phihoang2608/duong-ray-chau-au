@@ -11,8 +11,8 @@ const BM_TYPES=[
   {k:'hd',n:1,name:'Hải đăng',grp:'mul'},{k:'dc',n:1,name:'Đàn cá',grp:'mul'},{k:'dcc',n:1,name:'Đàn chim cánh cụt',grp:'mul'},{k:'tn',n:1,name:'Thuyền trưởng',grp:'mul'},
   {k:'tf',n:4,name:'Nàng tiên cá',grp:'mer'}];
 // 10 màu: 9 màu cho 54 lá thường, màu thứ 10 (trắng ngọc trai) dành cho nàng tiên cá
-const BM_COL=[{n:'Lam đậm',h:'#1d4ed8'},{n:'Lam nhạt',h:'#38bdf8'},{n:'Đen than',h:'#1f2937'},{n:'Vàng',h:'#facc15'},{n:'Xanh lá',h:'#22c55e'},
-  {n:'Tím',h:'#8b5cf6'},{n:'Xám',h:'#9ca3af'},{n:'Cam',h:'#fb923c'},{n:'Hồng',h:'#f472b6'},{n:'Trắng ngọc trai',h:'#f8fafc'}];
+const BM_COL=[{n:'Lam',h:'#3468e2'},{n:'Đỏ',h:'#e23e3e'},{n:'Đen than',h:'#3e4656'},{n:'Vàng',h:'#f7d642'},{n:'Xanh lá',h:'#46be6e'},
+  {n:'Tím',h:'#966ce8'},{n:'Nâu',h:'#96623c'},{n:'Cam',h:'#ff8c1e'},{n:'Hồng',h:'#f484be'},{n:'Trắng ngọc trai',h:'#f8fafc'}];
 const BM_COLN=[9,9,8,8,6,4,4,3,3];
 const BM_WHITE=9;
 const BM_WIN={2:40,3:35,4:30};

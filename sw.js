@@ -1,5 +1,5 @@
 /* Service worker Phi Board Games: luôn lấy bản mới từ mạng, mất mạng thì dùng bản đã lưu */
-const C='pbg-v2';
+const C='pbg-v3';
 self.addEventListener('install',e=>self.skipWaiting());
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch',e=>{ const r=e.request; if(r.method!=='GET'||new URL(r.url).origin!==location.origin) return;

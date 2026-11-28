@@ -62,6 +62,7 @@ body{font-family:"Times New Roman",Times,serif;background:radial-gradient(120% 9
 .bmc .pip{position:absolute;left:calc(var(--w)*.05);top:calc(var(--w)*.05);width:calc(var(--w)*.2);height:calc(var(--w)*.2);border-radius:50%;background:var(--cc);border:max(1.5px,calc(var(--w)*.03)) solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.6)}
 .bmc .nm{position:absolute;left:0;right:0;bottom:0;padding:calc(var(--w)*.03) calc(var(--w)*.04);font:bold calc(var(--w)*.125)/1.1 "Times New Roman",serif;text-align:center;color:#fff;background:linear-gradient(0deg,rgba(6,20,36,.9),rgba(6,20,36,.55));border-top:max(1.5px,calc(var(--w)*.025)) solid var(--cc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bmc.back{border-color:var(--gold)}.bmc.back .nm,.bmc.back .pip{display:none}
+.bmc.img,.bmc:has(.art img){border:0;border-radius:calc(var(--w)*.068);background:transparent;box-shadow:0 2px 5px rgba(0,0,0,.5)}.bmc.img .art svg,.bmc.img .nm,.bmc.img .pip,.bmc:has(.art img) .art svg,.bmc:has(.art img) .nm,.bmc:has(.art img) .pip{display:none}
 .bmc.empty{background:rgba(255,255,255,.06);border:2px dashed rgba(233,196,106,.5);box-shadow:none}
 .smh .bmhand .nm,.smo .bmopb .nm,.smo .bmtabl .nm,.bmc.mini .nm{display:none}
 .bmc.mini .pip{width:calc(var(--w)*.26);height:calc(var(--w)*.26)}
