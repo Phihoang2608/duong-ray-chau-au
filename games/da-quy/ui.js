@@ -164,11 +164,18 @@ ${ticks}${rn}
 .dqchart{width:100%;height:auto;background:#fffaf0;border-radius:10px;border:1px solid #e0c896}
 .dqleg{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px;font-weight:bold}
 .dqbody td:first-child{min-width:120px}
+.dqvp .sqs,.dqbody .sqs{display:inline-flex;gap:4px;vertical-align:middle}
+.dqvp .sqs .sq,.dqbody .sqs .sq{width:26px!important;height:26px!important;font-size:15px!important;border-radius:5px!important;flex:none}
+.dqvp .rk .nm .sqs{display:flex;margin-top:4px}
+.dqvp .rk .nm .sqs .sq{width:22px!important;height:22px!important;font-size:13px!important}
+.dqbody .sqs .sq.z,.dqvp .sqs .sq.z{opacity:.35}
+.dqpl h4 .h4s{display:inline-flex;align-items:center;gap:6px;margin-left:8px;font-size:14px;font-weight:normal;color:#6b4a22}
+@media (max-width:600px){.dqbody .sqs{gap:2px;flex-wrap:wrap;justify-content:center;max-width:76px}.dqbody .sqs .sq{width:20px!important;height:20px!important;font-size:12px!important;border-radius:4px!important}.dqpl h4 .h4s{display:flex;margin:4px 0 0}.dqpl h4 .h4s .sqs{max-width:none}}
 @media (max-width:600px){.dqbody td:first-child{min-width:96px}.dqbody .gm svg{width:14px;height:14px}.dqbody .gm{margin:0 1px}.dqvp h2{font-size:27px}.dqvp .rk .p{font-size:22px}.dqbody{padding:8px}.dqbody table{font-size:13px}.dqbody td,.dqbody th{padding:5px 4px}.dqcards .c{width:52px;height:72px}}
 `; document.head.appendChild(st); }
   function showVictory(S,ME,api,force){ if(!S||S.phase!=='over') return; dqvCSS(); const old=document.getElementById('dqv'); if(old) old.remove();
     const order=S.order||S.seats.map((_,i)=>i).sort((a,b)=>S.P[b].pts-S.P[a].pts); const w=S.winner, esc=api.esc;
-    const rows=order.map((i,k)=>{ const P=S.P[i]; return `<div class="rk ${i===w?'w':''}"><span class="n">${k+1}</span><span class="nm">${esc(S.seats[i].name)}${i===ME?' (bạn)':''}<small>${P.cards.length} thẻ · ${P.nobles.length} quý tộc${P.res.length?' · '+P.res.length+' thẻ giữ chỗ':''}</small></span><span class="p">${P.pts}<small> điểm</small></span></div>`; }).join('');
+    const rows=order.map((i,k)=>{ const P=S.P[i]; return `<div class="rk ${i===w?'w':''}"><span class="n">${k+1}</span><span class="nm">${esc(S.seats[i].name)}${i===ME&&S.seats[i].name!=='Bạn'?' (bạn)':''}<small>${P.cards.length} thẻ · ${P.nobles.length} quý tộc${P.res.length?' · '+P.res.length+' thẻ giữ chỗ':''}</small>${sqs(P)}</span><span class="p">${P.pts}<small> điểm</small></span></div>`; }).join('');
     const dur=S.tEnd&&S.t0?fmtT(S.tEnd-S.t0):'';
     const v=document.createElement('div'); v.id='dqv';
     v.innerHTML=`<div class="dqvp"><button class="x" data-v="close" title="Đóng">✕</button><div class="crown">👑</div><h2>${w===ME?'Chúc mừng bạn!':esc(S.seats[w].name)+' chiến thắng!'}</h2>
@@ -177,6 +184,7 @@ ${ticks}${rn}
     document.body.appendChild(v);
     v.addEventListener('click',e=>{ const b=e.target.closest('[data-v]'); if(!b){ if(e.target===v) v.remove(); return; } const k=b.dataset.v; v.remove(); if(k==='again') api.rematch(); else if(k==='review') showReview(S,api); });
   }
+  function sqs(P){ return `<span class="sqs">${[0,1,2,3,4].map(c=>`<span class="sq sq${c} ${P.bonus[c]?'':'z'}" title="Giảm ${P.bonus[c]} ${GEMN[c]}">${P.bonus[c]}</span>`).join('')}</span>`; }
   function gm(c,n){ return `<span class="gm">${A.gemSVG(c,18,c)}${n}</span>`; }
   function showReview(S,api){ if(!S) return; dqvCSS(); const old=document.getElementById('dqr'); if(old) old.remove(); const esc=api.esc, n=S.seats.length;
     const order=S.order||S.seats.map((_,i)=>i); const COL=['#c0392b','#2e86de','#27ae60','#e67e22','#8e44ad'];
@@ -193,7 +201,7 @@ ${ticks}${rn}
       ${row('Thời gian suy nghĩ',q=>fmtT(q.tt))}
       <tr><td class="sec" colspan="${n+1}">Thẻ đã mua</td></tr>
       ${row('Tổng số thẻ',(q,P)=>'<b>'+P.cards.length+'</b>')}${row('Cấp I',q=>q.buy[1])}${row('Cấp II',q=>q.buy[2])}${row('Cấp III',q=>q.buy[3])}${row('Mua từ thẻ giữ chỗ',q=>q.buyRes)}
-      ${row('Thẻ giảm giá theo màu',(q,P)=>P.bonus.map((b,c)=>b?gm(c,b):'').join('')||'–')}
+      ${row('Thẻ giảm giá theo màu',(q,P)=>sqs(P))}
       <tr><td class="sec" colspan="${n+1}">Đá quý</td></tr>
       ${row('Tổng đá đã lấy',q=>'<b>'+tot(q.take)+'</b>')}${row('Đá đã lấy theo màu',q=>q.take.map((x,c)=>x?gm(c,x):'').join('')||'–')}
       ${row('Đá đã trả để mua thẻ',q=>q.spent.map((x,c)=>x?gm(c,x):'').join('')||'–')}${row('Vàng đã dùng',q=>q.spent[5])}
@@ -209,7 +217,7 @@ ${ticks}${rn}
       s+=`<text x="${W/2}" y="${H}" text-anchor="middle" font-size="12" fill="#7a5a2b">Vòng chơi</text>`;
       S.seats.forEach((_,i)=>{ s+=`<polyline fill="none" stroke="${COL[i%5]}" stroke-width="3.5" stroke-linejoin="round" points="${pt.map((r,k)=>X(k)+','+Y(r[i])).join(' ')}"/><circle cx="${X(R)}" cy="${Y(pt[R][i])}" r="5" fill="${COL[i%5]}"/>`; });
       s+='</svg>'; return s+`<div class="dqleg">${S.seats.map((_,i)=>nm(i)+' '+S.P[i].pts).join('')}</div>`; }
-    function tabCards(){ return order.map(i=>{ const P=S.P[i]; return `<div class="dqpl"><h4>${nm(i)} — ${P.cards.length} thẻ, ${P.nobles.length} quý tộc</h4><div class="dqcards">${P.nobles.map(id=>`<div class="c nb">${A.noble(id)}</div>`).join('')}${P.cards.slice().sort((a,b)=>DQ.CARDS[a].col-DQ.CARDS[b].col||DQ.CARDS[b].pts-DQ.CARDS[a].pts).map(id=>`<div class="c">${A.card(id)}</div>`).join('')||'<i>Chưa mua thẻ nào</i>'}</div></div>`; }).join(''); }
+    function tabCards(){ return order.map(i=>{ const P=S.P[i]; return `<div class="dqpl"><h4>${nm(i)} — ${P.cards.length} thẻ, ${P.nobles.length} quý tộc <span class="h4s">Thẻ giảm giá: ${sqs(P)}</span></h4><div class="dqcards">${P.nobles.map(id=>`<div class="c nb">${A.noble(id)}</div>`).join('')}${P.cards.slice().sort((a,b)=>DQ.CARDS[a].col-DQ.CARDS[b].col||DQ.CARDS[b].pts-DQ.CARDS[a].pts).map(id=>`<div class="c">${A.card(id)}</div>`).join('')||'<i>Chưa mua thẻ nào</i>'}</div></div>`; }).join(''); }
     function tabLog(){ const L=S.log; return L.map((l,k)=>`<div class="dqhrow"><i>${L.length-k}</i><span>${logH(l,api)}</span></div>`).join(''); }
     const TABS=[['p','Người chơi',tabPlayers],['c','Diễn biến điểm',tabChart],['k','Thẻ & quý tộc',tabCards],['l','Nhật ký',tabLog]];
     const r=document.createElement('div'); r.id='dqr';
