@@ -89,7 +89,7 @@ const BMUI=(()=>{
   function clockHtml(S,api){ const el=Math.min(60,Math.max(0,(api.now()-S.turnAt)/1000)); return `<span class="tmr">${A.clock(el.toFixed(2))}</span>`; }
   function seatOrder(S,ME){ const n=S.seats.length, o=[]; const st=ME>=0?ME:0; for(let k=0;k<n;k++) o.push((st+k)%n); return o; }
   function actKinds(S,ME){ const P=S.P[ME], pr=BM.pairsOf(P), kinds={}; pr.forEach(p=>{ kinds[p.kind]=kinds[p.kind]||p; }); return kinds; }
-  const KIND={cua:['🦀','Đôi Cua','xem chồng bỏ, lấy 1 lá'],thuyen:['⛵','Đôi Thuyền','đi thêm lượt'],ca:['🐟','Đôi Cá','rút 1 lá'],ms:['🦈','Cá mập + Người bơi','rút trộm 1 lá']};
+  const KIND={cua:['','Đôi Cua','xem chồng bỏ, lấy 1 lá'],thuyen:['','Đôi Thuyền','đi thêm lượt'],ca:['','Đôi Cá','rút 1 lá'],ms:['','Cá mập + Người bơi','rút trộm 1 lá']};
   function statusText(S,ME,api){ const my=S.phase==='play'&&S.turn===ME, nm=api.esc(S.seats[S.turn]?S.seats[S.turn].name:''), st=S.step;
     if(S.phase==='over') return S.mermaid?`🧜 <b>${api.esc(S.seats[S.winner].name)}</b> gom đủ 4 nàng tiên cá!`:`🏆 <b>${api.esc(S.seats[S.winner].name)}</b> thắng chung cuộc!`;
     if(st==='roundover') return 'Ván đã kết thúc — xem bảng điểm.';
@@ -97,11 +97,11 @@ const BMUI=(()=>{
     if(my){ const txt={draw:'<b class="me blink">Đến lượt bạn!</b>',
         keep:sel<0?'<b>1/2</b> Chạm lá để GIỮ':'<b>2/2</b> Kéo lá kia vào chồng bỏ',
         play:BM.pairsOf(S.P[ME]).length?'Đánh cặp hoặc kết thúc':'Không có cặp…',
-        crab:crabP<0?'🦀 Chọn 1 chồng bỏ':'🦀 Chọn 1 lá',shark:'🦈 Chạm 1 đối thủ'}[st]; return lc+txt; }
+        crab:crabP<0?'Chọn 1 chồng bỏ':'Chọn 1 lá',shark:'Chạm 1 đối thủ'}[st]; return lc+txt; }
     const who='…';
     return lc+`Chờ <b>${nm}</b>${who}`; }
-  function pileHtml(S,p,ME,my){ const d=S.disc[p], top=d.length?d[d.length-1]:null; const go=my&&S.step==='draw'&&top!=null, dropT=my&&S.step==='keep'&&sel>=0;
-    return `<div class="pile ${go?'go':''} ${dropT?'drop':''}" data-pile="${p}">${top!=null?card(top,'big'):'<div class="bmc empty"><div class="art"></div></div>'}<small>${(dropT?'Thả vào đây':'Bỏ '+(p+1))+' · '+d.length+' lá'}</small></div>`; }
+  function pileHtml(S,p,ME,my){ const d=S.disc[p], top=d.length?d[d.length-1]:null; const go=my&&(S.step==='draw'||(S.step==='crab'&&crabP<0))&&top!=null, dropT=my&&S.step==='keep'&&sel>=0;
+    return `<div class="pile ${go?'go':''} ${dropT?'drop':''}" data-pile="${p}">${top!=null?card(top,'big'):'<div class="bmc empty"><div class="art"></div></div>'}<small>${(dropT?'Thả vào đây':'Bỏ '+(p+1))}</small></div>`; }
   function render(S,ME,api){ window.__S=S; document.documentElement.classList.add('bmingame'); applyFx();
     if(!root){ document.getElementById('tb-game').innerHTML='<div id="bm"></div>'; root=$('#bm'); root.addEventListener('click',onClick);
       root.addEventListener('contextmenu',e=>{ const el=e.target.closest('[data-cid]'); if(el){ e.preventDefault(); zoomCard(+el.dataset.cid); } });
@@ -118,21 +118,22 @@ const BMUI=(()=>{
       if(k==='steal') pre.from=rectOf(`.pl[data-p="${ev.from}"] .bmhand`)||rectOf(`.pl[data-p="${ev.from}"] .bmopb`)||rectOf(`.pl[data-p="${ev.from}"]`); }
     if(isNew){ const e=ev, N=x=>'<b>'+api.esc(S.seats[x].name)+'</b>', k=e.k;
       const T={draw2:()=>N(e.seat)+' rút 2 lá',draw1:()=>N(e.seat)+' rút lá cuối',keep:()=>N(e.seat)+' giữ 1 lá, bỏ 1 lá vào chồng '+(e.pile+1),take:()=>N(e.seat)+' lấy lá chồng bỏ '+(e.pile+1),
-        duo:()=>({cua:'🦀 '+N(e.seat)+' đánh đôi Cua: lấy 1 lá chồng bỏ',thuyen:'⛵ '+N(e.seat)+' đánh đôi Thuyền: đi thêm lượt',ca:'🐟 '+N(e.seat)+' đánh đôi Cá: rút thêm 1 lá',ms:'🦈 '+N(e.seat)+' đánh Cá mập + Người bơi: rút trộm'}[e.kind]),
-        crab:()=>'🦀 '+N(e.seat)+' lấy lá chồng bỏ '+(e.pile+1),fish:()=>'🐟 '+N(e.seat)+' rút thêm 1 lá',steal:()=>'🦈 '+N(e.seat)+' rút trộm 1 lá của '+N(e.from),
+        duo:()=>({cua:''+N(e.seat)+' đánh đôi Cua: lấy 1 lá chồng bỏ',thuyen:''+N(e.seat)+' đánh đôi Thuyền: đi thêm lượt',ca:''+N(e.seat)+' đánh đôi Cá: rút thêm 1 lá',ms:''+N(e.seat)+' đánh Cá mập + Người bơi: rút trộm'}[e.kind]),
+        crab:()=>''+N(e.seat)+' lấy lá chồng bỏ '+(e.pile+1),fish:()=>''+N(e.seat)+' rút thêm 1 lá',steal:()=>''+N(e.seat)+' rút trộm 1 lá của '+N(e.from),
         stop:()=>'🛑 '+N(e.seat)+' hô DỪNG',last:()=>'⏳ '+N(e.seat)+' hô CƠ HỘI CUỐI'}[k]; if(T) note=T(); }
     if(!note) note='Chào mừng! Bạn rút bài để bắt đầu';
     const kinds=my&&S.step==='play'?actKinds(S,ME):{}; const P=ME>=0?S.P[ME]:null, mypts=P?BM.myPts(S,ME):0;
     let h=`<div class="bmwrap"><div class="bmtools"><b class="bmttl">Biển Muối &amp; Thuyền Giấy</b><a href="../../index.html" title="Menu trò chơi">🏠</a>
       <button data-tool="chat" class="bmchatb" style="${api.mode()==='local'?'display:none':''}" title="Trò chuyện trong phòng">💬<i class="bmcu"></i></button>
       <button data-tool="fx" title="Mức hiệu ứng">✨</button><button data-tool="app" data-pbg-app title="Tải app">📲</button><button data-tool="acc" title="Tài khoản · Bạn bè · Online">👤</button><button data-tool="fs" title="Toàn màn hình">⛶</button><button data-hist="1" title="Lịch sử ván">📜</button><button data-tool="snd" title="Âm thanh">${SFX.on===false?'🔇':'🔊'}</button><button data-tool="rules" title="Luật chơi">📖</button><button data-tool="zin" title="Phóng to">＋</button><button data-tool="zout" title="Thu nhỏ">－</button></div>
-      <div class="bmmain"><div class="bmnote">${note}</div><div class="bmtab"><div class="bminfo">Ván <b>${S.round}</b> · Đích <b>${S.target}</b> điểm · Chồng bài còn <b>${S.deck.length}</b> lá</div>
-      <div class="bmbody"><div class="bmpiles"><div class="pile deck ${my&&S.step==='draw'&&S.deck.length?'go':''}" data-deck="1">${A.back('big')}<small>Bài · ${S.deck.length} lá</small></div>${pileHtml(S,0,ME,my)}${pileHtml(S,1,ME,my)}</div>
+      <div class="bmmain"><div class="bmnote">${note}</div><div class="bmtab"><div class="bminfo">Ván <b>${S.round}</b> · Đích <b>${S.target}</b> điểm</div>
+      <div class="bmbody"><div class="bmpiles"><div class="pile deck ${my&&S.step==='draw'&&S.deck.length?'go':''}" data-deck="1">${A.back('big')}<small>Bài</small></div>${pileHtml(S,0,ME,my)}${pileHtml(S,1,ME,my)}</div>
       <div class="bmside">${my&&S.step==='keep'?'':`<div class="bmstat">${statusText(S,ME,api)}</div>`}</div></div>${my&&S.step==='keep'?`<div class="bmdrawn bmpick">${S.pend.map((id,i)=>card(id,'big '+(sel===i?'pk':(sel>=0?'dis':'')),`data-pend="${i}"`)).join('')}</div>`:''}`;
-    if(my&&S.step==='play'){ h+=`<div class="bmacts">`+Object.keys(kinds).filter(k=>k!=='ms'||BM.victims(S,ME).length).map(k=>`<button class="tbtn gold" data-duo="${k}" title="${KIND[k][2]}">${KIND[k][0]} ${KIND[k][1]}</button>`).join('')
+    if(my&&S.step==='play'){ h+=`<div class="bmacts">`+Object.keys(kinds).filter(k=>k!=='ms'||BM.victims(S,ME).length).map(k=>`<button class="tbtn gold" data-duo="${k}" title="${KIND[k][2]}">${KIND[k][1]}</button>`).join('')
       +`<button class="tbtn pri" data-a="end">Kết thúc lượt</button>`
       +(!S.call?`<button class="tbtn stop" data-a="stop" ${mypts>=BM_MIN_END?'':'disabled'} title="Cần từ ${BM_MIN_END} điểm">🛑 DỪNG</button><button class="tbtn last" data-a="last" ${mypts>=BM_MIN_END?'':'disabled'} title="Cần từ ${BM_MIN_END} điểm">⏳ CƠ HỘI CUỐI</button>`:'')+`</div>`; }
     else if(my&&S.step==='draw') h+=`<div class="bmacts"><button class="tbtn pri bmdrawb" data-a="deck" ${S.deck.length?'':'disabled'}>🂠 Lấy ${S.deck.length>1?'2 lá':'lá cuối'} từ chồng bài</button></div>`;
+    else if(my&&S.step==='crab') h+=`<div class="bmacts"><div class="bmstat">${statusText(S,ME,api)}</div><button class="tbtn" data-a="skipcrab">Bỏ qua</button></div>`;
     else if(my&&S.step==='keep') h+=`<div class="bmacts bmhint"><div class="bmstat">${statusText(S,ME,api)}</div></div>`;
     else h+=`<div class="bmacts bmlog"></div>`;
     h+=`</div>`;
@@ -151,9 +152,8 @@ const BMUI=(()=>{
     // đồng hồ + kích thước
     fit(); lastSec=-1; syncResult(S,ME,api);
     // chọn lá từ chồng bỏ khi đánh đôi Cua
-    let cp=document.getElementById('bmcrab'); if(my&&S.step==='crab'){ if(!cp){ cp=document.createElement('div'); cp.id='bmcrab'; root.appendChild(cp); }
-      if(crabP<0) cp.innerHTML=`<div class="cph"><b>🦀 Chọn 1 chồng bỏ để xem</b></div><div class="cpb">`+[0,1].map(p=>`<button class="tbtn pri" data-cp="${p}" ${S.disc[p].length?'':'disabled'}>Chồng bỏ ${p+1}<br><small>${S.disc[p].length} lá</small></button>`).join('')+`</div><button class="tbtn" data-a="skipcrab">Bỏ qua</button>`;
-      else cp.innerHTML=`<div class="cph"><b>🦀 Chồng bỏ ${crabP+1} — chọn 1 lá</b></div><div class="cpr"><div class="cpc">${sortIds(S.disc[crabP]).map(id=>card(id,'mini',`data-crab="${id}" data-pile="${crabP}"`)).join('')}</div></div><button class="tbtn" data-a="skipcrab">Bỏ qua</button>`;
+    let cp=document.getElementById('bmcrab'); if(my&&S.step==='crab'&&crabP>=0){ if(!cp){ cp=document.createElement('div'); cp.id='bmcrab'; root.appendChild(cp); }
+      cp.innerHTML=`<div class="cph"><b>Chồng bỏ ${crabP+1} — chọn 1 lá</b></div><div class="cpr"><div class="cpc">${sortIds(S.disc[crabP]).map(id=>card(id,'mini',`data-crab="${id}" data-pile="${crabP}"`)).join('')}</div></div><button class="tbtn" data-a="skipcrab">Bỏ qua</button>`;
       cp.querySelectorAll('.cpc').forEach(c=>{ const k=c.firstChild; const w=k&&k.getBoundingClientRect?k.getBoundingClientRect().width:40; fan(c,w); }); }
     else if(cp) cp.remove();
     // điểm nhảy +N cho điểm lá hiện có
@@ -171,7 +171,7 @@ const BMUI=(()=>{
     else if(k==='crab'){ fly(pre.pile,tgt(ev.seat),A.card(ev.id,'x'),w,h,0); }
     else if(k==='steal'){ fly(pre.from,tgt(ev.seat),ev.seat===ME||ev.from===ME?A.card(ev.id,'x'):A.back('x'),w,h,300); if(ev.from===ME) api.toast('😱 '+api.esc(S.seats[ev.seat].name)+' rút trộm 1 lá của bạn!'); }
     else if(k==='duo'){ const to=rectOf(`.pl[data-p="${ev.seat}"] .bmtabl`)||rectOf(`.pl[data-p="${ev.seat}"]`); ev.ids.forEach((id,j)=>fly(pre.ids&&pre.ids[j],to,A.card(id,'x'),w,h,j*140));
-      const txt={cua:'🦀 Đôi Cua!',thuyen:'⛵ Đôi Thuyền — đi thêm lượt!',ca:'🐟 Đôi Cá — rút thêm 1 lá',ms:'🦈 Cá mập + Người bơi — rút trộm!'}[ev.kind]; api.toast(`<b>${api.esc(S.seats[ev.seat].name)}</b>: ${txt}`); }
+      const txt={cua:'Đôi Cua!',thuyen:'Đôi Thuyền — đi thêm lượt!',ca:'Đôi Cá — rút thêm 1 lá',ms:'Cá mập + Người bơi — rút trộm!'}[ev.kind]; api.toast(`<b>${api.esc(S.seats[ev.seat].name)}</b>: ${txt}`); }
     else if(k==='stop'){ banner('stop','🛑 DỪNG!',`<b>${api.esc(S.seats[ev.seat].name)}</b> hô DỪNG với ${ev.pts} điểm — mọi người tính điểm`,2800); if(SFX.horn) SFX.horn(); }
     else if(k==='last'){ banner('last','⏳ CƠ HỘI CUỐI!',`<b>${api.esc(S.seats[ev.seat].name)}</b> đặt cược với ${ev.pts} điểm — mỗi người đi thêm 1 lượt`,3200); if(SFX.ok&&SFX.ok()) [523,659,784,1047].forEach((f,i)=>SFX.tone(f,.35,{vol:.12,at:i*.13,type:'triangle'})); }
     else if(k==='round'){ setTimeout(()=>{ ev.rows.forEach(r=>{ if(r.gain>0) ptsPop(r.seat,r.gain,'.pts'); }); },900); }
@@ -204,7 +204,7 @@ const BMUI=(()=>{
     const vc=e.target.closest('[data-v]'); if(vc&&my&&S.step==='shark'){ api.act({t:'steal',v:+vc.dataset.v}); return; }
     const pd=e.target.closest('[data-pend]'); if(pd&&my&&S.step==='keep'){ sel=+pd.dataset.pend; SND.pop(); render(S,ME,api); return; }
     const pl=e.target.closest('[data-pile]'); if(pl&&!pl.closest('#bmcrab')&&my){ const p=+pl.dataset.pile;
-      if(S.step==='draw'){ api.act({t:'take',pile:p}); return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
+      if(S.step==='crab'&&crabP<0){ if(S.disc[p].length){ crabP=p; SND.pop(); render(S,ME,api); } return; } if(S.step==='draw'){ api.act({t:'take',pile:p}); return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
     const dk=e.target.closest('[data-deck]'); if(dk&&my&&S.step==='draw'){ api.act({t:'deck'}); return; }
     const hc=e.target.closest('.me .bmhand [data-cid],.bmopb:not(.bk) [data-cid],.bmtabl [data-cid],.pile .bmc[data-cid],#bmres [data-cid]'); if(hc){ zoomCard(+hc.dataset.cid); return; } }
   /* ---------- kéo lá còn lại vào chồng bỏ ---------- */
