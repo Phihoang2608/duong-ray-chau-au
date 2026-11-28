@@ -1117,6 +1117,30 @@ body.portphone .mkbar .deckslot .dlab,body.portphone .mkbar .tkdeck .dlab{font-s
 
 @media (max-height:700px){ body.portphone .mkbar .deckslot .deckart,body.portphone .mkbar .tkdeck .tkart{display:none!important} body.portphone .mkbar .deckslot,body.portphone .mkbar .tkdeck{justify-content:center!important} body.portphone .mkbar .deckslot .dlab,body.portphone .mkbar .tkdeck .dlab{background:none;border:0;font-size:12px} }
 #tkPick .tpk,.tpk{white-space:nowrap}
+/* thông báo chiếm tuyến nhanh */
+.clmsg{position:absolute;left:50%;top:10px;z-index:40;transform:translateX(-50%);padding:7px 16px 7px 12px;border-radius:999px;background:rgba(36,8,14,.92);color:#fff6dc;font:600 15px/1.2 Georgia,'Times New Roman',serif;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis;border:2px solid #e8c36a;box-shadow:0 6px 18px rgba(0,0,0,.45);pointer-events:none;animation:clmsg 1.7s ease both}
+.clmsg::before{content:"";display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--pc);border:2px solid #fff;margin-right:8px;vertical-align:-1px}
+.clmsg b{color:#ffd770}
+@keyframes clmsg{0%{opacity:0;transform:translate(-50%,-14px) scale(.9)}12%{opacity:1;transform:translate(-50%,0) scale(1)}78%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
+/* điểm bay về ô người chơi */
+.ptsfly{position:fixed;z-index:600;pointer-events:none;font:800 30px/1 Georgia,'Times New Roman',serif;color:#ffe27a;-webkit-text-stroke:5px #3a0a12;paint-order:stroke fill;text-shadow:0 0 14px var(--pc),0 3px 0 #1a0408;white-space:nowrap}
+.pchip.gotpts{animation:gotpts .7s ease}
+@keyframes gotpts{30%{box-shadow:0 0 0 3px #ffd770,0 0 22px #ffd770}}
+.pchip .sc.bump{display:inline-block;animation:scbump .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes scbump{40%{transform:scale(1.7);color:#ffd770}}
+/* vé vừa hoàn thành */
+.tkdone{position:fixed;left:50%;top:14%;z-index:620;transform:translateX(-50%);width:min(78vw,380px);padding:10px 12px 12px;border-radius:18px;background:linear-gradient(180deg,#4a1220,#2a0810);border:3px solid #e8c36a;box-shadow:0 0 0 4px var(--pc),0 18px 44px rgba(0,0,0,.6),0 0 40px rgba(255,215,112,.45);color:#fff6dc;text-align:center;pointer-events:none;animation:tkin .5s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes tkin{from{opacity:0;transform:translate(-50%,24px) scale(.6) rotate(-4deg)}}
+.tkdone .tkh{font:700 18px/1.2 Georgia,'Times New Roman',serif;margin-bottom:8px}.tkdone .tkh b{color:#ffd770}
+.tkdone .tkc{position:relative}
+.tkdone .tkc img{width:100%;display:block;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.tkdone .tkc::after{content:"";position:absolute;inset:0;border-radius:12px;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 48%,transparent 62%);background-size:250% 100%;animation:tkshine 1.6s ease .3s 2}
+@keyframes tkshine{from{background-position:120% 0}to{background-position:-60% 0}}
+.tkdone .tkc i{position:absolute;left:var(--x);top:var(--y);width:16px;height:16px;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,#fff 0 18%,transparent 20%),conic-gradient(from 45deg,transparent 0 10%,#fff6c0 12% 13%,transparent 15% 35%,#fff6c0 37% 38%,transparent 40% 60%,#fff6c0 62% 63%,transparent 65% 85%,#fff6c0 87% 88%,transparent 90%);clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);background:#fff6c0;filter:drop-shadow(0 0 4px #ffd770);animation:twk 1.1s ease-in-out var(--d) infinite}
+@keyframes twk{0%,100%{transform:translate(-50%,-50%) scale(0) rotate(0)}50%{transform:translate(-50%,-50%) scale(var(--s)) rotate(90deg)}}
+.tkdone .tkp{margin-top:8px;font:600 14px/1.2 Georgia,serif;color:#ffd770}
+body.fx-lite .tkdone .tkc i{filter:none}
+@media (max-height:520px){.tkdone{top:6%;width:min(52vw,300px);padding:6px 8px 8px}.tkdone .tkh{font-size:15px;margin-bottom:4px}.clmsg{font-size:13px;top:6px}}
 </style>
 </head>
 <body>
@@ -1931,8 +1955,8 @@ let ME = 0;
 const TOUCH = (window.matchMedia && matchMedia('(pointer:coarse)').matches) || ('ontouchstart' in window);
 const HIT_W = TOUCH ? 34 : 18;
 function isLandPhone(){ return innerHeight<=520 && innerWidth>innerHeight; }
-const UIS = { hl:null, stationMode:false, claimAt:{}, lastFx:0, modalKey:null, myDone:null, shownEnd:false, prevScores:[], prevMarket:[], prevHand:null, gain:[], waiting:false, botT:null };
-function resetUI(){ Object.assign(UIS,{focus:null, tkHTML:null, hl:null, stationMode:false, claimAt:{}, lastFx:0, modalKey:null, myDone:null, shownEnd:false, prevScores:[], prevMarket:[], prevHand:null, gain:[], waiting:false}); hideModal(); }
+const UIS = { holdSc:{}, doneAll:null, hl:null, stationMode:false, claimAt:{}, lastFx:0, modalKey:null, myDone:null, shownEnd:false, prevScores:[], prevMarket:[], prevHand:null, gain:[], waiting:false, botT:null };
+function resetUI(){ Object.assign(UIS,{holdSc:{}, doneAll:null, focus:null, tkHTML:null, hl:null, stationMode:false, claimAt:{}, lastFx:0, modalKey:null, myDone:null, shownEnd:false, prevScores:[], prevMarket:[], prevHand:null, gain:[], waiting:false}); hideModal(); }
 function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function cleanName(s){ return String(s||'').replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁠-⁯]/g,'').trim().slice(0,16) || 'Khách'; }
 function myName(){ return cleanName($('#pname').value)||'Bạn'; }
@@ -1989,15 +2013,16 @@ function routeSVG(r, afford, now){
   const t=UIS.claimAt[r.id]; const el = t!=null ? now-t : 1e9; const fresh = el<2600 && G.owner[r.id]!=null;
   let s=`<g class="route ${canClick?'clickable':''} ${afford.has(r.id)?'afford':''} ${fresh?'glow':''}" data-id="${r.id}" ${fresh?`style="--gc:${G.players[owner].color};animation-delay:${-el}ms"`:''}>`;
   s+=`<line x1="${g.ax+g.ux*pad}" y1="${g.ay+g.uy*pad}" x2="${g.ax+g.ux*(g.d-pad)}" y2="${g.ay+g.uy*(g.d-pad)}" stroke="transparent" stroke-width="${HIT_W}"/>`;
+  if (owner!=null){ const x1=(g.ax+g.ux*(pad+2)).toFixed(1), y1=(g.ay+g.uy*(pad+2)).toFixed(1), x2=(g.ax+g.ux*(g.d-pad-2)).toFixed(1), y2=(g.ay+g.uy*(g.d-pad-2)).toFixed(1);
+    s+=`<g class="${fresh?'pop':''}" pointer-events="none"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="29" stroke-linecap="round" opacity=".95"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="24" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
   for (let i=0;i<r.len;i++){
     const tt=pad+seg*(i+0.5); const cx=(g.ax+g.ux*tt).toFixed(1), cy=(g.ay+g.uy*tt).toFixed(1);
     s+=`<g transform="translate(${cx},${cy}) rotate(${g.ang.toFixed(1)})">`;
     if (owner!=null){
-      const col=G.players[owner].color, h=17, W=w+1.5, win=Math.min(6,W/4.5);
+      const col=G.players[owner].color, h=19, W=seg-1.5, win=Math.min(6,W/4.5);
       const delay = fresh ? ((i+.5)/r.len*TRAIN_RUN_MS - el) : 0;
       s+=`<g class="${fresh?'pop':''}" ${fresh?`style="animation-delay:${delay.toFixed(0)}ms"`:''}>
-        <rect x="${-W/2-1.5}" y="${-h/2-1.5}" width="${W+3}" height="${h+3}" rx="4.5" fill="#fff" opacity=".85"/>
-        <rect x="${-W/2}" y="${-h/2}" width="${W}" height="${h}" rx="3.5" fill="${col}" stroke="#0b0b0b" stroke-width="2.3"/>
+        <rect x="${-W/2}" y="${-h/2}" width="${W}" height="${h}" rx="3.5" fill="${col}" stroke="#0b0b0b" stroke-width="2.6"/>
         <rect x="${-W/2+1.2}" y="${h/2-5}" width="${W-2.4}" height="3.8" rx="1.5" fill="#000" opacity=".28"/>
         <rect x="${-W/2+2.5}" y="${-h/2+2}" width="${W-5}" height="3" rx="1.5" fill="#fff" opacity=".45"/>
         ${W>15?`<rect x="${-W/2+3.5}" y="-2.5" width="${win}" height="4.5" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/><rect x="${W/2-3.5-win}" y="-2.5" width="${win}" height="4.5" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/>`:''}
@@ -2072,14 +2097,15 @@ function chipLoco(color){ return `<svg viewBox="0 0 60 60" class="chiploco"><g t
 function renderPlayers(){
   const html = G.players.map((p,i)=>{
     const online = NET.mode!=='local' && !p.isBot ? (NET.isPresent(p.peer) ? '<span class="on" title="Đang online">●</span>' : '<span class="off" title="Mất kết nối">●</span>') : '';
-    const bump = UIS.prevScores[i]!=null && UIS.prevScores[i]!==p.score;
+    if (UIS.prevScores[i]!=null && p.score>UIS.prevScores[i] && G.phase==='play'){ if(UIS.holdSc[i]==null){ UIS.holdSc[i]=UIS.prevScores[i]; setTimeout(()=>releaseScore(i),TRAIN_RUN_MS+2600); } }
+    const bump = false;
     return `<div class="pchip ${G.cur===i&&G.phase==='play'?'active':''} ${i===ME?'mine':''}" data-p="${i}" style="--pc:${p.color}">
-      ${chipLoco(p.color)}<div class="pinfo"><div class="pline1"><span class="pname">${online}${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.isBot?' <small class="botlab">máy</small>':''}</span><span class="scpill"><b class="sc ${bump?'bump':''}">${p.score}</b> điểm</span></div>
+      ${chipLoco(p.color)}<div class="pinfo"><div class="pline1"><span class="pname">${online}${esc(p.name)}${i===ME?' <i>(bạn)</i>':''}${p.isBot?' <small class="botlab">máy</small>':''}</span><span class="scpill"><b class="sc ${bump?'bump':''}">${UIS.holdSc[i]!=null?UIS.holdSc[i]:p.score}</b> điểm</span></div>
       <div class="pstats"><span title="Số toa tàu còn lại"><i>Toa</i> ${p.trains}</span><span title="Số lá bài trên tay"><i>Bài</i> ${handCount(p)}</span><span title="Số vé hành trình"><i>Vé</i> ${p.tickets.length}</span><span title="Số nhà ga còn lại"><i>Ga</i> ${p.stations}</span></div></div></div>`; }).join('');
   $('#players').innerHTML=html;
   const gains=G.players.map((p,i)=>UIS.prevScores[i]!=null ? p.score-UIS.prevScores[i] : 0);
   UIS.prevScores=G.players.map(p=>p.score);
-  if (gains.some(x=>x>0)){ setTimeout(()=>{ let snd=false; gains.forEach((d,i)=>{ if(d>0){ const r=chipRect(i); if(r) FX.scorePop(r, '+'+d, G.players[i].color); if(!snd){ SFX.reward(); snd=true; } } }); }, TRAIN_RUN_MS-300); }
+  if (G.phase!=='play' && gains.some(x=>x>0)){ setTimeout(()=>{ let snd=false; gains.forEach((d,i)=>{ if(d>0){ const r=chipRect(i); if(r) FX.scorePop(r, '+'+d, G.players[i].color); if(!snd){ SFX.reward(); snd=true; } } }); }, TRAIN_RUN_MS-300); }
   renderScoreboard(); fixStickyTop();
   if (document.body.classList.contains('portphone')){ const R=document.documentElement.style, o=R.getPropertyValue('--mph'); fitLayout(); if (R.getPropertyValue('--mph')!==o && UIS.autoFit) requestAnimationFrame(fitZoom); }
 }
@@ -2325,7 +2351,8 @@ function playFx(f){
       const r=ROUTES[f.r]; const col=G.players[f.p].color; UIS.claimAt[f.r]=performance.now(); renderMap();
       trainRun(r, col); SFX.clack(r.len); Ticker.push(`${esc(who(f.p))} chiếm tuyến <b>${esc(rname(r))}</b> (+${POINTS[r.len]} điểm)`, 'claim'); if (r.len>=3) setTimeout(()=>SFX.whistle(), 350);
       const g=routeGeom(r); const mx=g.ax+g.ux*g.d/2, my=g.ay+g.uy*g.d/2;
-      setTimeout(()=>{ floatText(mx, my-14, '+'+POINTS[r.len], col); if (r.len>=4 || f.p===ME){ const p=FX.svgPoint(mx,my); if(p) FX.confetti(p.x,p.y, r.len>=4?60:25, [col,'#ffd36b','#fff']); } }, TRAIN_RUN_MS-200);
+      claimMsg(`<b>${esc(who(f.p))}</b> chiếm tuyến ${esc(rname(r))}`, col);
+      setTimeout(()=>{ const p=FX.svgPoint(mx,my); if (p){ ptsFly(p.x,p.y,POINTS[r.len],f.p,col); if (FXMODE!=='off' && (r.len>=4 || f.p===ME)) FX.confetti(p.x,p.y, r.len>=4?50:20, [col,'#ffd36b','#fff']); } else releaseScore(f.p); }, TRAIN_RUN_MS-150);
       break; }
     case 'tun': SFX.rumble(); FX.shake($('#mapWrap'));
       if (f.p!==ME) FX.banner('Đường hầm!', `${esc(G.players[f.p].name)} lật ra ${f.rv.map(i=>cname(CARDS[i])).join(', ')} → cần thêm ${f.x} lá`, 'small', 2000);
@@ -2342,15 +2369,41 @@ function playFx(f){
   }
 }
 function checkTickets(){
-  if (ME<0 || !G.players[ME]) return; const me=G.players[ME];
-  const done=new Set(me.tickets.filter(id=>ticketDone(me,id)));
-  if (UIS.myDone){
-    done.forEach(id=>{ if(!UIS.myDone.has(id)){ const t=TK[id];
-      setTimeout(()=>{ SFX.chime(); FX.banner('Hoàn thành vé!', `${esc(tname(t))} · +${t.pts} điểm`, 'win', 2200);
-        [t.a,t.b].forEach((c,k)=>{ const p=FX.svgPoint(CITIES[c].x,CITIES[c].y); if(p) setTimeout(()=>{ FX.firework(p.x,p.y,me.color); FX.confetti(p.x,p.y,40); }, k*350); }); }, TRAIN_RUN_MS); } });
+  if (!G || !G.players) return;
+  const now=G.players.map(p=>new Set((p.tickets||[]).filter(id=>ticketDone(p,id))));
+  if (UIS.doneAll && UIS.doneAll.length===now.length && G.phase==='play'){
+    let k=0;
+    now.forEach((set,pi)=>set.forEach(id=>{ if(UIS.doneAll[pi].has(id)) return; const t=TK[id], pl=G.players[pi], dl=TRAIN_RUN_MS+700+k*1900; k++;
+      setTimeout(()=>{ ticketShow(pi,id);
+        if (pi===ME){ SFX.chime(); [t.a,t.b].forEach((c,q)=>{ const p=FX.svgPoint(CITIES[c].x,CITIES[c].y); if(p&&FXMODE!=='off') setTimeout(()=>{ FX.firework(p.x,p.y,pl.color); FX.confetti(p.x,p.y,30); }, q*300); }); }
+        else SFX.ding();
+        Ticker.push(`${esc(who(pi))} đã hoàn thành vé <b>${esc(tname(t))}</b>!`, pi===ME?'me':'claim'); }, dl); }));
   }
-  UIS.myDone=done;
+  UIS.doneAll=now; UIS.myDone=ME>=0&&now[ME]?now[ME]:null;
 }
+/* Dòng thông báo ngắn "Ai đó chiếm tuyến …": hiện nhanh rồi tắt */
+function claimMsg(html,col){
+  const host=$('#mapWrap'); if(!host) return; let el=document.createElement('div'); el.className='clmsg'; el.style.setProperty('--pc',col); el.innerHTML=html; host.appendChild(el);
+  setTimeout(()=>el.remove(), 1700); }
+/* Điểm "+N" bật lên giữa tuyến rồi bay vào ô điểm của người chơi, tới nơi thì số điểm nhảy lên */
+function releaseScore(pi){ if(UIS.holdSc[pi]==null) return; delete UIS.holdSc[pi]; const el=document.querySelector(`.pchip[data-p="${pi}"] .sc`); if(!el||!G.players[pi]) return; el.textContent=G.players[pi].score; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); const ch=el.closest('.pchip'); if(ch){ ch.classList.remove('gotpts'); void ch.offsetWidth; ch.classList.add('gotpts'); } }
+function ptsFly(x,y,n,pi,col){
+  const tgt=document.querySelector(`.pchip[data-p="${pi}"] .sc`);
+  if (!tgt || FXMODE==='off'){ releaseScore(pi); return; }
+  const el=document.createElement('div'); el.className='ptsfly'; el.style.setProperty('--pc',col); el.textContent='+'+n; el.style.left=x+'px'; el.style.top=y+'px'; document.body.appendChild(el);
+  const tr=tgt.getBoundingClientRect(), dx=tr.left+tr.width/2-x, dy=tr.top+tr.height/2-y;
+  const a=el.animate([{transform:'translate(-50%,-50%) scale(.4)',opacity:0},{transform:'translate(-50%,-90%) scale(1.25)',opacity:1,offset:.22},{transform:'translate(-50%,-95%) scale(1.1)',opacity:1,offset:.45},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(.55)`,opacity:.9}],{duration:1250,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'});
+  const done=()=>{ if(el.isConnected) el.remove(); releaseScore(pi); SFX.reward&&SFX.reward(); };
+  a.onfinish=done; setTimeout(done,1600); }
+/* Vé vừa hoàn thành: hiện to cho mọi người thấy, lấp lánh, rồi bay về ô người chơi */
+function ticketShow(pi,id){
+  const pl=G.players[pi]; if(!pl) return; const t=TK[id];
+  const el=document.createElement('div'); el.className='tkdone'; el.style.setProperty('--pc',pl.color);
+  const stars=FXMODE==='off'?'':Array.from({length:FXMODE==='full'?18:10},(_,k)=>`<i style="--x:${(Math.random()*120-10).toFixed(0)}%;--y:${(Math.random()*120-10).toFixed(0)}%;--d:${(Math.random()*1.2).toFixed(2)}s;--s:${(0.6+Math.random()*0.9).toFixed(2)}"></i>`).join('');
+  el.innerHTML=`<div class="tkh"><b>${esc(pi===ME?'Bạn':pl.name)}</b> hoàn thành vé!</div><div class="tkc"><img src="${RA_BASE}tickets/${RA_REG}/${t.id}.webp?v=9" alt="${esc(tname(t))}">${stars}</div><div class="tkp">+${t.pts} điểm khi kết thúc ván</div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>{ const r=chipRect(pi), b=el.getBoundingClientRect(); if(r&&FXMODE!=='off'){ el.animate([{transform:'translate(-50%,0) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${(r.left+r.width/2)-(b.left+b.width/2)}px),${(r.top+r.height/2)-(b.top+b.height/2)}px) scale(.15)`,opacity:.2}],{duration:650,easing:'cubic-bezier(.5,0,.6,1)',fill:'forwards'}).onfinish=()=>el.remove(); } else el.remove(); }, 2600);
+  setTimeout(()=>{ if(el.isConnected) el.remove(); }, 3600); }
 
 /* ----- Hộp thoại ----- */
 function showModal(title, bodyHTML, buttons, opts){
