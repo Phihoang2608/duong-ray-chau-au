@@ -2939,7 +2939,7 @@ function bind(){
   if (STANDALONE && $('#hubBtn')) $('#hubBtn').style.display='';
   refreshResume();
   $('#startBtn').onclick=startLocal;
-  $('#createBtn').onclick=createRoom;
+  $('#createBtn').onclick=()=>createRoom();
   $('#joinBtn').onclick=()=>askJoin('');
   document.addEventListener('pointerdown', ()=>SFX.init(), {once:false});
 }
@@ -2957,6 +2957,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
       Object.keys(G.initial||{}).forEach(pi=>{ const p=G.players[pi]; if (p.peer && p.peer!==NET.myPeer && NET.absentFor(p.peer)>15000){ botInitialPick(+pi); afterChange(); } });
       if (!UIS.botT) scheduleBots(); } }, 2000);
   const h=(location.hash||'').match(/^#p-([a-z0-9]{4,6})$/i); if (h) askJoin(h[1].toUpperCase());
+  const g=(location.hash||'').match(/^#go-(create|local|join|rules)$/);
+  if(g){ setTimeout(()=>{ const b={create:'#createBtn',local:'#startBtn',join:'#joinBtn'}[g[1]]; if(g[1]==='rules') showRules(); else if($(b)) $(b).click(); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} },400); }
 });
 
 document.addEventListener('DOMContentLoaded', ()=>{
