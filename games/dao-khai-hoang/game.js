@@ -52,11 +52,15 @@ const KH = (()=>{
     E.forEach((e,i)=>{ if(own[i]){ dfs(e.a,new Set(),0); dfs(e.b,new Set(),0); } }); return best; }
   function updateAwards(S){ const n=S.seats.length;
     S.P.forEach((P,i)=>P.lr=longestFor(S,i));
-    const cur=S.longest; let best=cur>=0?S.P[cur].lr:4, who=cur; if(cur>=0&&S.P[cur].lr<5){ who=-1; best=4; }
-    S.P.forEach((P,i)=>{ if(P.lr>best){ best=P.lr; who=i; } });
-    if (who!==cur && who>=0){ S.log.unshift(S.seats[who].name+' giành Đường dài nhất ('+best+' đoạn).'); ev(S,{k:'award',seat:who,a:'road'}); } S.longest=who;
+    // Đường dài nhất: từ 5 đoạn; người đang giữ chỉ mất khi có người dài HƠN, hoặc đường bị cắt. Nếu bị cắt mà nhiều người bằng nhau dài nhất thì tạm không ai giữ.
+    const cur=S.longest, L=S.P.map(P=>P.lr), mx=Math.max(...L); let who, best=mx;
+    if (cur>=0 && L[cur]>=5 && L[cur]>=mx) who=cur;
+    else { const top=[]; L.forEach((l,i)=>{ if(mx>=5&&l===mx) top.push(i); }); who=top.length===1?top[0]:-1; }
+    if (who!==cur && who>=0){ S.log.unshift(S.seats[who].name+' giành Đường dài nhất ('+best+' đoạn)'+(cur>=0?' từ '+S.seats[cur].name:'')+'.'); ev(S,{k:'award',seat:who,a:'road'}); }
+    else if (who!==cur && cur>=0){ S.log.unshift(S.seats[cur].name+' mất Đường dài nhất vì đường bị cắt.'); }
+    S.longest=who;
     const ca=S.largest; let kb=ca>=0?S.P[ca].knights:2, kw=ca; S.P.forEach((P,i)=>{ if(P.knights>kb){ kb=P.knights; kw=i; } });
-    if (kw!==ca){ S.log.unshift(S.seats[kw].name+' giành Quân đội mạnh nhất ('+kb+' hiệp sĩ).'); ev(S,{k:'award',seat:kw,a:'army'}); } S.largest=kw; }
+    if (kw!==ca){ S.log.unshift(S.seats[kw].name+' giành Quân đội mạnh nhất ('+kb+' hiệp sĩ)'+(ca>=0?' từ '+S.seats[ca].name:'')+'.'); ev(S,{k:'award',seat:kw,a:'army'}); } S.largest=kw; }
   function vp(S,i,hidden){ const P=S.P[i]; let v=0; S.vo.forEach(o=>{ if(o&&o.p===i) v+=o.city?2:1; }); if(S.longest===i) v+=2; if(S.largest===i) v+=2; if(hidden) v+=P.dev.filter(d=>d==='vp').length+P.newDev.filter(d=>d==='vp').length; return v; }
   function checkWin(S,t){ const i=S.turn; if(vp(S,i,true)>=KH_WIN){ S.phase='over'; S.winner=i; S.tEnd=t; S.log.unshift(S.seats[i].name+' đạt '+vp(S,i,true)+' điểm và chiến thắng!'); ev(S,{k:'over'}); return true; } return false; }
   function produce(S,num){ const got=S.seats.map(()=>[0,0,0,0,0]);

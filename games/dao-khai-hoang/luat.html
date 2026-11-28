@@ -80,7 +80,7 @@ table.t tr:nth-child(even) td{background:#fbf0d8}
 .cd b{display:block;font:800 18px "KhFont",sans-serif;color:#5a330f}
 .cd i{font-style:normal;color:#8a5a2b;font-size:14px}
 .awards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.aw{display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:14px;background:#fffaf0;border:2px solid #e0b264;max-width:460px}
+.aw{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;border-radius:14px;background:#fffaf0;border:2px solid #e0b264;flex:1 1 420px}
 .aw img{width:96px;flex:none}
 .prob{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:6px;align-items:end;height:180px;padding:10px;border-radius:14px;background:#5c3414;border:3px solid #2e1809}
 .prob div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
@@ -333,10 +333,28 @@ footer{text-align:center;color:#fff;text-shadow:0 1px 3px #000;font-size:14px}
     <tr><td><img class="r" src="assets/award-army.webp" alt=""> Quân đội mạnh nhất</td><td>2</td><td>Từ 3 Hiệp sĩ đã dùng trở lên, nhiều hơn tất cả</td></tr>
     <tr><td><img class="r" src="assets/vp-coin.webp" alt=""> Thẻ Điểm thưởng</td><td>1</td><td>Mỗi thẻ</td></tr>
   </table></div>
+  <h3>Hai thẻ thưởng +2 điểm có thể bị cướp</h3>
+  <p>Hai thẻ này không thuộc về ai mãi mãi. Ai vượt lên thì <b>giành luôn thẻ</b> từ tay người đang giữ, kể cả giữa ván. Người mất thẻ bị trừ 2 điểm, người giành được cộng 2 điểm ngay.</p>
   <div class="awards">
-    <div class="aw"><img src="assets/award-road.webp" alt=""><div><b class="kf">Đường dài nhất</b><br>Chuỗi đường liên tục, chỉ tính nhánh dài nhất, bị cắt nếu có nhà hoặc thành phố người khác chen giữa. Ai vượt thì lấy giải, bằng nhau thì người đang giữ vẫn giữ.</div></div>
-    <div class="aw"><img src="assets/award-army.webp" alt=""><div><b class="kf">Quân đội mạnh nhất</b><br>Ai dùng nhiều Hiệp sĩ hơn thì lấy giải, bằng nhau thì người đang giữ vẫn giữ.</div></div>
+    <div class="aw"><img src="assets/award-road.webp" alt=""><div><b class="kf">Đường dài nhất</b>
+      <ul style="margin:4px 0 0;padding-left:18px">
+        <li>Người đầu tiên có <b>chuỗi đường liền nhau từ 5 đoạn</b> nhận thẻ.</li>
+        <li>Chỉ tính một mạch dài nhất, không cộng các nhánh rẽ.</li>
+        <li>Ai làm được chuỗi <b>dài hơn</b> (không phải bằng) thì giành thẻ.</li>
+        <li>Nhà hoặc thành phố của đối thủ xây chen vào giữa sẽ <b>cắt đứt</b> chuỗi đường.</li>
+        <li>Bị cắt mà không còn ai dài nhất (nhiều người bằng nhau) thì thẻ tạm để ra ngoài, chờ ai vượt lên.</li>
+      </ul></div></div>
+    <div class="aw"><img src="assets/award-army.webp" alt=""><div><b class="kf">Quân đội mạnh nhất</b>
+      <ul style="margin:4px 0 0;padding-left:18px">
+        <li>Người đầu tiên <b>đã dùng 3 thẻ Hiệp sĩ</b> nhận thẻ.</li>
+        <li>Chỉ tính Hiệp sĩ đã lật ra dùng, Hiệp sĩ còn giữ trên tay không tính.</li>
+        <li>Ai dùng <b>nhiều hơn</b> người đang giữ thì giành thẻ. Bằng nhau thì người đang giữ vẫn giữ.</li>
+        <li>Thẻ này không bao giờ bị mất vì lý do khác.</li>
+      </ul></div></div>
   </div>
+  <div class="vd">An đang giữ Đường dài nhất với 5 đoạn. Bình xây tới đoạn thứ 6 và giành thẻ: Bình +2 điểm, An −2 điểm. Lượt sau An đặt nhà ngay giữa đường của Bình, chuỗi của Bình bị cắt còn 4 đoạn. Lúc này An có 5 đoạn là dài nhất duy nhất nên An lấy lại thẻ.</div>
+  <div class="vd">Cường giữ Quân đội mạnh nhất với 3 Hiệp sĩ. Dũng dùng Hiệp sĩ thứ 3: bằng nhau nên Cường vẫn giữ. Dũng dùng thêm Hiệp sĩ thứ 4 thì giành thẻ.</div>
+  <div class="game"><b class="kf">Trong game:</b> máy tự tính và chuyển thẻ ngay. Màn hình hiện thông báo "giành ĐƯỜNG DÀI NHẤT!" hoặc "giành QUÂN ĐỘI MẠNH NHẤT!", huy hiệu bay sang người mới, nhật ký ghi rõ giành từ ai. Nếu nhờ thẻ thưởng mà bạn đủ 10 điểm trong lượt của mình thì thắng ngay.</div>
   <div class="vd">Bạn có 3 nhà (3), 2 thành phố (4), Đường dài nhất (2) và 1 thẻ Điểm thưởng (1). Tổng 10 điểm, bạn thắng ngay trong lượt của mình.</div>
 </section>
 

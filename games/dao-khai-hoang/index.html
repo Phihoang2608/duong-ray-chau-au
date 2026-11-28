@@ -14,7 +14,7 @@
 <script src="../../core/effects.js"></script>
 <script src="../../core/table.js?v=20261127fix"></script>
 <script src="../../core/cards.js"></script>
-<script src="game.js?v=20261128f"></script>
+<script src="game.js?v=20261128aw"></script>
 <script src="assets/imgs.js?v=2026112823y"></script>
 <script>
 document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('khhid',document.hidden));
@@ -1054,7 +1054,7 @@ Table.init({ id:'dao-khai-hoang', prefix:'kh', title:'Đảo Khai Hoang', taglin
   +sec('Ra 7 và kẻ cướp',`<p>Đổ ra <b>7</b> thì không ai nhận tài nguyên. Ai đang giữ <b>hơn 7 lá</b> mất đi một nửa. Sau đó người đổ dời <b>kẻ cướp</b> sang ô khác: ô đó ngừng sản xuất, và bạn lấy ngẫu nhiên 1 lá của một người có nhà cạnh ô đó.</p>`)
   +sec('Đổi hàng',`<div class="krg"><div class="kri3"><b>4 : 1</b><span>Với ngân hàng<br><small>4 lá cùng loại lấy 1 lá bất kỳ</small></span></div><div class="kri3"><b>3 : 1</b><span>Cảng chung<br><small>có nhà ở cảng thì đổi 3 lá</small></span></div><div class="kri3">${I(2)}<b>2 : 1</b><span>Cảng riêng<br><small>2 lá đúng loại ghi trên cảng</small></span></div></div><p>Bấm <b>Đổi cảng</b> để đổi với ngân hàng. Bấm <b>Chợ</b> để gửi yêu cầu đổi với người chơi khác: chọn lá đưa, lá nhận rồi gửi; người nhận bấm Đồng ý hoặc Từ chối (lời mời hết hạn sau 30 giây).</p>`)
   +sec('Thẻ phát triển',`<div class="krd">${[['knight','Hiệp sĩ','14 thẻ · dời kẻ cướp, góp vào Quân đội mạnh nhất'],['road','Làm đường','2 thẻ · xây 2 đường miễn phí'],['plenty','Được mùa','2 thẻ · nhận ngay 2 tài nguyên tuỳ chọn'],['mono','Độc quyền','2 thẻ · gom hết 1 loại tài nguyên của mọi người'],['vp','Điểm thưởng','5 thẻ · +1 điểm, không cần dùng']].map(([k,n,d])=>`<div><span class="kcd">${KHART.devCard(k,true)}</span><b>${n}</b><small>${d}</small></div>`).join('')}</div><p>Mỗi lượt dùng tối đa <b>1 thẻ</b> (trừ Điểm thưởng) và không được dùng thẻ vừa mua trong lượt đó.</p>`)
-  +sec('Giải thưởng +2 điểm',`<p><b>Đường dài nhất:</b> chuỗi đường liên tục từ 5 đoạn trở lên; ai dài hơn sẽ cướp giải. <b>Quân đội mạnh nhất:</b> ai đã dùng từ 3 hiệp sĩ và nhiều hơn người khác.</p>`)
+  +sec('Giải thưởng +2 điểm',`<p><b>Đường dài nhất:</b> chuỗi đường liên tục từ 5 đoạn trở lên; ai dài hơn sẽ cướp giải ngay, nhà đối thủ chen giữa sẽ cắt đứt đường. <b>Quân đội mạnh nhất:</b> ai đã dùng từ 3 hiệp sĩ và <b>nhiều hơn</b> người đang giữ sẽ cướp giải (bằng nhau thì người cũ giữ). Người mất giải bị trừ 2 điểm.</p>`)
   +sec('Mẹo nhỏ',`<p>Đặt nhà ở nơi có nhiều loại tài nguyên và số có nhiều chấm (6, 8, 5, 9). Chiếm cảng hợp với tài nguyên mình hay có. Giữ không quá 7 lá khi chưa chắc ra 7 để khỏi mất bài.</p>`)
   +`<p style="text-align:center;margin:14px 0 4px"><a href="luat.html" target="_blank" style="display:inline-block;padding:8px 18px;border-radius:12px;background:linear-gradient(180deg,#fbe3a0,#e0a645 55%,#c98b2c);border:2px solid #5a330f;color:#3a210c;font-weight:800;text-decoration:none">📖 Xem luật chi tiết</a><a href="tom-tat.html" target="_blank" style="display:inline-block;margin:4px;padding:8px 18px;border-radius:12px;background:linear-gradient(180deg,#fbe3a0,#e0a645 55%,#c98b2c);border:2px solid #5a330f;color:#3a210c;font-weight:800;text-decoration:none">📋 Tóm tắt</a><a href="Luat-choi-Dao-Khai-Hoang.pdf" download style="display:inline-block;margin:4px;padding:8px 18px;border-radius:12px;background:linear-gradient(180deg,#fbe3a0,#e0a645 55%,#c98b2c);border:2px solid #5a330f;color:#3a210c;font-weight:800;text-decoration:none">⬇ Tải PDF</a></p>`
   +`</div>`; })() });
