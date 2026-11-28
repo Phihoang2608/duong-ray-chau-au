@@ -13,6 +13,25 @@
 <link rel="manifest" href="../../manifest.json">
 <link rel="apple-touch-icon" href="../../pwa/apple-icon.png">
 <title>Thương Nhân Đá Quý | Phi Board Games</title>
+<style id="dq-lobby">
+/* ===== Sảnh Thương Nhân Đá Quý: nền tranh bìa, khung nhung đỏ hoa văn, viền vàng ===== */
+body:not(.ingame) .tb-screen{position:relative;background:#2a0a14 url(assets/cover-16x9.jpg) center/cover no-repeat}
+body:not(.ingame) .tb-screen::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(40,6,18,.35),rgba(24,4,10,.82) 80%);pointer-events:none}
+body:not(.ingame) #tb-box{position:relative;background:linear-gradient(170deg,rgba(122,26,54,.9),rgba(70,9,31,.94) 75%),url(assets/damask.svg) center/120px repeat,#5a0f25!important;
+  border:2px solid #d9b25a!important;border-radius:20px!important;color:#fbe9c8;
+  box-shadow:inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 0 6px rgba(246,214,128,.4),0 22px 60px rgba(0,0,0,.7)!important}
+body:not(.ingame) #tb-box h2{color:#f6d680!important;text-shadow:0 3px 0 #2a0610,0 0 16px rgba(246,214,128,.3);font-size:36px}
+body:not(.ingame) #tb-box h2::before{content:"";display:block;height:38px;margin:0 auto 6px;background:url(assets/gem-0.webp) calc(50% - 88px) 50%/36px no-repeat,url(assets/gem-1.webp) calc(50% - 44px) 50%/36px no-repeat,url(assets/gem-2.webp) 50% 50%/36px no-repeat,url(assets/gem-3.webp) calc(50% + 44px) 50%/36px no-repeat,url(assets/gem-4.webp) calc(50% + 88px) 50%/36px no-repeat;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5))}
+body:not(.ingame) #tb-box .sub{color:#f3dcb4!important;font-style:italic}
+body:not(.ingame) #tb-box label{color:#f6d680!important}
+body:not(.ingame) #tb-box input,body:not(.ingame) #tb-box select{background:#fbf1d8!important;color:#2b2116!important;border:1.5px solid #d9b25a!important}
+body:not(.ingame) #tb-box input::placeholder{color:#8a7a62}
+body:not(.ingame) #tb-box .tbtn{background:linear-gradient(180deg,#8b2340,#5a0f25)!important;color:#fbe9b8!important;border:1.5px solid #d9b25a!important;border-radius:999px!important;font-weight:bold}
+body:not(.ingame) #tb-box .tbtn.pri{background:linear-gradient(180deg,#fbe7a8,#e3b553 55%,#b98522)!important;color:#3a1a08!important;border-color:#7a5310!important;box-shadow:inset 0 1px 0 #fff6cf,0 3px 0 #4a2a0c!important}
+body:not(.ingame) #tb-box .tbtn:hover{filter:brightness(1.12)}
+body:not(.ingame) #tb-box .tb-or{color:#e9cf98!important}
+@media (max-width:480px){body:not(.ingame) #tb-box h2{font-size:28px}}
+</style>
 </head>
 <body>
 <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
