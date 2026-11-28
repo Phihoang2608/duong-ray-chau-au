@@ -19,7 +19,7 @@
 <script src="../../core/room.js"></script>
 <script src="../../core/audio.js"></script>
 <script src="../../core/effects.js"></script>
-<script src="../../core/table.js"></script>
+<script src="../../core/table.js?v=20261128dice"></script>
 <script src="../../core/cards.js"></script>
 <script src="game.js"></script>
 <script src="assets/cards.js"></script>
@@ -882,7 +882,7 @@ body.online .dqchatb{display:flex!important}
  .bank .tok{width:58px!important;height:58px!important}
 }
 `;
-Table.init({ id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
+Table.init({ diceOrder:true, id:'da-quy', prefix:'dq', title:'Thương Nhân Đá Quý', tagline:'Gom đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm',
   minPlayers:2, maxPlayers:4, botOptions:[1,2,3], defaultBots:1, turnLimit:60, botDelay:600, css:CSS,
   difficulty:true, newGame:DQ.newGame, apply:DQ.apply, tick:DQ.tick, whoActs:DQ.whoActs, botAction:DQ.botAction, timeoutAction:DQ.timeoutAction,
   render:DQUI.render, tickView:DQUI.tickView,

@@ -1425,7 +1425,17 @@ function newGame(seats){
     const offer = [longs.pop(), ...G.ticketDeck.splice(0,3)];
     if (p.isBot) botKeepInitial(pi, offer); else G.initial[pi] = offer;
   });
-  G.cur = Math.floor(rand()*players.length);
+  /* Tung xúc xắc chọn thứ tự đi: tổng 2 xúc xắc cao nhất đi trước, hòa thì tung lại */
+  { const n=players.length, R=players.map(()=>[]), d=()=>1+Math.floor(Math.random()*6);
+    const sums=i=>R[i].map(r=>r[0]+r[1]); const cmp=(a,b)=>{ const A=sums(a),B=sums(b); for(let k=0;k<Math.max(A.length,B.length);k++){ const x=A[k]||0,y=B[k]||0; if(x!==y) return y-x; } return 0; };
+    let grp=[[...Array(n).keys()]];
+    for(let guard=0;guard<20;guard++){ let again=false; const next=[];
+      grp.forEach(g=>{ if(g.length<2){ next.push(g); return; } g.forEach(i=>R[i].push([d(),d()])); g.sort(cmp);
+        let k=0; while(k<g.length){ let j=k+1; while(j<g.length&&cmp(g[k],g[j])===0) j++; const sub=g.slice(k,j); next.push(sub); if(sub.length>1) again=true; k=j; } });
+      grp=next; if(!again) break; }
+    G.order=grp.flat(); G.ordDice={id:Date.now()+'-'+Math.random().toString(36).slice(2,7), rows:G.order.map(i=>({name:players[i].name, p:i, r:R[i]}))}; }
+  G.cur = G.order[0];
+  log('🎲 Tung xúc xắc chọn lượt: '+G.order.map((i,k)=>(k+1)+'. '+players[i].name).join(', ')+'.', 'sys');
   log(HAS_ST?'Ván mới bắt đầu! Mỗi người có 45 toa tàu và 3 nhà ga.':'Ván mới bắt đầu! Mỗi người có 45 toa tàu.', 'sys');
   if (!Object.keys(G.initial).length) startPlay();
 }
@@ -1562,7 +1572,7 @@ function endTurn(){
   if (G.passes >= G.players.length*2){ endGame(); return; }
   if (G.finalTurns!=null){ G.finalTurns--; if (G.finalTurns<=0){ endGame(); return; } }
   else if (p.trains<=2){ G.finalTurns=G.players.length; log(`${p.name} chỉ còn ${p.trains} toa — bắt đầu VÒNG CUỐI, mỗi người được đi thêm 1 lượt!`, 'warn'); pushFx({k:'final', p:G.cur}); }
-  G.cur=(G.cur+1)%G.players.length; G.turnNo++;
+  { const O=G.order&&G.order.length===G.players.length?G.order:null; G.cur = O ? O[(O.indexOf(G.cur)+1)%O.length] : (G.cur+1)%G.players.length; } G.turnNo++;
   pushFx({k:'turn', p:G.cur});
 }
 
@@ -1659,7 +1669,7 @@ function snapshot(maxLog){
     pl:G.players.map(p=>({n:p.name, b:p.isBot?1:0, pe:p.peer, h:CARDS.map(c=>p.hand[c]), t:p.trains, s:p.stations, sc:p.score, k:p.tickets})),
     in:G.initial, pd:G.pending&&{p:G.pending.pi, t:G.pending.tickets, m:G.pending.min},
     tu:G.tunnel&&{p:G.tunnel.pi, r:G.tunnel.rid, o:G.tunnel.opt, rv:G.tunnel.rev.map(c=>CARDS.indexOf(c)), x:G.tunnel.extra},
-    lg:G.log.slice(0, maxLog==null?8:maxLog).map(l=>[l.msg,l.cls]), fx:G.fx.slice(-6), rs:G.results, ud:undoInfo() };
+    lg:G.log.slice(0, maxLog==null?8:maxLog).map(l=>[l.msg,l.cls]), fx:G.fx.slice(-6), rs:G.results, ud:undoInfo(), or:G.order, od:G.ordDice };
 }
 function restore(s){
   const players = s.pl.map((q,i)=>{ const hand={}; CARDS.forEach((c,j)=>hand[c]=q.h[j]);
@@ -1671,7 +1681,7 @@ function restore(s){
     ticketDeck:new Array(s.td).fill('?'), cur:s.cu, drawn:s.dr, finalTurns:s.ft, phase:s.ph, initial:s.in||{},
     pending: s.pd ? {pi:s.pd.p, tickets:s.pd.t, min:s.pd.m} : null,
     tunnel: s.tu ? {pi:s.tu.p, rid:s.tu.r, opt:s.tu.o, rev:s.tu.rv.map(i=>CARDS[i]), extra:s.tu.x} : null,
-    log:(s.lg||[]).map(([msg,cls])=>({msg,cls})), fx:s.fx||[], fxN:(s.fx&&s.fx.length)?s.fx[s.fx.length-1].n:0, results:s.rs, ver:s.v, passes:0, replica:true, undoInfo:s.ud||null };
+    log:(s.lg||[]).map(([msg,cls])=>({msg,cls})), fx:s.fx||[], fxN:(s.fx&&s.fx.length)?s.fx[s.fx.length-1].n:0, results:s.rs, ver:s.v, passes:0, replica:true, undoInfo:s.ud||null, order:s.or||null, ordDice:s.od||null };
   return old;
 }
 
@@ -2343,7 +2353,60 @@ function ticketHTML(t, ok, hue, extra){
   </div>`;
 }
 function myUndo(){ if (!G || ME<0) return null; const u = NET.mode==='client' ? G.undoInfo : undoInfo(); return u && u.s===ME ? u : null; }
-function render(){ if(!G) return; MUSIC.sync((G.phase==='play'||G.phase==='pick') && $('#menu').classList.contains('hidden')); if (UIS.focus && (ME<0 || !G.players[ME] || !G.players[ME].tickets.includes(UIS.focus.id))) UIS.focus=null; updateTurnClock(); renderPlayers(); renderMap(); renderSide(); ensureModal(); processFx(); checkTickets(); }
+/* ===== Bảng tung xúc xắc chọn lượt đi ===== */
+let diceShown='';
+  function dieSVG(v,cls){ const P={1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[26,26],[74,26],[50,50],[26,74],[74,74]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]}[v];
+  return `<svg viewBox="0 0 100 100" class="${cls||''}"><rect x="5" y="5" width="90" height="90" rx="20" fill="#fffdf6" stroke="#3a2412" stroke-width="5"/><rect x="11" y="11" width="78" height="30" rx="14" fill="#fff" opacity=".7"/>${P.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9" fill="${v===1?'#c62828':'#2b1a0c'}"/>`).join('')}</svg>`; }
+function showDice(S){
+  if (!S||!S.ordDice||S.phase==='idle'||diceShown===S.ordDice.id) return; diceShown=S.ordDice.id;
+  const left=5200-(Date.now()-(+String(S.ordDice.id).split('-')[0]||0)); if (left<800) return;
+  if (!document.getElementById('dice-css')){ const st=document.createElement('style'); st.id='dice-css'; st.textContent=`
+#dice-ov{position:fixed;inset:0;z-index:99990;display:flex;align-items:center;justify-content:center;background:rgba(10,6,2,.72);backdrop-filter:blur(3px);animation:dov .3s both;padding:12px}
+@keyframes dov{from{opacity:0}}
+#dice-ov .dbox{width:min(480px,100%);max-height:100%;overflow:auto;background:linear-gradient(180deg,#fff7e2,#f1dfb4);border:3px solid #6b4220;border-radius:20px;box-shadow:0 0 0 4px #e8c06a,0 20px 50px rgba(0,0,0,.6);padding:16px 16px 12px;font-family:"Times New Roman",serif;color:#2b1a0c;text-align:center}
+#dice-ov h3{margin:0 0 10px;font-size:22px;color:#7a1f10}
+#dice-ov .drow{display:flex;align-items:center;gap:10px;padding:7px 10px;margin:6px 0;border-radius:12px;background:#fffdf5;border:1.5px solid #d8b878;transition:transform .45s,background .3s}
+#dice-ov .drow .rk{flex:none;width:30px;height:30px;border-radius:50%;background:#bfa678;color:#fff;font-weight:bold;display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transform:scale(.3);transition:.35s}
+#dice-ov.done .drow .rk{opacity:1;transform:none}
+#dice-ov.done .drow.r1{background:#fff2b8;border-color:#e0a62c}#dice-ov.done .drow.r1 .rk{background:#d48a0a}
+#dice-ov .drow .nm{flex:1;text-align:left;font-weight:bold;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dice-ov .drow .nm i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.35)}
+#dice-ov .dd{display:flex;gap:4px;align-items:center}
+#dice-ov .dd svg{width:34px;height:34px}
+#dice-ov .rolling .dd svg{animation:dshake .18s infinite alternate}
+@keyframes dshake{from{transform:rotate(-14deg) translateY(-2px)}to{transform:rotate(14deg) translateY(2px)}}
+#dice-ov .sm{font-weight:bold;min-width:30px;font-size:20px;color:#7a1f10;text-align:right}
+#dice-ov .tie{display:block;font-size:11px;line-height:1.1;color:#8a5a2b;font-style:italic;font-weight:normal}
+#dice-ov .lbl{font-size:13px;color:#8a5a2b;opacity:0;transition:.3s}
+#dice-ov.done .lbl{opacity:1}
+#dice-ov .go{margin-top:8px;padding:8px 22px;border-radius:999px;border:2px solid #6b4220;background:linear-gradient(180deg,#ffe9a8,#e0a645);font:bold 16px "Times New Roman",serif;color:#3a1a08;cursor:pointer}
+@media (max-height:500px){#dice-ov .dbox{padding:10px}#dice-ov h3{font-size:18px;margin-bottom:4px}#dice-ov .drow{padding:4px 8px;margin:4px 0}#dice-ov .dd svg{width:26px;height:26px}}
+`; document.head.appendChild(st); }
+  const old=document.getElementById('dice-ov'); if(old) old.remove();
+  const rows=S.ordDice.rows; const n=rows.length;
+  const shuf=[...Array(n).keys()].sort(()=>Math.random()-.5); // hiện lúc tung theo thứ tự lộn xộn
+  const ov=document.createElement('div'); ov.id='dice-ov';
+  ov.innerHTML=`<div class="dbox"><h3>🎲 Tung xúc xắc chọn lượt đi</h3><div class="dlist" style="position:relative"></div><div class="lbl">Ai tổng cao nhất đi trước. Bằng điểm thì tung lại.</div><button class="go">Bắt đầu chơi</button></div>`;
+  document.body.appendChild(ov);
+  const list=ov.querySelector('.dlist');
+  rows.forEach((x,k)=>{ const el=document.createElement('div'); el.className='drow rolling'; el.dataset.k=k;
+    el.innerHTML=`<span class="rk">${k+1}</span><span class="nm">${esc(x.name)}</span><span class="dd">${dieSVG(1)}${dieSVG(1)}</span><span class="sm">?</span>`;
+    list.appendChild(el); });
+  const els=[...list.children]; const H=els[0]?els[0].getBoundingClientRect().height+12:52;
+  els.forEach((el,k)=>{ el.style.transform=`translateY(${(shuf.indexOf(k)-k)*H}px)`; });
+  
+  let tk=0; const spin=setInterval(()=>{ tk++; els.forEach(el=>{ if(!el.classList.contains('rolling')) return; el.querySelector('.dd').innerHTML=dieSVG(1+Math.floor(Math.random()*6))+dieSVG(1+Math.floor(Math.random()*6)); }); },110);
+  els.forEach((el,k)=>{ setTimeout(()=>{ const r=rows[k].r, last=r[r.length-1]; el.classList.remove('rolling'); el.querySelector('.dd').innerHTML=dieSVG(last[0])+dieSVG(last[1]);
+    el.querySelector('.sm').innerHTML=r.length>1?`<span class="tie">${r.slice(0,-1).map(a=>a[0]+a[1]).join(' → ')} hòa, tung lại →</span> ${last[0]+last[1]}`:(last[0]+last[1]); }, 900+shuf.indexOf(k)*280); });
+  const tDone=900+n*280+250;
+  setTimeout(()=>{ clearInterval(spin); els.forEach(el=>{ el.style.transform='translateY(0)'; }); els[0]&&els[0].classList.add('r1');
+    els.forEach((el,k)=>{ el.querySelector('.rk').textContent=k+1; el.querySelector('.nm').insertAdjacentHTML('beforeend',` <small style="font-weight:normal;color:#8a5a2b">— đi thứ ${k+1}</small>`); });
+    ov.classList.add('done'); }, tDone);
+  const close=()=>{ clearInterval(spin); ov.style.transition='opacity .3s'; ov.style.opacity='0'; setTimeout(()=>ov.remove(),300); };
+  ov.querySelector('.go').onclick=close; setTimeout(close, Math.max(tDone+1800, left-200));
+}
+
+function render(){ if(!G) return; MUSIC.sync((G.phase==='play'||G.phase==='pick') && $('#menu').classList.contains('hidden')); if (UIS.focus && (ME<0 || !G.players[ME] || !G.players[ME].tickets.includes(UIS.focus.id))) UIS.focus=null; updateTurnClock(); renderPlayers(); renderMap(); renderSide(); ensureModal(); processFx(); checkTickets(); try{ showDice(G); }catch(e){} }
 
 /* ----- Thu phóng bản đồ ----- */
 UIS.zoom=100;

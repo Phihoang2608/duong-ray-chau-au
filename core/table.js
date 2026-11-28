@@ -271,15 +271,86 @@ const Table = (()=>{
   }
 
   /* ---------- Ván chơi ---------- */
+
+  /* ===== Tung xúc xắc chọn thứ tự đi (bật bằng CFG.diceOrder) ===== */
+  const DICE_MS=5200; let diceShown='';
+  function rollOrder(n){ const R=[...Array(n)].map(()=>[]); const d=()=>1+Math.floor(Math.random()*6);
+    const sum=i=>R[i].map(r=>r[0]+r[1]); const cmp=(a,b)=>{ const A=sum(a),B=sum(b); for(let k=0;k<Math.max(A.length,B.length);k++){ const x=A[k]||0,y=B[k]||0; if(x!==y) return y-x; } return 0; };
+    let grp=[[...Array(n).keys()]];
+    for(let guard=0;guard<20;guard++){ let again=false; const next=[];
+      grp.forEach(g=>{ if(g.length<2){ next.push(g); return; } g.forEach(i=>R[i].push([d(),d()])); g.sort(cmp);
+        let k=0; while(k<g.length){ let j=k+1; while(j<g.length && cmp(g[k],g[j])===0) j++; const sub=g.slice(k,j); next.push(sub); if(sub.length>1) again=true; k=j; } });
+      grp=next; if(!again) break; }
+    return {order:grp.flat(), rolls:R}; }
+  function newGameDice(seats, t, prev){
+    if (!CFG.diceOrder) return CFG.newGame(seats, t, prev);
+    const R=rollOrder(seats.length); const ordered=R.order.map(i=>seats[i]);
+    const S=CFG.newGame(ordered, t, prev);
+    if (typeof S.turn==='number') S.turn=0; if ('first' in S) S.first=0;
+    if (Array.isArray(S.log) && typeof S.log[0]==='string' && /đi trước/.test(S.log[0])) S.log[0]=S.log[0].replace(/—\s*[^—]*đi trước\./,'— '+ordered[0].name+' đi trước.');
+    S.ordDice={id:t+'-'+Math.random().toString(36).slice(2,7), rows:R.order.map(i=>({name:seats[i].name, color:seats[i].color||'', r:R.rolls[i]}))};
+    S.diceUntil=t+DICE_MS; if (typeof S.turnAt==='number') S.turnAt=t+DICE_MS;
+    if (Array.isArray(S.log)) S.log.unshift('🎲 Tung xúc xắc chọn lượt: '+S.ordDice.rows.map((x,k)=>(k+1)+'. '+x.name+' ('+x.r.map(a=>a[0]+a[1]).join('→')+')').join(', ')+'.');
+    return S; }
+  function dieSVG(v,cls){ const P={1:[[50,50]],2:[[28,28],[72,72]],3:[[26,26],[50,50],[74,74]],4:[[28,28],[72,28],[28,72],[72,72]],5:[[26,26],[74,26],[50,50],[26,74],[74,74]],6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]}[v];
+    return `<svg viewBox="0 0 100 100" class="${cls||''}"><rect x="5" y="5" width="90" height="90" rx="20" fill="#fffdf6" stroke="#3a2412" stroke-width="5"/><rect x="11" y="11" width="78" height="30" rx="14" fill="#fff" opacity=".7"/>${P.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9" fill="${v===1?'#c62828':'#2b1a0c'}"/>`).join('')}</svg>`; }
+  function showDice(S){
+    if (!S||!S.ordDice||diceShown===S.ordDice.id) return; diceShown=S.ordDice.id;
+    const left=(S.diceUntil||0)-now(); if (left<800) return;
+    if (!document.getElementById('dice-css')){ const st=document.createElement('style'); st.id='dice-css'; st.textContent=`
+#dice-ov{position:fixed;inset:0;z-index:99990;display:flex;align-items:center;justify-content:center;background:rgba(10,6,2,.72);backdrop-filter:blur(3px);animation:dov .3s both;padding:12px}
+@keyframes dov{from{opacity:0}}
+#dice-ov .dbox{width:min(480px,100%);max-height:100%;overflow:auto;background:linear-gradient(180deg,#fff7e2,#f1dfb4);border:3px solid #6b4220;border-radius:20px;box-shadow:0 0 0 4px #e8c06a,0 20px 50px rgba(0,0,0,.6);padding:16px 16px 12px;font-family:"Times New Roman",serif;color:#2b1a0c;text-align:center}
+#dice-ov h3{margin:0 0 10px;font-size:22px;color:#7a1f10}
+#dice-ov .drow{display:flex;align-items:center;gap:10px;padding:7px 10px;margin:6px 0;border-radius:12px;background:#fffdf5;border:1.5px solid #d8b878;transition:transform .45s,background .3s}
+#dice-ov .drow .rk{flex:none;width:30px;height:30px;border-radius:50%;background:#bfa678;color:#fff;font-weight:bold;display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transform:scale(.3);transition:.35s}
+#dice-ov.done .drow .rk{opacity:1;transform:none}
+#dice-ov.done .drow.r1{background:#fff2b8;border-color:#e0a62c}#dice-ov.done .drow.r1 .rk{background:#d48a0a}
+#dice-ov .drow .nm{flex:1;text-align:left;font-weight:bold;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dice-ov .drow .nm i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.35)}
+#dice-ov .dd{display:flex;gap:4px;align-items:center}
+#dice-ov .dd svg{width:34px;height:34px}
+#dice-ov .rolling .dd svg{animation:dshake .18s infinite alternate}
+@keyframes dshake{from{transform:rotate(-14deg) translateY(-2px)}to{transform:rotate(14deg) translateY(2px)}}
+#dice-ov .sm{font-weight:bold;min-width:30px;font-size:20px;color:#7a1f10;text-align:right}
+#dice-ov .tie{display:block;font-size:11px;line-height:1.1;color:#8a5a2b;font-style:italic;font-weight:normal}
+#dice-ov .lbl{font-size:13px;color:#8a5a2b;opacity:0;transition:.3s}
+#dice-ov.done .lbl{opacity:1}
+#dice-ov .go{margin-top:8px;padding:8px 22px;border-radius:999px;border:2px solid #6b4220;background:linear-gradient(180deg,#ffe9a8,#e0a645);font:bold 16px "Times New Roman",serif;color:#3a1a08;cursor:pointer}
+@media (max-height:500px){#dice-ov .dbox{padding:10px}#dice-ov h3{font-size:18px;margin-bottom:4px}#dice-ov .drow{padding:4px 8px;margin:4px 0}#dice-ov .dd svg{width:26px;height:26px}}
+`; document.head.appendChild(st); }
+    const old=document.getElementById('dice-ov'); if(old) old.remove();
+    const rows=S.ordDice.rows; const n=rows.length;
+    const shuf=[...Array(n).keys()].sort(()=>Math.random()-.5); // hiện lúc tung theo thứ tự lộn xộn
+    const ov=document.createElement('div'); ov.id='dice-ov';
+    ov.innerHTML=`<div class="dbox"><h3>🎲 Tung xúc xắc chọn lượt đi</h3><div class="dlist" style="position:relative"></div><div class="lbl">Ai tổng cao nhất đi trước. Bằng điểm thì tung lại.</div><button class="go">Bắt đầu chơi</button></div>`;
+    document.body.appendChild(ov);
+    const list=ov.querySelector('.dlist');
+    rows.forEach((x,k)=>{ const el=document.createElement('div'); el.className='drow rolling'; el.dataset.k=k;
+      el.innerHTML=`<span class="rk">${k+1}</span><span class="nm">${esc(x.name)}</span><span class="dd">${dieSVG(1)}${dieSVG(1)}</span><span class="sm">?</span>`;
+      list.appendChild(el); });
+    const els=[...list.children]; const H=els[0]?els[0].getBoundingClientRect().height+12:52;
+    els.forEach((el,k)=>{ el.style.transform=`translateY(${(shuf.indexOf(k)-k)*H}px)`; });
+    try{ SFX&&SFX.init&&SFX.init(); }catch(e){}
+    let tk=0; const spin=setInterval(()=>{ tk++; els.forEach(el=>{ if(!el.classList.contains('rolling')) return; el.querySelector('.dd').innerHTML=dieSVG(1+Math.floor(Math.random()*6))+dieSVG(1+Math.floor(Math.random()*6)); }); },110);
+    els.forEach((el,k)=>{ setTimeout(()=>{ const r=rows[k].r, last=r[r.length-1]; el.classList.remove('rolling'); el.querySelector('.dd').innerHTML=dieSVG(last[0])+dieSVG(last[1]);
+      el.querySelector('.sm').innerHTML=r.length>1?`<span class="tie">${r.slice(0,-1).map(a=>a[0]+a[1]).join(' → ')} hòa, tung lại →</span> ${last[0]+last[1]}`:(last[0]+last[1]); }, 900+shuf.indexOf(k)*280); });
+    const tDone=900+n*280+250;
+    setTimeout(()=>{ clearInterval(spin); els.forEach(el=>{ el.style.transform='translateY(0)'; }); els[0]&&els[0].classList.add('r1');
+      els.forEach((el,k)=>{ el.querySelector('.rk').textContent=k+1; el.querySelector('.nm').insertAdjacentHTML('beforeend',` <small style="font-weight:normal;color:#8a5a2b">— đi thứ ${k+1}</small>`); });
+      ov.classList.add('done'); }, tDone);
+    const close=()=>{ clearInterval(spin); ov.style.transition='opacity .3s'; ov.style.opacity='0'; setTimeout(()=>ov.remove(),300); };
+    ov.querySelector('.go').onclick=close; setTimeout(close, Math.max(tDone+1800, left-200));
+  }
   function startGame(seats, mode){
     if (CFG.shuffleSeats!==false){ for(let i=seats.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [seats[i],seats[j]]=[seats[j],seats[i]]; } }
     const DL=ls.get('bg-diff')||'med'; seats.forEach(s=>{ if(s.bot&&!s.lvl) s.lvl=DL; });
-    MODE=mode; S=CFG.newGame(seats.map((s,i)=>Object.assign({color:COLORS[i%COLORS.length]},s)), now()); S.v=1; ME=Math.max(0,S.seats.findIndex(p=>!p.bot&&p.pid===PID)); if(S.seats[ME]&&S.seats[ME].bot) ME=S.seats.findIndex(p=>!p.bot);
-    if (S.seats&&S.seats[0]&&S.seats[0].name&&S.log&&Array.isArray(S.log)) S.log.unshift('Bốc thăm thứ tự: '+S.seats.map(p=>p.name).join(' → ')+'. '+S.seats[S.turn>=0?S.turn:0].name+' đi trước.');
+    MODE=mode; S=newGameDice(seats.map((s,i)=>Object.assign({color:COLORS[i%COLORS.length]},s)), now()); S.v=1; ME=Math.max(0,S.seats.findIndex(p=>!p.bot&&p.pid===PID)); if(S.seats[ME]&&S.seats[ME].bot) ME=S.seats.findIndex(p=>!p.bot);
+    if (!CFG.diceOrder && S.seats&&S.seats[0]&&S.seats[0].name&&S.log&&Array.isArray(S.log)) S.log.unshift('Bốc thăm thứ tự: '+S.seats.map(p=>p.name).join(' → ')+'. '+S.seats[S.turn>=0?S.turn:0].name+' đi trước.');
     document.body.classList.add('ingame'); setTop(); commit(); CFG.onStart && CFG.onStart();
   }
   function commit(){ S.v=(S.v||0)+1; if (MODE==='host'){ ROOM.presence(Object.assign({role:'host', name:myName(), pid:PID, lobby:false, st:S, now:Date.now()},acct())).catch(()=>{}); announce(); } draw(); }
-  function draw(){ if(!S) return; document.body.classList.add('ingame'); setTop(); CFG.render(S, ME, API); try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S,ME}); }catch(e){} }
+  function draw(){ if(!S) return; document.body.classList.add('ingame'); setTop(); CFG.render(S, ME, API); try{ showDice(S); }catch(e){} try{ window.PBG&&PBG.onState&&PBG.onState({id:CFG.id,title:CFG.title,code:CODE,link:CODE?inviteLink():null,mode:MODE,S,ME}); }catch(e){} }
   function act(a){
     SFX.init(); if (!S) return false;
     if (MODE==='watcher'){ toast('Bạn đang ở chế độ xem, không thể thực hiện lượt chơi'); return false; }
@@ -311,6 +382,7 @@ const Table = (()=>{
   setInterval(()=>{
     if (!S || MODE==='client' || MODE==='watcher') { if(S) CFG.render && CFG.tickView && CFG.tickView(S,ME,API); return; }
     let ch=false; const t=now();
+    if (S.diceUntil && t<S.diceUntil){ CFG.tickView && CFG.tickView(S,ME,API); return; }
     if (CFG.tick && CFG.tick(S,t)) ch=true;
     const who=CFG.whoActs(S)||[];
     for (const seat of who){ const p=S.seats[seat]; if(!p) continue;
@@ -332,7 +404,7 @@ const Table = (()=>{
     const u=$('#tb-unread'); u.style.display=unread?'':'none'; u.textContent=unread; }
   function setTop(){ const on=MODE!=='local'; $('#tb-chatbtn').style.display=on?'':'none'; $('#tb-leave').style.display=on?'':'none'; $('#tb-code').innerHTML=on&&CODE?`Phòng <b>${esc(CODE)}</b>${MODE==='watcher'?' · Đang xem':''}`:''; if(!on) $('#tb-chat').classList.remove('show'); }
 
-  const API={ act, now, toast, modal, esc, avatar, me:()=>ME, mode:()=>MODE, isMine:seat=>seat===ME, menu, rematch:()=>{ if(MODE==='watcher') return toast('Khán giả không thể yêu cầu chơi lại'); if(MODE==='client') return toast('Chờ chủ phòng bắt đầu ván mới'); S=CFG.newGame(S.seats, now(), S); commit(); } };
+  const API={ act, now, toast, modal, esc, avatar, me:()=>ME, mode:()=>MODE, isMine:seat=>seat===ME, menu, rematch:()=>{ if(MODE==='watcher') return toast('Khán giả không thể yêu cầu chơi lại'); if(MODE==='client') return toast('Chờ chủ phòng bắt đầu ván mới'); const pidMe=S.seats[ME]&&S.seats[ME].pid; S=newGameDice(S.seats, now(), S); if(pidMe){ const k=S.seats.findIndex(p=>!p.bot&&p.pid===pidMe); if(k>=0) ME=k; } commit(); } };
   /* Chủ phòng thoát giữa ván: một người chơi còn lại được chọn ngẫu nhiên (giống nhau trên mọi máy) làm chủ phòng mới */
   let goneSince=0;
   function hashStr(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
