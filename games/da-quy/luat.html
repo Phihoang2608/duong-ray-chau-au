@@ -110,6 +110,15 @@ main{max-width:none;padding:12px 18px 50px}
  table.t td,table.t th{padding:7px 6px}
  .act{padding:10px}
 }
+
+/* ô thẻ giảm giá: giống ô yêu cầu trên thẻ quý tộc trong game */
+.sq{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font:bold 14px "Times New Roman",serif;font-style:normal;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -2px 0 rgba(0,0,0,.25),0 1px 2px rgba(0,0,0,.5);vertical-align:-4px;margin:0 2px}
+.sq0{background:linear-gradient(135deg,#6ee7b7,#059669 55%,#065f46)}
+.sq1{background:linear-gradient(135deg,#93c5fd,#2563eb 55%,#1e3a8a)}
+.sq2{background:linear-gradient(135deg,#fca5a5,#dc2626 55%,#7f1d1d)}
+.sq3{background:linear-gradient(135deg,#ffffff,#e2e8f0 55%,#94a3b8);color:#1f2937;text-shadow:none}
+.sq4{background:linear-gradient(135deg,#6b7280,#27272a 55%,#000)}
+.sqlbl{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -172,7 +181,7 @@ main{max-width:none;padding:12px 18px 50px}
     <div class="cardwrap"><img src="assets/rules/the-cap3.webp" alt="Thẻ Sư tử vàng"><span class="pin" style="left:-10px;top:-10px">1</span><span class="pin" style="right:-10px;top:-10px">2</span><span class="pin" style="left:-10px;top:150px">3</span><span class="pin" style="right:-10px;bottom:-10px">4</span></div>
     <ul class="lst">
       <li><span class="k">1</span><span>Góc trên trái: <b>điểm uy tín</b> của thẻ (thẻ rẻ có thể không có điểm).</span></li>
-      <li><span class="k">2</span><span>Góc trên phải: <b>viên đá thưởng</b>. Mua thẻ này, bạn được giảm giá vĩnh viễn 1 viên màu đó cho mọi lần mua sau. Ví dụ thẻ này cho <img class="g" src="assets/gem-2.webp" alt="">.</span></li>
+      <li><span class="k">2</span><span>Góc trên phải: <b>viên đá thưởng</b>. Mua thẻ này, nó trở thành <b>thẻ giảm giá</b> <span class="sq sq2">1</span>: giảm vĩnh viễn 1 viên màu đó cho mọi lần mua sau. Ví dụ thẻ này cho <img class="g" src="assets/gem-2.webp" alt="">.</span></li>
       <li><span class="k">3</span><span>Cạnh trái: <b>giá mua</b>, tính bằng đá quý. Thẻ này giá <span class="gn"><img class="g" src="assets/gem-4.webp" alt="">7</span> <span class="gn"><img class="g" src="assets/gem-0.webp" alt="">3</span>.</span></li>
       <li><span class="k">4</span><span>Dưới cùng: tên bảo vật, chỉ để trang trí.</span></li>
     </ul>
@@ -180,7 +189,7 @@ main{max-width:none;padding:12px 18px 50px}
   <div class="fig">
     <figure><img class="cardimg" src="assets/rules/the-cap1.webp" alt="Thẻ cấp I"><figcaption>Thẻ cấp I: 0 điểm, giá rẻ</figcaption></figure>
     <figure><img class="cardimg" src="assets/rules/the-cap2.webp" alt="Thẻ cấp II"><figcaption>Thẻ cấp II: có điểm</figcaption></figure>
-    <figure><img class="nobimg" src="assets/rules/quy-toc-1.webp" alt="Thẻ quý tộc"><figcaption>Quý tộc: 3 điểm, ghé thăm khi đủ thẻ theo yêu cầu</figcaption></figure>
+    <figure><img class="nobimg" src="assets/rules/quy-toc-1.webp" alt="Thẻ quý tộc"><figcaption>Quý tộc: 3 điểm, ghé thăm khi đủ thẻ giảm giá theo ô màu <span class="sq sq1">4</span><span class="sq sq2">4</span></figcaption></figure>
   </div>
 </section>
 
@@ -233,7 +242,7 @@ main{max-width:none;padding:12px 18px 50px}
       <div class="ic"><img src="assets/gem-0.webp" alt=""><img src="assets/gem-2.webp" alt=""><img src="assets/gem-5.webp" alt=""></div>
       <ul>
         <li>Mua 1 thẻ ngửa trên bàn hoặc 1 thẻ đang giữ chỗ.</li>
-        <li>Trả giá thẻ bằng đá quý, đã <b>trừ đi số thẻ cùng màu</b> bạn đang có (mỗi thẻ giảm 1 viên màu đó). Giá sau giảm không âm.</li>
+        <li>Trả giá thẻ bằng đá quý, đã <b>trừ đi số thẻ giảm giá cùng màu</b> bạn đang có (mỗi <span class="sq sq1">1</span> giảm 1 viên màu đó). Giá sau giảm không âm.</li>
         <li>Thiếu màu nào thì dùng vàng thay (1 <img class="g" src="assets/gem-5.webp" alt=""> thay 1 viên bất kỳ).</li>
         <li>Đá đã trả về lại Ngân khố. Trong game, thẻ bạn mua được hiện viền sáng.</li>
       </ul>
@@ -243,11 +252,11 @@ main{max-width:none;padding:12px 18px 50px}
   <h3>Ví dụ tính giá khi mua thẻ</h3>
   <div class="calc">
     <div><b>Giá trên thẻ</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">3</span> <span class="gn"><img class="g" src="assets/gem-1.webp" alt="">2</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">2</span></div>
-    <div><b>Thẻ giảm giá đang có</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">2</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">1</span></div>
+    <div><b>Thẻ giảm giá đang có</b><span class="sq sq3">2</span> <span class="sq sq2">1</span></div>
     <div><b>Còn phải trả</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-1.webp" alt="">2</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">1</span></div>
     <div><b>Bạn trả</b><span class="gn"><img class="g" src="assets/gem-3.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-1.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-2.webp" alt="">1</span> <span class="gn"><img class="g" src="assets/gem-5.webp" alt="">1</span></div>
   </div>
-  <div class="vd">Thẻ giá 3 <img class="g" src="assets/gem-3.webp" alt=""> + 2 <img class="g" src="assets/gem-1.webp" alt=""> + 2 <img class="g" src="assets/gem-2.webp" alt="">. Bạn đã có 2 thẻ trắng và 1 thẻ đỏ, nên giá còn 1 <img class="g" src="assets/gem-3.webp" alt=""> + 2 <img class="g" src="assets/gem-1.webp" alt=""> + 1 <img class="g" src="assets/gem-2.webp" alt="">. Bạn chỉ có 1 <img class="g" src="assets/gem-1.webp" alt="">, nên dùng 1 <img class="g" src="assets/gem-5.webp" alt=""> vàng thay cho viên <img class="g" src="assets/gem-1.webp" alt=""> còn thiếu.</div>
+  <div class="vd">Thẻ giá 3 <img class="g" src="assets/gem-3.webp" alt=""> + 2 <img class="g" src="assets/gem-1.webp" alt=""> + 2 <img class="g" src="assets/gem-2.webp" alt="">. Bạn đã có <span class="sq sq3">2</span> <span class="sq sq2">1</span> (2 thẻ giảm giá trắng và 1 thẻ giảm giá đỏ), nên giá còn 1 <img class="g" src="assets/gem-3.webp" alt=""> + 2 <img class="g" src="assets/gem-1.webp" alt=""> + 1 <img class="g" src="assets/gem-2.webp" alt="">. Bạn chỉ có 1 <img class="g" src="assets/gem-1.webp" alt="">, nên dùng 1 <img class="g" src="assets/gem-5.webp" alt=""> vàng thay cho viên <img class="g" src="assets/gem-1.webp" alt=""> còn thiếu.</div>
 </section>
 
 <section class="box" id="gioi-han">
@@ -260,13 +269,13 @@ main{max-width:none;padding:12px 18px 50px}
     <figure><img class="nobimg" src="assets/rules/quy-toc-2.webp" alt="Quý tộc"></figure>
     <figure><img class="nobimg" src="assets/rules/quy-toc-3.webp" alt="Quý tộc"></figure>
   </div>
-  <p>Cuối lượt của bạn, nếu các thẻ bạn đã mua đủ điều kiện ghi trên một thẻ quý tộc (ví dụ 3 thẻ đỏ và 3 thẻ đen), quý tộc đó tự đến thăm: bạn nhận thẻ quý tộc và được <b>3 điểm uy tín</b>.</p>
+  <p>Cuối lượt của bạn, nếu số <b>thẻ giảm giá</b> (thẻ đã mua) của bạn đủ điều kiện ghi trên một thẻ quý tộc (ví dụ <span class="sq sq2">3</span> <span class="sq sq4">3</span>: 3 thẻ giảm giá đỏ và 3 thẻ giảm giá đen), quý tộc đó tự đến thăm: bạn nhận thẻ quý tộc và được <b>3 điểm uy tín</b>.</p>
   <ul>
-    <li>Điều kiện chỉ tính <b>thẻ đã mua</b>, không tính đá quý đang cầm.</li>
+    <li>Điều kiện chỉ tính <b>thẻ giảm giá</b> (thẻ đã mua), không tính đá quý đang cầm.</li>
     <li>Đủ điều kiện nhiều quý tộc cùng lúc thì chỉ nhận 1. Mỗi lượt nhận tối đa 1 quý tộc.</li>
     <li>Bạn không cần làm gì thêm, quý tộc đến miễn phí.</li>
   </ul>
-  <div class="vd">Quý tộc cần 4 thẻ <img class="g" src="assets/gem-3.webp" alt=""> + 4 thẻ <img class="g" src="assets/gem-1.webp" alt="">. Cuối lượt bạn vừa mua thẻ <img class="g" src="assets/gem-3.webp" alt=""> thứ 4 và đã có 4 thẻ <img class="g" src="assets/gem-1.webp" alt="">, nên quý tộc ghé thăm ngay, bạn được +3 điểm.</div>
+  <div class="vd">Quý tộc cần <span class="sq sq3">4</span> <span class="sq sq1">4</span>, tức 4 thẻ giảm giá trắng và 4 thẻ giảm giá xanh dương. Cuối lượt bạn vừa mua thẻ giảm giá trắng thứ 4 và đã có 4 thẻ giảm giá xanh dương, nên quý tộc ghé thăm ngay, bạn được +3 điểm.</div>
 </section>
 
 <section class="box" id="ket-thuc">
@@ -283,7 +292,7 @@ main{max-width:none;padding:12px 18px 50px}
   <h2><span class="no">7</span>Ví dụ ba lượt đầu</h2>
   <ol class="turns">
     <li>Bạn lấy 3 đá khác màu: <img class="g" src="assets/gem-4.webp" alt=""> <img class="g" src="assets/gem-2.webp" alt=""> <img class="g" src="assets/gem-0.webp" alt="">. Mục tiêu là mua sớm một thẻ cấp I rẻ để có đá thưởng.</li>
-    <li>Một thẻ cấp I giá 1 <img class="g" src="assets/gem-4.webp" alt=""> + 1 <img class="g" src="assets/gem-2.webp" alt=""> + 1 <img class="g" src="assets/gem-0.webp" alt=""> vừa đủ. Bạn mua thẻ đó, nhận đá thưởng <img class="g" src="assets/gem-1.webp" alt=""> và 0 điểm. Từ giờ mọi thẻ cần <img class="g" src="assets/gem-1.webp" alt=""> rẻ hơn 1 viên.</li>
+    <li>Một thẻ cấp I giá 1 <img class="g" src="assets/gem-4.webp" alt=""> + 1 <img class="g" src="assets/gem-2.webp" alt=""> + 1 <img class="g" src="assets/gem-0.webp" alt=""> vừa đủ. Bạn mua thẻ đó, có thêm thẻ giảm giá <span class="sq sq1">1</span> và 0 điểm. Từ giờ mọi thẻ cần <img class="g" src="assets/gem-1.webp" alt=""> rẻ hơn 1 viên.</li>
     <li>Bạn lấy 2 <img class="g" src="assets/gem-1.webp" alt=""> cùng màu (Ngân khố còn từ 4 viên) để chuẩn bị mua thẻ cấp II có điểm.</li>
   </ol>
 </section>
@@ -293,7 +302,7 @@ main{max-width:none;padding:12px 18px 50px}
   <div class="tip">
   <ul>
     <li>Đầu ván tập trung mua thẻ cấp I rẻ để có đá thưởng, tạo giảm giá lâu dài.</li>
-    <li>Chọn 2 đến 3 màu chính, mua thẻ cùng màu để dễ đủ điều kiện quý tộc.</li>
+    <li>Chọn 2 đến 3 màu chính, gom thẻ giảm giá cùng màu để dễ đủ điều kiện quý tộc.</li>
     <li>Giữ chỗ thẻ điểm cao hoặc thẻ đối thủ đang cần, đồng thời lấy vàng.</li>
     <li>Đừng ôm quá 10 viên. Khi gần đủ 10, nên mua thẻ thay vì lấy thêm đá.</li>
     <li>Theo dõi điểm đối thủ. Khi ai đó gần 15 điểm, hãy giữ chỗ chặn thẻ họ cần hoặc về đích nhanh hơn.</li>
@@ -307,7 +316,7 @@ main{max-width:none;padding:12px 18px 50px}
   <ul>
     <li>Lấy 2 đá cùng màu khi Ngân khố còn dưới 4 viên màu đó.</li>
     <li>Quên trả bớt đá khi vượt 10 viên lúc kết thúc lượt.</li>
-    <li>Tính điều kiện quý tộc bằng đá đang cầm. Thực ra chỉ tính thẻ đã mua.</li>
+    <li>Tính điều kiện quý tộc bằng đá đang cầm. Thực ra chỉ tính thẻ giảm giá (thẻ đã mua).</li>
     <li>Nghĩ rằng ván kết thúc ngay khi có người đạt 15 điểm, quên cho những người sau chơi nốt vòng.</li>
   </ul>
   </div>
