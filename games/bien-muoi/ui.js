@@ -8,7 +8,7 @@ const BMUI=(()=>{
     vo:'Vỏ sò: 1 lá = 0 điểm, 2 lá = 2, 3 lá = 4, 4 lá = 6, 5 lá = 8, 6 lá = 10.',bt:'Bạch tuộc: 1 lá = 0, 2 lá = 3, 3 lá = 6, 4 lá = 9, 5 lá = 12.',cc:'Chim cánh cụt: 1 lá = 1 điểm, 2 lá = 3, 3 lá = 5.',tt:'Thủy thủ: 1 lá = 0 điểm, 2 lá = 5 điểm.',
     hd:'Hải đăng: mỗi lá Thuyền bạn có được +1 điểm.',dc:'Đàn cá: mỗi lá Cá bạn có được +1 điểm.',dcc:'Đàn chim cánh cụt: mỗi lá Chim cánh cụt bạn có được +2 điểm.',tn:'Thuyền trưởng: mỗi lá Thủy thủ bạn có được +3 điểm.',
     tf:'Nàng tiên cá: mỗi nàng cho điểm bằng số lá của màu bạn có nhiều nhất (nàng thứ hai tính màu nhiều thứ hai…). Đủ 4 nàng là thắng ngay!'};
-  let crabP=-1, note='', autoKey='', autoT=0, dragT=0, root=null, sel=-1, lastEv=null, ZM=1, lastSec=-1, firstDraw=true, lastTurnMe=false, resShown=-1;
+  let pileSel=-1, crabP=-1, note='', autoKey='', autoT=0, dragT=0, root=null, sel=-1, lastEv=null, ZM=1, lastSec=-1, firstDraw=true, lastTurnMe=false, resShown=-1;
   const PREV={};
   /* ---------- tiện ích ---------- */
   function syncKids(a,b){ const A_=a.childNodes, B=b.childNodes; let i=0;
@@ -89,26 +89,27 @@ const BMUI=(()=>{
   function clockHtml(S,api){ const el=Math.min(60,Math.max(0,(api.now()-S.turnAt)/1000)); return `<span class="tmr">${A.clock(el.toFixed(2))}</span>`; }
   function seatOrder(S,ME){ const n=S.seats.length, o=[]; const st=ME>=0?ME:0; for(let k=0;k<n;k++) o.push((st+k)%n); return o; }
   function actKinds(S,ME){ const P=S.P[ME], pr=BM.pairsOf(P), kinds={}; pr.forEach(p=>{ kinds[p.kind]=kinds[p.kind]||p; }); return kinds; }
+  const FN={cua:'Đôi Cua = 1đ. Đánh ra: lấy 1 lá chồng bỏ',thuyen:'Đôi Thuyền = 1đ. Đánh ra: đi thêm lượt',ca:'Đôi Cá = 1đ. Đánh ra: rút thêm 1 lá',map:'Cá mập + Người bơi = 1đ. Đánh ra: rút trộm 1 lá',boi:'Người bơi + Cá mập = 1đ. Đánh ra: rút trộm 1 lá',vo:'Vỏ sò: 2 lá = 2đ, 3 = 4đ, 4 = 6đ…',bt:'Bạch tuộc: 2 lá = 3đ, 3 = 6đ…',cc:'Cánh cụt: 1 lá = 1đ, 2 = 3đ, 3 = 5đ',tt:'Thủy thủ: 2 lá = 5đ',hd:'Hải đăng: +1đ mỗi Thuyền',dc:'Đàn cá: +1đ mỗi Cá',dcc:'Đàn cánh cụt: +2đ mỗi Cánh cụt',tn:'Thuyền trưởng: +3đ mỗi Thủy thủ',tf:'Tiên cá: đủ 4 là thắng'};
   const KIND={cua:['','Đôi Cua','xem chồng bỏ, lấy 1 lá'],thuyen:['','Đôi Thuyền','đi thêm lượt'],ca:['','Đôi Cá','rút 1 lá'],ms:['','Cá mập + Người bơi','rút trộm 1 lá']};
   function statusText(S,ME,api){ const my=S.phase==='play'&&S.turn===ME, nm=api.esc(S.seats[S.turn]?S.seats[S.turn].name:''), st=S.step;
     if(S.phase==='over') return S.mermaid?`🧜 <b>${api.esc(S.seats[S.winner].name)}</b> gom đủ 4 nàng tiên cá!`:`🏆 <b>${api.esc(S.seats[S.winner].name)}</b> thắng chung cuộc!`;
     if(st==='roundover') return 'Ván đã kết thúc — xem bảng điểm.';
     const lc=S.call?`<div class="bmlc">⏳ CƠ HỘI CUỐI của <b>${api.esc(S.seats[S.call.by].name)}</b> — còn <b>${S.call.left.length}</b> lượt cuối</div>`:'';
-    if(my){ const txt={draw:'<b class="me blink">Đến lượt bạn!</b>',
+    if(my){ const txt={draw:pileSel>=0&&S.disc[pileSel].length?'<b>'+(FN[BM.CARDS[S.disc[pileSel][S.disc[pileSel].length-1]].t]||'')+'</b>':'<b class="me blink">Đến lượt bạn!</b>',
         keep:sel<0?'<b>1/2</b> Chạm lá để GIỮ':'<b>2/2</b> Kéo lá kia vào chồng bỏ',
         play:BM.pairsOf(S.P[ME]).length?'Đánh cặp hoặc kết thúc':'Không có cặp…',
         crab:crabP<0?'Chọn 1 chồng bỏ':'Chọn 1 lá',shark:'Chạm 1 đối thủ'}[st]; return lc+txt; }
     const who='…';
     return lc+`Chờ <b>${nm}</b>${who}`; }
   function pileHtml(S,p,ME,my){ const d=S.disc[p], top=d.length?d[d.length-1]:null; const go=my&&(S.step==='draw'||(S.step==='crab'&&crabP<0))&&top!=null, dropT=my&&S.step==='keep'&&sel>=0;
-    return `<div class="pile ${go?'go':''} ${dropT?'drop':''}" data-pile="${p}">${top!=null?card(top,'big'):'<div class="bmc empty"><div class="art"></div></div>'}<small>${(dropT?'Thả vào đây':'Bỏ '+(p+1))}</small></div>`; }
+    return `<div class="pile ${go?'go':''} ${dropT?'drop':''}" data-pile="${p}">${top!=null?card(top,'big'):'<div class="bmc empty"><div class="art"></div></div>'}<small>${dropT?'Thả vào đây':'Bỏ '+(p+1)}</small>${go&&S.step==='draw'&&pileSel===p?`<button class="tbtn pri bmtake" data-take="${p}">Lấy</button>`:''}</div>`; }
   function render(S,ME,api){ window.__S=S; document.documentElement.classList.add('bmingame'); applyFx();
     if(!root){ document.getElementById('tb-game').innerHTML='<div id="bm"></div>'; root=$('#bm'); root.addEventListener('click',onClick);
       root.addEventListener('contextmenu',e=>{ const el=e.target.closest('[data-cid]'); if(el){ e.preventDefault(); zoomCard(+el.dataset.cid); } });
       let lp=null; document.addEventListener('touchstart',e=>{ const el=e.target.closest&&e.target.closest('#bm [data-cid]'); if(!el) return; lp=setTimeout(()=>{ lp='done'; zoomCard(+el.dataset.cid); },550); },{passive:true});
       const cancel=()=>{ if(lp&&lp!=='done') clearTimeout(lp); }; document.addEventListener('touchend',e=>{ if(lp==='done') e.preventDefault(); cancel(); lp=null; }); document.addEventListener('touchmove',cancel,{passive:true}); }
     const t=api.now(), my=S.phase==='play'&&S.turn===ME&&S.step!=='roundover';
-    if(S.step!=='keep') sel=-1; if(S.step!=='crab') crabP=-1;
+    if(S.step!=='keep') sel=-1; if(S.step!=='crab') crabP=-1; if(S.step!=='draw'||S.turn!==ME) pileSel=-1;
     if(lastEv===null) lastEv=S.ev?S.ev.n:0; const ev=S.ev, isNew=ev&&ev.n!==lastEv; const pre={};
     if(isNew){ const k=ev.k;
       if(k==='draw2'||k==='fish'||k==='draw1') pre.deck=rectOf('[data-deck]');
@@ -203,8 +204,9 @@ const BMUI=(()=>{
     const cr=e.target.closest('[data-crab]'); if(cr&&my&&S.step==='crab'){ api.act({t:'crab',pile:+cr.dataset.pile,id:+cr.dataset.crab}); return; }
     const vc=e.target.closest('[data-v]'); if(vc&&my&&S.step==='shark'){ api.act({t:'steal',v:+vc.dataset.v}); return; }
     const pd=e.target.closest('[data-pend]'); if(pd&&my&&S.step==='keep'){ sel=+pd.dataset.pend; SND.pop(); render(S,ME,api); return; }
+    const tk=e.target.closest('[data-take]'); if(tk&&my&&S.step==='draw'){ SND.pop(); const p=+tk.dataset.take; pileSel=-1; api.act({t:'take',pile:p}); return; }
     const pl=e.target.closest('[data-pile]'); if(pl&&!pl.closest('#bmcrab')&&my){ const p=+pl.dataset.pile;
-      if(S.step==='crab'&&crabP<0){ if(S.disc[p].length){ crabP=p; SND.pop(); render(S,ME,api); } return; } if(S.step==='draw'){ api.act({t:'take',pile:p}); return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
+      if(S.step==='crab'&&crabP<0){ if(S.disc[p].length){ crabP=p; SND.pop(); render(S,ME,api); } return; } if(S.step==='draw'){ if(S.disc[p].length){ pileSel=pileSel===p?-1:p; SND.pop(); render(S,ME,api); } return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
     const dk=e.target.closest('[data-deck]'); if(dk&&my&&S.step==='draw'){ api.act({t:'deck'}); return; }
     const hc=e.target.closest('.me .bmhand [data-cid],.bmopb:not(.bk) [data-cid],.bmtabl [data-cid],.pile .bmc[data-cid],#bmres [data-cid]'); if(hc){ zoomCard(+hc.dataset.cid); return; } }
   /* ---------- kéo lá còn lại vào chồng bỏ ---------- */

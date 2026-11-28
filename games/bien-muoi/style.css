@@ -164,3 +164,4 @@ body{font-family:"Times New Roman",Times,serif;background:radial-gradient(120% 9
 .pile small{font-size:12px;font-weight:bold;color:#ffe9a8}
 #bmcrab .cpb{display:flex;gap:12px;justify-content:center;margin:8px 0}#bmcrab .cpb .tbtn{font-size:16px;padding:10px 18px}
 #bm .bmnote{background:linear-gradient(180deg,#0e4a73,#082f4d);border:1px solid var(--gold);color:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.bmtake{position:absolute;left:50%;top:72%;transform:translate(-50%,-50%);z-index:5;font-size:15px!important;padding:6px 14px!important;white-space:nowrap}
