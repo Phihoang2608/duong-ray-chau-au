@@ -535,7 +535,16 @@ button,input{font-family:inherit;font-size:15px}
 }
 .g-cover img,.hero-art-box img,.room-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
 .g-card:hover .g-cover img{transform:scale(1.06)}
-.hero-art-box{aspect-ratio:1200/896}
+.hero-art-box{aspect-ratio:16/9}
+.hero-art-box{position:relative}
+.hero-art-box .hs{position:absolute;inset:0;opacity:0;transform:scale(1.06);transition:opacity .7s ease,transform 1.2s ease;pointer-events:none}
+.hero-art-box .hs.on{opacity:1;transform:scale(1)}
+.hero-art-box .hs img,.hero-art-box .hs svg{width:100%;height:100%;object-fit:cover;display:block}
+.hero-dots{display:flex;gap:6px;margin-top:12px}
+.hero-dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:all .3s}
+.hero-dots i.on{width:22px;border-radius:6px;background:#ffe9b3}
+.hero-text{transition:opacity .35s,transform .35s}.hero-text.out{opacity:0;transform:translateY(6px)}
+@media (prefers-reduced-motion:reduce){.hero-art-box .hs,.hero-text{transition:none}}
 .g-cover:has(img.wide){aspect-ratio:16/9}
 .g-cover:has(img.w195){aspect-ratio:16/9}
 .g-cover img.wide{object-fit:cover;object-position:center}
@@ -586,14 +595,15 @@ button,input{font-family:inherit;font-size:15px}
 
     <section class="hero-row">
       <div class="hero-banner">
-        <div>
-          <span class="hero-badge">🔥 Nổi bật nhất</span>
-          <h2 class="hero-title">Thương Nhân Đá Quý</h2>
-          <p class="hero-desc">Thu thập đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm. Đạt 15 điểm uy tín để giành chiến thắng!</p>
+        <div class="hero-text" id="heroText">
+          <span class="hero-badge" id="heroBadge">🔥 Nổi bật nhất</span>
+          <h2 class="hero-title" id="heroTitle">Thương Nhân Đá Quý</h2>
+          <p class="hero-desc" id="heroDesc">Thu thập đá quý, mua mỏ và thương điếm, mời quý tộc ghé thăm. Đạt 15 điểm uy tín để giành chiến thắng!</p>
           <div class="hero-foot">
-            <a class="hero-play" href="games/da-quy/index.html" data-go="da-quy">▶ Chơi ngay</a>
-            <span class="hero-meta">2–4 người · Online & Máy</span>
+            <a class="hero-play" id="heroPlay" href="games/da-quy/index.html" data-go="da-quy">▶ Chơi ngay</a>
+            <span class="hero-meta" id="heroMeta">2–4 người · Online & Máy</span>
           </div>
+          <div class="hero-dots" id="heroDots"></div>
         </div>
         <div class="hero-art">
           <div class="hero-art-box" id="heroThumb"></div>
@@ -704,7 +714,36 @@ const clean=s=>String(s||'').replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮�
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),2600); }
 function gameUrl(id, code, watch=false){ return 'games/'+id+'/index.html'+(code?(watch?'#s-':'#p-')+code:''); }
 
-$('#heroThumb').innerHTML=THUMBS['da-quy'](1);
+/* Banner nổi bật: chạy qua các game chơi gần đây */
+function noteRecent(id){ if(!id) return; try{ let L=JSON.parse(localStorage.getItem('pbg-recent')||'[]'); L=[id].concat(L.filter(x=>x!==id)).slice(0,8); localStorage.setItem('pbg-recent',JSON.stringify(L)); }catch(e){} }
+function heroList(){
+  let rec=[]; try{ rec=JSON.parse(localStorage.getItem('pbg-recent')||'[]'); }catch(e){}
+  try{ JSON.parse(localStorage.getItem('pbg-hist')||'[]').forEach(h=>{ if(h&&h.game&&!rec.includes(h.game)) rec.push(h.game); }); }catch(e){}
+  const ok=id=>GAMES.some(g=>g.id===id&&g.ready&&THUMBS[id]);
+  rec=rec.filter(ok).slice(0,5);
+  const items=rec.map(id=>({id,recent:true}));
+  if(items.length<3) ['da-quy','duong-ray-chau-au','dao-khai-hoang','duong-ray-bac-my'].forEach(id=>{ if(items.length<3&&!items.some(x=>x.id===id)) items.push({id,recent:false}); });
+  return items;
+}
+(function heroSlider(){
+  const items=heroList(), box=$('#heroThumb'), dots=$('#heroDots'), tx=$('#heroText'); if(!items.length) return;
+  box.innerHTML=items.map(it=>`<div class="hs">${THUMBS[it.id]()}</div>`).join('');
+  dots.innerHTML=items.map((_,i)=>`<i data-i="${i}"></i>`).join('');
+  const sl=[...box.children], dt=[...dots.children]; let cur=-1, timer=null;
+  function show(i){
+    if(i===cur) return; const first=cur<0; cur=i; const it=items[i], g=GAMES.find(x=>x.id===it.id);
+    sl.forEach((e,k)=>e.classList.toggle('on',k===i)); dt.forEach((e,k)=>e.classList.toggle('on',k===i));
+    const apply=()=>{ $('#heroBadge').textContent=it.recent?'🕘 Chơi gần đây':'🔥 Nổi bật nhất'; $('#heroTitle').textContent=g.title; $('#heroDesc').textContent=g.desc; const a=$('#heroPlay'); a.href=gameUrl(g.id); a.dataset.go=g.id; $('#heroMeta').textContent=g.players+' người · Online & Máy'; tx.classList.remove('out'); };
+    if(first) apply(); else { tx.classList.add('out'); setTimeout(apply,300); }
+  }
+  function next(){ show((cur+1)%items.length); }
+  function start(){ stop(); if(items.length>1&&!matchMedia('(prefers-reduced-motion:reduce)').matches) timer=setInterval(next,4000); }
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+  dots.addEventListener('click',e=>{ const d=e.target.closest('[data-i]'); if(!d) return; show(+d.dataset.i); start(); });
+  const hb=document.querySelector('.hero-banner'); hb.addEventListener('mouseenter',stop); hb.addEventListener('mouseleave',start); hb.addEventListener('touchstart',stop,{passive:true}); hb.addEventListener('touchend',()=>setTimeout(start,3000),{passive:true});
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+  show(0); start();
+})();
 
 const nameEl=$('#name');
 function syncIdentity(){
@@ -777,7 +816,7 @@ document.addEventListener('click',e=>{
   const s=e.target.closest('[data-soon]');
   if(s){ e.preventDefault(); toast('Trò chơi này đang hoàn thiện, sắp ra mắt!'); return; }
   const a=e.target.closest('[data-go]');
-  if(a) ensureName();
+  if(a){ noteRecent(a.dataset.go); ensureName(); }
 });
 
 const ROOMS={};
