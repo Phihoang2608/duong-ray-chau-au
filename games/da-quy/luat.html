@@ -95,6 +95,21 @@ footer{text-align:center;font-size:14px;opacity:.8;margin-top:20px}
  .cardimg{width:130px}.nobimg{width:110px}.deckimg{width:90px}
 }
 @media (prefers-reduced-motion:reduce){.pin{animation:none}}
+
+/* phủ gần kín chiều ngang */
+main{max-width:none;padding:12px 18px 50px}
+.hero{grid-template-columns:1.3fr 1fr}
+.acts{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+@media (min-width:1300px){ .acts{grid-template-columns:repeat(4,minmax(0,1fr))} }
+.boardshot{max-width:1000px;display:block;margin:10px auto 0}
+@media (max-width:760px){
+ main{padding:8px 6px 40px}
+ .hero{padding:12px;border-width:2px;border-radius:16px}
+ section.box{margin:12px 0;padding:14px 10px;border-width:2px;border-radius:14px}
+ nav.toc{margin:10px 0 4px;padding:8px}
+ table.t td,table.t th{padding:7px 6px}
+ .act{padding:10px}
+}
 </style>
 </head>
 <body>
