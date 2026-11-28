@@ -2108,20 +2108,21 @@ function routeSVG(r, afford, now){
   const t=UIS.claimAt[r.id]; const el = t!=null ? now-t : 1e9; const fresh = el<2600 && G.owner[r.id]!=null;
   let s=`<g class="route ${canClick?'clickable':''} ${afford.has(r.id)?'afford':''} ${fresh?'glow':''}" data-id="${r.id}" ${fresh?`style="--gc:${G.players[owner].color};animation-delay:${-el}ms"`:''}>`;
   s+=`<line x1="${g.ax+g.ux*pad}" y1="${g.ay+g.uy*pad}" x2="${g.ax+g.ux*(g.d-pad)}" y2="${g.ay+g.uy*(g.d-pad)}" stroke="transparent" stroke-width="${HIT_W}"/>`;
+  const DK = r.pair!=null ? .6 : 1; /* đường đôi: thu nhỏ đoàn tàu cho vừa làn, không đè làn bên cạnh */
   if (owner!=null){ const x1=(g.ax+g.ux*(pad+2)).toFixed(1), y1=(g.ay+g.uy*(pad+2)).toFixed(1), x2=(g.ax+g.ux*(g.d-pad-2)).toFixed(1), y2=(g.ay+g.uy*(g.d-pad-2)).toFixed(1);
-    s+=`<g class="${fresh?'pop':''}" pointer-events="none"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="29" stroke-linecap="round" opacity=".95"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="24" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
+    s+=`<g class="${fresh?'pop':''}" pointer-events="none"><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="${(29*DK).toFixed(1)}" stroke-linecap="round" opacity=".95"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="${(24*DK).toFixed(1)}" stroke-linecap="round"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${G.players[owner].color}" stroke-width="6" stroke-linecap="round" opacity=".55"/></g>`; }
   for (let i=0;i<r.len;i++){
     const tt=pad+seg*(i+0.5); const cx=(g.ax+g.ux*tt).toFixed(1), cy=(g.ay+g.uy*tt).toFixed(1);
     s+=`<g transform="translate(${cx},${cy}) rotate(${g.ang.toFixed(1)})">`;
     if (owner!=null){
-      const col=G.players[owner].color, h=19, W=seg-1.5, win=Math.min(6,W/4.5);
+      const col=G.players[owner].color, h=19*DK, W=seg-1.5, win=Math.min(6,W/4.5)*(DK<1?.8:1);
       const delay = fresh ? ((i+.5)/r.len*TRAIN_RUN_MS - el) : 0;
       s+=`<g class="${fresh?'pop':''}" ${fresh?`style="animation-delay:${delay.toFixed(0)}ms"`:''}>
         <rect x="${-W/2}" y="${-h/2}" width="${W}" height="${h}" rx="3.5" fill="${col}" stroke="#0b0b0b" stroke-width="2.6"/>
-        <rect x="${-W/2+1.2}" y="${h/2-5}" width="${W-2.4}" height="3.8" rx="1.5" fill="#000" opacity=".28"/>
+        <rect x="${-W/2+1.2}" y="${h/2-5*DK}" width="${W-2.4}" height="${3.8*DK}" rx="1.5" fill="#000" opacity=".28"/>
         <rect x="${-W/2+2.5}" y="${-h/2+2}" width="${W-5}" height="3" rx="1.5" fill="#fff" opacity=".45"/>
-        ${W>15?`<rect x="${-W/2+3.5}" y="-2.5" width="${win}" height="4.5" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/><rect x="${W/2-3.5-win}" y="-2.5" width="${win}" height="4.5" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/>`:''}
-        <circle cx="${-W/4}" cy="${h/2+.5}" r="2.6" fill="#0b0b0b"/><circle cx="${W/4}" cy="${h/2+.5}" r="2.6" fill="#0b0b0b"/></g>`;
+        ${W>15?`<rect x="${-W/2+3.5}" y="${-2.5*DK}" width="${win}" height="${4.5*DK}" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/><rect x="${W/2-3.5-win}" y="${-2.5*DK}" width="${win}" height="${4.5*DK}" rx="1" fill="#fff3bf" stroke="#0b0b0b" stroke-width=".6"/>`:''}
+        <circle cx="${-W/4}" cy="${h/2+.5*DK}" r="${2.6*DK}" fill="#0b0b0b"/><circle cx="${W/4}" cy="${h/2+.5*DK}" r="${2.6*DK}" fill="#0b0b0b"/></g>`;
     } else {
       const h=14; const fill = r.color==='gray' ? '#bdb5a6' : CINFO[r.color].hex;
       const stroke = r.tunnel ? 'stroke="#111" stroke-width="2.4" stroke-dasharray="3.5 2"' : 'stroke="#1e140b" stroke-width="1.8"';
