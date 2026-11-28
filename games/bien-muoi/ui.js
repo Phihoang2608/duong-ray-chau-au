@@ -96,7 +96,7 @@ const BMUI=(()=>{
     if(st==='roundover') return 'Ván đã kết thúc — xem bảng điểm.';
     const lc=S.call?`<div class="bmlc">⏳ CƠ HỘI CUỐI của <b>${api.esc(S.seats[S.call.by].name)}</b> — còn <b>${S.call.left.length}</b> lượt cuối</div>`:'';
     if(my){ const txt={draw:pileSel>=0&&S.disc[pileSel].length?'<b>'+(FN[BM.CARDS[S.disc[pileSel][S.disc[pileSel].length-1]].t]||'')+'</b>':'<b class="me blink">Đến lượt bạn!</b>',
-        keep:sel<0?'<b>1/2</b> Chạm lá để GIỮ':'<b>2/2</b> Kéo lá kia vào chồng bỏ',
+        keep:sel<0?'Chạm hoặc kéo 1 lá vào tay để giữ':'Kéo lá sáng vào chồng bỏ',
         play:BM.pairsOf(S.P[ME]).length?'Đánh cặp hoặc kết thúc':'Không có cặp…',
         crab:crabP<0?'Chọn 1 chồng bỏ':'Chọn 1 lá',shark:'Chạm 1 đối thủ'}[st]; return lc+txt; }
     const who='…';
@@ -129,7 +129,7 @@ const BMUI=(()=>{
       <button data-tool="fx" title="Mức hiệu ứng">✨</button><button data-tool="app" data-pbg-app title="Tải app">📲</button><button data-tool="acc" title="Tài khoản · Bạn bè · Online">👤</button><button data-tool="fs" title="Toàn màn hình">⛶</button><button data-hist="1" title="Lịch sử ván">📜</button><button data-tool="snd" title="Âm thanh">${SFX.on===false?'🔇':'🔊'}</button><button data-tool="rules" title="Luật chơi">📖</button><button data-tool="zin" title="Phóng to">＋</button><button data-tool="zout" title="Thu nhỏ">－</button></div>
       <div class="bmmain"><div class="bmnote">${note}</div><div class="bmtab"><div class="bminfo">Ván <b>${S.round}</b> · Đích <b>${S.target}</b> điểm</div>
       <div class="bmbody"><div class="bmpiles"><div class="pile deck ${my&&S.step==='draw'&&S.deck.length?'go':''}" data-deck="1">${A.back('big')}<small>Bài</small></div>${pileHtml(S,0,ME,my)}${pileHtml(S,1,ME,my)}</div>
-      <div class="bmside">${my&&S.step==='keep'?'':`<div class="bmstat">${statusText(S,ME,api)}</div>`}</div></div>${my&&S.step==='keep'?`<div class="bmdrawn bmpick">${S.pend.map((id,i)=>card(id,'big '+(sel===i?'pk':(sel>=0?'dis':'')),`data-pend="${i}"`)).join('')}</div>`:''}`;
+      <div class="bmside">${my&&S.step==='keep'?'':`<div class="bmstat">${statusText(S,ME,api)}</div>`}</div></div>${my&&S.step==='keep'?`<div class="bmdrawn bmpick">${S.pend.map((id,i)=>card(id,'big '+(sel<0?'lt':(sel===i?'pk':'dis')),`data-pend="${i}"`)).join('')}</div>`:''}`;
     if(my&&S.step==='play'){ h+=`<div class="bmacts">`+Object.keys(kinds).filter(k=>k!=='ms'||BM.victims(S,ME).length).map(k=>`<button class="tbtn gold" data-duo="${k}" title="${KIND[k][2]}">${KIND[k][1]}</button>`).join('')
       +`<button class="tbtn pri" data-a="end">Kết thúc lượt</button>`
       +(!S.call?`<button class="tbtn stop" data-a="stop" ${mypts>=BM_MIN_END?'':'disabled'} title="Cần từ ${BM_MIN_END} điểm">🛑 DỪNG</button><button class="tbtn last" data-a="last" ${mypts>=BM_MIN_END?'':'disabled'} title="Cần từ ${BM_MIN_END} điểm">⏳ CƠ HỘI CUỐI</button>`:'')+`</div>`; }
@@ -151,7 +151,7 @@ const BMUI=(()=>{
     h+=`</div></div></div>`;
     if(root.firstChild) morph(root,h); else root.innerHTML=h; if(ZM!==1){ const w=root.querySelector('.bmwrap'); if(w) w.style.zoom=ZM; }
     // đồng hồ + kích thước
-    fit(); lastSec=-1; syncResult(S,ME,api);
+    fit(); lastSec=-1; syncResult(S,ME,api); hintArrow(S,ME);
     // chọn lá từ chồng bỏ khi đánh đôi Cua
     let cp=document.getElementById('bmcrab'); if(my&&S.step==='crab'&&crabP>=0){ if(!cp){ cp=document.createElement('div'); cp.id='bmcrab'; root.appendChild(cp); }
       cp.innerHTML=`<div class="cph"><b>Chồng bỏ ${crabP+1} — chọn 1 lá</b></div><div class="cpr"><div class="cpc">${sortIds(S.disc[crabP]).map(id=>card(id,'mini',`data-crab="${id}" data-pile="${crabP}"`)).join('')}</div></div><button class="tbtn" data-a="skipcrab">Bỏ qua</button>`;
@@ -163,6 +163,22 @@ const BMUI=(()=>{
       if(!can&&!canStop){ const key=S.round+':'+S.turn+':'+S.turnAt+':'+S.deck.length+':'+P.hand.length; if(autoKey!==key){ autoKey=key; clearTimeout(autoT); autoT=setTimeout(()=>{ const N=window.__S; if(N&&N.phase==='play'&&N.turn===ME&&N.step==='play'&&N.turnAt===S.turnAt&&!BM.pairsOf(N.P[ME]).length) api.act({t:'end'}); },1300); } } }
     if(my&&!lastTurnMe&&!firstDraw&&SFX.turn) SFX.turn(); lastTurnMe=my; firstDraw=false;
     if(isNew){ lastEv=ev.n; runEvent(S,ME,api,ev,pre); } }
+
+  /* ---------- mũi tên chỉ dẫn 2 lượt đầu ---------- */
+  let hintN=0, hintKey=''; try{ hintN=+localStorage.getItem('bm-keep-n')||0; }catch(e){}
+  function hintArrow(S,ME){ let sv=document.getElementById('bmarrow'); const my=S&&S.phase==='play'&&S.turn===ME&&S.step==='keep';
+    if(my){ const k=S.round+':'+S.turnAt; if(k!==hintKey){ hintKey=k; hintN++; try{ localStorage.setItem('bm-keep-n',hintN); }catch(e){} } }
+    if(!my||hintN>2){ if(sv) sv.remove(); return; }
+    const from=sel<0?rectOf('.bmpick'):rectOf(`.bmpick [data-pend="${sel===0?1:0}"]`);
+    const tos=sel<0?[rectOf('.pl.me .bmhand')||rectOf('.pl.me')]:[rectOf('[data-pile="0"]'),rectOf('[data-pile="1"]')];
+    if(!from||!tos[0]){ if(sv) sv.remove(); return; }
+    if(!sv){ sv=document.createElementNS('http://www.w3.org/2000/svg','svg'); sv.id='bmarrow'; document.body.appendChild(sv); }
+    sv.setAttribute('width',innerWidth); sv.setAttribute('height',innerHeight);
+    let g='<defs><marker id="bmah" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="14" refY="11" orient="auto"><path d="M0 0 L22 11 L0 22 z" fill="#ffe08a"/></marker></defs>';
+    tos.forEach((t,i)=>{ if(!t) return; const x0=from.left+from.width/2, y0=sel<0?from.top+from.height:from.top+from.height*.5, x1=t.left+t.width/2, y1=sel<0?t.top+Math.min(30,t.height*.3):t.top+t.height*.5+(y0<t.top?-t.height*.5:t.height*.5);
+      const mx=(x0+x1)/2+(sel<0?0:(i?30:-30)), my2=Math.min(y0,y1)-Math.max(36,Math.abs(x1-x0)*.25);
+      g+=`<path d="M${x0.toFixed(0)} ${y0.toFixed(0)} Q${mx.toFixed(0)} ${my2.toFixed(0)} ${x1.toFixed(0)} ${y1.toFixed(0)}" fill="none" stroke="#ffe08a" stroke-width="5" stroke-linecap="round" stroke-dasharray="3 12" marker-end="url(#bmah)" class="bmarc"/>`; });
+    sv.innerHTML=g; }
   function frameRect(seat,mine){ return rectOf(`.pl[data-p="${seat}"] ${seat===window.__ME?'.bmhand':'.bmopb'}`)||rectOf(`.pl[data-p="${seat}"]`); }
   function runEvent(S,ME,api,ev,pre){ window.__ME=ME; const k=ev.k, tgt=s=>rectOf(`.pl[data-p="${s}"] ${s===ME?'.bmhand':'.bmopb'}`)||rectOf(`.pl[data-p="${s}"]`), w=Math.max(34,cw('[data-deck] .bmc')*.8), h=w*1.4, pw=cw('[data-deck] .bmc');
     if(k==='draw2'||k==='draw1'){ if(ev.seat!==ME){ const to=tgt(ev.seat); fly(pre.deck,to,A.back('x'),w,h,0); if(k==='draw2') fly(pre.deck,to,A.back('x'),w,h,150); } else { SND.tach(); } }
@@ -209,16 +225,21 @@ const BMUI=(()=>{
       if(S.step==='crab'&&crabP<0){ if(S.disc[p].length){ crabP=p; SND.pop(); render(S,ME,api); } return; } if(S.step==='draw'){ if(S.disc[p].length){ pileSel=pileSel===p?-1:p; SND.pop(); render(S,ME,api); } return; } if(S.step==='keep'){ if(sel<0){ api.toast('Hãy chọn 1 lá để giữ trước'); return; } api.act({t:'keep',i:sel,pile:p}); sel=-1; return; } }
     const dk=e.target.closest('[data-deck]'); if(dk&&my&&S.step==='draw'){ api.act({t:'deck'}); return; }
     const hc=e.target.closest('.me .bmhand [data-cid],.bmopb:not(.bk) [data-cid],.bmtabl [data-cid],.pile .bmc[data-cid],#bmres [data-cid]'); if(hc){ zoomCard(+hc.dataset.cid); return; } }
-  /* ---------- kéo lá còn lại vào chồng bỏ ---------- */
+  /* ---------- kéo lá: lá giữ -> tay, lá bỏ -> chồng bỏ ---------- */
   document.addEventListener('dragstart',e=>{ if(e.target.closest&&e.target.closest('#bm')) e.preventDefault(); });
-  (function drag(){ let el=null,clone=null,x0=0,y0=0,mv=false,hot=null;
-    const pileAt=(x,y)=>{ const l=document.elementsFromPoint(x,y); for(const n of l){ const p=n.closest&&n.closest('#bm [data-pile]'); if(p&&!p.closest('#bmcrab')) return p; } return null; };
-    document.addEventListener('pointerdown',e=>{ const S=window.__S, api=Table.API; if(!S||S.phase!=='play'||S.turn!==api.me()||S.step!=='keep'||sel<0) return; const c=e.target.closest&&e.target.closest('#bm [data-pend]'); if(!c||+c.dataset.pend===sel) return; el=c; x0=e.clientX; y0=e.clientY; mv=false; });
-    document.addEventListener('pointermove',e=>{ if(!el) return; if(!mv){ if(Math.hypot(e.clientX-x0,e.clientY-y0)<8) return; mv=true; const r=el.getBoundingClientRect(); clone=el.cloneNode(true); clone.classList.add('bmdragc'); clone.style.cssText=`position:fixed;z-index:9995;pointer-events:none;width:${r.width}px;height:${r.height}px;left:${r.left}px;top:${r.top}px;--w:${r.width}px;transform:scale(1.12) rotate(4deg);box-shadow:0 10px 24px rgba(0,0,0,.6)`; document.body.appendChild(clone); el.style.opacity='.3'; }
-      e.preventDefault&&e.cancelable&&e.preventDefault(); const r=clone.getBoundingClientRect(); clone.style.left=(e.clientX-r.width/2)+'px'; clone.style.top=(e.clientY-r.height/2)+'px';
-      const p=pileAt(e.clientX,e.clientY); if(hot!==p){ hot&&hot.classList.remove('hot'); hot=p; hot&&hot.classList.add('hot'); } },{passive:false});
-    const end=e=>{ if(!el) return; const S=window.__S, api=Table.API; if(mv){ dragT=Date.now(); const p=pileAt(e.clientX,e.clientY); if(clone) clone.remove(); el.style.opacity=''; if(hot) hot.classList.remove('hot');
-        if(p&&S&&S.step==='keep'&&S.turn===api.me()&&sel>=0){ SND.pop(); const i=sel; sel=-1; api.act({t:'keep',i,pile:+p.dataset.pile}); } else api.toast('Hãy thả lá vào Chồng bỏ 1 hoặc Chồng bỏ 2'); }
+  (function drag(){ let el=null,clone=null,x0=0,y0=0,mv=false,hot=null,hotKind='';
+    const at=(x,y)=>{ const l=document.elementsFromPoint(x,y); let hand=null; for(const n of l){ if(!n.closest) continue; const p=n.closest('#bm [data-pile]'); if(p&&!p.closest('#bmcrab')) return {pile:p}; if(!hand&&n.closest('#bm .pl.me')) hand=n.closest('#bm .pl.me'); } return hand?{hand}:{}; };
+    const mark=t=>{ const k=t.pile||t.hand||null; if(hot!==k){ hot&&hot.classList.remove('hot'); hot=k; hot&&hot.classList.add('hot'); } };
+    document.addEventListener('pointerdown',e=>{ const S=window.__S, api=Table.API; if(!S||S.phase!=='play'||S.turn!==api.me()||S.step!=='keep') return; const c=e.target.closest&&e.target.closest('#bm [data-pend]'); if(!c) return; el=c; x0=e.clientX; y0=e.clientY; mv=false; });
+    document.addEventListener('pointermove',e=>{ if(!el) return; if(!mv){ if(Math.hypot(e.clientX-x0,e.clientY-y0)<8) return; mv=true; const r=el.getBoundingClientRect(); clone=el.cloneNode(true); clone.classList.add('bmdragc'); clone.style.cssText=`position:fixed;z-index:9995;pointer-events:none;width:${r.width}px;height:${r.height}px;left:${r.left}px;top:${r.top}px;--w:${r.width}px;transform:scale(1.12) rotate(4deg);box-shadow:0 10px 24px rgba(0,0,0,.6)`; document.body.appendChild(clone); el.style.opacity='.3'; document.documentElement.classList.add('bmdragging'); const ar=document.getElementById('bmarrow'); if(ar) ar.style.opacity='.25'; }
+      e.preventDefault&&e.cancelable&&e.preventDefault(); const r=clone.getBoundingClientRect(); clone.style.left=(e.clientX-r.width/2)+'px'; clone.style.top=(e.clientY-r.height/2)+'px'; mark(at(e.clientX,e.clientY)); },{passive:false});
+    const end=e=>{ if(!el) return; const S=window.__S, api=Table.API; if(mv){ dragT=Date.now(); const t=at(e.clientX,e.clientY), idx=+el.dataset.pend; if(clone) clone.remove(); el.style.opacity=''; if(hot) hot.classList.remove('hot'); document.documentElement.classList.remove('bmdragging'); const ar=document.getElementById('bmarrow'); if(ar) ar.style.opacity='';
+        if(S&&S.step==='keep'&&S.turn===api.me()){
+          if(t.hand){ if(sel>=0&&sel!==idx){ api.toast('Chỉ được giữ 1 lá — lá này phải bỏ vào chồng bỏ'); }
+            else { if(sel!==idx){ sel=idx; SND.pop(); render(S,api.me(),api); } api.toast('Đã giữ lá này — giờ kéo lá còn lại vào chồng bỏ'); } }
+          else if(t.pile){ if(sel>=0&&sel===idx){ api.toast('Đây là lá bạn giữ — hãy kéo lá kia vào chồng bỏ'); }
+            else { SND.pop(); const keep=S.pend.length===2?1-idx:(sel>=0?sel:0); sel=-1; api.act({t:'keep',i:keep,pile:+t.pile.dataset.pile}); } }
+          else api.toast('Kéo lá giữ vào khu bài của bạn, lá bỏ vào Chồng bỏ 1 hoặc 2'); } }
       el=null; clone=null; hot=null; mv=false; };
     document.addEventListener('pointerup',end); document.addEventListener('pointercancel',end); })();
   return {render,tickView,fit};

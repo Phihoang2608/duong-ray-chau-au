@@ -152,9 +152,6 @@ body{font-family:"Times New Roman",Times,serif;background:radial-gradient(120% 9
 .bmdrawb{font-size:15px;padding:10px 16px;min-height:44px}
 .bmstat.bmsm{font-size:12px;flex:1 1 120px}
 .bmdrawn .bmc{touch-action:none}
-.bmdrawn .bmc.pk::after{content:'GIỮ';position:absolute;left:50%;bottom:3px;transform:translateX(-50%);background:#ffe08a;color:#3a2410;font:bold 11px/1 sans-serif;padding:3px 7px;border-radius:8px;z-index:3}
-.bmdrawn .bmc.dis{outline:2px dashed #ff9a9a;outline-offset:2px;cursor:grab;animation:bmwig 1s ease-in-out infinite}
-.bmdrawn .bmc.dis::after{content:'KÉO ĐI';position:absolute;left:50%;bottom:3px;transform:translateX(-50%);white-space:nowrap;background:#ff9a9a;color:#4a1010;font:bold 9px/1 sans-serif;padding:3px 5px;border-radius:8px;z-index:3}
 @keyframes bmwig{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-2px)}}
 .pile.hot .bmc{box-shadow:0 0 0 4px #7dffb0,0 0 20px #7dffb0;transform:scale(1.08)}
 .pile.drop small{font-size:12px}
@@ -183,3 +180,13 @@ body:not(.ingame) #tb-box .tbtn.pri{background:linear-gradient(180deg,#ffe9a8,#e
 body:not(.ingame) #tb-box .tbtn:hover{filter:brightness(1.1)}
 body:not(.ingame) #tb-box .tb-or{color:#cfe8f7!important}
 @media (max-width:480px){body:not(.ingame) #tb-box h2{font-size:27px}}
+
+.bmpick .bmc{cursor:grab;touch-action:none;transition:transform .2s,box-shadow .2s,filter .2s}
+.bmpick .bmc.lt{box-shadow:0 0 0 2px rgba(255,224,138,.55),0 0 12px rgba(255,224,138,.4)}
+.bmpick .bmc.pk{transform:translateY(-4px) scale(1.04);box-shadow:0 0 0 2px rgba(255,224,138,.7),0 0 12px rgba(255,224,138,.45);filter:none}
+.bmpick .bmc.dis{transform:translateY(-8px) scale(1.12);z-index:2;animation:bmdisglow 1.1s ease-in-out infinite}
+@keyframes bmdisglow{0%,100%{box-shadow:0 0 0 3px #fff,0 0 18px 4px rgba(255,236,150,.95),0 0 36px 10px rgba(255,200,60,.6)}50%{box-shadow:0 0 0 4px #fff,0 0 30px 8px #fff3b0,0 0 56px 18px rgba(255,190,40,.85)}}
+.pl.me.hot{outline:3px dashed #7dffb0;outline-offset:-3px;background:rgba(125,255,176,.1)}
+#bmarrow{position:fixed;left:0;top:0;z-index:9990;pointer-events:none;transition:opacity .2s}
+.bmarc{animation:bmdash 1s linear infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+@keyframes bmdash{to{stroke-dashoffset:-30}}
